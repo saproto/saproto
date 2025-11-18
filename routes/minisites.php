@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IsAlfredThereController;
 use App\Http\Controllers\OmNomController;
 use App\Http\Controllers\SmartXpScreenController;
+use App\Http\Controllers\WrappedController;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,12 @@ foreach ($domains['smartxp'] as $domain) {
 foreach ($domains['omnomcom'] as $domain) {
     Route::group(['domain' => $domain], static function () {
         Route::get('', [OmNomController::class, 'miniSite']);
+    });
+}
+
+foreach ($domains['wrapped'] as $domain) {
+    Route::group(['domain' => $domain], static function () {
+        Route::get('', [WrappedController::class, 'index'])->middleware('auth');
     });
 }
 

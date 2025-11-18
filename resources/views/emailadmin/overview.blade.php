@@ -152,6 +152,11 @@
                                     @foreach ($email->events()->get() as $event)
                                             {{ $event->title }}.
                                     @endforeach
+                                @elseif ($email->to_withdrawal)
+                                    withdrawal(s)
+                                    @foreach ($email->withdrawals as $withdrawal)
+                                            {{ $withdrawal->id }}.
+                                    @endforeach
                                 @endif
                             </td>
                             <td>

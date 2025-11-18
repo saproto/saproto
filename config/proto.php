@@ -249,6 +249,10 @@ return [
             'omnomcom.nl',
             'www.omnomcom.nl',
         ],
+        'wrapped' => [
+            'wrapped.omnomcom.nl',
+            'www.wrapped.omnomcom.nl',
+        ],
         'smartxp' => [
             'smartxp.nl',
             'www.smartxp.nl',

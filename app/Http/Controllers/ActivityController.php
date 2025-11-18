@@ -32,13 +32,13 @@ class ActivityController extends Controller
         $newRegistrationEnd = $request->date('registration_end')->timestamp;
 
         if ($newRegistrationEnd < $newRegistrationStart) {
-            Session::flash('flash_message', 'You cannot let the event sign-up end before it starts.');
+            Session::flash('flash_message', 'You cannot let the event sign-up end before the sign-up starts.');
 
             return to_route('event::edit', ['event' => $event]);
         }
 
-        if ($newRegistrationEnd < $event->start) {
-            Session::flash('flash_message', 'You cannot let the event sign-up end before the event starts.');
+        if ($newRegistrationEnd >= $event->start) {
+            Session::flash('flash_message', 'You cannot let the event sign-up end after the event starts.');
 
             return to_route('event::edit', ['event' => $event]);
         }

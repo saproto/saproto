@@ -21,12 +21,11 @@ use Spatie\MediaLibrary\MediaCollections\Exceptions\MediaCannotBeDeleted;
 
 class EmailController extends Controller
 {
-    /** @return View */
     public function index(): \Illuminate\Contracts\View\View|Factory
     {
         return view('emailadmin.overview', [
             'lists' => EmailList::query()->withCount('users')->get(),
-            'emails' => Email::query()->with('lists')->orderBy('id', 'desc')->paginate(10),
+            'emails' => Email::query()->with('lists')->with('withdrawals')->orderBy('id', 'desc')->paginate(10),
         ]);
     }
 
@@ -60,7 +59,6 @@ class EmailController extends Controller
         ]);
     }
 
-    /** @return View */
     public function create(): \Illuminate\Contracts\View\View|Factory
     {
         return view('emailadmin.editmail', ['email' => null]);
@@ -90,7 +88,7 @@ class EmailController extends Controller
             'sender_name' => $request->input('sender_name'),
             'sender_address' => $senderAddress,
         ]);
-        $this->updateEmailDestination($email, $request->input('destinationType'), $request->input('listSelect'), $request->input('eventSelect'), $request->has('toBackup'));
+        $this->updateEmailDestination($email, $request->input('destinationType'), $request->input('listSelect'), $request->input('eventSelect'), $request->input('withdrawalSelect'), $request->has('toBackup'));
         Session::flash('flash_message', 'Your e-mail has been saved.');
 
         return to_route('email::index');
@@ -165,7 +163,7 @@ class EmailController extends Controller
             'sender_address' => $senderAddress,
         ]);
 
-        $this->updateEmailDestination($email, $request->input('destinationType'), $request->input('listSelect'), $request->input('eventSelect'), $request->has('toBackup'));
+        $this->updateEmailDestination($email, $request->input('destinationType'), $request->input('listSelect'), $request->input('eventSelect'), $request->input('withdrawalSelect'), $request->has('toBackup'));
 
         Session::flash('flash_message', 'Your e-mail has been saved.');
 
@@ -307,10 +305,12 @@ class EmailController extends Controller
         return to_route('email::index');
     }
 
-    /** @param array<int> $lists
+    /**
+     * @param  array<int>  $lists
      * @param  array<int>  $events
+     * @param  array<int>  $withdrawals
      */
-    private function updateEmailDestination(Email $email, string $type, ?array $lists = [], ?array $events = [], bool $toBackup = false): void
+    private function updateEmailDestination(Email $email, string $type, ?array $lists = [], ?array $events = [], ?array $withdrawals = [], bool $toBackup = false): void
     {
         $email->to_user = false;
         switch ($type) {
@@ -323,9 +323,11 @@ class EmailController extends Controller
                 $email->to_list = false;
                 $email->to_event = false;
                 $email->to_backup = false;
+                $email->to_withdrawal = false;
 
                 $email->lists()->sync([]);
                 $email->events()->sync([]);
+                $email->withdrawals()->sync([]);
                 break;
 
             case 'pending':
@@ -336,9 +338,11 @@ class EmailController extends Controller
                 $email->to_list = false;
                 $email->to_event = false;
                 $email->to_backup = false;
+                $email->to_withdrawal = false;
 
                 $email->lists()->sync([]);
                 $email->events()->sync([]);
+                $email->withdrawals()->sync([]);
                 break;
 
             case 'active':
@@ -349,9 +353,11 @@ class EmailController extends Controller
                 $email->to_list = false;
                 $email->to_event = false;
                 $email->to_backup = false;
+                $email->to_withdrawal = false;
 
                 $email->lists()->sync([]);
                 $email->events()->sync([]);
+                $email->withdrawals()->sync([]);
                 break;
 
             case 'event':
@@ -362,7 +368,9 @@ class EmailController extends Controller
                 $email->to_list = false;
                 $email->to_event = true;
                 $email->to_backup = $toBackup;
+                $email->to_withdrawal = false;
                 $email->lists()->sync([]);
+                $email->withdrawals()->sync([]);
                 if ($events !== null && $events !== []) {
                     $email->events()->sync($events);
                 }
@@ -377,9 +385,28 @@ class EmailController extends Controller
                 $email->to_list = true;
                 $email->to_event = false;
                 $email->to_backup = false;
+                $email->to_withdrawal = false;
 
                 $email->lists()->sync($lists);
                 $email->events()->sync([]);
+                $email->withdrawals()->sync([]);
+                break;
+
+            case 'withdrawals':
+                $email->to_pending = false;
+                $email->to_member = false;
+                $email->to_active = false;
+
+                $email->to_list = false;
+                $email->to_event = false;
+                $email->to_backup = false;
+                $email->to_withdrawal = true;
+
+                $email->lists()->sync([]);
+                $email->events()->sync([]);
+                if ($withdrawals !== null && $withdrawals !== []) {
+                    $email->withdrawals()->sync($withdrawals);
+                }
                 break;
 
             default:
@@ -393,8 +420,8 @@ class EmailController extends Controller
 
                 $email->lists()->sync([]);
                 $email->events()->sync([]);
+                $email->withdrawals()->sync([]);
                 break;
-
         }
 
         $email->save();
