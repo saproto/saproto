@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Laravel\Passport\Client;
+use Laravel\Passport\Contracts\OAuthenticatable;
 use Laravel\Passport\HasApiTokens;
 use Laravel\Passport\Token;
 use Spatie\Image\Enums\Fit;
@@ -189,7 +190,7 @@ use Spatie\Permission\Traits\HasRoles;
  *
  * @mixin Eloquent
  */
-class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract, HasMedia
+class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract, HasMedia, OAuthenticatable
 {
     use CanResetPassword;
     use HasApiTokens;
