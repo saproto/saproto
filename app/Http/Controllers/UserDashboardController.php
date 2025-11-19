@@ -35,7 +35,7 @@ class UserDashboardController extends Controller
         $tfakey = null;
         if (! $user->tfa_totp_key) {
             $google2fa = new Google2FA;
-            $tfakey = $google2fa->generateSecretKey(32);
+            $tfakey = $google2fa->generateSecretKey();
             $qrcode = (new DNS2D)->getBarcodeSVG($google2fa->getQRCodeUrl('S.A. Proto', $user->name, $tfakey), 'QRCODE');
         }
 
