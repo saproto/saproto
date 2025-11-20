@@ -118,12 +118,12 @@ sail artisan migrate --seed
 
 #### Client-side dependencies
 
-To install the client-side dependencies you'll need to run `sail npm install` to install all client-side dependencies.
+To install the client-side dependencies you'll need to run `sail yarn` to install all client-side dependencies.
 
-To compile the project assets (JS/CSS) run `sail npm run build` to compile once or `sail npm run dev` to keep checking
+To compile the project assets (JS/CSS) run `sail yarn build` to compile once or `sail yarn dev` to keep checking
 for changes to scripts or stylesheets.
 
-When adding a new library or client-side dependency through npm don't forget to require the scripts in `application.js`
+When adding a new library or client-side dependency through yarn don't forget to require the scripts in `application.js`
 and the stylesheet in `vendor.scss`.
 
 #### Websockets

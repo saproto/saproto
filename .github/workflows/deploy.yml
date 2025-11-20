@@ -38,17 +38,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: npm
+          cache: yarn
 
       - name: 📥 Install front-end dependencies
-        run: npm ci --ignore-scripts
+        run: yarn install --frozen-lockfile --ignore-scripts
 
       - name: 🔨 build front-end
         env:
           VITE_PUSHER_APP_KEY: ${{ secrets.PUSHER_APP_KEY }}
           VITE_PUSHER_HOST: ${{ secrets.PUSHER_HOST }}
           VITE_PUSHER_PORT: ${{ secrets.PUSHER_PORT }}
-        run: npm run build
+        run: yarn build
 
       - name: Cache Playwright
         uses: actions/cache@v4
@@ -56,7 +56,7 @@ jobs:
         with:
           path: |
             ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install playwright deps
         run: npx playwright install --with-deps chromium

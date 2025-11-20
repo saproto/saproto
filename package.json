@@ -54,6 +54,7 @@
         "tw-animate-css": "^1.3.6",
         "util.promisify": "^1.0.1",
         "vaul-vue": "^0.4.1",
+        "vite": "^7.2.4",
         "vue-sonner": "^2.0.8",
         "ziggy-js": "^2.5.3"
     },

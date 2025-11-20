@@ -31,7 +31,8 @@ phpstan.neon
 
 # Meta files
 composer.phar
-yarn.lock
+# yarn.lock
+package-lock.json
 
 # Generated files
 /public/build
