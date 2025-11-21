@@ -7,7 +7,7 @@
 @section('container')
     <div class="row justify-content-center mb-3">
         <div class="col-md-3">
-            <form method="post">
+            <form method="get">
                 @csrf
 
                 <div class="card">
