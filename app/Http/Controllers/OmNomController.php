@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\ProductData;
 use App\Enums\MembershipTypeEnum;
 use App\Models\OrderLine;
 use App\Models\Product;
@@ -83,9 +84,9 @@ class OmNomController extends Controller
     }
 
     /**
-     * @return string
+     * @return array<ProductData>
      */
-    public function stock(Request $request)
+    public function stock(Request $request): array
     {
         $stores = Config::array('omnomcom.stores');
         abort_unless(array_key_exists($request->store, $stores), 404);
@@ -106,7 +107,7 @@ class OmNomController extends Controller
             }
         }
 
-        return json_encode($products);
+        return ProductData::collect($products);
     }
 
     /**

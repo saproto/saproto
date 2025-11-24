@@ -15,7 +15,8 @@ class ProductData extends Data
         public float $price,
         public float $calories,
         public bool $is_alcoholic,
-        public string $image_url
+        public int $stock,
+        public string $image_url,
     ) {}
 
     public static function fromModel(?Product $product): ?self
@@ -26,6 +27,7 @@ class ProductData extends Data
             $product->price,
             $product->calories,
             $product->is_alcoholic,
+            $product->stock,
             $product->getImageUrl(ProductEnum::THUMB)
         ) : null;
     }
