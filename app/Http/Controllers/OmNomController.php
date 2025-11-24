@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\ProductCategoryData;
+use App\Data\ProductData;
 use App\Enums\MembershipTypeEnum;
 use App\Models\OrderLine;
 use App\Models\Product;
@@ -12,16 +14,26 @@ use App\Models\User;
 use App\Services\ProTubeApiService;
 use Exception;
 use Illuminate\Contracts\Database\Query\Builder;
+use Illuminate\Contracts\Pagination\CursorPaginator;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\AbstractCursorPaginator;
+use Illuminate\Pagination\AbstractPaginator;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Enumerable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\LazyCollection;
 use Illuminate\View\View;
+use Spatie\LaravelData\CursorPaginatedDataCollection;
+use Spatie\LaravelData\DataCollection;
+use Spatie\LaravelData\PaginatedDataCollection;
 use stdClass;
 
 class OmNomController extends Controller
@@ -83,7 +95,7 @@ class OmNomController extends Controller
     }
 
     /**
-     * @return string
+     * @return array|CursorPaginator|Paginator|AbstractCursorPaginator|AbstractPaginator|Collection|Enumerable|LazyCollection|CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
      */
     public function stock(Request $request)
     {
@@ -106,7 +118,7 @@ class OmNomController extends Controller
             }
         }
 
-        return json_encode($products);
+        return ProductData::collect($products);
     }
 
     /**
