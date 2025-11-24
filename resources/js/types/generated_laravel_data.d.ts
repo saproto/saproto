@@ -48,6 +48,7 @@ name: string;
 price: number;
 calories: number;
 is_alcoholic: boolean;
+stock: number;
 image_url: string;
 };
 }
