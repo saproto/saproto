@@ -37,6 +37,11 @@ likes_count: number | null;
 liked_by_me: boolean | null;
 album: App.Data.PhotoAlbumData | null;
 };
+export type ProductCategoryData = {
+id: number;
+name: string;
+sortedProducts: Array<App.Data.ProductData> | null;
+};
 export type ProductData = {
 id: number;
 name: string;

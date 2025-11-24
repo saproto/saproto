@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Data\ProductCategoryData;
 use App\Data\ProductData;
 use App\Enums\MembershipTypeEnum;
 use App\Models\OrderLine;
