@@ -94,9 +94,9 @@ class OmNomController extends Controller
     }
 
     /**
-     * @return array|CursorPaginator|Paginator|AbstractCursorPaginator|AbstractPaginator|Collection|Enumerable|LazyCollection|CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
+     * @return array<ProductData>
      */
-    public function stock(Request $request)
+    public function stock(Request $request): array
     {
         $stores = Config::array('omnomcom.stores');
         abort_unless(array_key_exists($request->store, $stores), 404);
