@@ -95,6 +95,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:emailcron')->everyMinute();
         $schedule->command('proto:spotifyupdate')->everyFourHours();
         $schedule->command('proto:usercleanup')->hourly();
+        $schedule->command('passport:purge')->hourly();
         $schedule->command('proto:gsync')->at('00:01');
         $schedule->command('proto:birthdaycron')->daily()->at('00:01');
         $schedule->command('proto:achievementscron')->daily()->at('00:10');
