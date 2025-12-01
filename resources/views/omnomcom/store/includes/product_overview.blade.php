@@ -45,6 +45,13 @@
                             </div>
 
                             <div class="product-details">
+
+                                @if ($product->stock < 1000)
+                                    <div class="product-stock">
+                                        {{ $product->stock }} x
+                                    </div>
+                                @endif
+
                                 <div class="product-name">
                                     {{ $product->name }}
                                 </div>
@@ -53,12 +60,6 @@
                                     &euro;
                                     {{ number_format($product->price, 2, '.', '') }}
                                 </div>
-
-                                @if ($product->stock < 1000)
-                                    <div class="product-stock">
-                                        {{ $product->stock }} x
-                                    </div>
-                                @endif
                             </div>
                         </div>
                     </div>
@@ -83,7 +84,7 @@
                         <div class="product-details">
                             <div class="product-name">I'm feeling lucky!</div>
 
-                            <div class="product-price">Who knows?</div>
+                            <div class="product-price">€ ???</div>
                         </div>
                     </div>
                 </div>
@@ -95,7 +96,7 @@
     @if (count($minors) > 0)
         <div class="category-view inactive" data-id="static-minors">
             @foreach ($minors as $user)
-                <div class="product col-3">
+                <div class="product col-6 col-xl-3">
                     <div class="product-inner">
                         <div
                             class="product-image user-image"
@@ -104,14 +105,10 @@
                             "
                         ></div>
                         <div class="product-details">
-                            <div class="product-name">
-                                {{ $user->name }}
-                            </div>
+                                <div class="product-name">{{$user->name}}</div>
 
-                            <div class="product-stock user-age">
-                                Age: {{ $user->age() }}
+                                <div class="product-price">{{$user->age()}}</div>
                             </div>
-                        </div>
                     </div>
                 </div>
             @endforeach

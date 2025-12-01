@@ -684,7 +684,7 @@ a.card {
             position: relative;
             width: 100%;
             height: 130px;
-            background-color: #333;
+            background-color: rgba(51, 51, 51, 0.98);
             color: #fff;
         }
 
@@ -694,16 +694,11 @@ a.card {
             left: 130px;
             right: 0;
             bottom: 0;
-            background-color: #333;
             padding: 15px;
         }
 
         &-stock {
-            position: absolute;
-            top: 0;
-            right: 0;
-            float: right;
-            margin: 10px;
+            float: inline-end;
             padding: 10px;
             background-color: #111;
             color: #fff;
@@ -711,7 +706,10 @@ a.card {
 
         &-name {
             max-height: 90px;
-            margin: 10px;
+            margin-right: 10px;
+            margin-left: 10px;
+            margin-bottom: 10px;
+            margin-top:0px;
             text-align: left;
             font-size: 30px;
             overflow: hidden;
@@ -719,6 +717,7 @@ a.card {
         }
 
         &-price {
+            font-size: 15px;
             position: absolute;
             bottom: 10px;
             left: -50px;
@@ -750,12 +749,6 @@ a.card {
     }
 
     .user {
-        &-age {
-            color: #fff;
-            font-weight: bold;
-            background-color: #26ade4;
-        }
-
         &-image {
             background-size: cover;
             background-position: center center;
