@@ -45,7 +45,6 @@
                             </div>
 
                             <div class="product-details">
-
                                 @if ($product->stock < 1000)
                                     <div class="product-stock">
                                         {{ $product->stock }} x
@@ -96,7 +95,7 @@
     @if (count($minors) > 0)
         <div class="category-view inactive" data-id="static-minors">
             @foreach ($minors as $user)
-                <div class="product col-6 col-xl-3">
+                <div class="product col-xl-3 col-6">
                     <div class="product-inner">
                         <div
                             class="product-image user-image"
@@ -105,10 +104,10 @@
                             "
                         ></div>
                         <div class="product-details">
-                                <div class="product-name">{{$user->name}}</div>
+                            <div class="product-name">{{ $user->name }}</div>
 
-                                <div class="product-price">{{$user->age()}}</div>
-                            </div>
+                            <div class="product-price">{{ $user->age() }}</div>
+                        </div>
                     </div>
                 </div>
             @endforeach
