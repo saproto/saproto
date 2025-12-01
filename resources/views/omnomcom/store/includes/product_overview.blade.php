@@ -22,7 +22,7 @@
                     ?>
 
                     <div
-                        class="product {{ $product->stock <= 0 ? 'nostock' : '' }} col-6 col-xl-3 "
+                        class="product {{ $product->stock <= 0 ? 'nostock' : '' }} col-xl-3 col-6"
                         data-id="{{ $product->id }}"
                         data-stock="{{ $product->stock }}"
                         data-price="{{ $product->price }}"
@@ -67,7 +67,7 @@
 
             @if (count($products_in_category) > 0)
                 <div
-                    class="product random {{ count($products_in_category) <= 1 ? 'nostock' : '' }} col-6 col-xl-3"
+                    class="product random {{ count($products_in_category) <= 1 ? 'nostock' : '' }} col-xl-3 col-6"
                     data-list="{{ implode(',', $products_in_category) }}"
                     data-stock="{{ count($products_in_category) }}"
                 >
