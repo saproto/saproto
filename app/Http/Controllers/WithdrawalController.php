@@ -57,7 +57,7 @@ class WithdrawalController extends Controller
 
         $totalPerUser = [];
 
-        $orderlines = OrderLine::unpayed()
+        $orderlines = OrderLine::query()->unpayed()
             ->whereHas('user')
             ->with('product')
             ->with('product.ticket')

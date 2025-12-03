@@ -10,7 +10,7 @@
             @include(
                 'components.modals.confirm-modal',
                 [
-                    'action' => route('user::delete', ['id' => $user->id]),
+                    'action' => route('user::delete', ['id' => $user->id, 'name'=>$user->name]),
                     'method' => 'POST',
                     'text' => '<button class="btn btn-block btn-danger mb-1">
                                     <i class="fas fa-trash"></i>

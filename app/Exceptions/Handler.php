@@ -52,7 +52,7 @@ class Handler extends ExceptionHandler
     public function report(Throwable $e): void
     {
         if ($this->shouldReport($e) && app()->bound('sentry') && App::environment('production')) {
-            app('sentry')->captureException($e);
+            resolve('sentry')->captureException($e);
         }
 
         parent::report($e);
