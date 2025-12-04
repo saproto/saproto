@@ -84,13 +84,13 @@ class Photo extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('private')
-            ->useDisk(App::environment('local') ? 'local' : 'stack')
-            ->storeConversionsOnDisk('local')
+            ->useDisk(App::environment('local') ? 'garage' : 'stack')
+            ->storeConversionsOnDisk('garage')
             ->singleFile();
 
         $this->addMediaCollection('public')
-            ->useDisk(App::environment('local') ? 'public' : 'stack')
-            ->storeConversionsOnDisk('public')
+            ->useDisk(App::environment('local') ? 'garage' : 'stack')
+            ->storeConversionsOnDisk('garage')
             ->singleFile();
     }
 
