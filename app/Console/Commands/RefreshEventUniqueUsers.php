@@ -26,9 +26,17 @@ class RefreshEventUniqueUsers extends Command
      */
     public function handle(): void
     {
-        Event::query()->chunk(25, static function ($events) {
+        $query = Event::query()
+            ->with('activity.users')
+            ->with('tickets');
+
+        $bar = $this->output->createProgressBar($query->count());
+        $bar->start();
+
+        $query->chunk(25, static function ($events) use ($bar) {
             foreach ($events as $event) {
                 $event->updateUniqueUsersCount();
+                $bar->advance();
             }
         });
     }

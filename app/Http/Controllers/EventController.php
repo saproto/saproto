@@ -177,9 +177,6 @@ class EventController extends Controller
         return view('event.edit', ['event' => $event]);
     }
 
-    /**
-     * @throws FileNotFoundException
-     */
     public function update(StoreEventRequest $request, Event $event): RedirectResponse
     {
         $event->title = $request->title;
@@ -686,14 +683,8 @@ CALSCALE:GREGORIAN
         ]);
         $newEvent->save();
 
-        $image = $event->getFirstMedia('header');
-        if ($image) {
-            $newEvent->addMedia($image->getPath())
-                ->usingName($image->file_name)
-                ->usingFileName('event_'.$newEvent->id)
-                ->preservingOriginal()
-                ->toMediaCollection('header');
-        }
+        $event->getFirstMedia('header')
+            ?->copy($newEvent, collectionName: 'header', fileName: 'event_'.$newEvent->id);
 
         if ($event->activity) {
             $newActivity = $event->activity->replicate([

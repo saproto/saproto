@@ -54,6 +54,6 @@ class LikedPhotosController extends Controller
                 'likes as liked_by_me' => function ($query) {
                     $query->where('user_id', Auth::id());
                 },
-            ])->orderBy('date_taken');
+            ])->orderBy('date_taken', 'desc');
     }
 }

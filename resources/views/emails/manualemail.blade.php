@@ -29,6 +29,8 @@
                 You receive this e-mail because you have an active membership with S.A. Proto.
             @elseif ($destination == 'active members')
                 You receive this e-mail because you are an active member (participate in a committee) of S.A. Proto.
+            @elseif ($destination == 'withdrawals')
+                You receive this e-mail because you are in an withdrawal of S.A. Proto.
             @endif
         </sup>
     </p>

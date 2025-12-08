@@ -43,6 +43,7 @@ class StickerRemovedEvent implements ShouldBroadcastNow
     {
         return [
             'id' => $this->sticker->id,
+            'stickerType' => $this->sticker->sticker_type_id,
         ];
     }
 }

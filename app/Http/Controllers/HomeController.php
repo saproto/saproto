@@ -27,7 +27,7 @@ class HomeController extends Controller
     public function show(): \Illuminate\Contracts\View\View|Factory
     {
         $companies =
-            Cache::remember('home.companies', 3600, fn () => Company::query()
+            Cache::remember('home.companies', Date::tomorrow(), fn () => Company::query()
                 ->where('in_logo_bar', true)
                 ->with('media')
                 ->get())->shuffle();

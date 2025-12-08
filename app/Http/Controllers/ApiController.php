@@ -109,11 +109,15 @@ class ApiController extends Controller
      */
     private function randomDistributedAlbum(array $numbers): array
     {
-        $privateQuery = PhotoAlbum::query()->where('private', false)->where('published', true)->whereHas('items', static function (Builder $query) {
-            $query->where('private', false);
-        })->with(['items' => function ($q) {
-            $q->reorder()->inRandomOrder()->take(6);
-        }])->without('thumbPhoto');
+        $privateQuery = PhotoAlbum::query()
+            ->withoutGlobalScopes()
+            ->where('private', false)
+            ->where('published', true)
+            ->whereHas('items', static function (Builder $query) {
+                $query->withoutGlobalScopes()->where('private', false);
+            })->with(['items' => function ($q) {
+                $q->withoutGlobalScopes()->where('private', false)->reorder()->inRandomOrder()->take(6);
+            }])->without('thumbPhoto');
 
         $random = random_int(1, 100);
         if ($random <= $numbers[0]) { // $numbers[0]% chance the album is from within the last year

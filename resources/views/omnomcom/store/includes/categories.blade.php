@@ -1,4 +1,4 @@
-<div class="vh-100 bg-dark col-2 p-0">
+<div class="vh-100 bg-dark col-2 overflow-hidden p-0">
     <nav id="category-nav" class="nav p-3">
         @foreach ($categories as $category)
             <div

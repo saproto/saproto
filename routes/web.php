@@ -58,6 +58,7 @@ use App\Http\Controllers\ShortUrlController;
 use App\Http\Controllers\SmartXpScreenController;
 use App\Http\Controllers\SpotifyController;
 use App\Http\Controllers\StickerController;
+use App\Http\Controllers\StickerTypeController;
 use App\Http\Controllers\StockMutationController;
 use App\Http\Controllers\SurfConextController;
 use App\Http\Controllers\TempAdminController;
@@ -73,6 +74,7 @@ use App\Http\Controllers\VideoController;
 use App\Http\Controllers\WallstreetController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\WithdrawalController;
+use App\Http\Controllers\WrappedController;
 use App\Models\Photo;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Cookie;
@@ -444,9 +446,10 @@ Route::middleware('forcedomain')->group(function () {
     });
     Route::middleware(['auth', 'member'])->group(function () {
 
-        Route::middleware('permission:board')->group(function () {
-            Route::post('stickers/unreport/{sticker}', [StickerController::class, 'unreport'])->name('stickers.unreport')->middleware('permission:board');
-            Route::get('stickers/admin', [StickerController::class, 'admin'])->name('stickers.admin')->middleware('permission:board');
+        Route::middleware('permission:board')->prefix('stickers')->group(function () {
+            Route::post('unreport/{sticker}', [StickerController::class, 'unreport'])->name('stickers.unreport');
+            Route::get('admin', [StickerController::class, 'admin'])->name('stickers.admin');
+            Route::resource('stickerType', StickerTypeController::class)->only(['store', 'update']);
         });
 
         Route::post('stickers/report/{sticker}', [StickerController::class, 'report'])->name('stickers.report');
@@ -1002,7 +1005,7 @@ Route::middleware('forcedomain')->group(function () {
         Route::get('/activity_overview', [QueryController::class, 'activityOverview'])->name('activity_overview');
         Route::get('/activity_statistics', [QueryController::class, 'activityStatistics'])->name('activity_statistics');
         Route::get('/membership_totals', [QueryController::class, 'membershipTotals'])->name('membership_totals');
-        Route::get('/new_membership_totals', [QueryController::class, 'newMembershipTotals'])->name('new_membership_totals');
+        Route::get('/protube_statistics', [QueryController::class, 'protubeStatistics'])->name('protube_statistics');
     });
 
     /* --- Routes related to the mini-sites --- */
@@ -1028,6 +1031,9 @@ Route::middleware('forcedomain')->group(function () {
         Route::get('/', fn () => inertia('Welcome'))->name('index');
         Route::get('/admin', fn () => inertia('admin/Admin'))->name('admin');
     });
+
+    /* Routes related to Wrapped */
+    Route::get('wrapped', [WrappedController::class, 'index'])->middleware('auth')->name('wrapped');
 
     /* --- Route related to the december theme --- */
     Route::get('/december/toggle', function (): RedirectResponse {

@@ -18,12 +18,12 @@ class EnforceWizard
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        if (Auth::check() && HashMapItem::key('wizard')->subkey((string) Auth::user()->id)->first() && ! $request->is('api/*')) {
+        if (Auth::check() && HashMapItem::query()->key('wizard')->subkey((string) Auth::user()->id)->first() && ! $request->is('api/*')) {
             if (! $request->is('becomeamember')) {
                 return to_route('becomeamember');
             }
 
-            HashMapItem::key('wizard')->subkey((string) Auth::user()->id)->first()->delete();
+            HashMapItem::query()->key('wizard')->subkey((string) Auth::user()->id)->first()->delete();
         }
 
         return $next($request);

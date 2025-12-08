@@ -13,6 +13,14 @@ order: number;
 is_member_only: boolean;
 children: Array<App.Data.MenuItemData>;
 };
+export type OrderlineData = {
+id: number;
+product_id: number;
+units: number;
+total_price: number;
+created_at: string;
+product: App.Data.ProductData;
+};
 export type PhotoAlbumData = {
 id: string | number;
 name: string;
@@ -29,6 +37,20 @@ likes_count: number | null;
 liked_by_me: boolean | null;
 album: App.Data.PhotoAlbumData | null;
 };
+export type ProductCategoryData = {
+id: number;
+name: string;
+sortedProducts: Array<App.Data.ProductData> | null;
+};
+export type ProductData = {
+id: number;
+name: string;
+price: number;
+calories: number;
+is_alcoholic: boolean;
+stock: number;
+image_url: string;
+};
 }
 declare namespace App.Enums {
 export enum CommitteeEnum { CARD = 'card', BLOCK = 'block' };
@@ -42,4 +64,5 @@ export enum PageEnum { LARGE = 'large' };
 export enum PhotoEnum { ORIGINAL = 'original', LARGE = 'large', MEDIUM = 'medium', SMALL = 'small' };
 export enum ProductEnum { LARGE = 'large', THUMB = 'thumb' };
 export enum StickerEnum { LARGE = 'large', SMALL = 'small' };
+export enum StickerTypeEnum { LARGE = 'large', TINY = 'tiny' };
 }
