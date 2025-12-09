@@ -27,6 +27,7 @@ services:
             - mailpit
             - soketi
             - redis
+            - minio
     mariadb:
         container_name: '${SAIL_CONTAINER_NAME}-mariadb'
         image: 'mariadb:10.6'
@@ -94,6 +95,39 @@ services:
             timeout: 5s
         networks:
             - sail
+    minio:
+        image: 'minio/minio:latest'
+        ports:
+            - '${FORWARD_MINIO_PORT:-9000}:9000'
+            - '${FORWARD_MINIO_CONSOLE_PORT:-8900}:8900'
+        environment:
+            MINIO_ROOT_USER: sail
+            MINIO_ROOT_PASSWORD: password
+        volumes:
+            - 'sail-minio:/data'
+        networks:
+            - sail
+        command: 'minio server /data --console-address ":8900"'
+        healthcheck:
+            test: [ "CMD", "mc", "ready", "local" ]
+            retries: 3
+            timeout: 5s
+
+    createbuckets:
+        image: minio/mc
+        depends_on:
+            - minio
+        networks:
+            - sail
+        entrypoint: >
+            /bin/sh -c "
+              sleep 5;
+              mc alias set laravel http://minio:9000 sail password;
+              mc mb --ignore-existing laravel/local;
+              mc mb --ignore-existing laravel/public;
+              mc anonymous set download laravel/public;
+              echo 'Buckets created and public access set.';
+            "
 networks:
     sail:
         driver: bridge
@@ -101,4 +135,6 @@ volumes:
     sail-mariadb:
         driver: local
     sail-redis:
+        driver: local
+    sail-minio:
         driver: local
