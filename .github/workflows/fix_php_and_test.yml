@@ -132,6 +132,17 @@ jobs:
 
       - run: mkdir -p .tmp/phpunit.cache
 
+      - run: |
+          php artisan key:generate
+          php artisan migrate
+          php artisan schema:dump
+
+      - name: Commit changes (schema dump)
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Changed sql schema (artisan dump)
+          skip_fetch: true
+
       - name: 🐘 Run Pest tests
         env:
           DB_CONNECTION: mysql
@@ -141,8 +152,6 @@ jobs:
           DB_PASSWORD: secret
           DB_HOST: 127.0.0.1
         run: |
-          php artisan key:generate
-          php artisan migrate
           vendor/bin/pest --ci --parallel
 
       - name: Check if laravel caching works
