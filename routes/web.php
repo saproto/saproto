@@ -1007,6 +1007,7 @@ Route::middleware('forcedomain')->group(function () {
         Route::get('/membership_totals', [QueryController::class, 'membershipTotals'])->name('membership_totals');
         Route::get('/protube_statistics', [QueryController::class, 'protubeStatistics'])->name('protube_statistics');
         Route::get('/mostliked_photos', [QueryController::class, 'mostLikedPhotos'])->name('mostliked_photos');
+        Route::get('/almanac_member_photos', [QueryController::class, 'almanacMemberPhotos'])->name('almanac_member_photos');
     });
 
     /* --- Routes related to the mini-sites --- */
