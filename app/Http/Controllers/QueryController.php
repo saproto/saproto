@@ -8,6 +8,7 @@ use App\Models\ActivityParticipation;
 use App\Models\Event;
 use App\Models\EventCategory;
 use App\Models\Member;
+use App\Models\Photo;
 use App\Models\PlayedVideo;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -236,5 +237,28 @@ class QueryController extends Controller
         }
 
         return view('queries.activity_statistics', ['start' => $start, 'end' => $end, 'events' => $events->groupBy('board'), 'totalEvents' => $totalEvents, 'eventCategories' => $eventCategories]);
+    }
+
+    public function mostLikedPhotos(Request $request): View
+    {
+        if ($request->missing('start') || $request->missing('end')) {
+            $now = Date::now();
+            $year_start = $now->month >= 9 ? $now->year : $now->year - 1;
+            $start = Date::create($year_start, 9, 1, 0, 0, 1);
+            $end = Date::now();
+        } else {
+            $start = $request->date('start');
+            $end = $request->date('end')->addDay();
+        }
+
+        $photos = Photo::query()
+            ->withCount('likes')
+            ->where('created_at', '>', $start->format('Y-m-d'))
+            ->where('created_at', '<', $end->format('Y-m-d'))
+            ->where('private', false)
+            ->orderBy('likes_count', 'desc')
+            ->simplePaginate(24);
+
+        return view('queries.mostliked_photos', ['start' => $start, 'end' => $end, 'photos' => $photos]);
     }
 }
