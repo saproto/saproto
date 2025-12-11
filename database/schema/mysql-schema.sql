@@ -418,6 +418,7 @@ CREATE TABLE `emails` (
   `to_pending` tinyint(1) NOT NULL DEFAULT 0,
   `to_list` tinyint(1) NOT NULL DEFAULT 0,
   `to_event` tinyint(1) NOT NULL DEFAULT 0,
+  `to_withdrawal` tinyint(1) NOT NULL DEFAULT 0,
   `to_backup` tinyint(1) NOT NULL DEFAULT 0,
   `to_active` tinyint(1) NOT NULL DEFAULT 0,
   `sent_to` int(11) DEFAULT NULL,
@@ -451,6 +452,22 @@ CREATE TABLE `emails_lists` (
   PRIMARY KEY (`id`),
   KEY `emails_lists_email_id_index` (`email_id`),
   KEY `emails_lists_list_id_index` (`list_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `emails_withdrawals`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `emails_withdrawals` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `email_id` bigint(20) unsigned NOT NULL,
+  `withdrawal_id` bigint(20) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `emails_withdrawals_email_id_foreign` (`email_id`),
+  KEY `emails_withdrawals_withdrawal_id_foreign` (`withdrawal_id`),
+  CONSTRAINT `emails_withdrawals_email_id_foreign` FOREIGN KEY (`email_id`) REFERENCES `emails` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `emails_withdrawals_withdrawal_id_foreign` FOREIGN KEY (`withdrawal_id`) REFERENCES `withdrawals` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `event_categories`;
@@ -1236,6 +1253,17 @@ CREATE TABLE `soundboard_sounds` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `sticker_types`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sticker_types` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `stickers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -1246,6 +1274,7 @@ CREATE TABLE `stickers` (
   `city` varchar(255) DEFAULT NULL,
   `country` varchar(255) DEFAULT NULL,
   `country_code` varchar(255) DEFAULT NULL,
+  `sticker_type_id` bigint(20) unsigned NOT NULL DEFAULT 1,
   `user_id` bigint(20) unsigned NOT NULL,
   `reporter_id` bigint(20) unsigned DEFAULT NULL,
   `report_reason` varchar(255) DEFAULT NULL,
@@ -1254,7 +1283,9 @@ CREATE TABLE `stickers` (
   PRIMARY KEY (`id`),
   KEY `stickers_user_id_foreign` (`user_id`),
   KEY `stickers_reporter_id_index` (`reporter_id`),
+  KEY `stickers_sticker_type_id_foreign` (`sticker_type_id`),
   CONSTRAINT `stickers_reporter_id_foreign` FOREIGN KEY (`reporter_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `stickers_sticker_type_id_foreign` FOREIGN KEY (`sticker_type_id`) REFERENCES `sticker_types` (`id`),
   CONSTRAINT `stickers_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1810,3 +1841,5 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_06_124016_remov
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_06_154106_remove_featured_image_id_from_newsitems',191);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_06_212403_remove_file_id_from_soundboardsounds',192);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_06_224547_remove_emails_files_table',193);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_25_194358_create_sticker_types_table',193);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_30_123317_add_withdrawal_pivot_table_to_emails',194);
