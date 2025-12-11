@@ -263,7 +263,7 @@ class QueryController extends Controller
         return view('queries.mostliked_photos', ['start' => $start, 'end' => $end, 'photos' => $photos]);
     }
 
-    public function almanacMemberPhotos(Request $request)
+    public function almanacMemberPhotos(Request $request): View
     {
         $availableYears = range(2014, Date::now()->subYear()->year);
         $year = $request->integer('year', Date::now()->subYear()->year);
