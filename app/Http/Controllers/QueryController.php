@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Data\PhotoData;
 use App\Enums\MembershipTypeEnum;
 use App\Models\Activity;
 use App\Models\ActivityParticipation;
@@ -252,7 +251,7 @@ class QueryController extends Controller
             $end = $request->date('end')->addDay();
         }
 
-        $photos=Photo::withCount('likes')
+        $photos = Photo::query()->withCount('likes')
             ->where('created_at', '>', $start->format('Y-m-d'))
             ->where('created_at', '<', $end->format('Y-m-d'))
             ->where('private', false)
