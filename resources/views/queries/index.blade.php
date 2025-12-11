@@ -80,12 +80,9 @@
                             </td>
                         </tr>
 
-
                         <tr>
                             <td>Most liked photos</td>
-                            <td>
-                                Get the most liked photos between two dates
-                            </td>
+                            <td>Get the most liked photos between two dates</td>
                             <td>
                                 <a
                                     href="{{ route('queries::mostliked_photos') }}"

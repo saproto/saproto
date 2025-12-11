@@ -85,7 +85,6 @@
                 <div class="card-footer">
                     {{ $photos->links() }}
                 </div>
-
             </div>
         </div>
     </div>
