@@ -87,7 +87,7 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    {{ $photos->links() }}
+                    {{ $photos->withQueryString()->links() }}
                 </div>
             </div>
         </div>
