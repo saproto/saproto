@@ -56,11 +56,11 @@
                                     <th scope="row">{{ $user->id }}</th>
                                     <td>{{ $user->name }}</td>
                                     <td>
-                                        {{ $user->getFirstMediaUrl('profile_picture') }}
+                                        {{ $user->getFirstMediaUrl('profile_picture', 'preview') }}
                                     </td>
                                     <td class="col-1">
                                         <img
-                                            src="{{ $user->getFirstMediaUrl('profile_picture', 'preview') }}"
+                                            src="{{ $user->getFirstMediaUrl('profile_picture', 'thumb') }}"
                                             alt="{{ $user->name }}'s photo"
                                         />
                                     </td>
