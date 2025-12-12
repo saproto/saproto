@@ -22,7 +22,7 @@
                     ?>
 
                     <div
-                        class="product {{ $product->stock <= 0 ? 'nostock' : '' }} col-xl-3 col-6"
+                        class="product {{ $product->stock <= 0 ? 'nostock' : '' }} col-xl-4 col-xxl-3 col-6"
                         data-id="{{ $product->id }}"
                         data-stock="{{ $product->stock }}"
                         data-price="{{ $product->price }}"
@@ -56,8 +56,7 @@
                                 </div>
 
                                 <div class="product-price">
-                                    &euro;
-                                    {{ number_format($product->price, 2, '.', '') }}
+                                    €{{ number_format($product->price, 2, '.', '') }}
                                 </div>
                             </div>
                         </div>
@@ -67,7 +66,7 @@
 
             @if (count($products_in_category) > 0)
                 <div
-                    class="product random {{ count($products_in_category) <= 1 ? 'nostock' : '' }} col-xl-3 col-6"
+                    class="product random {{ count($products_in_category) <= 1 ? 'nostock' : '' }} col-xl-4 col-xxl-3 col-6"
                     data-list="{{ implode(',', $products_in_category) }}"
                     data-stock="{{ count($products_in_category) }}"
                 >
@@ -95,7 +94,7 @@
     @if (count($minors) > 0)
         <div class="category-view inactive" data-id="static-minors">
             @foreach ($minors as $user)
-                <div class="product col-xl-3 col-6">
+                <div class="product col-xl-4 col-xxl-3 col-6">
                     <div class="product-inner">
                         <div
                             class="product-image user-image"
