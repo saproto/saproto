@@ -5,7 +5,7 @@
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
-    Actual membership totals
+    Member profile pictures for the almanac
 @endsection
 
 @section('container')
