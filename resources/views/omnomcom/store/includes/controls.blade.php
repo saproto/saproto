@@ -12,7 +12,7 @@
         disabled
     >
         <i class="fas fa-cookie-bite me-2"></i>
-        Complete order
+        Pay!
     </button>
     @if ($store['cash_allowed'])
         <button

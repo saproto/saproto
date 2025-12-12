@@ -8,10 +8,12 @@ use App\Models\ActivityParticipation;
 use App\Models\Event;
 use App\Models\EventCategory;
 use App\Models\Member;
+use App\Models\Photo;
 use App\Models\PlayedVideo;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
@@ -236,5 +238,49 @@ class QueryController extends Controller
         }
 
         return view('queries.activity_statistics', ['start' => $start, 'end' => $end, 'events' => $events->groupBy('board'), 'totalEvents' => $totalEvents, 'eventCategories' => $eventCategories]);
+    }
+
+    public function mostLikedPhotos(Request $request): View
+    {
+        if ($request->missing('start') || $request->missing('end')) {
+            $now = Date::now();
+            $year_start = $now->month >= 9 ? $now->year : $now->year - 1;
+            $start = Date::create($year_start, 9, 1, 0, 0, 1);
+            $end = Date::now();
+        } else {
+            $start = $request->date('start');
+            $end = $request->date('end')->addDay();
+        }
+
+        $photos = Photo::query()
+            ->withCount('likes')
+            ->where('created_at', '>', $start->format('Y-m-d'))
+            ->where('created_at', '<', $end->format('Y-m-d'))
+            ->where('private', false)
+            ->orderBy('likes_count', 'desc')
+            ->simplePaginate(24);
+
+        return view('queries.mostliked_photos', ['start' => $start, 'end' => $end, 'photos' => $photos]);
+    }
+
+    public function almanacMemberPhotos(Request $request): View
+    {
+        $availableYears = range(2014, Date::now()->subYear()->year);
+        $year = $request->integer('year', Date::now()->subYear()->year);
+
+        $users = User::query()
+            ->where('profile_in_almanac', true)
+            ->whereHas('orderlines', function (\Illuminate\Contracts\Database\Query\Builder $q) use ($year) {
+                $q->whereIn('product_id', array_values(Config::array('omnomcom.fee')))
+                    ->where('created_at', '>=', $year.'-09-01 00:00:01')
+                    ->where('created_at', '<', ($year + 1).'-09-01 00:00:01');
+            })->whereDoesntHave('orderlines', function (\Illuminate\Contracts\Database\Query\Builder $q) use ($year) {
+                $q->whereIn('product_id', array_values(Config::array('omnomcom.fee')))
+                    ->where('created_at', '<', ($year).'-09-01 00:00:01');
+            })
+            ->with('media')
+            ->get();
+
+        return view('queries.almanac_member_photos', ['year' => $year, 'availableYears' => $availableYears, 'users' => $users]);
     }
 }
