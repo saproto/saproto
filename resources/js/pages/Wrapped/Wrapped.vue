@@ -30,7 +30,7 @@ const loadData = async () => {
         purchases.value,
         order_totals.value,
         total_spent.value,
-        events.value,
+        events.value
     )
     currentStep.value++ // 5
     await new Promise((resolve) => setTimeout(resolve, 100))

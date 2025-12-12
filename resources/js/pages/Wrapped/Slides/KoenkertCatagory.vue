@@ -12,11 +12,11 @@ const stats = props.data.koenkert
         <div class="card">
             <h1>Based on your purchases this year</h1>
             <h1 class="color-text">
-                <span class="dynamic">{{ stats.type }}</span> 
+                <span class="dynamic">{{ stats.type }}</span>
             </h1>
-            <h1>would be your best freind </h1>
+            <h1>would be your best freind</h1>
         </div>
-         <div class="container">
+        <div class="container">
             <div
                 class="color"
                 :style="`background-image: url(${stats.imageName});`"
