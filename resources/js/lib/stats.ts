@@ -172,12 +172,12 @@ export const prepareStats = async (
     const amountForOptions: {
         [key: string]: { products: number[]; amount: number; imageName: string }
     } = {
-        'capitalist santa Koenkert': {
+        'Big Corporate cookie monster': {
             products: [35],
             amount: 0,
             imageName: colaKoenkert,
         },
-        'bavarian Koenkert': {
+        'Bavarian cookie monster': {
             products: [
                 24, 211, 376, 494, 757, 758, 759, 761, 805, 810, 957, 1005,
                 1039, 1173, 1247, 1618, 1619, 1621, 1667, 1668, 1669,
@@ -185,17 +185,17 @@ export const prepareStats = async (
             amount: 0,
             imageName: BavarianKoenkert,
         },
-        '2 Koenkerts in a golden sleeping bag': {
+        '2 cookie monsters in a golden sleeping bag': {
             products: [27],
             amount: 0,
             imageName: Koenkertsleepingbag,
         },
-        'Kermit the Koenkert': {
+        'Kermit the cookie monster': {
             products: [954],
             amount: 0,
             imageName: KermitKoenkert,
         },
-        'Koenkert in highschool': {
+        'High school cookie monster': {
             products: [1504, 1688],
             amount: 0,
             imageName: Koenkerthighschool,

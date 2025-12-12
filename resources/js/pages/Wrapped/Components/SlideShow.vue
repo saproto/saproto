@@ -222,7 +222,7 @@ const { lengthX } = useSwipe(slideElement, {
         <div>
             <h1>
                 {{ $page.props.auth.user.calling_name }}'s
-                <span class="omnomcom">OmNomCom</span> Wrapped
+                <span class="omnomcom">Proto</span> Wrapped
             </h1>
         </div>
 

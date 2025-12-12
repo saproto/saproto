@@ -10,11 +10,13 @@ const stats = props.data.koenkert
 <template>
     <div class="slide">
         <div class="card">
-            <h1>Based on your purchases this year</h1>
+            <h1>The Cookie monster</h1>
+            <h1>you vibed with</h1>
+            <h1>the most this year is:</h1>
             <h1 class="color-text">
                 <span class="dynamic">{{ stats.type }}</span>
             </h1>
-            <h1>would be your best freind</h1>
+
         </div>
         <div class="container">
             <div
@@ -37,6 +39,7 @@ const stats = props.data.koenkert
 }
 
 .color-text {
+    margin-top: 0.5rem;
     color: #50f8eb;
 }
 
@@ -67,7 +70,7 @@ const stats = props.data.koenkert
 }
 
 .color {
-    height: 30rem;
+    height: 29rem;
 }
 
 @keyframes fillColor {
