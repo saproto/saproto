@@ -62,7 +62,7 @@
                                     </td>
                                     <td class="col-1">
                                         <img
-                                            src="{{ $user->getFirstMediaUrl('profile_picture', 'thumb') }}"
+                                            src="{{ $user->getFirstMediaUrl('profile_picture', 'preview') }}"
                                             alt="{{ $user->name }}'s photo"
                                         />
                                     </td>

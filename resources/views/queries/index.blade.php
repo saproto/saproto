@@ -91,6 +91,21 @@
                                 </a>
                             </td>
                         </tr>
+
+                        <tr>
+                            <td>Member almanac profile pictures</td>
+                            <td>
+                                Get members per academic year with their profile
+                                pictures for the almanac
+                            </td>
+                            <td>
+                                <a
+                                    href="{{ route('queries::almanac_member_photos') }}"
+                                >
+                                    <i class="fas fa-running"></i>
+                                </a>
+                            </td>
+                        </tr>
                     </table>
                 </div>
             </div>
