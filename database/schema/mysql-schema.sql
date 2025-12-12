@@ -1,4 +1,3 @@
-/*M!999999\- enable the sandbox mode */ 
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -7,7 +6,7 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 DROP TABLE IF EXISTS `accounts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `accounts` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `account_number` bigint(20) unsigned NOT NULL,
@@ -20,7 +19,7 @@ CREATE TABLE `accounts` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `achievement`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `achievement` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -39,7 +38,7 @@ CREATE TABLE `achievement` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `achievements_users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `achievements_users` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL,
@@ -55,7 +54,7 @@ CREATE TABLE `achievements_users` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `activities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `activities` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `event_id` bigint(20) unsigned DEFAULT NULL,
@@ -79,7 +78,7 @@ CREATE TABLE `activities` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `activities_users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `activities_users` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `activity_id` bigint(20) unsigned NOT NULL,
@@ -98,7 +97,7 @@ CREATE TABLE `activities_users` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `addresses`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `addresses` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL,
@@ -115,7 +114,7 @@ CREATE TABLE `addresses` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `alias`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `alias` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `alias` varchar(255) NOT NULL,
@@ -129,7 +128,7 @@ CREATE TABLE `alias` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `announcements`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `announcements` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `description` varchar(255) NOT NULL,
@@ -153,7 +152,7 @@ CREATE TABLE `announcements` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `bankaccounts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bankaccounts` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL,
@@ -168,7 +167,7 @@ CREATE TABLE `bankaccounts` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `codex_category`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `codex_category` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -179,7 +178,7 @@ CREATE TABLE `codex_category` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `codex_codex_song`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `codex_codex_song` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `codex` bigint(20) unsigned NOT NULL,
@@ -193,7 +192,7 @@ CREATE TABLE `codex_codex_song` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `codex_codex_text`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `codex_codex_text` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `codex` bigint(20) unsigned NOT NULL,
@@ -207,7 +206,7 @@ CREATE TABLE `codex_codex_text` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `codex_codices`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `codex_codices` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -220,7 +219,7 @@ CREATE TABLE `codex_codices` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `codex_songs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `codex_songs` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `category_id` bigint(20) unsigned NOT NULL,
@@ -235,7 +234,7 @@ CREATE TABLE `codex_songs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `codex_text_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `codex_text_types` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(255) NOT NULL,
@@ -246,7 +245,7 @@ CREATE TABLE `codex_text_types` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `codex_texts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `codex_texts` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `type_id` bigint(20) unsigned NOT NULL,
@@ -260,7 +259,7 @@ CREATE TABLE `codex_texts` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `committees`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `committees` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -277,7 +276,7 @@ CREATE TABLE `committees` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `committees_activities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `committees_activities` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `activity_id` bigint(20) unsigned NOT NULL,
@@ -293,7 +292,7 @@ CREATE TABLE `committees_activities` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `committees_users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `committees_users` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL,
@@ -310,7 +309,7 @@ CREATE TABLE `committees_users` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `companies`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `companies` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -330,7 +329,7 @@ CREATE TABLE `companies` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `dinnerform_orderline`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dinnerform_orderline` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -348,7 +347,7 @@ CREATE TABLE `dinnerform_orderline` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `dinnerforms`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dinnerforms` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `restaurant` varchar(255) NOT NULL,
@@ -371,7 +370,7 @@ CREATE TABLE `dinnerforms` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `dmx_channels`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dmx_channels` (
   `id` bigint(20) unsigned NOT NULL,
   `name` mediumtext NOT NULL,
@@ -381,7 +380,7 @@ CREATE TABLE `dmx_channels` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `dmx_fixtures`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dmx_fixtures` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` mediumtext NOT NULL,
@@ -393,7 +392,7 @@ CREATE TABLE `dmx_fixtures` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `dmx_overrides`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dmx_overrides` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `fixtures` varchar(255) NOT NULL,
@@ -405,7 +404,7 @@ CREATE TABLE `dmx_overrides` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `emails`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `emails` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `description` varchar(255) NOT NULL,
@@ -432,7 +431,7 @@ CREATE TABLE `emails` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `emails_events`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `emails_events` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `email_id` bigint(20) unsigned NOT NULL,
@@ -444,7 +443,7 @@ CREATE TABLE `emails_events` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `emails_lists`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `emails_lists` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `email_id` bigint(20) unsigned NOT NULL,
@@ -456,7 +455,7 @@ CREATE TABLE `emails_lists` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `emails_withdrawals`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `emails_withdrawals` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `email_id` bigint(20) unsigned NOT NULL,
@@ -472,7 +471,7 @@ CREATE TABLE `emails_withdrawals` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `event_categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `event_categories` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -484,7 +483,7 @@ CREATE TABLE `event_categories` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `event_newsitem`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `event_newsitem` (
   `newsitem_id` bigint(20) unsigned NOT NULL,
   `event_id` bigint(20) unsigned NOT NULL,
@@ -494,7 +493,7 @@ CREATE TABLE `event_newsitem` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `events`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `events` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
@@ -526,7 +525,7 @@ CREATE TABLE `events` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `failed_jobs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `failed_jobs` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uuid` varchar(255) DEFAULT NULL,
@@ -541,7 +540,7 @@ CREATE TABLE `failed_jobs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `feedback`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `feedback` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL,
@@ -559,7 +558,7 @@ CREATE TABLE `feedback` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `feedback_categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `feedback_categories` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
@@ -576,7 +575,7 @@ CREATE TABLE `feedback_categories` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `feedback_votes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `feedback_votes` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL,
@@ -591,7 +590,7 @@ CREATE TABLE `feedback_votes` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `files`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `files` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `filename` varchar(255) NOT NULL,
@@ -605,7 +604,7 @@ CREATE TABLE `files` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `hashmap`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `hashmap` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `key` varchar(255) NOT NULL,
@@ -616,7 +615,7 @@ CREATE TABLE `hashmap` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `headerimages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `headerimages` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
@@ -629,7 +628,7 @@ CREATE TABLE `headerimages` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `joboffers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `joboffers` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `company_id` bigint(20) unsigned NOT NULL,
@@ -644,7 +643,7 @@ CREATE TABLE `joboffers` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `jobs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `jobs` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `queue` varchar(255) NOT NULL,
@@ -659,7 +658,7 @@ CREATE TABLE `jobs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `leaderboards`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `leaderboards` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `committee_id` bigint(20) unsigned NOT NULL,
@@ -676,7 +675,7 @@ CREATE TABLE `leaderboards` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `leaderboards_entries`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `leaderboards_entries` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `leaderboard_id` bigint(20) unsigned NOT NULL,
@@ -691,7 +690,7 @@ CREATE TABLE `leaderboards_entries` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `mailinglists`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `mailinglists` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -702,7 +701,7 @@ CREATE TABLE `mailinglists` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `media`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `media` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `model_type` varchar(255) NOT NULL,
@@ -730,7 +729,7 @@ CREATE TABLE `media` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `members`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `members` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL,
@@ -749,7 +748,7 @@ CREATE TABLE `members` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `menuitems`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `menuitems` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `parent` bigint(20) unsigned DEFAULT NULL,
@@ -767,7 +766,7 @@ CREATE TABLE `menuitems` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `migrations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `migrations` (
   `migration` varchar(255) NOT NULL,
   `batch` int(11) NOT NULL
@@ -775,7 +774,7 @@ CREATE TABLE `migrations` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `model_has_permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `model_has_permissions` (
   `permission_id` bigint(20) unsigned NOT NULL,
   `model_type` varchar(255) NOT NULL,
@@ -789,7 +788,7 @@ CREATE TABLE `model_has_permissions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `model_has_roles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `model_has_roles` (
   `role_id` bigint(20) unsigned NOT NULL,
   `model_type` varchar(255) NOT NULL,
@@ -803,7 +802,7 @@ CREATE TABLE `model_has_roles` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `mollie_transactions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `mollie_transactions` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` varchar(255) NOT NULL,
@@ -818,7 +817,7 @@ CREATE TABLE `mollie_transactions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `narrowcasting`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `narrowcasting` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -833,7 +832,7 @@ CREATE TABLE `narrowcasting` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `newsitems`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `newsitems` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL,
@@ -850,7 +849,7 @@ CREATE TABLE `newsitems` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `oauth_access_tokens`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `oauth_access_tokens` (
   `id` varchar(100) NOT NULL,
   `user_id` bigint(20) unsigned DEFAULT NULL,
@@ -868,7 +867,7 @@ CREATE TABLE `oauth_access_tokens` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `oauth_auth_codes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `oauth_auth_codes` (
   `id` varchar(100) NOT NULL,
   `user_id` bigint(20) unsigned NOT NULL,
@@ -882,7 +881,7 @@ CREATE TABLE `oauth_auth_codes` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `oauth_clients`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `oauth_clients` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned DEFAULT NULL,
@@ -901,7 +900,7 @@ CREATE TABLE `oauth_clients` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `oauth_personal_access_clients`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `oauth_personal_access_clients` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `client_id` bigint(20) unsigned NOT NULL,
@@ -913,7 +912,7 @@ CREATE TABLE `oauth_personal_access_clients` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `oauth_refresh_tokens`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `oauth_refresh_tokens` (
   `id` varchar(100) NOT NULL,
   `access_token_id` varchar(100) NOT NULL,
@@ -925,7 +924,7 @@ CREATE TABLE `oauth_refresh_tokens` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `orderlines`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `orderlines` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned DEFAULT NULL,
@@ -954,7 +953,7 @@ CREATE TABLE `orderlines` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `pages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `pages` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
@@ -969,7 +968,7 @@ CREATE TABLE `pages` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `password_resets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `password_resets` (
   `email` varchar(255) NOT NULL,
   `token` varchar(255) NOT NULL,
@@ -980,7 +979,7 @@ CREATE TABLE `password_resets` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `passwordstore`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `passwordstore` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `permission_id` bigint(20) unsigned NOT NULL,
@@ -997,7 +996,7 @@ CREATE TABLE `passwordstore` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `permission_role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `permission_role` (
   `permission_id` bigint(20) unsigned NOT NULL,
   `role_id` bigint(20) unsigned NOT NULL,
@@ -1011,7 +1010,7 @@ CREATE TABLE `permission_role` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `permissions` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -1027,7 +1026,7 @@ CREATE TABLE `permissions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `photo_albums`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `photo_albums` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -1047,7 +1046,7 @@ CREATE TABLE `photo_albums` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `photo_likes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `photo_likes` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -1061,7 +1060,7 @@ CREATE TABLE `photo_likes` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `photos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `photos` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -1075,7 +1074,7 @@ CREATE TABLE `photos` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `playedvideos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `playedvideos` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned DEFAULT NULL,
@@ -1096,7 +1095,7 @@ CREATE TABLE `playedvideos` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `product_categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `product_categories` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -1108,7 +1107,7 @@ CREATE TABLE `product_categories` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `product_wallstreet_drink`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `product_wallstreet_drink` (
   `wallstreet_drink_id` bigint(20) unsigned NOT NULL,
   `product_id` bigint(20) unsigned NOT NULL,
@@ -1118,7 +1117,7 @@ CREATE TABLE `product_wallstreet_drink` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `products`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `products` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `account_id` bigint(20) unsigned NOT NULL,
@@ -1142,7 +1141,7 @@ CREATE TABLE `products` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `products_categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `products_categories` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `product_id` bigint(20) unsigned NOT NULL,
@@ -1156,7 +1155,7 @@ CREATE TABLE `products_categories` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `qrauth_requests`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `qrauth_requests` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL,
@@ -1172,7 +1171,7 @@ CREATE TABLE `qrauth_requests` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `rfid`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rfid` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL,
@@ -1186,7 +1185,7 @@ CREATE TABLE `rfid` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `role_user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `role_user` (
   `user_id` bigint(20) unsigned NOT NULL,
   `role_id` bigint(20) unsigned NOT NULL,
@@ -1200,7 +1199,7 @@ CREATE TABLE `role_user` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `roles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `roles` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -1216,7 +1215,7 @@ CREATE TABLE `roles` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `sessions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sessions` (
   `id` varchar(255) NOT NULL,
   `user_id` bigint(20) unsigned DEFAULT NULL,
@@ -1230,7 +1229,7 @@ CREATE TABLE `sessions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `short_url`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `short_url` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `description` varchar(255) NOT NULL,
@@ -1245,7 +1244,7 @@ CREATE TABLE `short_url` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `soundboard_sounds`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `soundboard_sounds` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `hidden` tinyint(1) NOT NULL,
@@ -1255,7 +1254,7 @@ CREATE TABLE `soundboard_sounds` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `sticker_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sticker_types` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
@@ -1266,7 +1265,7 @@ CREATE TABLE `sticker_types` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `stickers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `stickers` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `lat` double NOT NULL,
@@ -1291,7 +1290,7 @@ CREATE TABLE `stickers` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `stock_mutations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `stock_mutations` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -1308,7 +1307,7 @@ CREATE TABLE `stock_mutations` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `tempadmins`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tempadmins` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL,
@@ -1324,7 +1323,7 @@ CREATE TABLE `tempadmins` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `ticket_purchases`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ticket_purchases` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `ticket_id` bigint(20) unsigned NOT NULL,
@@ -1343,7 +1342,7 @@ CREATE TABLE `ticket_purchases` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `tickets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tickets` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `event_id` bigint(20) unsigned NOT NULL,
@@ -1362,7 +1361,7 @@ CREATE TABLE `tickets` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `user_welcome`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_welcome` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL,
@@ -1375,7 +1374,7 @@ CREATE TABLE `user_welcome` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -1421,7 +1420,7 @@ CREATE TABLE `users` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `users_mailinglists`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users_mailinglists` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `list_id` bigint(20) unsigned NOT NULL,
@@ -1435,7 +1434,7 @@ CREATE TABLE `users_mailinglists` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `ut_accounts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ut_accounts` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `member_id` bigint(20) unsigned NOT NULL,
@@ -1452,7 +1451,7 @@ CREATE TABLE `ut_accounts` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `videos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `videos` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
@@ -1470,7 +1469,7 @@ CREATE TABLE `videos` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `wallstreet_drink`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `wallstreet_drink` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `end_time` bigint(20) NOT NULL,
@@ -1486,7 +1485,7 @@ CREATE TABLE `wallstreet_drink` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `wallstreet_drink_event`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `wallstreet_drink_event` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `wallstreet_drink_id` bigint(20) unsigned NOT NULL,
@@ -1498,7 +1497,7 @@ CREATE TABLE `wallstreet_drink_event` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `wallstreet_drink_event_product`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `wallstreet_drink_event_product` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `wallstreet_drink_event_id` bigint(20) unsigned NOT NULL,
@@ -1512,7 +1511,7 @@ CREATE TABLE `wallstreet_drink_event_product` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `wallstreet_drink_events`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `wallstreet_drink_events` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -1526,7 +1525,7 @@ CREATE TABLE `wallstreet_drink_events` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `wallstreet_drink_prices`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `wallstreet_drink_prices` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `wallstreet_drink_id` bigint(20) unsigned NOT NULL,
@@ -1540,7 +1539,7 @@ CREATE TABLE `wallstreet_drink_prices` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `withdrawals`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `withdrawals` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `date` date NOT NULL,
@@ -1555,7 +1554,7 @@ CREATE TABLE `withdrawals` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `withdrawals_failed`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `withdrawals_failed` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `withdrawal_id` bigint(20) unsigned NOT NULL,
@@ -1574,7 +1573,6 @@ CREATE TABLE `withdrawals_failed` (
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
-/*M!999999\- enable the sandbox mode */ 
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2014_10_12_000000_create_users_table',1);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2014_10_12_100000_create_password_resets_table',1);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2016_03_09_221221_initialmigration',1);
