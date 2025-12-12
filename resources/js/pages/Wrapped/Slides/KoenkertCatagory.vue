@@ -16,7 +16,6 @@ const stats = props.data.koenkert
             <h1 class="color-text">
                 <span class="dynamic">{{ stats.type }}</span>
             </h1>
-
         </div>
         <div class="container">
             <div
