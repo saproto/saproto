@@ -6,7 +6,6 @@ const props = defineProps<{
     noAnimation: boolean
 }>()
 const stats = props.data.koenkert
-const Image = stats.imageName
 </script>
 <template>
     <div class="slide">
