@@ -15,7 +15,7 @@ const order_totals = computed(() => page.props.order_totals as number[][])
 const total_spent = computed(() => page.props.total_spent as number)
 const events = computed(() => page.props.events as { price: number }[])
 const loaded = ref(false)
-const steps = 2
+const steps = 1
 const currentStep = ref(0)
 
 const loadData = async () => {
@@ -24,7 +24,7 @@ const loadData = async () => {
         purchases.value,
         order_totals.value,
         total_spent.value,
-        events.value
+        events.value,
     )
     currentStep.value++
     await new Promise((resolve) => setTimeout(resolve, 1000))

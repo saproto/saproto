@@ -5,6 +5,12 @@ import spilledBeer from '@/../assets/images/wrapped/spilledbeer.png'
 import tosti from '@/../assets/images/wrapped/tosti.png'
 import unicorn from '@/../assets/images/wrapped/unicorn.png'
 import unicornBw from '@/../assets/images/wrapped/unicorn_bw.png'
+import colaKoenkert from '@/../assets/images/wrapped/koenkerts/colaKoenkert.png'
+import Koenkertsleepingbag from '@/../assets/images/wrapped/koenkerts/Koenkertsleepingbag.png'
+import BavarianKoenkert from '@/../assets/images/wrapped/koenkerts/BavarianKoenkert.png'
+import KermitKoenkert from '@/../assets/images/wrapped/koenkerts/KermitKoenkert.png'
+import Koenkerthighschool from '@/../assets/images/wrapped/koenkerts/Koenkerthighschool.png'
+
 import OrderlineData = App.Data.OrderlineData
 import ProductData = App.Data.ProductData
 import { statsType } from '@/pages/Wrapped/types'
@@ -65,6 +71,10 @@ export const prepareStats = async (
             percentage: 0,
             percentile: 0,
         },
+        koenkert: {
+            type: '',
+            imageName: ``
+        }
     }
 
     // const beerOrders = orders.filter(x => x.product.is_alcoholic);
@@ -158,8 +168,35 @@ export const prepareStats = async (
     stats.willToLives.percentile = Math.round(
         ((otherWills.length - percentileCountWills) / otherWills.length) * 100
     )
+    //category Koenkert
+    var amountForOptions: { [key: string]: { products: number[]; amount: number; imageName: string } } = {
+        "capitalist santa Koenkert": { products: [35], amount: 0, imageName:colaKoenkert },
+        "bavarian Koenkert": { products: [24,211,376,494,757,758,759,761,805,810,957,1005,1039,1173,1247,1618,1619,1621,1667,1668,1669,], amount: 0,imageName:BavarianKoenkert},
+        "2 Koenkerts in a golden sleeping bag": { products: [27], amount: 0,imageName:Koenkertsleepingbag },
+        "Kermit the Koenkert": { products: [954], amount: 0,imageName:KermitKoenkert},
+        'Koenkert in highschool': { products: [1504,1688], amount: 0,imageName:Koenkerthighschool },
+    }
+    for (const order of orders) {
+        for (const option in amountForOptions) {
+            if (amountForOptions[option].products.includes(order.product_id)) {
+                amountForOptions[option].amount += order.units
+            }
+        }
+    }
+    let maxCategory = ''
+    let maxAmount = 0
+    for (const option in amountForOptions) {
+        if (amountForOptions[option].amount > maxAmount) {
+            maxAmount = amountForOptions[option].amount
+            maxCategory = option
+        }
+    }
+    stats.koenkert.type = maxCategory
+    stats.koenkert.imageName = amountForOptions[maxCategory].imageName
     await preloadImages(stats)
-    return stats
+    return stats    
+    
+    
 }
 
 const preloadImages = async (stats: statsType) => {
@@ -178,6 +215,7 @@ const preloadImages = async (stats: statsType) => {
     for (const activity of stats.activities.all) {
         activity.image_url = await fetchImageAsBase64(activity.image_url)
     }
+    stats.koenkert.imageName = await fetchImageAsBase64(stats.koenkert.imageName)
     //MostBought
     for (const product of stats.mostBought.items.slice(0, 5)) {
         product[0].image_url = await fetchImageAsBase64(product[0].image_url)
