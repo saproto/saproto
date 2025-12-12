@@ -15,19 +15,35 @@ const order_totals = computed(() => page.props.order_totals as number[][])
 const total_spent = computed(() => page.props.total_spent as number)
 const events = computed(() => page.props.events as { price: number }[])
 const loaded = ref(false)
-const steps = 2
+const steps = 10
 const currentStep = ref(0)
 
 const loadData = async () => {
-    currentStep.value++
+    currentStep.value++ // 1
+    await new Promise((resolve) => setTimeout(resolve, 50))
+    currentStep.value++ // 2
+    await new Promise((resolve) => setTimeout(resolve, 50))
+    currentStep.value++ // 3
+    await new Promise((resolve) => setTimeout(resolve, 50))
+    currentStep.value++ // 4
     data.value = await prepareStats(
         purchases.value,
         order_totals.value,
         total_spent.value,
         events.value
     )
-    currentStep.value++
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    currentStep.value++ // 5
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    currentStep.value++ // 6
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    currentStep.value++ // 7
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    currentStep.value++ // 8
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    currentStep.value++ // 9
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    currentStep.value++ // 10
+    await new Promise((resolve) => setTimeout(resolve, 400))
     loaded.value = true
 }
 loadData()
@@ -118,8 +134,8 @@ button:hover {
 }
 
 #loading:after {
-    animation: loading 10s linear infinite;
-    animation-delay: 2s;
+    animation: loading 2s linear infinite;
+    animation-delay: 0s;
     content: 'Collecting your data';
 }
 
