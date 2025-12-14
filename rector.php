@@ -3,8 +3,10 @@
 declare(strict_types=1);
 
 use Rector\Caching\ValueObject\Storage\FileCacheStorage;
+use Rector\CodingStyle\Rector\ArrowFunction\ArrowFunctionDelegatingCallToFirstClassCallableRector;
 use Rector\Config\RectorConfig;
 use Rector\Exception\Configuration\InvalidConfigurationException;
+use Rector\Php81\Rector\Array_\ArrayToFirstClassCallableRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use RectorLaravel\Rector\Class_\AddHasFactoryToModelsRector;
 use RectorLaravel\Rector\MethodCall\EloquentOrderByToLatestOrOldestRector;
@@ -41,6 +43,7 @@ try {
             LaravelSetList::LARAVEL_IF_HELPERS,
             LaravelSetList::LARAVEL_TESTING,
         ])
+        ->withPhpSets(php84: true)
         ->withConfiguredRule(WhereToWhereLikeRector::class, [
             WhereToWhereLikeRector::USING_POSTGRES_DRIVER => false,
         ])
@@ -54,6 +57,9 @@ try {
             EloquentOrderByToLatestOrOldestRector::class,
             RenameClassRector::class,
             AddHasFactoryToModelsRector::class,
+            ArrowFunctionDelegatingCallToFirstClassCallableRector::class,
+            ArrayToFirstClassCallableRector::class,
+            __DIR__.'/app/Libraries',
         ])
         ->withPaths([
             __DIR__.'/app',
