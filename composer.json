@@ -41,6 +41,7 @@
     "type": "project",
     "minimum-stability": "stable",
     "require": {
+        "php": ">=8.4",
         "abcaeffchen/sephpa": "^3.0.2",
         "alaouy/youtube": "2.2.5",
         "ext-calendar": "*",
