@@ -456,7 +456,7 @@ class TicketController extends Controller
             return Redirect::to($transaction->payment_url);
         }
 
-        Session::flash('flash_message', 'Order completed succesfully! You can find your tickets on this event page.');
+        Session::flash('flash_message', 'Order completed successfully! You can find your tickets on this event page.');
 
         if ($event->activity?->redirect_url) {
             return Redirect::away($event->activity->redirect_url);

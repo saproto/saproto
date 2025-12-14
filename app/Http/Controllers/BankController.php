@@ -179,7 +179,7 @@ class BankController extends Controller
             'status' => true,
             'message' => 'Valid',
             'iban' => iban_to_machine_format($iban),
-            'bic' => str_replace(' ', '', strtoupper($bic)),
+            'bic' => str_replace(' ', '', strtoupper((string) $bic)),
         ];
 
         if (! verify_iban($response->iban)) {

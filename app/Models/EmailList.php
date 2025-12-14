@@ -111,6 +111,6 @@ class EmailList extends Model
      */
     public static function parseUnsubscribeHash(string $hash): mixed
     {
-        return json_decode(Crypt::decrypt(base64_decode($hash)));
+        return json_decode((string) Crypt::decrypt(base64_decode($hash)));
     }
 }

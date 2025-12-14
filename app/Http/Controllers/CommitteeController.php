@@ -252,7 +252,7 @@ class CommitteeController extends Controller
 
         $name = $committee->name;
 
-        $message_content = strip_tags($request->get('message'));
+        $message_content = strip_tags((string) $request->get('message'));
         $message_hash = md5($message_content);
 
         Log::info('Anonymous e-mail with hash '.$message_hash.' sent to '.$name.' by user #'.Auth::user()->id);
@@ -260,7 +260,7 @@ class CommitteeController extends Controller
         Mail::to((object) [
             'name' => $committee->name,
             'email' => $committee->email,
-        ])->queue((new AnonymousEmail($committee, $message_content, $message_hash))->onQueue('low'));
+        ])->queue(new AnonymousEmail($committee, $message_content, $message_hash)->onQueue('low'));
 
         Session::flash('flash_message', sprintf('Thanks for submitting your anonymous e-mail! The e-mail will be sent to the %s straightaway. Please remember that they cannot reply to your e-mail, so you will not receive any further confirmation other than this notification.', $committee->name));
 
