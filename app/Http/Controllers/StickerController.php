@@ -179,6 +179,6 @@ class StickerController extends Controller
 
         event(new StickerPlacedEvent($sticker));
 
-        return back()->with('flash_message', 'Sticker succesfully unreported. It will be visible for other users again.');
+        return back()->with('flash_message', 'Sticker successfully unreported. It will be visible for other users again.');
     }
 }
