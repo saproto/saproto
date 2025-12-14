@@ -52,7 +52,7 @@ return new class extends Migration
 
             // Skip strange columns with char() type
 
-            if (str_starts_with($columnType, 'char(')) {
+            if (str_starts_with((string) $columnType, 'char(')) {
                 continue;
             }
 

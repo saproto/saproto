@@ -156,7 +156,7 @@ class UserAdminController extends Controller
         $member->proto_username = Member::createProtoUsername($user->name);
         $member->save();
 
-        Mail::to($user)->queue((new MembershipStarted($user))->onQueue('high'));
+        Mail::to($user)->queue(new MembershipStarted($user)->onQueue('high'));
 
         EmailListController::autoSubscribeToLists('autoSubscribeMember', $user);
 
@@ -185,7 +185,7 @@ class UserAdminController extends Controller
         $user->member()->delete();
         $user->clearMemberProfile();
 
-        Mail::to($user)->queue((new MembershipEnded($user))->onQueue('high'));
+        Mail::to($user)->queue(new MembershipEnded($user)->onQueue('high'));
 
         Session::flash('flash_message', 'Membership of '.$user->name.' has been terminated.');
 
@@ -204,7 +204,7 @@ class UserAdminController extends Controller
 
         $user->member->until = Date::parse('Last day of September')->endOfDay()->subDay()->timestamp;
         $user->member->save();
-        Mail::to($user)->queue((new MemberShipEndSet($user))->onQueue('high'));
+        Mail::to($user)->queue(new MemberShipEndSet($user)->onQueue('high'));
         Session::flash('flash_message', "End date for membership of $user->name set to the end of september!");
 
         return back();

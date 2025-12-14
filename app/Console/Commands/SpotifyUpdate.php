@@ -91,7 +91,7 @@ class SpotifyUpdate extends Command
                 continue;
             }
 
-            if (strlen($video->video_title) <= 0) {
+            if (strlen((string) $video->video_title) <= 0) {
                 continue;
             }
 
@@ -102,7 +102,7 @@ class SpotifyUpdate extends Command
                 'title_formatted' => preg_replace(
                     '/(\(.*|[^\S{2,}\s])/',
                     '',
-                    str_replace($strip, ' ', strtolower($video->video_title))
+                    str_replace($strip, ' ', strtolower((string) $video->video_title))
                 ),
             ];
         }

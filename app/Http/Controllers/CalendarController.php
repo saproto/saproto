@@ -39,7 +39,7 @@ class CalendarController extends Controller
 
             $name = property_exists($entry, 'summary') ? $entry->summary : '(no name)';
 
-            $name_exp = explode(' ', $name);
+            $name_exp = explode(' ', (string) $name);
             if (is_numeric($name_exp[0])) {
                 $name_exp[0] = '';
             }
@@ -50,8 +50,8 @@ class CalendarController extends Controller
             }
 
             if (property_exists($entry, 'description')) {
-                preg_match(' /Type: (.*)/', $entry->description, $type);
-                preg_match('/Student set\(s\):.*(CRE MOD\d{2}|ITECH M \d[a-zA-Z]).*/', $entry->description, $study);
+                preg_match(' /Type: (.*)/', (string) $entry->description, $type);
+                preg_match('/Student set\(s\):.*(CRE MOD\d{2}|ITECH M \d[a-zA-Z]).*/', (string) $entry->description, $study);
             } else {
                 $type = null;
                 $study = null;

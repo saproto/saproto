@@ -37,9 +37,7 @@ class StickerController extends Controller
             ->whereNull('reporter_id')
             ->with('user')
             ->with('media')
-            ->when($request->has('type'), function ($query) use ($request) {
-                return $query->where('sticker_type_id', $request->integer('type'));
-            })
+            ->when($request->has('type'), fn ($query) => $query->where('sticker_type_id', $request->integer('type')))
             ->get();
 
         $stickers = $stickers
