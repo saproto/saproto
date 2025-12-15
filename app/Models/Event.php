@@ -53,6 +53,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int|null $committee_id
  * @property string|null $summary
  * @property-read Activity|null $activity
+ * @property-read int|null $activity_sum_price
  * @property-read Collection<int, PhotoAlbum> $albums
  * @property-read int|null $albums_count
  * @property-read EventCategory|null $category

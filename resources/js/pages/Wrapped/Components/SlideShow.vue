@@ -67,7 +67,7 @@ const shareSlide = async () => {
                     const year = new Date().getFullYear()
                     const imgFile = new File(
                         [blob],
-                        `OmNomComWrapped${year}.png`,
+                        `ProtoWrapped${year}.png`,
                         { type: 'image/png' }
                     )
                     await navigator.share({
@@ -79,7 +79,8 @@ const shareSlide = async () => {
                 } else {
                     const dataUrl = URL.createObjectURL(blob)
                     const link = document.createElement('a')
-                    link.download = 'OmNomComWrapped2022.png'
+                    const year = new Date().getFullYear()
+                    link.download = `ProtoWrapped${year}.png`
                     link.href = dataUrl
                     link.click()
                 }

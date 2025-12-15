@@ -56,7 +56,8 @@ loadData()
             <SlideShow :data="data" />
         </main>
         <main v-else id="welcome">
-            <h1>Welcome to <span class="omnomcom">OmNomCom</span> Wrapped</h1>
+            <h1> {{ $page.props.auth.user.calling_name }}'s
+                <span class="omnomcom">Proto</span> Wrapped</h1>
             <div id="loader">
                 <div class="bar">
                     <div
