@@ -91,7 +91,7 @@ class HomeController extends Controller
 
         $message = Cache::remember(WelcomeMessage::getCacheKey(Auth::id()), Date::tomorrow(), fn () => WelcomeMessage::query()->where('user_id', Auth::id())->first());
 
-        $upcomingEventQuery = Event::getEventBlockQuery()
+        $upcomingEvents = Event::getEventBlockQuery()
             ->where([
                 ['end', '>=', Date::now()->timestamp],
                 ['secret', false],
@@ -101,19 +101,12 @@ class HomeController extends Controller
                 }],
             ])
             ->orderBy('start')
-            ->limit(6);
-
-        $upcomingEvents = $upcomingEventQuery->clone()
-            ->where('is_featured', false)
-            ->get();
-
-        $featuredEvents = $upcomingEventQuery->clone()
-            ->where('is_featured', true)
+            ->limit(6)
             ->get();
 
         return view('website.home.members', [
-            'upcomingEvents' => $upcomingEvents,
-            'featuredEvents' => $featuredEvents,
+            'upcomingEvents' => $upcomingEvents->filter(fn ($upcomingEvent) => $upcomingEvent->is_featured == false),
+            'featuredEvents' => $upcomingEvents->filter(fn ($upcomingEvent) => $upcomingEvent->is_featured == true),
             'companies' => $companies,
             'message' => $message,
             'newsitems' => $newsitems,
