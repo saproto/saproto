@@ -1,6 +1,6 @@
 <?php
 
-use App\Csp\Presets\Nominatim;
+use App\Csp\Presets\StickerMap;
 use App\Csp\Presets\Websockets;
 use App\Support\LaravelViteNonceGenerator;
 use Spatie\Csp\Directive;
@@ -25,7 +25,7 @@ return [
         \App\Csp\Presets\Discord::class,
         \App\Csp\Presets\FontAwesome::class,
         \App\Csp\Presets\Mollie::class,
-        Nominatim::class,
+        StickerMap::class,
         \App\Csp\Presets\ProtoApi::class,
         \App\Csp\Presets\ProTube::class,
         \App\Csp\Presets\UtilityScripts::class,
