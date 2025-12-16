@@ -152,7 +152,7 @@
 </form>
 
 @push('javascript')
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+    <script type="text/javascript" @cspNonce>
         let pageBlock = document.getElementById('achieve_page_block')
         document.getElementById('has_page').addEventListener('click', (e) => {
             if (e.target.checked) {

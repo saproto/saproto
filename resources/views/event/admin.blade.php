@@ -237,7 +237,7 @@
 @endsection
 
 @push('javascript')
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+    <script type="text/javascript" @cspNonce>
         window.addEventListener('load', () => {
             const scanList = Array.from(document.getElementsByClassName('scan'))
             const unscanList = Array.from(

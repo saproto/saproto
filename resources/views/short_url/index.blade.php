@@ -106,7 +106,7 @@
 @endsection
 
 @push('javascript')
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+    <script type="text/javascript" @cspNonce>
         document.querySelectorAll('.qr-button').forEach((el) =>
             el.addEventListener('click', (e) => {
                 const modal = document.querySelector(

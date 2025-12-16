@@ -43,7 +43,7 @@
         "leaflet": "^1.9.4",
         "leaflet-geosearch": "^4.2.0",
         "leaflet.markercluster": "^1.5.3",
-        "lucide-vue-next": "^0.556",
+        "lucide-vue-next": "^0.561.0",
         "moment": "^2.29.2",
         "radix-vue": "^1.9.13",
         "reka-ui": "^2.5.1",
@@ -60,7 +60,7 @@
     "devDependencies": {
         "@eslint/eslintrc": "^3.3.1",
         "@eslint/js": "^9.27.0",
-        "@inertiajs/vue3": "^2.0.0",
+        "@inertiajs/vue3": "^2.3.2",
         "@nabla/vite-plugin-eslint": "^2.0.6",
         "@rushstack/eslint-patch": "^1.12.0",
         "@tailwindcss/forms": "^0.5.3",

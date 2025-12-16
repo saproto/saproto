@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "faf1a62250fa131f2adaf3ba6d7f4522",
+    "content-hash": "60fa35777b17c6da31854c281c68e511",
     "packages": [
         {
             "name": "abcaeffchen/sepa-utilities",
@@ -2478,27 +2478,27 @@
         },
         {
             "name": "jwilsson/spotify-web-api-php",
-            "version": "6.3.1",
+            "version": "7.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jwilsson/spotify-web-api-php.git",
-                "reference": "5c9f04c5c4826c74ba5d695b899054efdb870ef3"
+                "reference": "d0928c14c5bc70465c95bbf07ad9698c867e9f16"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jwilsson/spotify-web-api-php/zipball/5c9f04c5c4826c74ba5d695b899054efdb870ef3",
-                "reference": "5c9f04c5c4826c74ba5d695b899054efdb870ef3",
+                "url": "https://api.github.com/repos/jwilsson/spotify-web-api-php/zipball/d0928c14c5bc70465c95bbf07ad9698c867e9f16",
+                "reference": "d0928c14c5bc70465c95bbf07ad9698c867e9f16",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
-                "php": "^8.1"
+                "php": "^8.3"
             },
             "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.89",
                 "php-coveralls/php-coveralls": "^2.5",
                 "php-mock/php-mock-phpunit": "^2.7",
-                "phpunit/phpunit": "^10.2",
-                "squizlabs/php_codesniffer": "^3.0"
+                "phpunit/phpunit": "^12.0"
             },
             "type": "library",
             "autoload": {
@@ -2523,22 +2523,22 @@
             ],
             "support": {
                 "issues": "https://github.com/jwilsson/spotify-web-api-php/issues",
-                "source": "https://github.com/jwilsson/spotify-web-api-php/tree/6.3.1"
+                "source": "https://github.com/jwilsson/spotify-web-api-php/tree/7.0.0"
             },
-            "time": "2025-12-06T07:07:13+00:00"
+            "time": "2025-12-14T10:35:38+00:00"
         },
         {
             "name": "laravel/framework",
-            "version": "v12.43.0",
+            "version": "v12.43.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "9f875fad08f5d409b4c33293eca34f7af36e8ecf"
+                "reference": "195b893593a9298edee177c0844132ebaa02102f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/9f875fad08f5d409b4c33293eca34f7af36e8ecf",
-                "reference": "9f875fad08f5d409b4c33293eca34f7af36e8ecf",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/195b893593a9298edee177c0844132ebaa02102f",
+                "reference": "195b893593a9298edee177c0844132ebaa02102f",
                 "shasum": ""
             },
             "require": {
@@ -2747,7 +2747,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2025-12-16T15:27:26+00:00"
+            "time": "2025-12-16T18:53:08+00:00"
         },
         {
             "name": "laravel/helpers",
@@ -7284,28 +7284,28 @@
         },
         {
             "name": "spatie/laravel-csp",
-            "version": "2.10.3",
+            "version": "3.21.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-csp.git",
-                "reference": "15e40c28d46076b3d5a4268b63040b3900cc05d3"
+                "reference": "1c5a878dddc66283d80ff3bbe810c9dcda4ee919"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-csp/zipball/15e40c28d46076b3d5a4268b63040b3900cc05d3",
-                "reference": "15e40c28d46076b3d5a4268b63040b3900cc05d3",
+                "url": "https://api.github.com/repos/spatie/laravel-csp/zipball/1c5a878dddc66283d80ff3bbe810c9dcda4ee919",
+                "reference": "1c5a878dddc66283d80ff3bbe810c9dcda4ee919",
                 "shasum": ""
             },
             "require": {
-                "illuminate/http": "^9.0|^10.0|^11.36.1|^12",
-                "illuminate/support": "^9.0|^10.0|^11.36.1|^12",
-                "php": "^8.1",
+                "illuminate/http": "^11.36.1|^12.0",
+                "illuminate/support": "^11.36.1|^12.0",
+                "php": "^8.3",
                 "spatie/laravel-package-tools": "^1.17"
             },
             "require-dev": {
-                "mockery/mockery": "^1.6.12",
-                "orchestra/testbench": "^7.0|^8.0|^9.9|^10",
-                "pestphp/pest": "^1.23.0|^2.36.0|^3",
+                "mockery/mockery": "^1.6",
+                "orchestra/testbench": "^9.9|^10.0",
+                "pestphp/pest": "^3.0",
                 "roave/security-advisories": "dev-master"
             },
             "type": "library",
@@ -7317,9 +7317,6 @@
                 }
             },
             "autoload": {
-                "files": [
-                    "src/helpers.php"
-                ],
                 "psr-4": {
                     "Spatie\\Csp\\": "src"
                 }
@@ -7340,6 +7337,12 @@
                     "email": "freek@spatie.be",
                     "homepage": "https://spatie.be",
                     "role": "Developer"
+                },
+                {
+                    "name": "Sebastian De Deyne",
+                    "email": "sebastian@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
                 }
             ],
             "description": "Add CSP headers to the responses of a Laravel app",
@@ -7354,7 +7357,7 @@
                 "spatie"
             ],
             "support": {
-                "source": "https://github.com/spatie/laravel-csp/tree/2.10.3"
+                "source": "https://github.com/spatie/laravel-csp/tree/3.21.0"
             },
             "funding": [
                 {
@@ -7362,7 +7365,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2025-02-14T13:23:32+00:00"
+            "time": "2025-10-16T07:20:44+00:00"
         },
         {
             "name": "spatie/laravel-data",

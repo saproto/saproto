@@ -168,7 +168,7 @@
         </div>
     </div>
 
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+    <script type="text/javascript" @cspNonce>
         const dateSelect = document.getElementById('datetimepicker-back-form')
         const dateBack = document.getElementById('datetimepicker-back')
         const alfredText = document.getElementById('alfred-text')

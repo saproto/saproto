@@ -296,7 +296,7 @@
 @endsection
 
 @push('head')
-    
+
 @endpush
 
 @push('stylesheet')
@@ -341,7 +341,7 @@
 @endpush
 
 @push('javascript')
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+    <script type="text/javascript" @cspNonce>
         window.addEventListener('load', () => {
             window.Echo.channel(`stickers`)
                 .listen('StickerPlacedEvent', (marker) => {

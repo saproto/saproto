@@ -70,7 +70,7 @@
 </div>
 
 @push('javascript')
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+    <script type="text/javascript" @cspNonce>
         var checkboxes = document.querySelectorAll('input[type=checkbox]')
         checkboxes.forEach((checkbox) => {
             checkbox.addEventListener('change', function (event) {

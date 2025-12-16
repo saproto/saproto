@@ -128,7 +128,7 @@
 @endsection
 
 @push('javascript')
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+    <script type="text/javascript" @cspNonce>
         let additionalNameInputs = document.getElementById(
             'regular-account-creation'
         )

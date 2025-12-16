@@ -95,7 +95,7 @@
     @endif
 </div>
 
-<script nonce="{{ csp_nonce() }}">
+<script @cspNonce>
     const outstanding = document.querySelector(
         '[data-bs-target="#collapse-outstanding"]'
     )

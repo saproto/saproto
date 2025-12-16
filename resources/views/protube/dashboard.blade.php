@@ -82,7 +82,7 @@
                                 >
                                     Clear my ProTube history.
                                 </a>
-                                <script nonce="{{ csp_nonce() }}">
+                                <script @cspNonce>
                                     document
                                         .getElementById('clear-history')
                                         .addEventListener('click', () =>

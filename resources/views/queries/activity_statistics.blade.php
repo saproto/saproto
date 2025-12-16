@@ -130,15 +130,15 @@
 @push('javascript')
     {{-- chart.js and the date adapter --}}
     <script
-        nonce="{{ csp_nonce() }}"
+        @cspNonce
         src="https://cdn.jsdelivr.net/npm/chart.js"
     ></script>
     <script
-        nonce="{{ csp_nonce() }}"
+        @cspNonce
         src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"
     ></script>
 
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+    <script type="text/javascript" @cspNonce>
         const ctx = document.getElementById('chart')
         var chart = null
         var data = {!! json_encode($events->toArray(), JSON_HEX_TAG) !!}
