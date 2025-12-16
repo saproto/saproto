@@ -296,7 +296,7 @@
 @endsection
 
 @push('head')
-
+    
 @endpush
 
 @push('stylesheet')

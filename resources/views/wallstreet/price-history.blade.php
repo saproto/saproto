@@ -16,10 +16,7 @@
 
 @push('javascript')
     {{-- chart.js and the date adapter --}}
-    <script
-        @cspNonce
-        src="https://cdn.jsdelivr.net/npm/chart.js"
-    ></script>
+    <script @cspNonce src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script
         @cspNonce
         src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"
