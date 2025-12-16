@@ -24,6 +24,6 @@ class Basic implements Preset
             ->add(Directive::STYLE, [Keyword::SELF, Keyword::UNSAFE_INLINE])
             ->add(Directive::FONT, Keyword::SELF)
             ->addNonce(Directive::SCRIPT);
-//            ->addNonce(Directive::STYLE);
+        //            ->addNonce(Directive::STYLE);
     }
 }

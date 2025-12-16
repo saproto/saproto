@@ -1,12 +1,20 @@
 <?php
 
+use App\Csp\Presets\Basic;
+use App\Csp\Presets\Discord;
+use App\Csp\Presets\FontAwesome;
+use App\Csp\Presets\Mollie;
+use App\Csp\Presets\ProtoApi;
+use App\Csp\Presets\ProTube;
 use App\Csp\Presets\StickerMap;
+use App\Csp\Presets\UtilityScripts;
 use App\Csp\Presets\Websockets;
 use App\Support\LaravelViteNonceGenerator;
 use Spatie\Csp\Directive;
 use Spatie\Csp\Keyword;
 use Spatie\Csp\Presets\GoogleFonts;
 use Spatie\Csp\Presets\GoogleRecaptcha;
+use Spatie\Csp\Presets\GoogleTlds;
 use Spatie\Csp\Presets\JsDelivr;
 
 return [
@@ -16,19 +24,19 @@ return [
      * any class that implements `Spatie\Csp\Preset`
      */
     'presets' => [
-        \App\Csp\Presets\Basic::class,
+        Basic::class,
         GoogleRecaptcha::class,
         JsDelivr::class,
         GoogleFonts::class,
-        \Spatie\Csp\Presets\GoogleTlds::class,
-        //our own custom presets
-        \App\Csp\Presets\Discord::class,
-        \App\Csp\Presets\FontAwesome::class,
-        \App\Csp\Presets\Mollie::class,
+        GoogleTlds::class,
+        // our own custom presets
+        Discord::class,
+        FontAwesome::class,
+        Mollie::class,
         StickerMap::class,
-        \App\Csp\Presets\ProtoApi::class,
-        \App\Csp\Presets\ProTube::class,
-        \App\Csp\Presets\UtilityScripts::class,
+        ProtoApi::class,
+        ProTube::class,
+        UtilityScripts::class,
         Websockets::class,
     ],
 

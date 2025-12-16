@@ -11,7 +11,7 @@ class Discord implements Preset
     public function configure(Policy $policy): void
     {
         $policy->add(Directive::CONNECT, [
-            'https://discordapp.com/api/guilds/600338792766767289/widget.json'
+            'https://discordapp.com/api/guilds/600338792766767289/widget.json',
         ]);
     }
 }

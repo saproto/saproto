@@ -15,14 +15,14 @@ class ProtoApi implements Preset
             // Internal APIs
             'https://proto.utwente.nl',
             'https://www.proto.utwente.nl',
-            'https://static.saproto.com'
+            'https://static.saproto.com',
         ]);
         $policy->add(Directive::MEDIA, [
             'https://static.saproto.com']);
 
-        //allow inline svgs and blobs
+        // allow inline svgs and blobs
         $policy->add(Directive::IMG, [
-            'data:'
+            'data:',
         ]);
 
         $policy->add(Directive::FORM_ACTION, Config::array('proto.domains.protube'));
