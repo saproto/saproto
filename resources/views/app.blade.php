@@ -19,6 +19,8 @@
             href="{{ route('search::opensearch') }}"
         />
 
+        @routes()
+
         <!-- Scripts -->
         @vite(['resources/js/app.ts', "resources/js/pages/{$page['component']}.vue"])
 
