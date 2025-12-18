@@ -46,11 +46,11 @@ class Kernel extends HttpKernel
         ValidatePostSize::class,
         StartSession::class,
         TrustProxies::class,
+        GenerateAndSetCspNonce::class,
     ];
 
     protected $middlewareGroups = [
         'web' => [
-            GenerateAndSetCspNonce::class,
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
             ShareErrorsFromSession::class,
