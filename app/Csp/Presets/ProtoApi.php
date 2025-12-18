@@ -22,6 +22,7 @@ class ProtoApi implements Preset
 
         // allow inline svgs and blobs
         $policy->add(Directive::IMG, [
+            'https://static.saproto.com',
             'data:',
         ]);
 
