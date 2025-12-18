@@ -229,7 +229,7 @@
             </a>
         </div>
 
-        <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        <script type="text/javascript" @cspNonce>
             const search = document.getElementById('search_query')
             const results = Array.from(
                 document.getElementsByClassName('result')

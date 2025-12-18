@@ -164,7 +164,7 @@
 
         @include('website.assets.javascripts')
 
-        <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        <script type="text/javascript" @cspNonce>
             const feedbackField = document.getElementById('feedback-field')
             let prevRead = ''
 

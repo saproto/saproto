@@ -69,7 +69,7 @@ class ImportLiveDataSeeder extends Seeder
             return null;
         }
 
-        return json_decode($response);
+        return json_decode((string) $response);
     }
 
     /**

@@ -70,7 +70,7 @@
 @push('javascript')
     @vite('resources/assets/js/echo.js')
 
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+    <script type="text/javascript" @cspNonce>
         const statusElement = document.getElementById('alfred-status')
         const text = document.getElementById('alfred-text')
         const time = document.getElementById('alfred-actualtime')

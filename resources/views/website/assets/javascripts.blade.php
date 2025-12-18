@@ -1,5 +1,5 @@
 {{-- Blade variable can be accessed through this config object. --}}
-<script type="text/javascript" nonce="{{ csp_nonce() }}">
+<script type="text/javascript" @cspNonce>
     const config = {
         routes: {
             api_search_user: "{{ route('api::search::user') }}",

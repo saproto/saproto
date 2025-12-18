@@ -4,7 +4,7 @@
 @endsection
 
 @push('stylesheet')
-    <style nonce="{{ csp_nonce() }}">
+    <style @cspNonce>
         :root {
             --wallstreet-dark: #303030;
             --wallstreet-light: #555555;
@@ -308,23 +308,20 @@
 
 @push('javascript')
     {{-- chart.js and the date adapter --}}
+    <script @cspNonce src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script
-        nonce="{{ csp_nonce() }}"
-        src="https://cdn.jsdelivr.net/npm/chart.js"
-    ></script>
-    <script
-        nonce="{{ csp_nonce() }}"
+        @cspNonce
         src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"
     ></script>
 
     <script
         src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"
-        nonce="{{ csp_nonce() }}"
+        @cspNonce
     ></script>
 
     @vite('resources/assets/js/echo.js')
 
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+    <script type="text/javascript" @cspNonce>
         window.addEventListener('load', () => {
             const swiper = new Swiper('#swiper-container', {
                 loop: true,
