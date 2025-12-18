@@ -114,7 +114,7 @@ class UserDashboardController extends Controller
                 'ip' => $request->ip(),
             ];
 
-            Mail::to($to)->queue((new UserMailChange($user, $changer, $email))->onQueue('high'));
+            Mail::to($to)->queue(new UserMailChange($user, $changer, $email)->onQueue('high'));
         }
 
         $user->email = $new_email;
@@ -180,7 +180,7 @@ class UserDashboardController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-        $user->diet = htmlspecialchars($request->input('diet'));
+        $user->diet = htmlspecialchars((string) $request->input('diet'));
         $user->save();
 
         Session::flash('flash_message', 'Your diet and allergy information has been updated.');

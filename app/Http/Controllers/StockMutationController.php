@@ -23,7 +23,7 @@ class StockMutationController extends Controller
         $mutations = StockMutation::query()->orderBy('stock_mutations.created_at', 'desc')->orderBy('stock_mutations.id', 'desc');
 
         // Find mutations by Product
-        if ($rq->has('product_name') && strlen($rq->get('product_name')) > 2) {
+        if ($rq->has('product_name') && strlen((string) $rq->get('product_name')) > 2) {
             $search = $rq->get('product_name');
             $mutations = $mutations
                 ->join('products', 'products.id', '=', 'stock_mutations.product_id', 'inner')
@@ -31,7 +31,7 @@ class StockMutationController extends Controller
         }
 
         // Find mutations by authoring User
-        if ($rq->has('author_name') && strlen($rq->input('author_name')) > 2) {
+        if ($rq->has('author_name') && strlen((string) $rq->input('author_name')) > 2) {
             $search = $rq->get('author_name');
             $mutations = $mutations
                 ->join('users', 'users.id', '=', 'stock_mutations.user_id', 'inner')
@@ -95,12 +95,12 @@ class StockMutationController extends Controller
         $callback = static function () use ($mutations) {
             $f = fopen('php://output', 'w');
             $csv_header = ['Product ID', 'Product Name', 'Change', 'Old stock', 'Updated stock', 'Creation time'];
-            fputcsv($f, $csv_header);
+            fputcsv($f, $csv_header, escape: '\\');
             foreach ($mutations as $row) {
                 $product = Product::query()->find($row['product_id']);
 
                 if (! is_null($product)) {
-                    fputcsv($f, [$row['product_id'], $product->name, $row['after'] - $row['before'], $row['before'], $row['after'], $row['created_at']]);
+                    fputcsv($f, [$row['product_id'], $product->name, $row['after'] - $row['before'], $row['before'], $row['after'], $row['created_at']], escape: '\\');
                 }
             }
 

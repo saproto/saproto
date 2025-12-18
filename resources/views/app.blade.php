@@ -19,7 +19,8 @@
             href="{{ route('search::opensearch') }}"
         />
 
-        @routes(nonce: csp_nonce())
+        @routes(nonce: \Illuminate\Support\Facades\Vite::cspNonce())
+
         <!-- Scripts -->
         @vite(['resources/js/app.ts', "resources/js/pages/{$page['component']}.vue"])
 

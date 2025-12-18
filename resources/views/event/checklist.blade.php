@@ -127,7 +127,7 @@
 @endsection
 
 @push('javascript')
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+    <script type="text/javascript" @cspNonce>
         present = document.getElementById('present')
 
         document.querySelectorAll('.is_present').forEach((el) => {

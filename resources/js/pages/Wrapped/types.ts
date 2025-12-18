@@ -42,4 +42,8 @@ export interface statsType {
         percentage: number
         percentile: number
     }
+    koenkert: {
+        type: string
+        imageName: string
+    }
 }

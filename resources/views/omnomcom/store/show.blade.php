@@ -62,32 +62,17 @@
                     @endif
                 @endforeach
 
-                   background-image: url('{{ asset($bg_image) }}');
+               background-image: url('{{ asset($bg_image) }}');
                 background-position: center 100%;
                 background-repeat: no-repeat;
+                @media (max-width: 1280px) and (max-height: 720px), (orientation: portrait) {
+                    background-size: 100% auto;
+                }
             }
         </style>
     </head>
 
     <body>
-        <div id="display-fullscreen" class="modal" tabindex="-1">
-            <div class="modal-dialog-centered mx-auto">
-                <div class="modal-content">
-                    <div class="modal-header text-center">
-                        <h5 class="modal-title w-100">
-                            Please display OmNomCom in fullscreen!
-                        </h5>
-                    </div>
-                    <div class="modal-body d-flex justify-content-center pb-0">
-                        <img
-                            src="{{ asset('images/omnomcom/cookiemonster_seasonal/pixels.png') }}"
-                            alt="cookie monster"
-                        />
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div id="omnomcom">
             <div class="d-flex ps-2">
                 @include('omnomcom.store.includes.categories')
@@ -106,7 +91,7 @@
 
         @stack('javascript')
 
-        <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        <script type="text/javascript" @cspNonce>
             let actionStatus
             let purchaseProcessing
             let cartOverflowVisible = true

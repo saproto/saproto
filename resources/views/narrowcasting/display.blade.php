@@ -66,9 +66,9 @@
     <script
         type="text/javascript"
         src="https://www.youtube.com/iframe_api"
-        nonce="{{ csp_nonce() }}"
+        @cspNonce
     ></script>
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+    <script type="text/javascript" @cspNonce>
         let campaigns = []
         let currentCampaign = 0
         let previousWasVideo = false

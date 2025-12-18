@@ -159,7 +159,7 @@ class CodexController extends Controller
                 $pdf->MultiCell(0, $textHeight, $category->type, 0, 'L');
                 $pdf->SetFont('minion', '', $textSize);
 
-                $textArray = explode(PHP_EOL, $text->text);
+                $textArray = explode(PHP_EOL, (string) $text->text);
                 $list = false;
                 $count = 0;
 
@@ -210,7 +210,7 @@ class CodexController extends Controller
                 $link = $pdf->AddLink();
                 $pdf->SetLink($link, -1, -1);
                 $pdf->TOC_Entry($song->title, 1);
-                $lyricsArray = explode(PHP_EOL, $song->lyrics);
+                $lyricsArray = explode(PHP_EOL, (string) $song->lyrics);
                 $print = true;
                 $counter = count($lyricsArray);
                 for ($index = 0; $index < $counter; $index++) {

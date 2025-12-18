@@ -22,7 +22,7 @@
                     ?>
 
                     <div
-                        class="product {{ $product->stock <= 0 ? 'nostock' : '' }} col-3"
+                        class="product {{ $product->stock <= 0 ? 'nostock' : '' }} col-xl-4 col-xxl-3 col-6"
                         data-id="{{ $product->id }}"
                         data-stock="{{ $product->stock }}"
                         data-price="{{ $product->price }}"
@@ -45,20 +45,19 @@
                             </div>
 
                             <div class="product-details">
-                                <div class="product-name">
-                                    {{ $product->name }}
-                                </div>
-
-                                <div class="product-price">
-                                    &euro;
-                                    {{ number_format($product->price, 2, '.', '') }}
-                                </div>
-
                                 @if ($product->stock < 1000)
                                     <div class="product-stock">
                                         {{ $product->stock }} x
                                     </div>
                                 @endif
+
+                                <div class="product-name">
+                                    {{ $product->name }}
+                                </div>
+
+                                <div class="product-price">
+                                    €{{ number_format($product->price, 2, '.', '') }}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -67,7 +66,7 @@
 
             @if (count($products_in_category) > 0)
                 <div
-                    class="product random {{ count($products_in_category) <= 1 ? 'nostock' : '' }} col-3"
+                    class="product random {{ count($products_in_category) <= 1 ? 'nostock' : '' }} col-xl-4 col-xxl-3 col-6"
                     data-list="{{ implode(',', $products_in_category) }}"
                     data-stock="{{ count($products_in_category) }}"
                 >
@@ -83,7 +82,7 @@
                         <div class="product-details">
                             <div class="product-name">I'm feeling lucky!</div>
 
-                            <div class="product-price">Who knows?</div>
+                            <div class="product-price">€ ???</div>
                         </div>
                     </div>
                 </div>
@@ -95,7 +94,7 @@
     @if (count($minors) > 0)
         <div class="category-view inactive" data-id="static-minors">
             @foreach ($minors as $user)
-                <div class="product col-3">
+                <div class="product col-xl-4 col-xxl-3 col-6">
                     <div class="product-inner">
                         <div
                             class="product-image user-image"
@@ -104,13 +103,9 @@
                             "
                         ></div>
                         <div class="product-details">
-                            <div class="product-name">
-                                {{ $user->name }}
-                            </div>
+                            <div class="product-name">{{ $user->name }}</div>
 
-                            <div class="product-stock user-age">
-                                Age: {{ $user->age() }}
-                            </div>
+                            <div class="product-price">{{ $user->age() }}</div>
                         </div>
                     </div>
                 </div>

@@ -84,9 +84,9 @@ class MenuItem extends Model
     protected function parsedUrl(): Attribute
     {
         return Attribute::make(get: function () {
-            if (str_starts_with($this->url, '(route) ')) {
+            if (str_starts_with((string) $this->url, '(route) ')) {
                 try {
-                    return route(substr($this->url, 8));
+                    return route(substr((string) $this->url, 8));
                 } catch (Exception) {
                     return '#';
                 }
@@ -98,9 +98,9 @@ class MenuItem extends Model
 
     public function getUrl(): ?string
     {
-        if (str_starts_with($this->url, '(route) ')) {
+        if (str_starts_with((string) $this->url, '(route) ')) {
             try {
-                return route(substr($this->url, 8));
+                return route(substr((string) $this->url, 8));
             } catch (Exception) {
                 return '#';
             }

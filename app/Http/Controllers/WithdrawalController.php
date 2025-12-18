@@ -57,7 +57,7 @@ class WithdrawalController extends Controller
 
         $totalPerUser = [];
 
-        $orderlines = OrderLine::unpayed()
+        $orderlines = OrderLine::query()->unpayed()
             ->whereHas('user')
             ->with('product')
             ->with('product.ticket')
@@ -259,7 +259,7 @@ class WithdrawalController extends Controller
             'correction_orderline_id' => $failedOrderline->id,
         ])->save();
 
-        Mail::to($user)->queue((new OmnomcomFailedWithdrawalNotification($user, $withdrawal))->onQueue('medium'));
+        Mail::to($user)->queue(new OmnomcomFailedWithdrawalNotification($user, $withdrawal)->onQueue('medium'));
 
         Session::flash('flash_message', "Withdrawal for $user->name marked as failed. User e-mailed.");
 
@@ -426,7 +426,7 @@ class WithdrawalController extends Controller
         }
 
         foreach ($withdrawal->users()->get() as $user) {
-            Mail::to($user)->queue((new OmnomcomWithdrawalNotification($user, $withdrawal))->onQueue('medium'));
+            Mail::to($user)->queue(new OmnomcomWithdrawalNotification($user, $withdrawal)->onQueue('medium'));
         }
 
         Session::flash('flash_message', 'All e-mails have been queued.');

@@ -559,8 +559,6 @@ CALSCALE:GREGORIAN
         $relevant_only = $user?->pref_calendar_relevant_only;
         $events = Event::getEventBlockQuery($user)
             ->where('start', '>', Date::now()->subMonths(6)->timestamp)
-            ->with('committee.users')
-            ->withCount('tickets')
             ->get();
 
         foreach ($events as $event) {

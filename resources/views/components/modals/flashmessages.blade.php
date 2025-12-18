@@ -13,7 +13,7 @@
     </div>
 
     @push('javascript')
-        <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        <script type="text/javascript" @cspNonce>
             window.addEventListener('load', () => {
                 modals['flash-modal'].show()
             })

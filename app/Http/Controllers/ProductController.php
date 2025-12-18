@@ -28,7 +28,7 @@ class ProductController extends Controller
      */
     public function index(Request $request): \Illuminate\Contracts\View\View|Factory
     {
-        if ($request->has('search') && strlen($request->get('search')) > 2) {
+        if ($request->has('search') && strlen((string) $request->get('search')) > 2) {
             $search = $request->get('search');
             $products = Product::query()->where('name', 'like', "%{$search}%")->orderBy('is_visible', 'desc')->orderBy('name', 'asc')->limit(100)->get();
         } elseif ($request->has('filter')) {
@@ -208,7 +208,7 @@ class ProductController extends Controller
 
     public function bulkUpdate(Request $request): RedirectResponse
     {
-        $input = preg_split('/\r\n|\r|\n/', $request->input('update'));
+        $input = preg_split('/\r\n|\r|\n/', (string) $request->input('update'));
 
         $log = '';
         $errors = '';
@@ -258,7 +258,7 @@ class ProductController extends Controller
         }
 
         Session::flash('flash_message', 'Done. Errors:<br>'.$errors);
-        Mail::queue((new ProductBulkUpdateNotification(Auth::user(), $errors.$log))->onQueue('low'));
+        Mail::queue(new ProductBulkUpdateNotification(Auth::user(), $errors.$log)->onQueue('low'));
 
         return back();
     }
@@ -315,7 +315,7 @@ class ProductController extends Controller
         $callback = static function () use ($data) {
             $f = fopen('php://output', 'w');
             foreach ($data as $row) {
-                fputcsv($f, $row);
+                fputcsv($f, $row, escape: '\\');
             }
 
             fclose($f);

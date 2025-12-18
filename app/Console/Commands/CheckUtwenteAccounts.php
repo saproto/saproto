@@ -41,7 +41,7 @@ class CheckUtwenteAccounts extends Command
     {
         $users = User::query()->whereNotNull('utwente_username')->select(['id', 'utwente_username', 'name'])->get();
 
-        $userSns = implode('', $users->pluck('utwente_username')->map(fn ($username): string => '(cn='.strtolower($username).')')->all());
+        $userSns = implode('', $users->pluck('utwente_username')->map(fn ($username): string => '(cn='.strtolower((string) $username).')')->all());
         $this->info('Checking '.$users->count().' UTwente accounts.');
 
         $unlinked = [];
@@ -57,7 +57,7 @@ class CheckUtwenteAccounts extends Command
 
         foreach ($users as $user) {
 
-            if ($remoteusers->filter(fn ($item): bool => strtolower($item) === strtolower($user->utwente_username))->count() <= 0) {
+            if ($remoteusers->filter(fn ($item): bool => strtolower((string) $item) === strtolower((string) $user->utwente_username))->count() <= 0) {
                 $msg = "Not found: {$user->utwente_username} (".$user->name.')';
                 $this->info($msg);
                 $unlinked[] = $msg;
@@ -67,7 +67,7 @@ class CheckUtwenteAccounts extends Command
             }
         }
 
-        Mail::queue((new UtwenteCleanup($unlinked))->onQueue('high'));
+        Mail::queue(new UtwenteCleanup($unlinked)->onQueue('high'));
 
         $this->info('Done');
     }

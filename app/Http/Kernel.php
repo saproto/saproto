@@ -9,6 +9,7 @@ use App\Http\Middleware\EnforceHTTPS;
 use App\Http\Middleware\EnforceTFA;
 use App\Http\Middleware\EnforceWizard;
 use App\Http\Middleware\ForceDomain;
+use App\Http\Middleware\GenerateAndSetCspNonce;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\LastSeenAt;
 use App\Http\Middleware\Member;
@@ -45,6 +46,7 @@ class Kernel extends HttpKernel
         ValidatePostSize::class,
         StartSession::class,
         TrustProxies::class,
+        GenerateAndSetCspNonce::class,
     ];
 
     protected $middlewareGroups = [

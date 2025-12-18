@@ -144,7 +144,14 @@ jobs:
           php artisan key:generate
           php artisan migrate
           php artisan passport:keys
+          php artisan schema:dump
           vendor/bin/pest --ci --parallel
+
+      - name: Commit changes (schema dump)
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Changed sql schema (artisan dump)
+          skip_fetch: true
 
       - name: Check if laravel caching works
         run: |

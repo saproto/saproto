@@ -18,7 +18,7 @@ class NotUtwenteEmail implements ValidationRule
     #[Override]
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (Str::endsWith(strtolower($value), 'utwente.nl')) {
+        if (Str::endsWith(strtolower((string) $value), 'utwente.nl')) {
             $fail('The :attribute may not be a utwente email-address');
         }
     }

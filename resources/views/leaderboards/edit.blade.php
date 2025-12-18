@@ -250,7 +250,7 @@
 @endsection
 
 @push('javascript')
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+    <script type="text/javascript" @cspNonce>
         Array.from(document.getElementsByClassName('le-points')).forEach(
             (el) => {
                 ;['click', 'keyup'].forEach((e) =>

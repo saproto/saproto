@@ -9,6 +9,7 @@ import Drinks from '@/pages/Wrapped/Slides/Drinks.vue'
 import WillToLive from '@/pages/Wrapped/Slides/WillToLive.vue'
 import DaysAtProto from '@/pages/Wrapped/Slides/DaysAtProto.vue'
 import Activities from '@/pages/Wrapped/Slides/Activities.vue'
+import KoenkertCatagory from '../Slides/KoenkertCatagory.vue'
 import { useSwipe } from '@vueuse/core'
 import { statsType } from '@/pages/Wrapped/types.ts'
 import { ArrowUp } from 'lucide-vue-next'
@@ -33,6 +34,7 @@ type SlideComponent =
     | typeof WillToLive
     | typeof DaysAtProto
     | typeof Activities
+    | typeof KoenkertCatagory
 
 const slideElement = ref<SlideComponent>()
 const sharing = ref(false)
@@ -45,6 +47,7 @@ let allSlides: Array<[Component, number] | true> = [
     stats.willToLives.amount <= 0 || [WillToLive, 10],
     [DaysAtProto, 10],
     stats.activities.amount <= 0 || [Activities, 10],
+    [KoenkertCatagory, 10],
 ]
 
 const slides = allSlides.filter((x) => x !== true)
@@ -64,7 +67,7 @@ const shareSlide = async () => {
                     const year = new Date().getFullYear()
                     const imgFile = new File(
                         [blob],
-                        `OmNomComWrapped${year}.png`,
+                        `ProtoWrapped${year}.png`,
                         { type: 'image/png' }
                     )
                     await navigator.share({
@@ -76,7 +79,8 @@ const shareSlide = async () => {
                 } else {
                     const dataUrl = URL.createObjectURL(blob)
                     const link = document.createElement('a')
-                    link.download = 'OmNomComWrapped2022.png'
+                    const year = new Date().getFullYear()
+                    link.download = `ProtoWrapped${year}.png`
                     link.href = dataUrl
                     link.click()
                 }
@@ -219,7 +223,7 @@ const { lengthX } = useSwipe(slideElement, {
         <div>
             <h1>
                 {{ $page.props.auth.user.calling_name }}'s
-                <span class="omnomcom">OmNomCom</span> Wrapped
+                <span class="omnomcom">Proto</span> Wrapped
             </h1>
         </div>
 

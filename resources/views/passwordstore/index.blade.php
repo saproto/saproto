@@ -212,7 +212,7 @@
 @endsection
 
 @push('javascript')
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+    <script type="text/javascript" @cspNonce>
         document.querySelectorAll('.passwordmanager__copy').forEach((el) => {
             const copy = el.getAttribute('data-copy')
             el.addEventListener('click', () => {

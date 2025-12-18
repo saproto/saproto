@@ -11,6 +11,6 @@ class LaravelViteNonceGenerator implements NonceGenerator
     #[Override]
     public function generate(): string
     {
-        return Vite::useCspNonce();
+        return Vite::cspNonce();
     }
 }
