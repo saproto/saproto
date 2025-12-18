@@ -884,30 +884,18 @@ DROP TABLE IF EXISTS `oauth_clients`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `oauth_clients` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` bigint(20) unsigned DEFAULT NULL,
+  `owner_type` varchar(255) DEFAULT NULL,
+  `owner_id` bigint(20) unsigned DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   `secret` varchar(100) DEFAULT NULL,
   `provider` varchar(255) DEFAULT NULL,
-  `redirect` mediumtext NOT NULL,
-  `personal_access_client` tinyint(1) NOT NULL,
-  `password_client` tinyint(1) NOT NULL,
+  `redirect_uris` text NOT NULL,
+  `grant_types` text NOT NULL,
   `revoked` tinyint(1) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `oauth_clients_user_id_index` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `oauth_personal_access_clients`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `oauth_personal_access_clients` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `client_id` bigint(20) unsigned NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `oauth_personal_access_clients_client_id_index` (`client_id`)
+  KEY `oauth_clients_owner_type_owner_id_index` (`owner_type`,`owner_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `oauth_refresh_tokens`;
@@ -1841,3 +1829,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_06_212403_remov
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_06_224547_remove_emails_files_table',193);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_25_194358_create_sticker_types_table',193);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_30_123317_add_withdrawal_pivot_table_to_emails',194);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_11_03_235144_remove_oauth_personal_access_clients_table',195);
