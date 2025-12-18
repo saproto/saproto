@@ -162,7 +162,7 @@
 @endsection
 
 @push('javascript')
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+    <script type="text/javascript" @cspNonce>
         const otherUrlOption = document.getElementById('other-url-option')
         const otherUrlFields = document.getElementById('other-url-fields')
         document.getElementById('page_id').addEventListener('change', (e) => {

@@ -174,7 +174,7 @@
     </div>
 </form>
 @push('javascript')
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+    <script type="text/javascript" @cspNonce>
         // Update the is active checkbox when the committee type is changed
         document
             .getElementById('is_society')

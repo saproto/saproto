@@ -384,7 +384,7 @@
 @endsection
 
 @push('javascript')
-    <script async type="text/javascript" nonce="{{ csp_nonce() }}">
+    <script async type="text/javascript" @cspNonce>
         window.addEventListener('load', () => {
             let fileSizeLimit = '{{ $fileSizeLimit }}B'
             let fileId = 1

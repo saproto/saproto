@@ -73,4 +73,16 @@ export default defineConfig({
             host: 'localhost',
         },
     },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                silenceDeprecations: [
+                    'import',
+                    'color-functions',
+                    'global-builtin',
+                    'if-function'
+                ],
+            },
+        },
+    },
 });

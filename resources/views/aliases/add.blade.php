@@ -74,7 +74,7 @@
 @endsection
 
 @push('javascript')
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+    <script type="text/javascript" @cspNonce>
         document.getElementById('user').addEventListener('change', () => {
             document.getElementById('destination').value = ''
         })

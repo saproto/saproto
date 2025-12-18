@@ -16,16 +16,13 @@
 
 @push('javascript')
     {{-- chart.js and the date adapter --}}
+    <script @cspNonce src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script
-        nonce="{{ csp_nonce() }}"
-        src="https://cdn.jsdelivr.net/npm/chart.js"
-    ></script>
-    <script
-        nonce="{{ csp_nonce() }}"
+        @cspNonce
         src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"
     ></script>
 
-    <script nonce="{{ csp_nonce() }}">
+    <script @cspNonce>
         // Initialize when page is loaded
         window.addEventListener('load', () => {
             const ctx = document.getElementById('myChart')

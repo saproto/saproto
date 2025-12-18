@@ -67,7 +67,7 @@ class SyncUTAccounts extends Command
         UtAccount::query()->where('found', false)->delete();
 
         if ($removed->count() > 0) {
-            Mail::queue((new UtwenteCleanup($removed))->onQueue('high'));
+            Mail::queue(new UtwenteCleanup($removed)->onQueue('high'));
         }
     }
 
@@ -179,7 +179,7 @@ class SyncUTAccounts extends Command
     /** @param array<string, mixed> $student */
     public function standardCompare(string $userValue, array $student, string $UTIdentifier): bool
     {
-        return strtolower($userValue) === strtolower($student[$UTIdentifier]);
+        return strtolower($userValue) === strtolower((string) $student[$UTIdentifier]);
     }
 
     /**

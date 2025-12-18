@@ -128,7 +128,7 @@ class FeedbackController extends Controller
     public function store(Request $request, int $category): RedirectResponse
     {
         $category = FeedbackCategory::query()->findOrFail($category);
-        $feedback = new Feedback(['feedback' => trim($request->input('feedback')), 'user_id' => Auth::id(), 'feedback_category_id' => $category->id]);
+        $feedback = new Feedback(['feedback' => trim((string) $request->input('feedback')), 'user_id' => Auth::id(), 'feedback_category_id' => $category->id]);
         $feedback->save();
 
         $categoryTitle = Str::singular($category->title);
@@ -157,7 +157,7 @@ class FeedbackController extends Controller
 
         if ($feedback->reply == null && $reply != null) {
             $user = User::query()->findOrFail($feedback->user_id);
-            Mail::to($user)->queue((new FeedbackReplyEmail($feedback, $user, $reply, $accepted))->onQueue('low'));
+            Mail::to($user)->queue(new FeedbackReplyEmail($feedback, $user, $reply, $accepted)->onQueue('low'));
         }
 
         $feedback->reply = $reply;
@@ -285,7 +285,7 @@ class FeedbackController extends Controller
     public function categoryStore(Request $request): RedirectResponse
     {
         // regex to remove all non-alphanumeric characters
-        $newUrl = strtolower(preg_replace('/[^a-zA-Z0-9]+/', '', $request->input('name')));
+        $newUrl = strtolower((string) preg_replace('/[^a-zA-Z0-9]+/', '', (string) $request->input('name')));
         if (FeedbackCategory::query()->where('url', $newUrl)->first()) {
             Session::flash('flash_message', 'This category-url already exists! Try a different name!');
 
@@ -315,7 +315,7 @@ class FeedbackController extends Controller
     public function categoryUpdate(Request $request, int $id): RedirectResponse
     {
         // regex to remove all non-alphanumeric characters
-        $newUrl = strtolower(preg_replace('/[^a-zA-Z0-9]+/', '', $request->input('name')));
+        $newUrl = strtolower((string) preg_replace('/[^a-zA-Z0-9]+/', '', (string) $request->input('name')));
         if (FeedbackCategory::query()->where('url', $newUrl)->first() && FeedbackCategory::query()->where('url', $newUrl)->first()->id !== $id) {
             Session::flash('flash_message', 'This category-url already exists! Try a different name!');
 

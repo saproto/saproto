@@ -114,7 +114,7 @@
                         value="{{ Auth::check() ? Auth::user()->getIcalUrl() : route('ical::calendar') }}"
                         readonly
                     />
-                    <script nonce="{{ csp_nonce() }}">
+                    <script @cspNonce>
                         document
                             .getElementById('ical-url')
                             .addEventListener('click', (e) => {

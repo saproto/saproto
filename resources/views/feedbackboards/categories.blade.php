@@ -146,7 +146,7 @@
 @endsection
 
 @push('javascript')
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+    <script type="text/javascript" @cspNonce>
         let checkbox = document.getElementById('can_review')
         checkbox.addEventListener('change', function () {
             if (checkbox.checked) {
