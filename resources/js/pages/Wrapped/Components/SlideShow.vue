@@ -12,7 +12,7 @@ import KoenkertCatagory from '../Slides/KoenkertCatagory.vue'
 import { useSwipe } from '@vueuse/core'
 import { statsType } from '@/pages/Wrapped/types.ts'
 import { ArrowUp } from 'lucide-vue-next'
-import domtoimage from 'dom-to-image';
+import domtoimage from 'dom-to-image'
 
 const props = defineProps<{
     data: statsType
@@ -58,8 +58,7 @@ const shareSlide = async () => {
     setTimeout(async () => {
         try {
             if (!slide.value) return
-            domtoimage.toBlob(slide.value)
-                .then(async (blob) => {
+            domtoimage.toBlob(slide.value).then(async (blob) => {
                 if (!blob) return
                 if (navigator.share) {
                     const year = new Date().getFullYear()
