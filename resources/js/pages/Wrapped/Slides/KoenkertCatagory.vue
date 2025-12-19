@@ -60,7 +60,7 @@ const stats = props.data.koenkert
     background-repeat: no-repeat;
     background-position: bottom;
     background-size: 25rem;
-    width: 100%;
+    width: 27rem;
 }
 
 .grayscale {
