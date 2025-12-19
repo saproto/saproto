@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { Component } from 'vue'
-import html2canvas from 'html2canvas'
 import TotalSpent from '@/pages/Wrapped/Slides/TotalSpent.vue'
 import MostBought from '@/pages/Wrapped/Slides/MostBought.vue'
 import Calories from '@/pages/Wrapped/Slides/Calories.vue'
