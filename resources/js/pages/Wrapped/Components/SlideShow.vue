@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { Component } from 'vue'
-import html2canvas from 'html2canvas'
 import TotalSpent from '@/pages/Wrapped/Slides/TotalSpent.vue'
 import MostBought from '@/pages/Wrapped/Slides/MostBought.vue'
 import Calories from '@/pages/Wrapped/Slides/Calories.vue'
@@ -13,6 +12,7 @@ import KoenkertCatagory from '../Slides/KoenkertCatagory.vue'
 import { useSwipe } from '@vueuse/core'
 import { statsType } from '@/pages/Wrapped/types.ts'
 import { ArrowUp } from 'lucide-vue-next'
+import domtoimage from 'dom-to-image'
 
 const props = defineProps<{
     data: statsType
@@ -58,10 +58,7 @@ const shareSlide = async () => {
     setTimeout(async () => {
         try {
             if (!slide.value) return
-            const canvas = await html2canvas(slide.value, {
-                backgroundColor: null,
-            })
-            canvas.toBlob(async (blob) => {
+            domtoimage.toBlob(slide.value).then(async (blob) => {
                 if (!blob) return
                 if (navigator.share) {
                     const year = new Date().getFullYear()
