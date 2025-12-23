@@ -37,6 +37,13 @@ likes_count: number | null;
 liked_by_me: boolean | null;
 album: App.Data.PhotoAlbumData | null;
 };
+export type PlayedVideoData = {
+video_id: string;
+video_title: string;
+sum_duration: number | null;
+sum_duration_played: number | null;
+played_count: number;
+};
 export type ProductCategoryData = {
 id: number;
 name: string;

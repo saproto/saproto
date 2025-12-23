@@ -5,7 +5,7 @@
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
-    Actual membership totals
+    Most liked Photos
 @endsection
 
 @section('container')
