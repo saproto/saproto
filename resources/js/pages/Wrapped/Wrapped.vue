@@ -11,7 +11,12 @@ const data = ref({} as statsType)
 const purchases = computed(
     () => page.props.purchases as Array<App.Data.OrderlineData>
 )
+
+const played_videos = computed(
+    () => page.props.played_videos as Array<App.Data.PlayedVideoData>
+)
 const order_totals = computed(() => page.props.order_totals as number[][])
+const protube_totals = computed(() => page.props.protube_totals as number[])
 const total_spent = computed(() => page.props.total_spent as number)
 const events = computed(() => page.props.events as { price: number }[])
 const loaded = ref(false)
@@ -30,7 +35,9 @@ const loadData = async () => {
         purchases.value,
         order_totals.value,
         total_spent.value,
-        events.value
+        events.value,
+        protube_totals.value,
+        played_videos.value
     )
     currentStep.value++ // 5
     await new Promise((resolve) => setTimeout(resolve, 100))
