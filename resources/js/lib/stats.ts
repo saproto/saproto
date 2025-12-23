@@ -178,13 +178,13 @@ export const prepareStats = async (
     const hoursPlayed = minutesPlayed / 60
     const daysPlayed = hoursPlayed / 24
     if (daysPlayed > 1) {
-        stats.protube.user.duration_played = `${daysPlayed.toFixed(2)} days!`
+        stats.protube.user.duration_played = `${daysPlayed.toFixed(2)} days`
     } else if (hoursPlayed > 0) {
-        stats.protube.user.duration_played = `${hoursPlayed.toFixed(2)} hours!`
+        stats.protube.user.duration_played = `${hoursPlayed.toFixed(2)} hours`
     } else if (minutesPlayed > 0) {
-        stats.protube.user.duration_played = `${minutesPlayed.toFixed(2)} minutes!`
+        stats.protube.user.duration_played = `${minutesPlayed.toFixed(2)} minutes`
     } else if (secondsPlayed > 0) {
-        stats.protube.user.duration_played = `${secondsPlayed.toFixed(2)} seconds!`
+        stats.protube.user.duration_played = `${secondsPlayed.toFixed(2)} seconds`
     } else {
         stats.protube.user.duration_played = `you not having used ProTube at all!`
     }

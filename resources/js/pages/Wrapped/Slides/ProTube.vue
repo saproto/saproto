@@ -8,29 +8,33 @@ const stats = props.data.protube
 </script>
 <template>
     <div class="slide">
-        <h1>This year ProTube has played</h1>
 
-        <h1 class="dynamic">
-            <span class="color">
-                {{ stats.total.total_played }}
-            </span>
-            video's
+
+        <h1>This year ProTube has played</h1>
+        <h1 class="bottom">
+            <span class="dynamic total">{{ stats.total.total_played }}</span>
+            songs!
         </h1>
-        <div>
-            Of these, you put in
-            <h1 class="dynamic">
-                <span class="color">
-                    {{ stats.user.total_played }}
-                </span>
-                video's
-            </h1>
-            <h2>
-                That estimates to
-                {{ stats.user.duration_played }}
-            </h2>
+        <h2>
+            You have put in
+            <span class="dynamic total-user">{{ stats.user.total_played }}</span>
+            songs!
+        </h2>
+        <h2 class="bottom">
+            That estimates to
+            <span class="dynamic duration">{{ stats.user.duration_played }}</span> of music
+        </h2>
+
+        <h1 class="bottom">
+            You are in the top
+            <span class="dynamic percentile">{{ stats.user.percentile }}%</span> of users
+        </h1>
+
+        <div class="protube">
+            <img v-for="i in 100"
+                 :class="i>stats.user.percentile?'red':''" id="protubeLogo" :style="`animation-delay:${(100-i) * 0.05}s`" :src="data.images.proTubeLogo" />
         </div>
 
-        <img id="protubeLogo" :src="data.images.proTubeLogo" />
         <!--        <h1>Your most played video:</h1>-->
         <!--        <div style="height: 8rem; display: flex; justify-content: center">-->
         <!--            <div class="">-->
@@ -95,14 +99,40 @@ const stats = props.data.protube
     text-align: center;
 }
 
-.color {
-    color: #da2c38;
+.bottom{
+    margin-bottom: 1rem;
 }
 
-#protubeLogo {
-    position: absolute;
-    bottom: 2rem;
-    left: 0;
-    padding: 2rem;
+.total {
+    color: #E01305;
+}
+.total-user{
+    color: #7D58D9;
+}
+.duration{
+    color: #E1E1E1;
+}
+
+.percentile{
+    color: #95E913;
+}
+
+.protube{
+    gap: 0.1rem;
+    display: grid;
+    grid-template-columns: repeat(10, auto);
+    margin-top: 2rem;
+}
+
+.red{
+    animation-name: reveal;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    filter: grayscale(0);
+}
+
+@keyframes reveal {
+    from {filter: grayscale(0);}
+    to {filter: grayscale(1);}
 }
 </style>
