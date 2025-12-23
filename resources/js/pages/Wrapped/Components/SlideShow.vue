@@ -14,6 +14,7 @@ import { statsType } from '@/pages/Wrapped/types.ts'
 import { ArrowUp } from 'lucide-vue-next'
 import domtoimage from 'dom-to-image'
 import ProTube from '@/pages/Wrapped/Slides/ProTube.vue'
+import ProtubeTop from '@/pages/Wrapped/Slides/ProtubeTop.vue'
 
 const props = defineProps<{
     data: statsType
@@ -37,20 +38,22 @@ type SlideComponent =
     | typeof Activities
     | typeof KoenkertCategory
     | typeof ProTube
+    | typeof ProtubeTop
 
 const slideElement = ref<SlideComponent>()
 const sharing = ref(false)
 
 let allSlides: Array<[Component, number] | true> = [
     [ProTube, 10],
-    // [TotalSpent, 10],
-    // [MostBought, 10],
-    // [Calories, 10],
-    // stats.drinks.amount <= 0 || [Drinks, 10],
-    // stats.willToLives.amount <= 0 || [WillToLive, 10],
-    // [DaysAtProto, 10],
-    // stats.activities.amount <= 0 || [Activities, 10],
-    // [KoenkertCategory, 10],
+    stats.protube.user.total_played <= 0 || [ProtubeTop, 10],
+    [TotalSpent, 10],
+    [MostBought, 10],
+    [Calories, 10],
+    stats.drinks.amount <= 0 || [Drinks, 10],
+    stats.willToLives.amount <= 0 || [WillToLive, 10],
+    [DaysAtProto, 10],
+    stats.activities.amount <= 0 || [Activities, 10],
+    [KoenkertCategory, 10],
 ]
 
 const slides = allSlides.filter((x) => x !== true)
