@@ -3,12 +3,13 @@ import { statsType } from '@/pages/Wrapped/types'
 
 const props = defineProps<{
     data: statsType
+    noAnimation?: boolean
 }>()
 const stats = props.data.protube
 </script>
 <template>
     <div class="slide">
-        <h1>Your favourite's song is....</h1>
+        <h1>Your favourite song is....</h1>
         <div
             style="
                 position: relative;
@@ -67,8 +68,9 @@ const stats = props.data.protube
 
         <h2 class="bottom">To complete your top 5 this year:</h2>
         <div
-            v-for="video in stats.user.videos.slice(1, 5)"
+            v-for="(video, idx) in stats.user.videos.slice(1, 5)"
             :key="video.video_id"
+            :style="`animation-delay:${noAnimation ? -6 : idx * 0.8}s`"
             class="youtube-video"
         >
             <img :src="video.thumbnail_url" />
@@ -131,7 +133,21 @@ const stats = props.data.protube
     corner-shape: squircle;
     border-radius: 1rem;
     overflow: hidden;
+    animation-name: reveal;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    transform: translateY(100vh);
 }
+
+@keyframes reveal {
+    from {
+        transform: translateY(100vh);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
 .youtube-video > img {
     width: 8rem;
 }

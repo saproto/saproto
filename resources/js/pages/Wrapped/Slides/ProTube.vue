@@ -3,6 +3,7 @@ import { statsType } from '@/pages/Wrapped/types'
 
 const props = defineProps<{
     data: statsType
+    noAnimation: boolean
 }>()
 const stats = props.data.protube
 </script>
@@ -39,8 +40,8 @@ const stats = props.data.protube
                 v-for="i in 100"
                 id="protubeLogo"
                 :key="i"
-                :class="i > stats.user.percentile ? 'red' : ''"
-                :style="`animation-delay:${(100 - i) * 0.05}s`"
+                :class="i > stats.user.percentile ? 'grey' : ''"
+                :style="`animation-delay:${noAnimation ? -30 : (100 - i) * 0.03}s`"
                 :src="data.images.proTubeLogo"
             />
         </div>
@@ -85,11 +86,11 @@ const stats = props.data.protube
     margin-top: 2rem;
 }
 
-.red {
+.grey {
     animation-name: reveal;
-    animation-duration: 1s;
     animation-fill-mode: forwards;
     filter: grayscale(0);
+    animation-duration: 0.1s;
 }
 
 @keyframes reveal {

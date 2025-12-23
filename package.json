@@ -43,7 +43,7 @@
         "leaflet": "^1.9.4",
         "leaflet-geosearch": "^4.2.0",
         "leaflet.markercluster": "^1.5.3",
-        "lucide-vue-next": "^0.561.0",
+        "lucide-vue-next": "^0.562.0",
         "moment": "^2.29.2",
         "radix-vue": "^1.9.13",
         "reka-ui": "^2.5.1",

@@ -27,7 +27,7 @@ const stats = props.data.activities
                 v-for="(activity, idx) in stats.all"
                 :key="activity.title"
                 class="move-up"
-                :style="`animation-delay: ${(idx - 5) * delay}s`"
+                :style="`animation-delay: ${(Number(idx) - 5) * delay}s`"
             >
                 <div
                     class="activity"
@@ -83,7 +83,6 @@ const stats = props.data.activities
     animation-duration: v-bind('`${delay*stats.amount}s`');
     bottom: 0;
     opacity: 1;
-    //text-align: start;
     text-wrap: none;
     white-space: nowrap;
     width: 27rem;
