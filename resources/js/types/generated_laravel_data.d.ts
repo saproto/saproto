@@ -1,10 +1,11 @@
 declare namespace App.Data {
 export type AuthUserData = {
 id: number;
-name: string;
+calling_name: string;
 roles: Array<string>;
 is_member: boolean;
 avatar: string;
+email: string;
 };
 export type MenuItemData = {
 menuname: string;

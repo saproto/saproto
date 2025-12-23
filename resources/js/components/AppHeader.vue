@@ -62,7 +62,9 @@ import {
     CollapsibleContent,
     CollapsibleTrigger,
 } from '@/components/ui/collapsible'
-// import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController'
+import FeedbackController from '@/actions/App/Http/Controllers/FeedbackController.ts'
+import AchievementController from '@/actions/App/Http/Controllers/AchievementController.ts'
+import StickerController from '@/actions/App/Http/Controllers/StickerController.ts'
 
 interface Props {
     breadcrumbs?: BreadcrumbItem[]
@@ -96,22 +98,22 @@ const mainNavItems: NavItem[] = [
         children: [
             {
                 title: 'Quotes',
-                href: index(),
+                href: FeedbackController.index('quotes'),
                 icon: LucideTextQuote,
             },
             {
                 title: 'Good ideas',
-                href: index(),
+                href: FeedbackController.index('goodIdeas'),
                 icon: LucideTextQuote,
             },
             {
                 title: 'Achievements',
-                href: index(),
+                href: AchievementController.index(),
                 icon: LucideTextQuote,
             },
             {
                 title: 'Sticker tracker',
-                href: index(),
+                href: StickerController.index(),
                 icon: LucideTextQuote,
             },
             {
@@ -314,7 +316,7 @@ const rightNavItems: NavItem[] = [
                                             <NavigationMenuLink as-child>
                                                 <a
                                                     class="from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-gradient-to-b p-6 no-underline outline-none select-none focus:shadow-md"
-                                                    href="/"
+                                                    href="/albums"
                                                 >
                                                     <img
                                                         src="https://www.reka-ui.com/logo.svg"
@@ -338,7 +340,7 @@ const rightNavItems: NavItem[] = [
                                         <li>
                                             <NavigationMenuLink as-child>
                                                 <a
-                                                    href="/docs/introduction"
+                                                    href="/page/about-proto"
                                                     class="hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block space-y-1 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none"
                                                 >
                                                     <div
@@ -358,7 +360,7 @@ const rightNavItems: NavItem[] = [
                                         <li>
                                             <NavigationMenuLink as-child>
                                                 <a
-                                                    href="/docs/installation"
+                                                    href="/page/board"
                                                     class="hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block space-y-1 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none"
                                                 >
                                                     <div
@@ -378,7 +380,7 @@ const rightNavItems: NavItem[] = [
                                         <li>
                                             <NavigationMenuLink as-child>
                                                 <a
-                                                    href="/docs/typography"
+                                                    href="/committee/index"
                                                     class="hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block space-y-1 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none"
                                                 >
                                                     <div
@@ -517,12 +519,12 @@ const rightNavItems: NavItem[] = [
                                     <AvatarImage
                                         v-if="auth.user.avatar"
                                         :src="auth.user.avatar"
-                                        :alt="auth.user.name"
+                                        :alt="auth.user.calling_name"
                                     />
                                     <AvatarFallback
                                         class="rounded-lg bg-neutral-200 font-semibold text-black dark:bg-neutral-700 dark:text-white"
                                     >
-                                        {{ getInitials(auth.user?.name) }}
+                                        {{ getInitials(auth.user?.calling_name) }}
                                     </AvatarFallback>
                                 </Avatar>
                             </Button>
