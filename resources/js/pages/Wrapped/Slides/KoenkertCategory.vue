@@ -55,17 +55,10 @@ const stats = props.data.koenkert
     /* box-shadow: rgba(255, 255, 255, 0.2) 0 0 0.3rem 0.3rem; */
 }
 
-.container {
-    //position: relative;
-    //height: 40rem;
-}
-
 .container div {
     position: absolute;
     background-repeat: no-repeat;
-    //background-position: bottom;
     background-size: 25rem;
-    //bottom: 0cap.rem;
     width: 27rem;
 }
 
