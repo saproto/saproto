@@ -12,7 +12,6 @@ class CustomUrlGenerator extends BaseUrlGenerator
 {
     public function getUrl(): string
     {
-        return 'http://localhost:8080/images/default-avatars/other.png';
         if ($this->conversion instanceof Conversion && $this->media->conversions_disk !== 'public' || ! $this->conversion instanceof Conversion && $this->media->disk !== 'public') {
             return route('media::show', [
                 'id' => $this->media->id,

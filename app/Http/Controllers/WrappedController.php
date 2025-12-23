@@ -17,10 +17,11 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class WrappedController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
 
         $from = Date::now()->startOfYear();
@@ -132,29 +133,11 @@ class WrappedController extends Controller
         return $return;
     }
 
+    /** @return \Illuminate\Database\Eloquent\Collection<int, PlayedVideo> **/
     public function topProtubeSongs(Carbon $from, Carbon $to, User $user)
     {
-        // mean/median per users
-        //        $playedPerUsers = PlayedVideo::query()
-        //            ->select([
-        //                'video_id',
-        //                'video_title',
-        //                'user_id',
-        //                DB::raw('count(*) as played_count'),
-        //            ])
-        //            ->where('created_at', '>', $from->format('Y-m-d'))
-        //            ->where('created_at', '<', $to->format('Y-m-d'))
-        //            ->groupBy('user_id')
-        //            ->orderBy('played_count', 'desc')
-        //            ->get();
-
-        //        $medianPerUser = round($playedPerUsers->median('played_count'), 2);
-        //        $averagePerUser = round($playedPerUsers->avg('played_count'), 2);
-        //        $totalPlayed = round($playedPerUsers->sum('played_count'), 2);
-        //        $uniqueUsers = round($playedPerUsers->count(), 2);
-
         // top videos over the past 5 years
-        $topVideos = PlayedVideo::query()
+        return PlayedVideo::query()
             ->select([
                 'video_id',
                 'video_title',
@@ -169,44 +152,9 @@ class WrappedController extends Controller
             ->orderBy('played_count', 'desc')
             ->orderBy('created_at')
             ->get();
-        //
-        //        $topVideos->
-
-        return $topVideos;
-
-        //        // top 5 played by an individual user.
-        //        $topVideosByIndividualUser = PlayedVideo::query()
-        //            ->select([
-        //                'video_title',
-        //                'user_id',
-        //                DB::raw('count(*) as played_count'),
-        //            ])
-        //            ->where('created_at', '>', $start->format('Y-m-d'))
-        //            ->where('created_at', '<', $end->format('Y-m-d'))
-        //            ->with('user:id,name')
-        //            ->groupBy('video_id')
-        //            ->groupBy('user_id')
-        //            ->orderBy('played_count', 'desc')
-        //            ->orderBy('created_at')
-        //            ->limit(10)->get();
-
-        // top 10 contributors
-        $topUsers = PlayedVideo::query()
-            ->with('user:name,id')
-            ->select([
-                'user_id',
-                DB::raw('count(*) as played_count'),
-            ])
-            ->where('created_at', '>', $start->format('Y-m-d'))
-            ->where('created_at', '<', $end->format('Y-m-d'))
-            ->groupBy('user_id')
-            ->orderBy('played_count', 'desc')
-            ->orderBy('created_at')
-            ->limit(10)->get();
-
     }
 
-    /** @return Collection<(int), Collection<(int), mixed>>*/
+    /** @return Collection<(int|string), int> **/
     public function ProTubeTotals(): Collection
     {
         return PlayedVideo::query()
