@@ -17,12 +17,11 @@ const stats = props.data.koenkert
                 <span class="dynamic">{{ stats.type }}</span>
             </h1>
         </div>
-        <div class="container">
-            <div
-                class="color"
-                :style="`background-image: url(${stats.imageName});`"
-            />
-        </div>
+        <img
+            class="koenkertImage"
+            :src="stats.imageName"
+            alt="Cookie Monster"
+        />
     </div>
 </template>
 
@@ -35,6 +34,12 @@ const stats = props.data.koenkert
         rgb(48, 112, 242) 80%
     );
     text-align: center;
+}
+
+.koenkertImage {
+    corner-shape: scoop;
+    border-radius: 2rem;
+    padding: 1rem;
 }
 
 .color-text {
@@ -50,17 +55,11 @@ const stats = props.data.koenkert
     /* box-shadow: rgba(255, 255, 255, 0.2) 0 0 0.3rem 0.3rem; */
 }
 
-.container {
-    position: relative;
-    height: 40rem;
-}
-
 .container div {
     position: absolute;
     background-repeat: no-repeat;
-    background-position: bottom;
     background-size: 25rem;
-    width: 100%;
+    width: 27rem;
 }
 
 .grayscale {

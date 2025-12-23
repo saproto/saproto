@@ -1,7 +1,7 @@
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
-    Actual membership totals
+    Activity statistics
 @endsection
 
 @section('container')

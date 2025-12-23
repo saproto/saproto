@@ -19,6 +19,8 @@
             href="{{ route('search::opensearch') }}"
         />
 
+        @routes(nonce: \Illuminate\Support\Facades\Vite::cspNonce())
+
         <!-- Scripts -->
         @vite(['resources/js/app.ts', "resources/js/pages/{$page['component']}.vue"])
 
@@ -39,7 +41,7 @@
         @show
     </head>
     <body
-        class="bg-background font-sans antialiased"
+        class="bg-background text-foreground min-h-screen font-sans antialiased"
         data-theme="{{ config('proto.themes')[Auth::user()?->theme ?? 0] }}"
     >
         @inertia
