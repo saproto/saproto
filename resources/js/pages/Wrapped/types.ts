@@ -1,5 +1,8 @@
 import ProductData = App.Data.ProductData
 
+interface VideoWithUrl extends App.Data.PlayedVideoData {
+    thumbnail_url?: string
+}
 export interface statsType {
     images: {
         cookieMonster: string
@@ -52,7 +55,7 @@ export interface statsType {
             duration_played: string
             percentile: number
             total_played: number
-            videos: Array<App.Data.PlayedVideoData>
+            videos: Array<VideoWithUrl>
         }
         total: {
             total_played: number

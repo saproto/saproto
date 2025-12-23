@@ -306,6 +306,11 @@ const preloadImages = async (stats: statsType) => {
     for (const product of stats.mostBought.items.slice(0, 5)) {
         product[0].image_url = await fetchImageAsBase64(product[0].image_url)
     }
+    for (const video of stats.protube.user.videos.slice(0, 5)) {
+        video.thumbnail_url = await fetchImageAsBase64(
+            `https://img.youtube.com/vi/${video.video_id}/mqdefault.jpg`
+        )
+    }
 }
 
 export const blobToBase64 = (blob: Blob): Promise<string> => {
