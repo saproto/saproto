@@ -17,5 +17,8 @@ class Wrapped implements Preset
         $policy->add(Directive::FRAME, [
             'https://www.youtube.com',
         ]);
+        $policy->add(Directive::CONNECT, [
+            'https://img.youtube.com',
+        ]);
     }
 }

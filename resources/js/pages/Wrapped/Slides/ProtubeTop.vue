@@ -19,7 +19,7 @@ const stats = props.data.protube
             class="youtube"
         >
             <img
-                :src="`https://img.youtube.com/vi/${stats.user.videos[0].video_id}/mqdefault.jpg`"
+                :src="stats.user.videos[0].thumbnail_url"
                 style="
                     position: absolute;
                     top: 0;
@@ -71,9 +71,7 @@ const stats = props.data.protube
             :key="video.video_id"
             class="youtube-video"
         >
-            <img
-                :src="`https://img.youtube.com/vi/${video.video_id}/mqdefault.jpg`"
-            />
+            <img :src="video.thumbnail_url" />
             <span style="width: 19rem">
                 <span
                     style="
