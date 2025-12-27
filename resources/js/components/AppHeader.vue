@@ -15,7 +15,7 @@ import {
     NavigationMenuItem,
     NavigationMenuLink,
     NavigationMenuList,
-    NavigationMenuTrigger,
+    NavigationMenuTrigger, navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
 import {
     Sheet,
@@ -195,12 +195,12 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Calendar',
         // href: ProfileController.edit(),
-        href: '',
+        href: '/events',
         icon: Calendar1,
     },
     {
         title: 'Admin',
-        href: '',
+        href: '/admin',
         icon: Shield,
     },
 ]
@@ -435,14 +435,24 @@ const textValue = ref('')
                                     </ul>
                                 </NavigationMenuContent>
                             </NavigationMenuItem>
+
+
                             <NavigationMenuItem
                                 v-for="(item, vIndex) in mainNavItems"
                                 :key="vIndex"
                             >
-                                <NavigationMenuTrigger>
+                                <NavigationMenuLink
+                                    v-if="!item.children?.length"
+                                    :href="item.href"
+                                    :class="navigationMenuTriggerStyle()"
+                                >
+                                    {{ item.title }}
+                                </NavigationMenuLink>
+
+                                <NavigationMenuTrigger v-if="item.children?.length">
                                     {{ item.title }}
                                 </NavigationMenuTrigger>
-                                <NavigationMenuContent>
+                                <NavigationMenuContent v-if="item.children?.length">
                                     <ul
                                         class="grid w-[200px] grid-cols-1 gap-3 p-4"
                                     >
