@@ -42,15 +42,14 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'message' => $request->session()->get('flash_message'),
             ],
-            'menu'=>[
-                'photos'=> Cache::remember('inertia.albums', Date::tomorrow(), fn () =>
-                PhotoAlbumData::collect(
-                PhotoAlbum::query()->orderBy('date_taken', 'desc')
-                    ->with('thumbPhoto')
-                    ->where('published', true)
-                    ->take(4)
-                    ->get()))
-            ]
+            'menu' => [
+                'photos' => Cache::remember('inertia.albums', Date::tomorrow(), fn () => PhotoAlbumData::collect(
+                    PhotoAlbum::query()->orderBy('date_taken', 'desc')
+                        ->with('thumbPhoto')
+                        ->where('published', true)
+                        ->take(4)
+                        ->get())),
+            ],
         ]);
     }
 }
