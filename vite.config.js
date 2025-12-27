@@ -56,10 +56,7 @@ export default defineConfig({
         eslintPlugin({
             fix: true,
             ignores: ['vendor/**/*.js', '/virtual:/**', 'node_modules/**', 'resources/assets/js/**'],
-        }),
-        wayfinder({
-            formVariants: true,
-        }),
+        })
     ],
     build: {
         rollupOptions: {

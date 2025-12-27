@@ -16,7 +16,6 @@ import {
     NavigationMenuLink,
     NavigationMenuList,
     NavigationMenuTrigger,
-    navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
 import {
     Sheet,
@@ -33,29 +32,42 @@ import {
 } from '@/components/ui/tooltip'
 import UserMenuContent from '@/components/UserMenuContent.vue'
 import { getInitials } from '@/composables/useInitials'
-import { toUrl, urlIsActive } from '@/lib/utils'
+import { toUrl } from '@/lib/utils'
 import { index } from '@/routes'
 import type { BreadcrumbItem, NavItem } from '@/types'
-import { InertiaLinkProps, Link, usePage } from '@inertiajs/vue3'
+import { Link, usePage } from '@inertiajs/vue3'
 import {
     BookOpen,
     LayoutGrid,
     Menu,
     Search,
-    LucideTextQuote,
     Mail,
-    ChevronDown
+    ChevronDown,
+    GithubIcon,
+    Quote,
+    Lightbulb,
+    Medal,
+    Sticker,
+    Brain,
+    Ellipsis,
+    BookText,
+    University,
+    GraduationCap,
+    BookAlert,
+    Building2,
+    UserSearch,
+    UserPen,
+    Shield,
+    Calendar1,
 } from 'lucide-vue-next'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import {
     InputGroup,
     InputGroupAddon,
     InputGroupButton,
     InputGroupInput,
 } from '@/components/ui/input-group'
-import {
-    SidebarGroup, SidebarGroupLabel,
-} from '@/components/ui/sidebar'
+import { SidebarGroup, SidebarGroupLabel } from '@/components/ui/sidebar'
 
 import {
     Collapsible,
@@ -65,7 +77,7 @@ import {
 import FeedbackController from '@/actions/App/Http/Controllers/FeedbackController.ts'
 import AchievementController from '@/actions/App/Http/Controllers/AchievementController.ts'
 import StickerController from '@/actions/App/Http/Controllers/StickerController.ts'
-
+import PageController from '@/actions/App/Http/Controllers/PageController.ts'
 interface Props {
     breadcrumbs?: BreadcrumbItem[]
 }
@@ -77,17 +89,17 @@ const props = withDefaults(defineProps<Props>(), {
 const page = usePage()
 const auth = computed(() => page.props.auth)
 
-const isCurrentRoute = computed(
-    () => (url: NonNullable<InertiaLinkProps['href']>) =>
-        urlIsActive(url, page.url)
-)
+// const isCurrentRoute = computed(
+//     () => (url: NonNullable<InertiaLinkProps['href']>) =>
+//         urlIsActive(url, page.url)
+// )
 
-const activeItemStyles = computed(
-    () => (url: NonNullable<InertiaLinkProps['href']>) =>
-        isCurrentRoute.value(toUrl(url))
-            ? 'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100'
-            : ''
-)
+// const activeItemStyles = computed(
+//     () => (url: NonNullable<InertiaLinkProps['href']>) =>
+//         isCurrentRoute.value(toUrl(url))
+//             ? 'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100'
+//             : ''
+// )
 
 const mainNavItems: NavItem[] = [
     {
@@ -99,32 +111,32 @@ const mainNavItems: NavItem[] = [
             {
                 title: 'Quotes',
                 href: FeedbackController.index('quotes'),
-                icon: LucideTextQuote,
+                icon: Quote,
             },
             {
                 title: 'Good ideas',
                 href: FeedbackController.index('goodIdeas'),
-                icon: LucideTextQuote,
+                icon: Lightbulb,
             },
             {
                 title: 'Achievements',
                 href: AchievementController.index(),
-                icon: LucideTextQuote,
+                icon: Medal,
             },
             {
                 title: 'Sticker tracker',
                 href: StickerController.index(),
-                icon: LucideTextQuote,
+                icon: Sticker,
             },
             {
                 title: 'Mental Health',
                 href: index(),
-                icon: LucideTextQuote,
+                icon: Brain,
             },
             {
                 title: 'Other',
                 href: index(),
-                icon: LucideTextQuote,
+                icon: Ellipsis,
             },
         ],
     },
@@ -132,27 +144,27 @@ const mainNavItems: NavItem[] = [
         title: 'Education',
         // href: ProfileController.edit(),
         href: '',
-        icon: LayoutGrid,
+        icon: BookText,
         children: [
             {
                 title: 'Study Material',
                 href: index(),
-                icon: LayoutGrid,
+                icon: BookAlert,
             },
             {
                 title: 'Educational Committee',
                 href: index(),
-                icon: LayoutGrid,
+                icon: University,
             },
             {
                 title: 'Educational Feedback',
                 href: index(),
-                icon: LayoutGrid,
+                icon: GraduationCap,
             },
             {
                 title: 'Books',
                 href: index(),
-                icon: LayoutGrid,
+                icon: BookText,
             },
         ],
     },
@@ -160,24 +172,35 @@ const mainNavItems: NavItem[] = [
         title: 'Companies',
         // href: ProfileController.edit(),
         href: '',
-        icon: LayoutGrid,
+        icon: Building2,
         children: [
             {
                 title: 'Sponsors',
                 href: index(),
-                icon: LayoutGrid,
+                icon: Building2,
             },
             {
                 title: 'Job Offers',
                 href: index(),
-                icon: LayoutGrid,
+                icon: UserSearch,
             },
             {
                 title: 'Contact for Companies',
                 href: index(),
-                icon: LayoutGrid,
+                icon: UserPen,
             },
         ],
+    },
+    {
+        title: 'Calendar',
+        // href: ProfileController.edit(),
+        href: '',
+        icon: Calendar1,
+    },
+    {
+        title: 'Admin',
+        href: '',
+        icon: Shield,
     },
 ]
 
@@ -189,10 +212,17 @@ const rightNavItems: NavItem[] = [
     },
     {
         title: 'Contact',
-        href: 'https://github.com/saproto/saproto',
+        href: PageController.show.url('contact'),
         icon: Mail,
     },
+    {
+        title: 'Github',
+        href: 'https://github.com/saproto/saproto',
+        icon: GithubIcon,
+    },
 ]
+
+const textValue = ref('')
 </script>
 
 <template>
@@ -221,58 +251,61 @@ const rightNavItems: NavItem[] = [
                                 />
                             </SheetHeader>
                             <div
-                                class="flex h-full flex-1 flex-col justify-between space-y-4 py-6"
+                                class="flex h-full flex-1 flex-col justify-between space-y-4"
                             >
                                 <nav class="-mx-3 space-y-1">
                                     <Collapsible>
                                         <SidebarGroup>
-                                            <SidebarGroupLabel asChild>
+                                            <SidebarGroupLabel as-child>
                                                 <CollapsibleTrigger>
                                                     Association
-                                                    <ChevronDown class="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                                                    <ChevronDown
+                                                        class="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180"
+                                                    />
                                                 </CollapsibleTrigger>
                                             </SidebarGroupLabel>
                                             <CollapsibleContent>
                                                 <Link
-                                                    class="hover:bg-accent flex items-center gap-x-3 rounded-lg px-3 py-2 text-sm font-medium">
-<!--                                                    :key="child.title"-->
-<!--                                                    :href="child.href"-->
-<!--
-<!--                                                    <component-->
-<!--                                                        :is="child.icon"-->
-<!--                                                        v-if="child.icon"-->
-<!--                                                        class="h-5 w-5"-->
-<!--                                                    />-->
+                                                    class="hover:bg-accent flex items-center gap-x-3 rounded-lg px-3 py-2 text-sm font-medium"
+                                                >
                                                     hallo
                                                 </Link>
                                             </CollapsibleContent>
                                         </SidebarGroup>
                                     </Collapsible>
-                                <Collapsible v-for="item in mainNavItems">
-                                    <SidebarGroup>
-                                        <SidebarGroupLabel asChild>
-                                            <CollapsibleTrigger>
-                                                {{ item.title }}
-                                                <ChevronDown class="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
-                                            </CollapsibleTrigger>
-                                        </SidebarGroupLabel>
-                                        <CollapsibleContent>
-                                            <Link
-                                                v-for="child in item.children"
-                                                :key="child.title"
-                                                :href="child.href"
-                                                class="hover:bg-accent flex items-center gap-x-3 rounded-lg px-3 py-2 text-sm font-medium"
+                                    <Collapsible
+                                        v-for="item in mainNavItems"
+                                        :key="item.title"
+                                    >
+                                        <SidebarGroup>
+                                            <SidebarGroupLabel
+                                                v-if="item.children"
+                                                as-child
                                             >
-                                                <component
-                                                    :is="child.icon"
-                                                    v-if="child.icon"
-                                                    class="h-5 w-5"
-                                                />
-                                                {{ child.title }}
-                                            </Link>
-                                        </CollapsibleContent>
-                                    </SidebarGroup>
-                                </Collapsible>
+                                                <CollapsibleTrigger>
+                                                    {{ item.title }}
+                                                    <ChevronDown
+                                                        class="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180"
+                                                    />
+                                                </CollapsibleTrigger>
+                                            </SidebarGroupLabel>
+                                            <CollapsibleContent>
+                                                <Link
+                                                    v-for="child in item.children"
+                                                    :key="child.title"
+                                                    :href="child.href"
+                                                    class="hover:bg-accent flex items-center gap-x-3 rounded-lg px-3 py-2 text-sm font-medium"
+                                                >
+                                                    <component
+                                                        :is="child.icon"
+                                                        v-if="child.icon"
+                                                        class="h-5 w-5"
+                                                    />
+                                                    {{ child.title }}
+                                                </Link>
+                                            </CollapsibleContent>
+                                        </SidebarGroup>
+                                    </Collapsible>
                                 </nav>
                                 <div class="flex flex-col space-y-4">
                                     <a
@@ -305,9 +338,9 @@ const rightNavItems: NavItem[] = [
                     <NavigationMenu class="ml-10 flex h-full">
                         <NavigationMenuList>
                             <NavigationMenuItem>
-                                <NavigationMenuTrigger
-                                    >Association</NavigationMenuTrigger
-                                >
+                                <NavigationMenuTrigger>
+                                    Association
+                                </NavigationMenuTrigger>
                                 <NavigationMenuContent>
                                     <ul
                                         class="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[minmax(0,.75fr)_minmax(0,1fr)]"
@@ -405,9 +438,9 @@ const rightNavItems: NavItem[] = [
                                 v-for="(item, vIndex) in mainNavItems"
                                 :key="vIndex"
                             >
-                                <NavigationMenuTrigger>{{
-                                    item.title
-                                }}</NavigationMenuTrigger>
+                                <NavigationMenuTrigger>
+                                    {{ item.title }}
+                                </NavigationMenuTrigger>
                                 <NavigationMenuContent>
                                     <ul
                                         class="grid w-[200px] grid-cols-1 gap-3 p-4"
@@ -422,8 +455,12 @@ const rightNavItems: NavItem[] = [
                                                     class="hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block rounded-md p-1 leading-none no-underline transition-colors outline-none select-none"
                                                 >
                                                     <div
-                                                        class="text-sm leading-none font-medium"
+                                                        class="flex text-sm leading-none font-medium"
                                                     >
+                                                        <component
+                                                            :is="child.icon"
+                                                            class="me-2 size-5"
+                                                        />
                                                         {{ child.title }}
                                                     </div>
                                                     <p
@@ -437,22 +474,6 @@ const rightNavItems: NavItem[] = [
                                     </ul>
                                 </NavigationMenuContent>
                             </NavigationMenuItem>
-                            <NavigationMenuItem>
-                                <NavigationMenuLink
-                                    href="/events"
-                                    :class="navigationMenuTriggerStyle()"
-                                >
-                                    Calendar
-                                </NavigationMenuLink>
-                            </NavigationMenuItem>
-                            <NavigationMenuItem>
-                                <NavigationMenuLink
-                                    href="/events"
-                                    :class="navigationMenuTriggerStyle()"
-                                >
-                                    Admin
-                                </NavigationMenuLink>
-                            </NavigationMenuItem>
                         </NavigationMenuList>
                     </NavigationMenu>
                 </div>
@@ -460,9 +481,15 @@ const rightNavItems: NavItem[] = [
                 <div class="ml-auto flex items-center space-x-2">
                     <div class="relative flex items-center space-x-1">
                         <InputGroup>
-                            <InputGroupInput placeholder="Type to search..." />
+                            <InputGroupInput
+                                v-model="textValue"
+                                placeholder="Search"
+                            />
                             <InputGroupAddon align="inline-end">
-                                <InputGroupButton variant="secondary">
+                                <InputGroupButton
+                                    variant="secondary"
+                                    @click="console.log('clicked!')"
+                                >
                                     <Search />
                                 </InputGroupButton>
                             </InputGroupAddon>
@@ -524,7 +551,9 @@ const rightNavItems: NavItem[] = [
                                     <AvatarFallback
                                         class="rounded-lg bg-neutral-200 font-semibold text-black dark:bg-neutral-700 dark:text-white"
                                     >
-                                        {{ getInitials(auth.user?.calling_name) }}
+                                        {{
+                                            getInitials(auth.user?.calling_name)
+                                        }}
                                     </AvatarFallback>
                                 </Avatar>
                             </Button>
