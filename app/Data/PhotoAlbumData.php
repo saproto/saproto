@@ -14,6 +14,7 @@ class PhotoAlbumData extends Data
         public string $name,
         public bool $private,
 
+        public ?PhotoData $thumbPhoto,
         /** @var Collection<int, PhotoData> */
         #[DataCollectionOf(PhotoData::class)]
         public ?Collection $items,

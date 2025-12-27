@@ -4,7 +4,8 @@ id: number;
 calling_name: string;
 roles: Array<string>;
 is_member: boolean;
-photo: string;
+avatar: string;
+email: string;
 };
 export type MenuItemData = {
 menuname: string;
@@ -25,6 +26,7 @@ export type PhotoAlbumData = {
 id: string | number;
 name: string;
 private: boolean;
+thumbPhoto: App.Data.PhotoData | null;
 items: Array<App.Data.PhotoData> | null;
 };
 export type PhotoData = {

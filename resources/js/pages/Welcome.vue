@@ -1,21 +1,99 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
-import AppLayout from '@/layouts/AppLayout.vue'
+import AppLayout from '@/layouts/AppHeaderLayout.vue'
+import { index } from '@/routes'
+import { type BreadcrumbItem } from '@/types'
+import { Head } from '@inertiajs/vue3'
+// import PlaceholderPattern from '../components/PlaceholderPattern.vue';
 
-function handleClick() {
-    console.log('Button clicked!')
-}
-
-defineOptions({
-    layout: AppLayout,
-})
-import { Head, usePage } from '@inertiajs/vue3'
-const page = usePage()
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Dashboard',
+        href: index().url,
+    },
+]
 </script>
 
 <template>
-    <Head title="Welcome" />
+    <Head title="Dashboard" />
 
-    {{ page.props }}
-    <Button @click="handleClick"> Click me </Button>
+    <AppLayout :breadcrumbs="breadcrumbs">
+        <div
+            class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4"
+        >
+            <div class="grid auto-rows-min gap-4 md:grid-cols-3">
+                <div
+                    class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
+                >
+                    hallo
+                </div>
+                <div
+                    class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
+                >
+                    hallo
+                </div>
+                <div
+                    class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
+                >
+                    hallo
+                </div>
+            </div>
+            <div
+                class="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 rounded-xl border md:min-h-min"
+            >
+                hallo
+            </div>
+        </div>
+        <div
+            class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4"
+        >
+            <div class="grid auto-rows-min gap-4 md:grid-cols-3">
+                <div
+                    class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
+                >
+                    hallo
+                </div>
+                <div
+                    class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
+                >
+                    hallo
+                </div>
+                <div
+                    class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
+                >
+                    hallo
+                </div>
+            </div>
+            <div
+                class="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 rounded-xl border md:min-h-min"
+            >
+                hallo
+            </div>
+        </div>
+        <div
+            class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4"
+        >
+            <div class="grid auto-rows-min gap-4 md:grid-cols-3">
+                <div
+                    class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
+                >
+                    hallo
+                </div>
+                <div
+                    class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
+                >
+                    hallo
+                </div>
+                <div
+                    class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
+                >
+                    hallo
+                </div>
+            </div>
+            <div
+                class="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 rounded-xl border md:min-h-min"
+            >
+                hallo
+            </div>
+        </div>
+    </AppLayout>
 </template>
