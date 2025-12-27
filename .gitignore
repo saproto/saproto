@@ -37,6 +37,11 @@ yarn.lock
 /public/build
 /public/hot
 
+#generated wayfinder files
+/resources/js/actions
+/resources/js/routes
+/resources/js/wayfinder
+
 # Font metadata files
 /resources/fonts/unifont/*.cw*
 /resources/fonts/unifont/*.mtx*

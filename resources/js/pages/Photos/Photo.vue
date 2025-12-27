@@ -19,6 +19,9 @@ import 'vue-sonner/style.css'
 import { toast } from 'vue-sonner'
 import PhotoData = App.Data.PhotoData
 
+import { show, photo as photoRoute, toggleLike } from "@/actions/App/Http/Controllers/PhotoAlbumController";
+import { loginIndex } from "@/actions/App/Http/Controllers/AuthController";
+
 const page = usePage()
 
 const album = computed(() => page.props.album as PhotoAlbumData)
@@ -65,10 +68,12 @@ function goToPhotoAt(index: number) {
     window.history.replaceState(
         { isPhotoView: true },
         '',
-        route('albums::album::show', {
-            album: album.value.id,
-            photo: currentPhoto.value.id,
-        })
+        photoRoute.url(album.value.id as number, {
+                query: {
+                    photo: currentPhoto.value.id
+                }
+            }
+        )
     )
 
     setTimeout(() => {
@@ -77,10 +82,13 @@ function goToPhotoAt(index: number) {
 }
 
 function goToAlbum(newAlbum: PhotoAlbumData, albumPage: number | null) {
-    window.location.href = route('albums::album::list', {
-        album: newAlbum.id,
-        page: albumPage ?? 1,
-    })
+    window.location.href =
+        show.url(newAlbum.id as number, {
+                query: {
+                    page: albumPage ?? 1
+                }
+            }
+        )
 }
 
 let isLiking = false
@@ -88,11 +96,11 @@ const handleLikeClick = (index: number) => {
     if (isLiking) return
     isLiking = true
     if (!user.value) {
-        window.location.href = route('login::show')
+        window.location.href = loginIndex.url()
     }
     const photo = photoList.value[index]
     axios
-        .post(route('albums::like', { photo: photo.id }))
+        .post(toggleLike.url(photo.id))
         .then((response) => {
             photo.liked_by_me = response.data.liked_by_me as boolean
             photo.likes_count = response.data.likes_count as number
@@ -166,19 +174,23 @@ onMounted(() => {
     history.replaceState(
         { isPhotoView: true },
         '',
-        route('albums::album::show', {
-            album: album.value.id,
-            photo: currentPhoto.value.id,
-        })
+        photoRoute.url(album.value.id as number, {
+                query: {
+                    photo: currentPhoto.value.id
+                }
+            }
+        )
     )
 
     window.addEventListener('popstate', (e) => {
         if (e.state?.isPhotoView) {
             // Navigate to the album page based on current index
-            window.location.href = route('albums::album::list', {
-                album: album.value.id,
-                page: albumPage.value,
-            })
+            show.url(album.value.id as number, {
+                    query: {
+                        page: albumPage.value
+                    }
+                }
+            )
         }
     })
 })

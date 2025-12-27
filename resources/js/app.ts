@@ -8,8 +8,6 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
 const appName = import.meta.env.VITE_APP_NAME || 'S.A. Proto'
 const appEnv = import.meta.env.VITE_APP_ENV || 'production'
 
-import { ZiggyVue } from 'ziggy-js'
-
 createInertiaApp({
     title: (title) =>
         `${appEnv !== 'production' ? '[' + appEnv.toUpperCase() + '] ' : ''}${appName} | ${title}`,
@@ -21,7 +19,6 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
             .use(plugin)
-            .use(ZiggyVue)
             .mount(el)
     },
     progress: {
