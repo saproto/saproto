@@ -26,6 +26,7 @@ export type PhotoAlbumData = {
 id: string | number;
 name: string;
 private: boolean;
+thumbPhoto: App.Data.PhotoData | null;
 items: Array<App.Data.PhotoData> | null;
 };
 export type PhotoData = {

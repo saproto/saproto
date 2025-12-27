@@ -78,6 +78,7 @@ import FeedbackController from '@/actions/App/Http/Controllers/FeedbackControlle
 import AchievementController from '@/actions/App/Http/Controllers/AchievementController.ts'
 import StickerController from '@/actions/App/Http/Controllers/StickerController.ts'
 import PageController from '@/actions/App/Http/Controllers/PageController.ts'
+import PhotoAlbumData = App.Data.PhotoAlbumData
 interface Props {
     breadcrumbs?: BreadcrumbItem[]
 }
@@ -88,7 +89,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const page = usePage()
 const auth = computed(() => page.props.auth)
-
+const randomAlbum = computed(() => page.props.menu.photos[Math.floor(Math.random() *  page.props.menu.photos.length)])
 // const isCurrentRoute = computed(
 //     () => (url: NonNullable<InertiaLinkProps['href']>) =>
 //         urlIsActive(url, page.url)
@@ -352,8 +353,8 @@ const textValue = ref('')
                                                     href="/albums"
                                                 >
                                                     <img
-                                                        src="https://www.reka-ui.com/logo.svg"
-                                                        class="h-6 w-6"
+                                                        :src="randomAlbum.thumbPhoto?.large_url"
+                                                        class="h-36 w-36 object-cover rounded-md"
                                                     />
                                                     <div
                                                         class="mt-4 mb-2 text-lg font-medium"
@@ -455,12 +456,8 @@ const textValue = ref('')
                                                     class="hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block rounded-md p-1 leading-none no-underline transition-colors outline-none select-none"
                                                 >
                                                     <div
-                                                        class="flex text-sm leading-none font-medium"
+                                                        class="text-sm leading-none font-medium"
                                                     >
-                                                        <component
-                                                            :is="child.icon"
-                                                            class="me-2 size-5"
-                                                        />
                                                         {{ child.title }}
                                                     </div>
                                                     <p
