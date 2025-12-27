@@ -43,6 +43,8 @@ jobs:
       - name: 📥 Install front-end dependencies
         run: npm ci --ignore-scripts
 
+      - run: php artisan wayfinder:generate
+
       - name: 🔨 build front-end
         env:
           VITE_PUSHER_APP_KEY: ${{ secrets.PUSHER_APP_KEY }}
