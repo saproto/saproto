@@ -19,8 +19,12 @@ import 'vue-sonner/style.css'
 import { toast } from 'vue-sonner'
 import PhotoData = App.Data.PhotoData
 
-import { show, photo as photoRoute, toggleLike } from "@/actions/App/Http/Controllers/PhotoAlbumController";
-import { loginIndex } from "@/actions/App/Http/Controllers/AuthController";
+import {
+    show,
+    photo as photoRoute,
+    toggleLike,
+} from '@/actions/App/Http/Controllers/PhotoAlbumController'
+import { loginIndex } from '@/actions/App/Http/Controllers/AuthController'
 
 const page = usePage()
 
@@ -69,11 +73,10 @@ function goToPhotoAt(index: number) {
         { isPhotoView: true },
         '',
         photoRoute.url(album.value.id as number, {
-                query: {
-                    photo: currentPhoto.value.id
-                }
-            }
-        )
+            query: {
+                photo: currentPhoto.value.id,
+            },
+        })
     )
 
     setTimeout(() => {
@@ -82,13 +85,11 @@ function goToPhotoAt(index: number) {
 }
 
 function goToAlbum(newAlbum: PhotoAlbumData, albumPage: number | null) {
-    window.location.href =
-        show.url(newAlbum.id as number, {
-                query: {
-                    page: albumPage ?? 1
-                }
-            }
-        )
+    window.location.href = show.url(newAlbum.id as number, {
+        query: {
+            page: albumPage ?? 1,
+        },
+    })
 }
 
 let isLiking = false
@@ -175,22 +176,20 @@ onMounted(() => {
         { isPhotoView: true },
         '',
         photoRoute.url(album.value.id as number, {
-                query: {
-                    photo: currentPhoto.value.id
-                }
-            }
-        )
+            query: {
+                photo: currentPhoto.value.id,
+            },
+        })
     )
 
     window.addEventListener('popstate', (e) => {
         if (e.state?.isPhotoView) {
             // Navigate to the album page based on current index
             show.url(album.value.id as number, {
-                    query: {
-                        page: albumPage.value
-                    }
-                }
-            )
+                query: {
+                    page: albumPage.value,
+                },
+            })
         }
     })
 })
