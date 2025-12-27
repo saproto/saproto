@@ -78,7 +78,6 @@ import FeedbackController from '@/actions/App/Http/Controllers/FeedbackControlle
 import AchievementController from '@/actions/App/Http/Controllers/AchievementController.ts'
 import StickerController from '@/actions/App/Http/Controllers/StickerController.ts'
 import PageController from '@/actions/App/Http/Controllers/PageController.ts'
-import PhotoAlbumData = App.Data.PhotoAlbumData
 interface Props {
     breadcrumbs?: BreadcrumbItem[]
 }
