@@ -59,6 +59,10 @@ module.exports = defineConfig([{
             "vue/require-default-prop": "off",
             "@typescript-eslint/no-unused-vars": "off"
         },
-    },globalIgnores(["**/node_modules/", "**/dist/", "**/js/actions/",
+    },globalIgnores([
+        "**/node_modules/",
+        "**/dist/",
+        "**/js/actions/",
         "**/js/routes/",
-        "**/js/wayfinder/"])]);
+        "**/js/wayfinder/"])
+]);

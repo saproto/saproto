@@ -18,8 +18,13 @@ import { Toaster } from '@/components/ui/sonner'
 import 'vue-sonner/style.css'
 import { toast } from 'vue-sonner'
 import PhotoData = App.Data.PhotoData
-import PhotoAlbumController from '@/actions/App/Http/Controllers/PhotoAlbumController'
-import AuthController from '@/actions/App/Http/Controllers/AuthController'
+
+import {
+    show,
+    photo as photoRoute,
+    toggleLike,
+} from '@/actions/App/Http/Controllers/PhotoAlbumController'
+import { loginIndex } from '@/actions/App/Http/Controllers/AuthController'
 
 const page = usePage()
 
@@ -67,15 +72,11 @@ function goToPhotoAt(index: number) {
     window.history.replaceState(
         { isPhotoView: true },
         '',
-
-        PhotoAlbumController.photo(
-            { album: album.value.id as number },
-            {
-                query: {
-                    photo: currentPhoto.value.id,
-                },
-            }
-        ).url
+        photoRoute.url(album.value.id as number, {
+            query: {
+                photo: currentPhoto.value.id,
+            },
+        })
     )
 
     setTimeout(() => {
@@ -84,14 +85,11 @@ function goToPhotoAt(index: number) {
 }
 
 function goToAlbum(newAlbum: PhotoAlbumData, albumPage: number | null) {
-    window.location.href = PhotoAlbumController.show(
-        { album: newAlbum.id as number },
-        {
-            query: {
-                page: albumPage ?? 1,
-            },
-        }
-    ).url
+    window.location.href = show.url(newAlbum.id as number, {
+        query: {
+            page: albumPage ?? 1,
+        },
+    })
 }
 
 let isLiking = false
@@ -99,11 +97,11 @@ const handleLikeClick = (index: number) => {
     if (isLiking) return
     isLiking = true
     if (!user.value) {
-        window.location.href = AuthController.loginIndex().url
+        window.location.href = loginIndex.url()
     }
     const photo = photoList.value[index]
     axios
-        .post(PhotoAlbumController.toggleLike({ photo: photo.id }).url)
+        .post(toggleLike.url(photo.id))
         .then((response) => {
             photo.liked_by_me = response.data.liked_by_me as boolean
             photo.likes_count = response.data.likes_count as number
@@ -177,27 +175,21 @@ onMounted(() => {
     history.replaceState(
         { isPhotoView: true },
         '',
-        PhotoAlbumController.photo(
-            { album: album.value.id as number },
-            {
-                query: {
-                    photo: currentPhoto.value.id,
-                },
-            }
-        ).url
+        photoRoute.url(album.value.id as number, {
+            query: {
+                photo: currentPhoto.value.id,
+            },
+        })
     )
 
     window.addEventListener('popstate', (e) => {
         if (e.state?.isPhotoView) {
             // Navigate to the album page based on current index
-            window.location.href = PhotoAlbumController.show(
-                { album: album.value.id as number },
-                {
-                    query: {
-                        page: albumPage.value,
-                    },
-                }
-            ).url
+            show.url(album.value.id as number, {
+                query: {
+                    page: albumPage.value,
+                },
+            })
         }
     })
 })
