@@ -15,7 +15,7 @@ export type AppPageProps<
 > = T & {
     menuitems: Array<App.Data.MenuItemData>
     auth: { user: App.Data.AuthUserData }
-    menu: { photos: Array<App.Data.PhotoAlbumData>}
+    menu: { photos: Array<App.Data.PhotoAlbumData> }
 }
 
 export interface BreadcrumbItem {

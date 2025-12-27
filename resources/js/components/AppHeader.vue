@@ -15,7 +15,8 @@ import {
     NavigationMenuItem,
     NavigationMenuLink,
     NavigationMenuList,
-    NavigationMenuTrigger, navigationMenuTriggerStyle,
+    NavigationMenuTrigger,
+    navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
 import {
     Sheet,
@@ -88,7 +89,12 @@ const props = withDefaults(defineProps<Props>(), {
 
 const page = usePage()
 const auth = computed(() => page.props.auth)
-const randomAlbum = computed(() => page.props.menu.photos[Math.floor(Math.random() *  page.props.menu.photos.length)])
+const randomAlbum = computed(
+    () =>
+        page.props.menu.photos[
+            Math.floor(Math.random() * page.props.menu.photos.length)
+        ]
+)
 // const isCurrentRoute = computed(
 //     () => (url: NonNullable<InertiaLinkProps['href']>) =>
 //         urlIsActive(url, page.url)
@@ -352,8 +358,12 @@ const textValue = ref('')
                                                     href="/albums"
                                                 >
                                                     <img
-                                                        :src="randomAlbum.thumbPhoto?.large_url"
-                                                        class="h-36 w-36 object-cover rounded-md"
+                                                        :src="
+                                                            randomAlbum
+                                                                .thumbPhoto
+                                                                ?.large_url
+                                                        "
+                                                        class="h-36 w-36 rounded-md object-cover"
                                                     />
                                                     <div
                                                         class="mt-4 mb-2 text-lg font-medium"
@@ -435,7 +445,6 @@ const textValue = ref('')
                                 </NavigationMenuContent>
                             </NavigationMenuItem>
 
-
                             <NavigationMenuItem
                                 v-for="(item, vIndex) in mainNavItems"
                                 :key="vIndex"
@@ -448,10 +457,14 @@ const textValue = ref('')
                                     {{ item.title }}
                                 </NavigationMenuLink>
 
-                                <NavigationMenuTrigger v-if="item.children?.length">
+                                <NavigationMenuTrigger
+                                    v-if="item.children?.length"
+                                >
                                     {{ item.title }}
                                 </NavigationMenuTrigger>
-                                <NavigationMenuContent v-if="item.children?.length">
+                                <NavigationMenuContent
+                                    v-if="item.children?.length"
+                                >
                                     <ul
                                         class="grid w-[200px] grid-cols-1 gap-3 p-4"
                                     >
