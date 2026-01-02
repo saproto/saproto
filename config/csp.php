@@ -9,6 +9,7 @@ use App\Csp\Presets\ProTube;
 use App\Csp\Presets\StickerMap;
 use App\Csp\Presets\UtilityScripts;
 use App\Csp\Presets\Websockets;
+use App\Csp\Presets\Wrapped;
 use App\Support\LaravelViteNonceGenerator;
 use Spatie\Csp\Directive;
 use Spatie\Csp\Keyword;
@@ -38,6 +39,7 @@ return [
         ProTube::class,
         UtilityScripts::class,
         Websockets::class,
+        Wrapped::class,
     ],
 
     /**

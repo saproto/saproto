@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Data\OrderlineData;
+use App\Data\PlayedVideoData;
 use App\Models\Event;
 use App\Models\OrderLine;
+use App\Models\PlayedVideo;
 use App\Models\TicketPurchase;
 use App\Models\User;
 use Illuminate\Database\Query\Builder;
@@ -13,6 +15,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -20,6 +23,7 @@ class WrappedController extends Controller
 {
     public function index(): Response
     {
+
         $from = Date::now()->startOfYear();
         $to = Date::now()->endOfYear();
         $user = Auth::user();
@@ -30,6 +34,8 @@ class WrappedController extends Controller
                 'purchases' => OrderlineData::collect($this->getPurchases($from, $to, $user)->get()),
                 'total_spent' => Cache::remember('wrapped.total_price', Date::tomorrow(), fn () => round($this->getPurchases($from, $to)->sum('total_price'), 2)),
                 'events' => $this->eventList($from, $to, $user),
+                'protube_totals' => Cache::remember('wrapped.protube_totals', Date::tomorrow(), fn () => $this->ProTubeTotals()),
+                'played_videos' => PlayedVideoData::collect($this->topProtubeSongs($from, $to, $user)->toArray()),
             ]);
     }
 
@@ -125,5 +131,37 @@ class WrappedController extends Controller
         }
 
         return $return;
+    }
+
+    /** @return \Illuminate\Database\Eloquent\Collection<int, PlayedVideo> **/
+    public function topProtubeSongs(Carbon $from, Carbon $to, User $user)
+    {
+        // top videos over the past 5 years
+        return PlayedVideo::query()
+            ->select([
+                'video_id',
+                'video_title',
+                DB::raw('SUM(duration) as sum_duration'),
+                DB::raw('SUM(duration_played)  as sum_duration_played'),
+                DB::raw('count(*) as played_count'),
+            ])
+            ->where('created_at', '>', $from->format('Y-m-d'))
+            ->where('created_at', '<', $to->format('Y-m-d'))
+            ->where('user_id', $user->id)
+            ->groupBy('video_id')
+            ->orderBy('played_count', 'desc')
+            ->orderBy('created_at')
+            ->get();
+    }
+
+    /** @return Collection<(int|string), int> **/
+    public function ProTubeTotals(): Collection
+    {
+        return PlayedVideo::query()
+            ->whereBetween('created_at', [now()->startOfYear(), now()->endOfYear()])
+            ->selectRaw('COUNT(*) as total')
+            ->groupBy('user_id')
+            ->orderBy('total')
+            ->get()->pluck('total')->map(static fn ($total) => (int) $total);
     }
 }

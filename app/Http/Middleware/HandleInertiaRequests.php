@@ -3,9 +3,11 @@
 namespace App\Http\Middleware;
 
 use App\Data\AuthUserData;
-use App\Data\MenuItemData;
-use App\Models\MenuItem;
+use App\Data\PhotoAlbumData;
+use App\Models\PhotoAlbum;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Date;
 use Inertia\Middleware;
 use Override;
 
@@ -40,7 +42,14 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'message' => $request->session()->get('flash_message'),
             ],
-            'menuitems' => fn (): array => MenuItemData::collect(MenuItem::query()->whereNull('parent')->orderBy('order')->get()->toArray()),
+            'menu' => [
+                'photos' => Cache::remember('inertia.albums', Date::tomorrow(), fn () => PhotoAlbumData::collect(
+                    PhotoAlbum::query()->orderBy('date_taken', 'desc')
+                        ->with('thumbPhoto')
+                        ->where('published', true)
+                        ->take(4)
+                        ->get())),
+            ],
         ]);
     }
 }

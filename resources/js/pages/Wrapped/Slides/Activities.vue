@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import moment from 'moment'
+
 const delay = 1
 
 import { statsType } from '@/pages/Wrapped/types.ts'
@@ -25,7 +27,7 @@ const stats = props.data.activities
                 v-for="(activity, idx) in stats.all"
                 :key="activity.title"
                 class="move-up"
-                :style="`animation-delay: ${(idx - 5) * delay}s`"
+                :style="`animation-delay: ${(Number(idx) - 5) * delay}s`"
             >
                 <div
                     class="activity"
@@ -36,7 +38,7 @@ const stats = props.data.activities
                     </div>
                     <div class="footer">
                         <div class="date">
-                            {{ activity.formatted_date.simple }}
+                            {{ moment(activity.start * 1000).format('L') }}
                         </div>
                         <div class="location">
                             {{ activity.location }}
@@ -81,10 +83,9 @@ const stats = props.data.activities
     animation-duration: v-bind('`${delay*stats.amount}s`');
     bottom: 0;
     opacity: 1;
-    text-align: start;
     text-wrap: none;
     white-space: nowrap;
-    width: 100%;
+    width: 27rem;
     transform: translateY(7rem);
     padding: 0 1rem;
 }
@@ -95,14 +96,10 @@ const stats = props.data.activities
     font-size: 1.5rem;
     border-radius: 0.5rem;
     height: 5rem;
-    display: flex;
-    justify-content: space-evenly;
-    margin-bottom: 0.5rem;
-    width: 100%;
+    width: 25rem;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    flex-direction: column;
 }
 
 .title {
