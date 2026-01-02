@@ -77,7 +77,7 @@
         "eslint-config-prettier": "^10.1.5",
         "eslint-plugin-vue": "^10.4.0",
         "glob": "^13.0.0",
-        "globals": "^16.1.0",
+        "globals": "^17.0.0",
         "laravel-echo": "^2.1.5",
         "laravel-vite-plugin": "^2.0.1",
         "playwright": "^1.55.0",

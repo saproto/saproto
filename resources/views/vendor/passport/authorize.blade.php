@@ -24,6 +24,7 @@
 
         <input type="hidden" name="state" value="{{ $request->state }}" />
         <input type="hidden" name="client_id" value="{{ $client->id }}" />
+        <input type="hidden" name="auth_token" value="{{ $authToken }}">
         <button type="submit" class="btn btn-success btn-block mt-2">
             Give access
         </button>
@@ -37,6 +38,7 @@
 
         <input type="hidden" name="state" value="{{ $request->state }}" />
         <input type="hidden" name="client_id" value="{{ $client->id }}" />
+        <input type="hidden" name="auth_token" value="{{ $authToken }}">
         <button class="btn btn-danger btn-block mt-2">Deny access</button>
     </form>
 @endsection
