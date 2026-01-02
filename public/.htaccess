@@ -105,17 +105,13 @@
 
 <ifModule mod_headers.c>
     # One year for image and video files
-    <filesMatch ".(flv|gif|ico|jpg|jpeg|mp4|mpeg|png|svg|swf|webp)$">
+    <filesMatch "\.(svg|woff|woff2|css|flv|gif|ico|jpg|jpeg|mp4|mpeg|png|svg|swf|webp)$">
         Header set Cache-Control "max-age=31536000, public"
     </filesMatch>
 
     # One month for JavaScript and PDF files
-    <filesMatch ".(js|pdf)$">
+    <filesMatch "\.(js|pdf)$">
         Header set Cache-Control "max-age=2592000, public"
     </filesMatch>
 
-    # One week for CSS files
-    <filesMatch ".(css)$">
-        Header set Cache-Control "max-age=604800, public"
-    </filesMatch>
 </ifModule>

@@ -13,6 +13,7 @@
         <div class="col-xl-9 col-md-6 col-sm-12">
             <div
                 class="card mb-3 border-0 text-white"
+                fetchpriority="high"
                 style="
                     @if ($header)
                         background-image: url({{ $header->getImageUrl() }});
