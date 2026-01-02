@@ -53,7 +53,7 @@
         "jwilsson/spotify-web-api-php": "^7.0.0",
         "laravel/framework": "^v12.16.0",
         "laravel/helpers": "^1.7.0",
-        "laravel/passport": "^12.3.0",
+        "laravel/passport": "^13.3.0",
         "league/commonmark": "^2.3",
         "league/oauth1-client": "^1.7",
         "milon/barcode": "^12.0",
