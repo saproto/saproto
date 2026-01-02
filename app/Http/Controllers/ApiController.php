@@ -113,9 +113,7 @@ class ApiController extends Controller
             ->withoutGlobalScopes()
             ->where('private', false)
             ->where('published', true)
-            ->whereHas('items', static function (Builder $query) {
-                $query->withoutGlobalScopes()->where('private', false);
-            })->with(['items' => function ($q) {
+            ->with(['items' => function ($q) {
                 $q->withoutGlobalScopes()->where('private', false)->reorder()->inRandomOrder()->take(6);
             }])->without('thumbPhoto');
 
