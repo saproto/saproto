@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Date;
@@ -34,6 +35,7 @@ use Laravel\Passport\Client;
 use Laravel\Passport\Contracts\OAuthenticatable;
 use Laravel\Passport\HasApiTokens;
 use Laravel\Passport\Token;
+use NotificationChannels\WebPush\HasPushSubscriptions;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -197,6 +199,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     /** @use HasFactory<UserFactory>*/
     use HasFactory;
+    use Notifiable, HasPushSubscriptions;
 
     use HasRoles;
     use InteractsWithMedia;

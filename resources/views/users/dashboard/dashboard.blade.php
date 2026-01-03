@@ -39,6 +39,8 @@
 
             @include('users.dashboard.includes.2fa')
 
+            @include('users.dashboard.includes.webpush')
+
             @include('users.dashboard.includes.roleinfo')
         </div>
 
