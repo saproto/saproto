@@ -5,13 +5,14 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
-use NotificationChannels\WebPush\WebPushMessage;
 use NotificationChannels\WebPush\WebPushChannel;
+use NotificationChannels\WebPush\WebPushMessage;
 
 class WebPushNotification extends Notification implements ShouldQueue
 {
     use Queueable;
-    public function __construct(public string $messageTitle, public string $messageText, public string $onConnection = "low")
+
+    public function __construct(public string $messageTitle, public string $messageText, public string $onConnection = 'low')
     {
         $this->onConnection($onConnection);
     }

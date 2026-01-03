@@ -159,7 +159,7 @@ class AchievementsCron extends Command
             'achievement_id' => $id,
         ]);
         $user->loadMissing('pushSubscriptions');
-        $user->notify(new WebPushNotification("Achievement got: ".$achievement->name, $achievement->desc));
+        $user->notify(new WebPushNotification('Achievement got: '.$achievement->name, $achievement->desc));
 
         $this->line("Earned \033[32m$achievement->name\033[0m");
     }

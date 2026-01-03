@@ -199,8 +199,8 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     /** @use HasFactory<UserFactory>*/
     use HasFactory;
-    use Notifiable, HasPushSubscriptions;
 
+    use HasPushSubscriptions, Notifiable;
     use HasRoles;
     use InteractsWithMedia;
     use SoftDeletes;

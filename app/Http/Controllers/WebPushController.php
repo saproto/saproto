@@ -12,7 +12,7 @@ class WebPushController extends Controller
         $this->validate($request, [
             'endpoint' => 'required',
             'keys.auth' => 'required',
-            'keys.p256dh' => 'required'
+            'keys.p256dh' => 'required',
         ]);
 
         $request->user()->updatePushSubscription(
@@ -21,6 +21,6 @@ class WebPushController extends Controller
             $request->keys['auth']
         );
 
-        return response()->json(['success' => true]);
+        return new JsonResponse(['success' => true]);
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Enums\MembershipTypeEnum;
-use App\Models\Achievement;
 use App\Models\Committee;
 use App\Models\CommitteeMembership;
 use App\Models\Company;
@@ -15,7 +14,6 @@ use App\Models\PhotoAlbum;
 use App\Models\User;
 use App\Models\Video;
 use App\Models\WelcomeMessage;
-use App\Notifications\WebPushNotification;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
