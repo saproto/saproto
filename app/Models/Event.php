@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Carbon;
@@ -49,6 +50,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property bool $involves_food
  * @property bool $secret
  * @property bool $force_calendar_sync
+ * @property bool $has_interested
  * @property Carbon|null $deleted_at
  * @property int|null $committee_id
  * @property string|null $summary
@@ -63,7 +65,9 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read mixed $formatted_date
  * @property-read bool $is_future
  * @property-read Collection<int, Ticket> $tickets
+ * @property-read Collection<int, User> $interestedUsers
  * @property-read int|null $tickets_count
+ * @property-read int|null $interested_users_count
  * @property-read Collection<int, Video> $videos
  * @property-read int|null $videos_count
  *
@@ -116,6 +120,14 @@ class Event extends Model implements HasMedia
 
     protected $appends = ['is_future', 'formatted_date'];
 
+    /**
+     * @return BelongsToMany<\App\Models\User, $this, Pivot>
+     */
+    public function interestedUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'event_user', 'event_id', 'user_id');
+    }
+
     #[Override]
     protected function casts(): array
     {
@@ -124,6 +136,7 @@ class Event extends Model implements HasMedia
             'is_external' => 'boolean',
             'is_featured' => 'boolean',
             'involves_food' => 'boolean',
+            'has_interested' => 'boolean',
             'secret' => 'boolean',
             'force_calendar_sync' => 'boolean',
         ];
@@ -214,6 +227,7 @@ class Event extends Model implements HasMedia
         return Event::query()
             ->orderBy('start')
             ->with('media')
+            ->withCount('interestedUsers')
             ->with('activity', static function ($e) use ($user) {
                 $e
                     ->with(['participation' => function ($q) use ($user) {

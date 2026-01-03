@@ -15,13 +15,11 @@ use Illuminate\View\View;
 
 class DmxFixtureController extends Controller
 {
-    /** @return View */
     public function index(): \Illuminate\Contracts\View\View|Factory
     {
-        return view('dmx.index', ['fixtures' => DmxFixture::query()->orderBy('name', 'asc')->get()]);
+        return view('dmx.index', ['fixtures' => DmxFixture::query()->orderBy('name')->get()]);
     }
 
-    /** @return View */
     public function create(): \Illuminate\Contracts\View\View|Factory
     {
         return view('dmx.edit', ['fixture' => null]);

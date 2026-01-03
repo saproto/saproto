@@ -141,6 +141,7 @@ class EventController extends Controller
             'summary' => $request->summary,
             'is_featured' => $request->has('is_featured'),
             'is_external' => $request->has('is_external'),
+            'has_interested' => $request->has('has_interested'),
             'force_calendar_sync' => $request->has('force_calendar_sync'),
             'publication' => $request->publication ? $request->date('publication')->timestamp : null,
         ]);
@@ -190,6 +191,7 @@ class EventController extends Controller
         $event->involves_food = $request->has('involves_food');
         $event->is_featured = $request->has('is_featured');
         $event->is_external = $request->has('is_external');
+        $event->has_interested = $request->has('has_interested');
         $event->force_calendar_sync = $request->has('force_calendar_sync');
         $event->publication = $request->publication ? $request->date('publication')->timestamp : null;
 
@@ -519,6 +521,26 @@ class EventController extends Controller
         } else {
             Session::flash('flash_message', 'From now on your calendar will sync all events.');
         }
+
+        return back();
+    }
+
+    public function toggleInterested(Request $request, Event $event): RedirectResponse
+    {
+        if (! $event->has_interested) {
+            Session::flash('flash_message', 'This event has no interest list.');
+
+            return back();
+        }
+        $interest = $event->interestedUsers()->where('user_id', Auth::id())->first();
+        if ($interest) {
+            $event->interestedUsers()->detach(Auth::user());
+            Session::flash('flash_message', 'You are not interested in this event anymore.');
+
+            return back();
+        }
+        $event->interestedUsers()->attach(Auth::user());
+        Session::flash('flash_message', 'You are interested in this event.');
 
         return back();
     }

@@ -14,7 +14,6 @@ use App\Models\PhotoAlbum;
 use App\Models\User;
 use App\Models\Video;
 use App\Models\WelcomeMessage;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
@@ -24,7 +23,7 @@ use Illuminate\View\View;
 class HomeController extends Controller
 {
     /** Display the homepage. */
-    public function show(): \Illuminate\Contracts\View\View|Factory
+    public function show()
     {
         $companies =
             Cache::remember('home.companies', Date::tomorrow(), fn () => Company::query()

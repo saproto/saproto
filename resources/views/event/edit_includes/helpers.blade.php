@@ -1,3 +1,7 @@
+@php
+    /** @var App\Models\Event $event */
+@endphp
+
 @if ($event?->activity)
     <div class="card mb-3">
         <div class="card-header bg-dark text-white">Helping committees</div>

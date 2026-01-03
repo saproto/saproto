@@ -79,7 +79,7 @@
             @else
                 @if ($event->activity->canSubscribeBackup())
                     <a
-                        class="list-group-item bg-{{ $event->activity->isFull() || ! $event->activity->canSubscribe() ? 'warning' : 'success' }} text-white"
+                        class="list-group-item bg-{{ $event->activity->isFull() || ! $event->activity->canSubscribe() ? 'warning' : 'primary' }} text-white"
                         href="{{ route('event::addparticipation', ['event' => $event]) }}"
                     >
                         <strong>

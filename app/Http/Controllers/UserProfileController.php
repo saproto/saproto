@@ -9,13 +9,9 @@ use App\Models\User;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
 
 class UserProfileController extends Controller
 {
-    /**
-     * @return View
-     */
     public function show(?string $id = null): \Illuminate\Contracts\View\View|Factory
     {
         $user = $id == null ? Auth::user() : User::fromPublicId($id);

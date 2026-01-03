@@ -166,12 +166,18 @@
                 </span>
             @endif
 
-            {{-- Signup Icon --}}
             <div class="d-flex justify-content-between">
-                @if ($event->unique_users_count > 0)
+                @if ($event->activity?->withParticipants() || $event->has_interested)
                     <span>
                         <i class="fas fa-user-alt fa-fw" aria-hidden="true"></i>
-                        {{ $event->unique_users_count }}
+                        @if ($event->has_interested)
+                                {{ $event->interested_users_count }} interested
+                                ·
+                        @endif
+
+                        @if ($event->activity?->withParticipants())
+                                {{ $event->unique_users_count }} going
+                        @endif
                     </span>
                 @endif
 

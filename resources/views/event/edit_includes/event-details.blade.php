@@ -240,6 +240,18 @@
                                 ]
                             )
                         </div>
+
+                        <!-- Interested -->
+                        <div class="col-md-6 mb-3">
+                            @include(
+                                'components.forms.checkbox',
+                                [
+                                    'name' => 'has_interested',
+                                    'checked' => $event?->has_interested,
+                                    'label' => 'Users can be interested in this event',
+                                ]
+                            )
+                        </div>
                     </div>
 
                     @if ($event?->hasMedia('header'))

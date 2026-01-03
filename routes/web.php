@@ -522,6 +522,9 @@ Route::middleware('forcedomain')->group(function () {
         Route::post('set_reminder', [EventController::class, 'setReminder'])->middleware(['auth'])->name('set_reminder');
         Route::get('toggle_relevant_only', [EventController::class, 'toggleRelevantOnly'])->middleware(['auth'])->name('toggle_relevant_only');
 
+        // Toggle if the user is interested in the event
+        Route::post('{event}/toggle_interested', [EventController::class, 'toggleInterested'])->middleware(['auth'])->name('toggle_interested');
+
         // Force login for event
         Route::get('{event}/login', [EventController::class, 'forceLogin'])->middleware(['auth'])->name('login');
         // Show event

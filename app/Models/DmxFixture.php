@@ -39,14 +39,13 @@ class DmxFixture extends Model
      */
     public function getChannels(?string $special_func = null): Collection|array
     {
-        $channels = DmxChannel::query()->where('id', '>=', $this->channel_start)
-            ->where('id', '<=', $this->channel_end);
-
-        if (! empty($special_func)) {
-            $channels = $channels->where('special_function', $special_func);
-        }
-
-        return $channels->orderBy('id', 'asc')->get();
+        return DmxChannel::query()->where('id', '>=', $this->channel_start)
+            ->where('id', '<=', $this->channel_end)
+            ->unless(empty($special_func), function ($q) use ($special_func) {
+                $q->where('special_function', $special_func);
+            })
+            ->orderBy('id')
+            ->get();
     }
 
     /** @return int[] */

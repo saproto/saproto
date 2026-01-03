@@ -520,6 +520,14 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
+     * @return BelongsToMany<\App\Models\Event, $this, Pivot>
+     */
+    public function interestedEvents(): BelongsToMany
+    {
+        return $this->belongsToMany(Event::class, 'event_user', 'user_id', 'event_id');
+    }
+
+    /**
      * @return Attribute<string|null, never>
      */
     protected function protoEmail(): Attribute

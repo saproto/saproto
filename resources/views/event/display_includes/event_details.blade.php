@@ -1,3 +1,7 @@
+@php
+    /** @var App\Models\Event $event */
+@endphp
+
 @if ($event->secret)
     <div class="alert alert-info" role="alert">
         This event is not shown on the site, you can only access it directly via
@@ -54,16 +58,38 @@
         class="card-header bg-light justify-content-between d-inline-flex align-items-center"
     >
         <h5 class="card-title">@yield('page-title')</h5>
+        <span class="d-flex align-items-center mx-2">
+            @if ($event->category)
+                <span class="badge rounded-pill bg-info ellipsis mw-100">
+                    <i
+                        class="{{ $event->category->icon }} fa-fw"
+                        aria-hidden="true"
+                    ></i>
+                    {{ $event->category->name }}
+                </span>
+            @endif
 
-        @if ($event->category)
-            <span class="badge rounded-pill bg-info ellipsis mw-100 float-end">
-                <i
-                    class="{{ $event->category->icon }} fa-fw"
-                    aria-hidden="true"
-                ></i>
-                {{ $event->category->name }}
-            </span>
-        @endif
+            @if ($event->has_interested)
+                <form
+                    method="POST"
+                    action="{{ route('event::toggle_interested', ['event' => $event]) }}"
+                >
+                    @csrf
+
+                    <button
+                        type="submit"
+                        class="btn btn-outline-primary btn-block ms-3"
+                    >
+                        @if ($event->interestedUsers->contains(Auth::user()))
+                            <i class="fas fa-check"></i>
+                        @else
+                            <i class="fas fa-plus"></i>
+                        @endif
+                        Interested
+                    </button>
+                </form>
+            @endif
+        </span>
     </div>
 
     <ul class="list-group list-group-flush">
