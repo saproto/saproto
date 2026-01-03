@@ -1160,6 +1160,24 @@ CREATE TABLE `products_categories` (
   KEY `products_categories_category_id_index` (`category_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `push_subscriptions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `push_subscriptions` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `subscribable_type` varchar(255) NOT NULL,
+  `subscribable_id` bigint(20) unsigned NOT NULL,
+  `endpoint` varchar(500) NOT NULL,
+  `public_key` varchar(255) DEFAULT NULL,
+  `auth_token` varchar(255) DEFAULT NULL,
+  `content_encoding` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `push_subscriptions_endpoint_unique` (`endpoint`),
+  KEY `push_subscriptions_subscribable_morph_idx` (`subscribable_type`,`subscribable_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `qrauth_requests`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -1850,3 +1868,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_25_194358_creat
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_30_123317_add_withdrawal_pivot_table_to_emails',194);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_11_03_235144_remove_oauth_personal_access_clients_table',195);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2024_06_01_000001_create_oauth_device_codes_table',196);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_01_03_214942_create_push_subscriptions_table',197);

@@ -13,6 +13,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SmartXpScreenController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\WallstreetController;
+use App\Http\Controllers\WebPushController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -79,4 +80,6 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], static function
         Route::get('all_prices/{id}', [WallstreetController::class, 'getAllPrices'])->name('all_prices');
         Route::get('toggle_event', [WallstreetController::class, 'toggleEvent'])->name('toggle_event')->middleware(['permission:tipcie']);
     });
+
+    Route::post('subscriptions', [WebPushController::class, 'store'])->name('subscriptions')->middleware(['web', 'auth']);
 });
