@@ -191,11 +191,7 @@ class AchievementsCron extends Command
 
     private function stickeredCountries(User $user, int $nCountries): bool
     {
-        if ($nCountries === 12 && $user->id === 2179) {
-            return true;
-        }
-
-        return $user->stickers_country_count >= $nCountries;
+          return $user->stickers_country_count >= $nCountries;
     }
 
     /**
