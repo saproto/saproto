@@ -35,6 +35,7 @@ use Laravel\Passport\Client;
 use Laravel\Passport\Contracts\OAuthenticatable;
 use Laravel\Passport\HasApiTokens;
 use Laravel\Passport\Token;
+use Laravel\Pennant\Concerns\HasFeatures;
 use NotificationChannels\WebPush\HasPushSubscriptions;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
@@ -200,6 +201,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @use HasFactory<UserFactory>*/
     use HasFactory;
 
+    use HasFeatures;
     use HasPushSubscriptions, Notifiable;
     use HasRoles;
     use InteractsWithMedia;

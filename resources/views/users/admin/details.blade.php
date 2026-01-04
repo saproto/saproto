@@ -24,6 +24,10 @@
 
         <div class="col-md-3">
             @include('users.admin.admin_includes.hoofd')
+
+            @can('sysadmin')
+                @include('users.admin.admin_includes.features')
+            @endcan
         </div>
     </div>
 

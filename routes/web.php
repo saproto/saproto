@@ -24,6 +24,7 @@ use App\Http\Controllers\EmailController;
 use App\Http\Controllers\EmailListController;
 use App\Http\Controllers\EventCategoryController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\HeaderImageController;
@@ -1032,6 +1033,12 @@ Route::middleware('forcedomain')->group(function () {
     Route::middleware(['auth', 'permission:sysadmin'])->prefix('inertia')->group(function () {
         Route::get('/', fn () => inertia('Welcome'))->name('index');
         Route::get('/admin', fn () => inertia('admin/Admin'))->name('admin');
+    });
+
+    /* --- Routes related to the feature management --- */
+    Route::prefix('features')->name('features::')->middleware(['auth', 'permission:sysadmin'])->group(function () {
+        // Toggle for a specific user
+        Route::post('/toggle/{user}', [FeatureController::class, 'toggle'])->name('toggle');
     });
 
     /* Routes related to Wrapped */
