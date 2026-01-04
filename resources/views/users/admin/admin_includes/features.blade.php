@@ -26,38 +26,39 @@
                     @foreach (Feature::all() as $key => $feature)
                         <tr class="text-nowrap">
                             <td>
-                                {{ str($key)->afterLast('\\') }}
-                            </td>
-                            <td>
-                                @if (Feature::for($user)->active($key))
-                                    ✅
-                                @else
-                                        ❌
-                                @endif
-                            </td>
-                            <td>
-                                <form
-                                    method="post"
-                                    action="{{ route('features::toggle', ['user' => $user, 'feature' => $key]) }}"
-                                >
-                                    {{ csrf_field() }}
+                                <tr class="text-nowrap">
+                                    <td>
+                                        @if (Feature::for($user)->active($key))
+                                            ✅
+                                        @else
+                                                ❌
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <form
+                                            method="post"
+                                            action="{{ route('features::toggle', ['user' => $user, 'feature' => $key]) }}"
+                                        >
+                                            {{ csrf_field() }}
 
-                                    @if (Feature::for($user)->active($key))
-                                        <button
-                                            type="submit"
-                                            class="btn btn-sm btn-warning"
-                                        >
-                                            Turn off
-                                        </button>
-                                    @else
-                                        <button
-                                            type="submit"
-                                            class="btn btn-sm btn-primary"
-                                        >
-                                            Turn on
-                                        </button>
-                                    @endif
-                                </form>
+                                            @if (Feature::for($user)->active($key))
+                                                <button
+                                                    type="submit"
+                                                    class="btn btn-sm btn-warning"
+                                                >
+                                                    Turn off
+                                                </button>
+                                            @else
+                                                <button
+                                                    type="submit"
+                                                    class="btn btn-sm btn-primary"
+                                                >
+                                                    Turn on
+                                                </button>
+                                            @endif
+                                        </form>
+                                    </td>
+                                </tr>
                             </td>
                         </tr>
                     @endforeach
