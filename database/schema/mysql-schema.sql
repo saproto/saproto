@@ -538,6 +538,20 @@ CREATE TABLE `failed_jobs` (
   UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `features`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `features` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `scope` varchar(255) NOT NULL,
+  `value` text NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `features_name_scope_unique` (`name`,`scope`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `feedback`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -1869,3 +1883,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_30_123317_add_w
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_11_03_235144_remove_oauth_personal_access_clients_table',195);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2024_06_01_000001_create_oauth_device_codes_table',196);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_01_03_214942_create_push_subscriptions_table',197);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2022_11_01_000001_create_features_table',198);
