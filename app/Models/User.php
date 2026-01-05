@@ -334,7 +334,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function activities(): BelongsToMany
     {
         return $this->belongsToMany(Activity::class, 'activities_users')
-            ->whereNull('activities_users.deleted_at')
             ->where('backup', false)
             ->withTimestamps();
     }
@@ -345,7 +344,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function backupActivities(): BelongsToMany
     {
         return $this->belongsToMany(Activity::class, 'activities_users')
-            ->whereNull('activities_users.deleted_at')
             ->where('backup', true)
             ->withTimestamps();
     }

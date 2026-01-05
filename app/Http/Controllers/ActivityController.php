@@ -109,7 +109,7 @@ class ActivityController extends Controller
             return back();
         }
 
-        ActivityParticipation::withTrashed()->where('activity_id', $event->activity->id)->forceDelete();
+        ActivityParticipation::where('activity_id', $event->activity->id)->delete();
 
         $event->activity->delete();
 

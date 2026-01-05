@@ -114,7 +114,6 @@ class Activity extends Validatable
     {
         return $this->belongsToMany(User::class, 'activities_users')
             ->withPivot('id', 'committees_activities_id', 'is_present')
-            ->whereNull('activities_users.deleted_at')
             ->whereNull('committees_activities_id')
             ->where('backup', false)
             ->withTimestamps();
@@ -127,7 +126,6 @@ class Activity extends Validatable
     {
         return $this->belongsToMany(User::class, 'activities_users')
             ->withPivot('id', 'committees_activities_id', 'is_present')
-            ->whereNull('activities_users.deleted_at')
             ->whereNull('committees_activities_id')
             ->where('activities_users.is_present', true)
             ->where('backup', false)
@@ -141,7 +139,6 @@ class Activity extends Validatable
     {
         return $this->belongsToMany(User::class, 'activities_users')
             ->withPivot('id', 'committees_activities_id', 'is_present')
-            ->whereNull('activities_users.deleted_at')
             ->where('backup', false)
             ->withTimestamps();
     }
@@ -152,7 +149,6 @@ class Activity extends Validatable
     public function backupUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'activities_users')
-            ->whereNull('activities_users.deleted_at')
             ->whereNull('committees_activities_id')
             ->where('backup', true)
             ->withPivot('id')
@@ -180,7 +176,7 @@ class Activity extends Validatable
      */
     public function helpingUsers(int $help_id): \Illuminate\Support\Collection
     {
-        return ActivityParticipation::query()->whereNull('activities_users.deleted_at')->where('committees_activities_id', $help_id)->get();
+        return ActivityParticipation::query()->where('committees_activities_id', $help_id)->get();
     }
 
     /**

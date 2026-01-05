@@ -7,9 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
-use Override;
 
 /**
  * Activity Participation Model.
@@ -51,8 +49,6 @@ class ActivityParticipation extends Model
     /** @use HasFactory<ActivityParticipationFactory>*/
     use HasFactory;
 
-    use SoftDeletes;
-
     protected $table = 'activities_users';
 
     protected $guarded = ['id'];
@@ -84,13 +80,5 @@ class ActivityParticipation extends Model
     public function help(): BelongsTo
     {
         return $this->belongsTo(HelpingCommittee::class, 'committees_activities_id');
-    }
-
-    #[Override]
-    protected function casts(): array
-    {
-        return [
-            'deleted_at' => 'datetime',
-        ];
     }
 }
