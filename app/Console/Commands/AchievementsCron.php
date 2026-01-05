@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Enums\MembershipTypeEnum;
+use App\Features\notifications;
 use App\Models\Achievement;
 use App\Models\AchievementOwnership;
 use App\Models\Activity;
@@ -12,6 +13,7 @@ use App\Models\Event;
 use App\Models\OrderLine;
 use App\Models\Product;
 use App\Models\User;
+use App\Notifications\WebPushNotification;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -157,6 +159,11 @@ class AchievementsCron extends Command
             'user_id' => $user->id,
             'achievement_id' => $id,
         ]);
+
+        if ($user->features()->active(notifications::class)) {
+            $user->loadMissing('pushSubscriptions');
+            $user->notify(new WebPushNotification('Achievement got: '.$achievement->name, $achievement->desc));
+        }
 
         $this->line("Earned \033[32m$achievement->name\033[0m");
     }

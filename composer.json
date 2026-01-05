@@ -82,7 +82,9 @@
         "anhskohbo/no-captcha": "^3.7",
         "spatie/laravel-medialibrary": "^11.13",
         "league/flysystem-sftp-v3": "^3.30",
-        "laravel/wayfinder": "^0.1.12"
+        "laravel/wayfinder": "^0.1.12",
+        "laravel-notification-channels/webpush": "^10.4",
+        "laravel/pennant": "^1.18"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.0",

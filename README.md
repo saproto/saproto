@@ -113,6 +113,7 @@ echo "alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'" > ~/.zshenv
 sail up -d
 sail composer install
 sail artisan key:generate
+sail artisan webpush:vapid
 sail artisan migrate --seed
 ```
 
@@ -125,6 +126,11 @@ for changes to scripts or stylesheets.
 
 When adding a new library or client-side dependency through npm don't forget to require the scripts in `application.js`
 and the stylesheet in `vendor.scss`.
+
+#### WebPush notifications
+For WebPush notifications we use the [webpush](https://github.com/laravel-notification-channels/webpush) notification channels.
+To set it up you need to generate the vapid keys once by running:
+`sail artisan webpush:vapid`
 
 #### Websockets
 

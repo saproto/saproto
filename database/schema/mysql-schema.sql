@@ -88,8 +88,8 @@ CREATE TABLE `activities_users` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `backup` tinyint(1) NOT NULL DEFAULT 0,
+  `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_committee_user_activity` (`user_id`,`activity_id`,`committees_activities_id`),
   KEY `activities_users_user_id_index` (`user_id`),
   KEY `activities_users_activity_id_index` (`activity_id`),
   KEY `activities_users_committees_activities_id_index` (`committees_activities_id`)
@@ -536,6 +536,20 @@ CREATE TABLE `failed_jobs` (
   `failed_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `features`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `features` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `scope` varchar(255) NOT NULL,
+  `value` text NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `features_name_scope_unique` (`name`,`scope`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `feedback`;
@@ -1158,6 +1172,24 @@ CREATE TABLE `products_categories` (
   PRIMARY KEY (`id`),
   KEY `products_categories_product_id_index` (`product_id`),
   KEY `products_categories_category_id_index` (`category_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `push_subscriptions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `push_subscriptions` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `subscribable_type` varchar(255) NOT NULL,
+  `subscribable_id` bigint(20) unsigned NOT NULL,
+  `endpoint` varchar(500) NOT NULL,
+  `public_key` varchar(255) DEFAULT NULL,
+  `auth_token` varchar(255) DEFAULT NULL,
+  `content_encoding` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `push_subscriptions_endpoint_unique` (`endpoint`),
+  KEY `push_subscriptions_subscribable_morph_idx` (`subscribable_type`,`subscribable_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `qrauth_requests`;
@@ -1850,4 +1882,5 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_25_194358_creat
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_30_123317_add_withdrawal_pivot_table_to_emails',194);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_11_03_235144_remove_oauth_personal_access_clients_table',195);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2024_06_01_000001_create_oauth_device_codes_table',196);
-INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_01_05_095005_add_unique_to_activities_users',197);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_01_03_214942_create_push_subscriptions_table',197);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2022_11_01_000001_create_features_table',198);
