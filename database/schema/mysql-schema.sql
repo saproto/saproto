@@ -88,8 +88,8 @@ CREATE TABLE `activities_users` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `backup` tinyint(1) NOT NULL DEFAULT 0,
-  `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_committee_user_activity` (`user_id`,`activity_id`,`committees_activities_id`),
   KEY `activities_users_user_id_index` (`user_id`),
   KEY `activities_users_activity_id_index` (`activity_id`),
   KEY `activities_users_committees_activities_id_index` (`committees_activities_id`)
@@ -1850,3 +1850,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_25_194358_creat
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_30_123317_add_withdrawal_pivot_table_to_emails',194);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_11_03_235144_remove_oauth_personal_access_clients_table',195);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2024_06_01_000001_create_oauth_device_codes_table',196);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_01_05_095005_add_unique_to_activities_users',197);
