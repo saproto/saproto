@@ -20,7 +20,6 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property bool $backup
- * @property Carbon|null $deleted_at
  * @property-read Activity|null $activity
  * @property-read HelpingCommittee|null $help
  * @property-read User|null $user
@@ -34,7 +33,6 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|ActivityParticipation whereBackup($value)
  * @method static Builder<static>|ActivityParticipation whereCommitteesActivitiesId($value)
  * @method static Builder<static>|ActivityParticipation whereCreatedAt($value)
- * @method static Builder<static>|ActivityParticipation whereDeletedAt($value)
  * @method static Builder<static>|ActivityParticipation whereId($value)
  * @method static Builder<static>|ActivityParticipation whereIsPresent($value)
  * @method static Builder<static>|ActivityParticipation whereUpdatedAt($value)
