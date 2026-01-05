@@ -109,7 +109,7 @@ class ActivityController extends Controller
             return back();
         }
 
-        ActivityParticipation::where('activity_id', $event->activity->id)->delete();
+        ActivityParticipation::query()->where('activity_id', $event->activity->id)->delete();
 
         $event->activity->delete();
 
