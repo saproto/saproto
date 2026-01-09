@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\DiscordController;
-use App\Http\Controllers\DmxFixtureController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\NarrowcastingController;
@@ -20,7 +19,6 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], static function () {
     /* Routes related to the General APIs */
     Route::group(['middleware' => ['web']], static function () {
-        Route::get('dmx_values', [DmxFixtureController::class, 'valueApi'])->name('dmx_values');
         Route::get('scan/{event}', [TicketController::class, 'scanApi'])->name('scan')->middleware(['auth']);
         Route::get('news', [NewsController::class, 'apiIndex'])->name('news');
     });
