@@ -214,6 +214,7 @@ class PhotoAdminController extends Controller
         $album->published = true;
         $album->save();
         Cache::forget('home.albums');
+        Cache::forget('inertia.albums');
 
         return to_route('albums::admin::edit', ['id' => $id]);
     }
@@ -227,6 +228,7 @@ class PhotoAdminController extends Controller
         $album->published = false;
         $album->save();
         Cache::forget('home.albums');
+        Cache::forget('inertia.albums');
 
         return to_route('albums::admin::edit', ['id' => $id]);
     }

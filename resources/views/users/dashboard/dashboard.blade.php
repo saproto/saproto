@@ -1,3 +1,7 @@
+@php
+    use App\Features\notifications;
+@endphp
+
 @extends('website.layouts.redesign.generic')
 
 @section('page-title')
@@ -38,6 +42,10 @@
             @include('users.dashboard.includes.allergies')
 
             @include('users.dashboard.includes.2fa')
+
+            @feature(notifications::class)
+                @include('users.dashboard.includes.webpush')
+            @endfeature
 
             @include('users.dashboard.includes.roleinfo')
         </div>

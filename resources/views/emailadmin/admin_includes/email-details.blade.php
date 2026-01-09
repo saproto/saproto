@@ -287,7 +287,7 @@
 </form>
 
 @push('javascript')
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+    <script type="text/javascript" @cspNonce>
         const eventSelect = document.getElementById('eventSelect')
         const listSelect = document.getElementById('listSelect')
         const withdrawalSelect = document.getElementById('withdrawalSelect')

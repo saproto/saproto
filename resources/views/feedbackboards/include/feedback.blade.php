@@ -152,7 +152,7 @@
 
 @push('javascript')
     @if ($controls)
-        <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        <script type="text/javascript" @cspNonce>
             document
                 .querySelectorAll('.toggle-navbar-{{ $feedback->id }}')
                 .forEach((element) => {

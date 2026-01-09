@@ -142,7 +142,7 @@
 @endsection
 
 @push('javascript')
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+    <script type="text/javascript" @cspNonce>
         document.querySelectorAll('.buy_limit_checkbox').forEach((element) => {
             element.addEventListener('click', () => {
                 document

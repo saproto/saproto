@@ -39,7 +39,7 @@
 </div>
 
 @push('javascript')
-    <script nonce="{{ csp_nonce() }}">
+    <script @cspNonce>
         document.getElementById('reload-button').onclick = () =>
             window.location.reload()
     </script>

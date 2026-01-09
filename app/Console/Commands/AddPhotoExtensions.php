@@ -55,7 +55,7 @@ class AddPhotoExtensions extends Command
                             continue;
                         }
 
-                        if (pathinfo($media->file_name, PATHINFO_EXTENSION)) {
+                        if (pathinfo((string) $media->file_name, PATHINFO_EXTENSION)) {
                             $bar->advance();
 
                             continue;

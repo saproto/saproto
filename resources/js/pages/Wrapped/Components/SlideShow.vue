@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { Component } from 'vue'
-import html2canvas from 'html2canvas'
 import TotalSpent from '@/pages/Wrapped/Slides/TotalSpent.vue'
 import MostBought from '@/pages/Wrapped/Slides/MostBought.vue'
 import Calories from '@/pages/Wrapped/Slides/Calories.vue'
@@ -9,9 +8,13 @@ import Drinks from '@/pages/Wrapped/Slides/Drinks.vue'
 import WillToLive from '@/pages/Wrapped/Slides/WillToLive.vue'
 import DaysAtProto from '@/pages/Wrapped/Slides/DaysAtProto.vue'
 import Activities from '@/pages/Wrapped/Slides/Activities.vue'
+import KoenkertCategory from '../Slides/KoenkertCategory.vue'
 import { useSwipe } from '@vueuse/core'
 import { statsType } from '@/pages/Wrapped/types.ts'
 import { ArrowUp } from 'lucide-vue-next'
+import domtoimage from 'dom-to-image'
+import ProTube from '@/pages/Wrapped/Slides/ProTube.vue'
+import ProtubeTop from '@/pages/Wrapped/Slides/ProtubeTop.vue'
 
 const props = defineProps<{
     data: statsType
@@ -33,11 +36,16 @@ type SlideComponent =
     | typeof WillToLive
     | typeof DaysAtProto
     | typeof Activities
+    | typeof KoenkertCategory
+    | typeof ProTube
+    | typeof ProtubeTop
 
 const slideElement = ref<SlideComponent>()
 const sharing = ref(false)
 
 let allSlides: Array<[Component, number] | true> = [
+    [ProTube, 10],
+    stats.protube.user.total_played <= 0 || [ProtubeTop, 10],
     [TotalSpent, 10],
     [MostBought, 10],
     [Calories, 10],
@@ -45,6 +53,7 @@ let allSlides: Array<[Component, number] | true> = [
     stats.willToLives.amount <= 0 || [WillToLive, 10],
     [DaysAtProto, 10],
     stats.activities.amount <= 0 || [Activities, 10],
+    [KoenkertCategory, 10],
 ]
 
 const slides = allSlides.filter((x) => x !== true)
@@ -55,16 +64,13 @@ const shareSlide = async () => {
     setTimeout(async () => {
         try {
             if (!slide.value) return
-            const canvas = await html2canvas(slide.value, {
-                backgroundColor: null,
-            })
-            canvas.toBlob(async (blob) => {
+            domtoimage.toBlob(slide.value).then(async (blob) => {
                 if (!blob) return
                 if (navigator.share) {
                     const year = new Date().getFullYear()
                     const imgFile = new File(
                         [blob],
-                        `OmNomComWrapped${year}.png`,
+                        `ProtoWrapped${year}.png`,
                         { type: 'image/png' }
                     )
                     await navigator.share({
@@ -76,7 +82,8 @@ const shareSlide = async () => {
                 } else {
                     const dataUrl = URL.createObjectURL(blob)
                     const link = document.createElement('a')
-                    link.download = 'OmNomComWrapped2022.png'
+                    const year = new Date().getFullYear()
+                    link.download = `ProtoWrapped${year}.png`
                     link.href = dataUrl
                     link.click()
                 }
@@ -219,7 +226,7 @@ const { lengthX } = useSwipe(slideElement, {
         <div>
             <h1>
                 {{ $page.props.auth.user.calling_name }}'s
-                <span class="omnomcom">OmNomCom</span> Wrapped
+                <span class="omnomcom">Proto</span> Wrapped
             </h1>
         </div>
 

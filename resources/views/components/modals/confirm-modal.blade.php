@@ -62,7 +62,7 @@
 
 @once
     @push('javascript')
-        <script nonce="{{ csp_nonce() }}">
+        <script @cspNonce>
             document.querySelectorAll('.confirm-modal-button').forEach((el) =>
                 el.addEventListener('click', (e) => {
                     const modal = document.querySelector(

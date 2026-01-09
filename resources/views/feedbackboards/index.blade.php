@@ -20,7 +20,7 @@
 @endsection
 
 @push('javascript')
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+    <script type="text/javascript" @cspNonce>
         const upvoteList = Array.from(document.getElementsByClassName('upvote'))
         upvoteList.forEach((el) => {
             el.addEventListener('click', (e) => {

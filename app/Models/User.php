@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Date;
@@ -31,8 +32,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Laravel\Passport\Client;
+use Laravel\Passport\Contracts\OAuthenticatable;
 use Laravel\Passport\HasApiTokens;
 use Laravel\Passport\Token;
+use Laravel\Pennant\Concerns\HasFeatures;
+use NotificationChannels\WebPush\HasPushSubscriptions;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -189,7 +193,7 @@ use Spatie\Permission\Traits\HasRoles;
  *
  * @mixin Eloquent
  */
-class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract, HasMedia
+class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract, HasMedia, OAuthenticatable
 {
     use CanResetPassword;
     use HasApiTokens;
@@ -197,6 +201,8 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @use HasFactory<UserFactory>*/
     use HasFactory;
 
+    use HasFeatures;
+    use HasPushSubscriptions, Notifiable;
     use HasRoles;
     use InteractsWithMedia;
     use SoftDeletes;
@@ -497,7 +503,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     public function websiteUrl(): ?string
     {
-        if (preg_match("/(?:http|https):\/\/.*/i", $this->website) === 1) {
+        if (preg_match("/(?:http|https):\/\/.*/i", (string) $this->website) === 1) {
             return $this->website;
         }
 
@@ -506,7 +512,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     public function websiteDisplay(): ?string
     {
-        if (preg_match("/(?:http|https):\/\/(.*)/i", $this->website, $matches) === 1) {
+        if (preg_match("/(?:http|https):\/\/(.*)/i", (string) $this->website, $matches) === 1) {
             return $matches[1];
         }
 
@@ -645,7 +651,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             'edu_username' => $utwenteEmail,
         ]);
 
-        Mail::to($user)->queue((new RegistrationConfirmation($user))->onQueue('high'));
+        Mail::to($user)->queue(new RegistrationConfirmation($user)->onQueue('high'));
 
         $user->sendPasswordResetEmail();
 
@@ -666,7 +672,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             'valid_to' => Date::now()->addHour()->timestamp,
         ]);
 
-        Mail::to($this)->queue((new PasswordResetEmail($this, $reset->token))->onQueue('high'));
+        Mail::to($this)->queue(new PasswordResetEmail($this, $reset->token)->onQueue('high'));
     }
 
     /**
@@ -674,7 +680,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      */
     public function sendForgotUsernameEmail(): void
     {
-        Mail::to($this)->queue((new UsernameReminderEmail($this))->onQueue('high'));
+        Mail::to($this)->queue(new UsernameReminderEmail($this)->onQueue('high'));
     }
 
     protected function casts(): array

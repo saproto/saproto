@@ -16,5 +16,6 @@
             "@/*": ["./resources/js/*"],
         },
     },
-    "include": ["resources/js/**/*.ts", "resources/js/**/*.d.ts", "resources/js/**/*.vue"]
+    "include": ["resources/js/**/*.ts", "resources/js/**/*.d.ts", "resources/js/**/*.vue"],
+    "exclude": ["resources/js/actions/*", "resources/js/routes/*","resources/js/wayfinder/*"]
 }

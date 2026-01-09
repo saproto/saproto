@@ -4,6 +4,8 @@ import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
 import eslintPlugin from '@nabla/vite-plugin-eslint';
 import path from 'path';
+import { wayfinder } from "@laravel/vite-plugin-wayfinder";
+
 
 /**
  * https://vitejs.dev/config/
@@ -40,6 +42,9 @@ export default defineConfig({
             ],
             refresh: true,
         }),
+        wayfinder({
+            formVariants: true,
+        }),
         vue({
             template: {
                 transformAssetUrls: {
@@ -51,7 +56,7 @@ export default defineConfig({
         eslintPlugin({
             fix: true,
             ignores: ['vendor/**/*.js', '/virtual:/**', 'node_modules/**', 'resources/assets/js/**'],
-        }),
+        })
     ],
     build: {
         rollupOptions: {
@@ -66,6 +71,18 @@ export default defineConfig({
     server: {
         hmr: {
             host: 'localhost',
+        },
+    },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                silenceDeprecations: [
+                    'import',
+                    'color-functions',
+                    'global-builtin',
+                    'if-function'
+                ],
+            },
         },
     },
 });

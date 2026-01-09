@@ -80,7 +80,6 @@ body {
         'Droid Sans',
         'Helvetica Neue',
         sans-serif;
-    font-size: 15px;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -123,12 +122,12 @@ body {
 }
 
 .omnomcom {
-    color: rgb(50, 50, 255);
+    color: #c0ff33;
     text-shadow:
-        blue -0.1em -0.1em 0.2em,
-        blue -0.1em 0.1em 0.2em,
-        blue 0.1em -0.1em 0.2em,
-        blue 0.1em 0.1em 0.2em;
+        green -0.1em -0.1em 0.2em,
+        green -0.1em 0.1em 0.2em,
+        green 0.1em -0.1em 0.2em,
+        green 0.1em 0.1em 0.2em;
 }
 
 .dynamic {

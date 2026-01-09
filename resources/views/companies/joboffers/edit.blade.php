@@ -149,7 +149,7 @@
 @endsection
 
 @push("javascript")
-    <script nonce="{{ csp_nonce() }}">
+    <script @cspNonce>
         const typeUrl = document.getElementById('information_type_url')
         const redirectUrl = document.getElementById('redirect_url')
         const typeDescription = document.getElementById(

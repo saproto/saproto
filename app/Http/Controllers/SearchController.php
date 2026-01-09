@@ -126,19 +126,19 @@ class SearchController extends Controller
         }
 
         $query = $request->input('query');
-        if (preg_match('/^[a-zA-Z0-9\s\-]+$/', $query) !== 1) {
+        if (preg_match('/^[a-zA-Z0-9\s\-]+$/', (string) $query) !== 1) {
             Session::flash('flash_message', 'You cannot use special characters in your search query.');
 
             return back();
         }
 
-        if (strlen($query) < 3) {
+        if (strlen((string) $query) < 3) {
             Session::flash('flash_message', 'Please make your search term more than three characters.');
 
             return back();
         }
 
-        $terms = explode(' ', $query);
+        $terms = explode(' ', (string) $query);
         // make the search match all the terms, and is an active account
         $search = '(&(extensionattribute6=actief)';
         foreach ($terms as $term) {

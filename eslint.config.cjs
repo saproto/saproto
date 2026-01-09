@@ -26,7 +26,7 @@ module.exports = defineConfig([{
         },
 
         parser: parser,
-        ecmaVersion: 2022,
+        ecmaVersion: "latest",
 
         parserOptions: {
             parser: "@typescript-eslint/parser",
@@ -59,4 +59,10 @@ module.exports = defineConfig([{
             "vue/require-default-prop": "off",
             "@typescript-eslint/no-unused-vars": "off"
         },
-    },globalIgnores(["**/node_modules/", "**/dist/"])]);
+    },globalIgnores([
+        "**/node_modules/",
+        "**/dist/",
+        "**/js/actions/",
+        "**/js/routes/",
+        "**/js/wayfinder/"])
+]);

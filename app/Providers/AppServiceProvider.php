@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
+use Laravel\Passport\Passport;
+use Laravel\Pennant\Feature;
 use Override;
 
 class AppServiceProvider extends ServiceProvider
@@ -20,6 +22,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrapFive();
+
+        Feature::discover();
+
+        Passport::$clientUuids = false;
+        Passport::authorizationView('vendor.passport.authorize');
 
         Password::defaults(function () {
             $rule = Password::min(10)->max(72)->letters();

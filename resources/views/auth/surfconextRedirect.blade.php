@@ -16,7 +16,7 @@
 @endsection
 
 @push('javascript')
-    <script nonce="{{ csp_nonce() }}">
+    <script @cspNonce>
         window.location.href = '{{ $url }}'
     </script>
 @endpush

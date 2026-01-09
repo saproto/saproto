@@ -179,7 +179,7 @@
         type="text/javascript"
         src="https://unpkg.com/iban-to-bic@latest/dist/iban-to-bic.js"
     ></script>
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+    <script type="text/javascript" @cspNonce>
         window.addEventListener('load', () => {
             const iban = document.getElementById('iban')
             const bic_field = document.getElementById('bic')

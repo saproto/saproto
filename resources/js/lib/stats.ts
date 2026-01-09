@@ -5,6 +5,13 @@ import spilledBeer from '@/../assets/images/wrapped/spilledbeer.png'
 import tosti from '@/../assets/images/wrapped/tosti.png'
 import unicorn from '@/../assets/images/wrapped/unicorn.png'
 import unicornBw from '@/../assets/images/wrapped/unicorn_bw.png'
+import colaKoenkert from '@/../assets/images/wrapped/koenkerts/colaKoenkert.png'
+import Koenkertsleepingbag from '@/../assets/images/wrapped/koenkerts/Koenkertsleepingbag.png'
+import BavarianKoenkert from '@/../assets/images/wrapped/koenkerts/BavarianKoenkert.png'
+import KermitKoenkert from '@/../assets/images/wrapped/koenkerts/KermitKoenkert.png'
+import Koenkerthighschool from '@/../assets/images/wrapped/koenkerts/Koenkerthighschool.png'
+import ProTubeLogo from '@/../assets/images/wrapped/ProTubeLogo.png'
+
 import OrderlineData = App.Data.OrderlineData
 import ProductData = App.Data.ProductData
 import { statsType } from '@/pages/Wrapped/types'
@@ -12,7 +19,9 @@ export const prepareStats = async (
     orders: Array<OrderlineData>,
     order_totals: number[][],
     total_spent: number,
-    events: Array<{ price: number }>
+    events: Array<{ price: number }>,
+    protube_totals: number[],
+    played_videos: Array<App.Data.PlayedVideoData>
 ) => {
     const caloriesTotal = orders
         .map((x) => x.units * x.product.calories)
@@ -26,6 +35,7 @@ export const prepareStats = async (
             tosti: tosti,
             unicorn: unicorn,
             unicornBw: unicornBw,
+            proTubeLogo: ProTubeLogo,
         },
         activities: {
             amount: events.length,
@@ -64,6 +74,27 @@ export const prepareStats = async (
             amount: 0,
             percentage: 0,
             percentile: 0,
+        },
+        koenkert: {
+            type: '',
+            imageName: ``,
+        },
+        protube: {
+            total: {
+                total_played: protube_totals.reduce(
+                    (accumulator, video) => accumulator + video,
+                    0
+                ),
+            },
+            user: {
+                percentile: 0,
+                total_played: played_videos.reduce(
+                    (accumulator, video) => accumulator + video.played_count,
+                    0
+                ),
+                videos: played_videos.slice(0, 5),
+                duration_played: '0 minutes',
+            },
         },
     }
 
@@ -137,6 +168,43 @@ export const prepareStats = async (
         )
     }
 
+    const secondsPlayed = played_videos.reduce(
+        (accumulator, video) =>
+            accumulator +
+            (video.sum_duration_played ?? 238.15 * video.played_count),
+        0
+    )
+    const minutesPlayed = secondsPlayed / 60
+    const hoursPlayed = minutesPlayed / 60
+    const daysPlayed = hoursPlayed / 24
+    if (daysPlayed > 1) {
+        stats.protube.user.duration_played = `${daysPlayed.toFixed(2)} days`
+    } else if (hoursPlayed > 0) {
+        stats.protube.user.duration_played = `${hoursPlayed.toFixed(2)} hours`
+    } else if (minutesPlayed > 0) {
+        stats.protube.user.duration_played = `${minutesPlayed.toFixed(2)} minutes`
+    } else if (secondsPlayed > 0) {
+        stats.protube.user.duration_played = `${secondsPlayed.toFixed(2)} seconds`
+    } else {
+        stats.protube.user.duration_played = `you not having used ProTube at all!`
+    }
+
+    let percentileCountProtube = 0
+    for (const amount of protube_totals) {
+        if (stats.protube.user.total_played <= amount) {
+            break
+        }
+        percentileCountProtube++
+    }
+    stats.protube.user.percentile = Math.max(
+        1,
+        Math.round(
+            ((protube_totals.length - percentileCountProtube) /
+                protube_totals.length) *
+                100
+        )
+    )
+
     //WillToLive
     const willToLives = orders
         .filter((x) => x.product.id === 987)
@@ -158,6 +226,56 @@ export const prepareStats = async (
     stats.willToLives.percentile = Math.round(
         ((otherWills.length - percentileCountWills) / otherWills.length) * 100
     )
+    //category Koenkert
+    const amountForOptions: {
+        [key: string]: { products: number[]; amount: number; imageName: string }
+    } = {
+        'Big Corporate cookie monster': {
+            products: [35],
+            amount: 0,
+            imageName: colaKoenkert,
+        },
+        'Bavarian cookie monster': {
+            products: [
+                24, 211, 376, 494, 757, 758, 759, 761, 805, 810, 957, 1005,
+                1039, 1173, 1247, 1618, 1619, 1621, 1667, 1668, 1669,
+            ],
+            amount: 0,
+            imageName: BavarianKoenkert,
+        },
+        '2 cookie monsters in a golden sleeping bag': {
+            products: [27],
+            amount: 0,
+            imageName: Koenkertsleepingbag,
+        },
+        'Kermit the cookie monster': {
+            products: [954],
+            amount: 0,
+            imageName: KermitKoenkert,
+        },
+        'High school cookie monster': {
+            products: [1504, 1688],
+            amount: 0,
+            imageName: Koenkerthighschool,
+        },
+    }
+    for (const order of orders) {
+        for (const option in amountForOptions) {
+            if (amountForOptions[option].products.includes(order.product_id)) {
+                amountForOptions[option].amount += order.units
+            }
+        }
+    }
+    let maxCategory = ''
+    let maxAmount = 0
+    for (const option in amountForOptions) {
+        if (amountForOptions[option].amount > maxAmount) {
+            maxAmount = amountForOptions[option].amount
+            maxCategory = option
+        }
+    }
+    stats.koenkert.type = maxCategory
+    stats.koenkert.imageName = amountForOptions[maxCategory].imageName
     await preloadImages(stats)
     return stats
 }
@@ -174,13 +292,24 @@ const preloadImages = async (stats: statsType) => {
     stats.images.tosti = await fetchImageAsBase64(stats.images.tosti)
     stats.images.unicorn = await fetchImageAsBase64(stats.images.unicorn)
     stats.images.unicornBw = await fetchImageAsBase64(stats.images.unicornBw)
+    stats.images.proTubeLogo = await fetchImageAsBase64(
+        stats.images.proTubeLogo
+    )
     //Activities
     for (const activity of stats.activities.all) {
         activity.image_url = await fetchImageAsBase64(activity.image_url)
     }
+    stats.koenkert.imageName = await fetchImageAsBase64(
+        stats.koenkert.imageName
+    )
     //MostBought
     for (const product of stats.mostBought.items.slice(0, 5)) {
         product[0].image_url = await fetchImageAsBase64(product[0].image_url)
+    }
+    for (const video of stats.protube.user.videos.slice(0, 5)) {
+        video.thumbnail_url = await fetchImageAsBase64(
+            `https://img.youtube.com/vi/${video.video_id}/mqdefault.jpg`
+        )
     }
 }
 

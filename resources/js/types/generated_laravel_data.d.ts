@@ -4,7 +4,8 @@ id: number;
 calling_name: string;
 roles: Array<string>;
 is_member: boolean;
-photo: string;
+avatar: string;
+email: string;
 };
 export type MenuItemData = {
 menuname: string;
@@ -25,6 +26,7 @@ export type PhotoAlbumData = {
 id: string | number;
 name: string;
 private: boolean;
+thumbPhoto: App.Data.PhotoData | null;
 items: Array<App.Data.PhotoData> | null;
 };
 export type PhotoData = {
@@ -36,6 +38,13 @@ large_url: string;
 likes_count: number | null;
 liked_by_me: boolean | null;
 album: App.Data.PhotoAlbumData | null;
+};
+export type PlayedVideoData = {
+video_id: string;
+video_title: string;
+sum_duration: number | null;
+sum_duration_played: number | null;
+played_count: number;
 };
 export type ProductCategoryData = {
 id: number;
