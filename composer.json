@@ -57,7 +57,7 @@
         "league/commonmark": "^2.3",
         "league/oauth1-client": "^1.7",
         "milon/barcode": "^12.0",
-        "mollie/laravel-mollie": "^3.0",
+        "mollie/laravel-mollie": "^4.0",
         "nesbot/carbon": "^3.9.1",
         "pragmarx/google2fa": "^9.0.0",
         "sentry/sentry-laravel": "^4.4.1",
