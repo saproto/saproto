@@ -368,40 +368,6 @@ CREATE TABLE `dinnerforms` (
   KEY `dinnerforms_ordered_by_user_id_index` (`ordered_by_user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `dmx_channels`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `dmx_channels` (
-  `id` bigint(20) unsigned NOT NULL,
-  `name` mediumtext NOT NULL,
-  `special_function` char(10) NOT NULL DEFAULT 'none',
-  KEY `dmx_channels_id_index` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `dmx_fixtures`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `dmx_fixtures` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `name` mediumtext NOT NULL,
-  `channel_start` int(11) NOT NULL,
-  `channel_end` int(11) NOT NULL,
-  `follow_timetable` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `dmx_overrides`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `dmx_overrides` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `fixtures` varchar(255) NOT NULL,
-  `color` varchar(255) NOT NULL,
-  `start` varchar(255) NOT NULL,
-  `end` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `emails`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -1884,3 +1850,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_11_03_235144_remov
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2024_06_01_000001_create_oauth_device_codes_table',196);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_01_03_214942_create_push_subscriptions_table',197);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2022_11_01_000001_create_features_table',198);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_01_09_172626_remove_dmx_tables',199);

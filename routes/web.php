@@ -18,8 +18,6 @@ use App\Http\Controllers\CommitteeController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DinnerformController;
 use App\Http\Controllers\DinnerformOrderlineController;
-use App\Http\Controllers\DmxFixtureController;
-use App\Http\Controllers\DmxOverrrideController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\EmailListController;
 use App\Http\Controllers\EventCategoryController;
@@ -992,13 +990,6 @@ Route::middleware('forcedomain')->group(function () {
     Route::get('go/{short?}', [ShortUrlController::class, 'go'])->name('short_urls.go');
     Route::get('short_urls/qr_code/{id}', [ShortUrlController::class, 'qrCode'])->name('short_urls.qr_code')->middleware(['auth', 'permission:board']);
     Route::resource('short_urls', ShortUrlController::class)->except('show')->middleware(['auth', 'permission:board']);
-
-    /* --- Routes related to the DMX Management. (Board or alfred) --- */
-    Route::prefix('dmx')->name('dmx.')->middleware(['auth', 'permission:board|alfred'])->group(function () {
-        Route::resource('fixtures', DmxFixtureController::class)->except('show');
-
-        Route::resource('overrides', DmxOverrrideController::class)->except('show');
-    });
 
     /* --- Routes related to the Query system. (Board only) --- */
     Route::prefix('queries')->name('queries::')->middleware(['auth', 'permission:board'])->group(function () {
