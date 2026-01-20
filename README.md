@@ -127,6 +127,33 @@ for changes to scripts or stylesheets.
 When adding a new library or client-side dependency through npm don't forget to require the scripts in `application.js`
 and the stylesheet in `vendor.scss`.
 
+#### Garage container
+```shell
+echo "alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'" > ~/.zshenv
+```
+`alias garage="docker exec -ti garage /garage"`
+
+Then run `garage status` and copy the ID.
+Create a layout with:`garage layout assign -z dc1 -c 1G <node_id>`
+`garage layout apply --version 1`
+
+Creating keys and buckets:
+`garage bucket create laravel`
+
+`garage key create laravel-key`
+Copy the Key ID and secret to the GARAGE_KEY and GARAGE_SECRET in your .env respectively.
+
+Then run:
+`garage bucket allow \
+  --read \
+  --write \
+  --owner \
+  laravel \
+  --key laravel-key`
+
+and to enable public access:
+`garage bucket website --allow laravel`
+
 #### WebPush notifications
 For WebPush notifications we use the [webpush](https://github.com/laravel-notification-channels/webpush) notification channels.
 To set it up you need to generate the vapid keys once by running:

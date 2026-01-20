@@ -102,7 +102,7 @@ services:
         volumes:
             - garage_data:/var/lib/garage/data
             - garage_meta:/var/lib/garage/meta
-            - ./garage/garage.toml:/etc/garage.toml:ro
+            - ./garage.toml:/etc/garage.toml:ro
         ports:
             - "3900:3900"   # S3 API
             - "3901:3901"   # RPC
@@ -115,7 +115,7 @@ services:
         container_name: garage-webui
         restart: unless-stopped
         volumes:
-            - ./garage/garage.toml:/etc/garage.toml:ro
+            - ./garage.toml:/etc/garage.toml:ro
         ports:
             - "3909:3909"
         environment:
