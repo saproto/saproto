@@ -15,10 +15,18 @@ jobs:
         with:
           filters: |
             js: ['resources/**', 'package-lock.json', 'vite.config.js']
+            php: ['**.php', 'composer.lock']
+
   php-fixer:
     needs: changes
     #if: needs.changes.outputs.php == 'true'
     uses: ./.github/workflows/fix-php.yml
+
+  static-analysis:
+    needs: [php-fixer]
+    #if: needs.changes.outputs.php == 'true'
+    uses: ./.github/workflows/static-analysis.yml
+
   js-fixer:
     needs: [changes, php-fixer]
     #if: needs.changes.outputs.js == 'true'
