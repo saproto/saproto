@@ -9,6 +9,7 @@ jobs:
             - uses: actions/checkout@v4
               with:
                   ref: ${{ github.head_ref }}
+                  fetch-depth: 0
 
             - name: 🔍 Read Env
               run: grep -E 'NODE_VERSION' .env.prod >> $GITHUB_ENV
@@ -26,7 +27,6 @@ jobs:
 
             - name: Run Prettier
               run: |
-                git fetch origin master:master
                 git diff --diff-filter=MA --name-only master... -- resources | xargs -r npx prettier --write
 
             - name: Commit changes
