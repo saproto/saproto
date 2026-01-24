@@ -23,7 +23,6 @@ jobs:
             - name: Run eslint
               run: |
                   npx eslint resources/ --fix
-                  npx prettier --write resources/
 
             - name: Run Prettier
               run: |
