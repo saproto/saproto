@@ -57,6 +57,24 @@ jobs:
                     sleep 1
                   done
 
+            - name: Set up Pest tests
+              run: |
+                  mkdir -p .tmp/phpunit.cache
+                  composer remove pestphp/pest-plugin-browser --dev --no-interaction
+                  php artisan key:generate
+                  php artisan passport:keys
+
+            - name: Run migrations
+              env:
+                DB_CONNECTION: mysql
+                DB_DATABASE: testing
+                DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+                DB_USERNAME: root
+                DB_PASSWORD: secret
+                DB_HOST: 127.0.0.1
+              run: |
+                  php artisan migrate
+
             - name: 🐘 Run Pest tests
               env:
                   DB_CONNECTION: mysql
@@ -66,17 +84,12 @@ jobs:
                   DB_PASSWORD: secret
                   DB_HOST: 127.0.0.1
               run: |
-                  mkdir -p .tmp/phpunit.cache
-                  composer remove pestphp/pest-plugin-browser --dev --no-interaction
-                  php artisan key:generate
-                  php artisan migrate
-                  php artisan passport:keys
                   vendor/bin/pest --ci --parallel --exclude-group=browser --shard ${{ matrix.shard }}/3
 
             - name: Check if laravel caching works
               run: |
-                php artisan optimize:clear
-                php artisan optimize
+                  php artisan optimize:clear
+                  php artisan optimize
 
             - uses: actions/upload-artifact@v4
               if: failure()

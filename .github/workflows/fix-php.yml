@@ -49,6 +49,9 @@ jobs:
             - name: Generate Typescript
               run: |
                   php artisan typescript:transform
+
+            - name: Generate Typescript Routes
+              run: |
                   php artisan wayfinder:generate --with-form
 
             - name: 📤 Upload WayFinder Artifact
