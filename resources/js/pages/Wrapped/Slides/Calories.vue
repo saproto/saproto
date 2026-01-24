@@ -10,25 +10,27 @@ const columns = Math.round(Math.sqrt(stats.tostis / 2))
 </script>
 
 <template>
-  <div class="slide">
-    <h1>You consumed a total of</h1>
-    <h1>
-      <span class="dynamic color">{{ stats.amount }}</span>
-    </h1>
-    <h2>Calories this year.</h2>
-    <h2>
-      That's equal to
-      <span class="color"><span class="dynamic">{{ stats.tostis }}</span> Tostis</span>!
-    </h2>
-    <div class="tostis">
-      <img
-        v-for="n in stats.tostis"
-        :key="n"
-        :src="props.data.images.tosti"
-        :style="`animation-delay: ${noAnimation ? -4 : (n - 1) * (4 / stats.tostis)}s`"
-      >
+    <div class="slide">
+        <h1>You consumed a total of</h1>
+        <h1>
+            <span class="dynamic color">{{ stats.amount }}</span>
+        </h1>
+        <h2>Calories this year.</h2>
+        <h2>
+            That's equal to
+            <span class="color"
+                ><span class="dynamic">{{ stats.tostis }}</span> Tostis</span
+            >!
+        </h2>
+        <div class="tostis">
+            <img
+                v-for="n in stats.tostis"
+                :key="n"
+                :src="props.data.images.tosti"
+                :style="`animation-delay: ${noAnimation ? -4 : (n - 1) * (4 / stats.tostis)}s`"
+            />
+        </div>
     </div>
-  </div>
 </template>
 
 <style scoped>
