@@ -29,9 +29,9 @@ jobs:
               uses: actions/cache@v4
               with:
                 path: .tmp/prettier
-                key: ${{ runner.os }}-prettier-${{ hashFiles('**/composer.lock') }}-${{ github.run_id }}
+                key: ${{ runner.os }}-prettier-${{ hashFiles('**/package-lock.json') }}-${{ github.run_id }}
                 restore-keys: |
-                  ${{ runner.os }}-prettier-${{ hashFiles('**/composer.lock') }}-
+                  ${{ runner.os }}-prettier-${{ hashFiles('**/package-lock.json') }}-
                   ${{ runner.os }}-prettier-
 
             - name: Run Prettier
