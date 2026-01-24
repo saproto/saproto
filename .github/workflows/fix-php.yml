@@ -47,6 +47,7 @@ jobs:
       - name: Generate Typescript
         run: |
           php artisan typescript:transform
+          php artisan wayfinder:generate
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
