@@ -10,13 +10,13 @@ import AppSidebar from '@/components/AppSidebar.vue'
 </script>
 
 <template>
-    <div class="min-h-screen w-full">
-        <SidebarProvider>
-            <AppSidebar />
-            <main>
-                <SidebarTrigger />
-                <slot />
-            </main>
-        </SidebarProvider>
-    </div>
+  <div class="min-h-screen w-full">
+    <SidebarProvider>
+      <AppSidebar />
+      <main>
+        <SidebarTrigger />
+        <slot />
+      </main>
+    </SidebarProvider>
+  </div>
 </template>

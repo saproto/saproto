@@ -7,55 +7,64 @@ const props = defineProps<{
 const stats = props.data.drinks
 </script>
 <template>
-    <div class="slide">
-        <h1>This year you attended</h1>
-        <span class="flex justify-around">
-            <img
-                :src="props.data.images.spilledBeer"
-                style="width: 10rem"
-                alt="spilled beer"
-            />
-            <span class="color text-4xl">
-                <span class="dynamic">{{ stats.amount }}</span>
-                drinks</span
-            >
-        </span>
-        <h2>On average you consumed</h2>
-        <h2 style="margin-top: 0">
-            <span class="color"
-                ><span class="dynamic">{{
-                    (
-                        (stats.alcoholic + stats.nonAlcoholic) /
-                        stats.amount
-                    ).toFixed(2)
-                }}</span>
-                glasses</span
-            >
-            per drink!
-        </h2>
-        <h2 class="mb-3 flex justify-between">
-            <img :src="props.data.images.beugel" style="height: 1.5em" />
-            = <span class="dynamic" style="color: lawngreen">Alcoholic</span>
-            <img :src="props.data.images.lemonade" style="height: 1.5em" />
-            = <span class="dynamic color">Non-Alcoholic</span>
-        </h2>
-        <br />
-        <div id="beerStats">
-            <div v-for="i in 100" :key="i">
-                <img
-                    :src="
-                        i >
-                        (stats.alcoholic /
-                            (stats.alcoholic + stats.nonAlcoholic)) *
-                            100
-                            ? props.data.images.lemonade
-                            : props.data.images.beugel
-                    "
-                    style="width: 2.5rem"
-                />
-            </div>
-        </div>
+  <div class="slide">
+    <h1>This year you attended</h1>
+    <span class="flex justify-around">
+      <img
+        :src="props.data.images.spilledBeer"
+        style="width: 10rem"
+        alt="spilled beer"
+      >
+      <span class="color text-4xl">
+        <span class="dynamic">{{ stats.amount }}</span>
+        drinks</span>
+    </span>
+    <h2>On average you consumed</h2>
+    <h2 style="margin-top: 0">
+      <span class="color"><span class="dynamic">{{
+        (
+          (stats.alcoholic + stats.nonAlcoholic) /
+          stats.amount
+        ).toFixed(2)
+      }}</span>
+        glasses</span>
+      per drink!
+    </h2>
+    <h2 class="mb-3 flex justify-between">
+      <img
+        :src="props.data.images.beugel"
+        style="height: 1.5em"
+      >
+      = <span
+        class="dynamic"
+        style="color: lawngreen"
+      >Alcoholic</span>
+      <img
+        :src="props.data.images.lemonade"
+        style="height: 1.5em"
+      >
+      = <span class="dynamic color">Non-Alcoholic</span>
+    </h2>
+    <br>
+    <div id="beerStats">
+      <div
+        v-for="i in 100"
+        :key="i"
+      >
+        <img
+          :src="
+            i >
+              (stats.alcoholic /
+                (stats.alcoholic + stats.nonAlcoholic)) *
+              100
+              ? props.data.images.lemonade
+              : props.data.images.beugel
+          "
+          style="width: 2.5rem"
+        >
+      </div>
     </div>
+  </div>
 </template>
 
 <style scoped>

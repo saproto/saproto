@@ -13,41 +13,43 @@ const stats = props.data.activities
 </script>
 
 <template>
-    <div class="slide">
-        <h2>You paid for a total of</h2>
-        <h1 style="color: powderblue">
-            <span class="dynamic">{{ stats.amount }}</span> Activities
-        </h1>
-        <h2>
-            Which cost you a total of
-            <p class="amount-spent dynamic">€{{ stats.spent }}!</p>
-        </h2>
-        <div class="activity-container">
-            <div
-                v-for="(activity, idx) in stats.all"
-                :key="activity.title"
-                class="move-up"
-                :style="`animation-delay: ${(Number(idx) - 5) * delay}s`"
-            >
-                <div
-                    class="activity"
-                    :style="`background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url(${activity.image_url})`"
-                >
-                    <div class="title">
-                        {{ activity.title }}
-                    </div>
-                    <div class="footer">
-                        <div class="date">
-                            {{ moment(activity.start * 1000).format('L') }}
-                        </div>
-                        <div class="location">
-                            {{ activity.location }}
-                        </div>
-                    </div>
-                </div>
+  <div class="slide">
+    <h2>You paid for a total of</h2>
+    <h1 style="color: powderblue">
+      <span class="dynamic">{{ stats.amount }}</span> Activities
+    </h1>
+    <h2>
+      Which cost you a total of
+      <p class="amount-spent dynamic">
+        €{{ stats.spent }}!
+      </p>
+    </h2>
+    <div class="activity-container">
+      <div
+        v-for="(activity, idx) in stats.all"
+        :key="activity.title"
+        class="move-up"
+        :style="`animation-delay: ${(Number(idx) - 5) * delay}s`"
+      >
+        <div
+          class="activity"
+          :style="`background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url(${activity.image_url})`"
+        >
+          <div class="title">
+            {{ activity.title }}
+          </div>
+          <div class="footer">
+            <div class="date">
+              {{ moment(activity.start * 1000).format('L') }}
             </div>
+            <div class="location">
+              {{ activity.location }}
+            </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <style scoped>
