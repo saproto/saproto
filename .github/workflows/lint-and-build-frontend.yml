@@ -45,4 +45,5 @@ jobs:
         with:
           name: compiled-assets
           path: public/build/
+          if-no-files-found: error
           retention-days: 1

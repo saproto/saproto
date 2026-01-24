@@ -59,6 +59,7 @@ jobs:
             resources/js/actions
             resources/js/routes
             resources/js/wayfinder
+          if-no-files-found: error
           retention-days: 1
 
       - name: Commit changes

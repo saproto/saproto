@@ -1,0 +1,76 @@
+on:
+  workflow_call:
+
+jobs:
+  pest:
+    name: 🐘 Pest Tests
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mariadb:10.6
+        env:
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_DATABASE: testing
+        ports:
+          - 3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    steps:
+      - name: 🛎️ Checkout project
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: 🔍 Read .env
+        run: (grep -E 'PHP_VERSION' .env.prod >> $GITHUB_ENV && cp .env.ci .env)
+
+      - name: 🖱️ Setup PHP v${{ env.PHP_VERSION }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          coverage: xdebug
+
+      - uses: ramsey/composer-install@v3
+        with:
+          composer-options: "--ignore-platform-reqs --optimize-autoloader --prefer-dist"
+
+      - name: Cache Pest test results
+        uses: actions/cache@v4
+        with:
+          path: .tmp/phpunit.cache/test-results
+          key: ${{ runner.os }}-pest-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-pest-
+
+      - name: Verify MariaDB connection
+        env:
+          PORT: ${{ job.services.mysql.ports['3306'] }}
+        run: |
+          while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
+            sleep 1
+          done
+
+      - name: 🐘 Run Pest tests
+        env:
+          DB_CONNECTION: mysql
+          DB_DATABASE: testing
+          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+          DB_USERNAME: root
+          DB_PASSWORD: secret
+          DB_HOST: 127.0.0.1
+        run: |
+          mkdir -p .tmp/phpunit.cache
+          php artisan key:generate
+          php artisan migrate
+          php artisan passport:keys
+#          php artisan schema:dump
+          vendor/bin/pest --ci --parallel --exclude-group=browser
+
+#      - name: Check if laravel caching works
+#        run: |
+#          php artisan optimize:clear
+#          php artisan optimize
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: laravel-failure-artifact
+          path: storage/logs/laravel.log
