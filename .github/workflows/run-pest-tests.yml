@@ -64,6 +64,7 @@ jobs:
           DB_HOST: 127.0.0.1
         run: |
           mkdir -p .tmp/phpunit.cache
+          composer remove pestphp/pest-plugin-browser --dev --no-update
           php artisan key:generate
           php artisan migrate
           php artisan passport:keys
