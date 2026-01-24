@@ -1,4 +1,4 @@
-name: ♻️ PHP Fixer & Generator
+name: Fix PHP (Pint and Rector)
 on:
   workflow_call:
 
@@ -18,10 +18,34 @@ jobs:
 
       - uses: ramsey/composer-install@v3
 
-      - name: Run Fixers & Generators
+      - name: Cache Rector
+        uses: actions/cache@v4
+        with:
+          path: .tmp/rector
+          key: ${{ runner.os }}-rector-${{ hashFiles('**/composer.lock') }}-${{ github.run_id }}
+          restore-keys: |
+            ${{ runner.os }}-rector-${{ hashFiles('**/composer.lock') }}-
+            ${{ runner.os }}-rector-
+
+      - name: Run Rector
         run: |
-          vendor/bin/rector --ansi
-          ./vendor/bin/pint --parallel
+          mkdir -p .tmp/rector
+          vendor/bin/rector --ansi --cache-directory .tmp/rector
+
+      - name: Cache Pint
+        uses: actions/cache@v4
+        with:
+          path: .tmp/.pint.cache
+          key: ${{ runner.os }}-pint-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pint-
+
+      - name: Run Pint
+        run: |
+          vendor/bin/pint --parallel --cache-file=.tmp/.pint.cache
+
+      - name: Generate Typescript
+        run: |
           php artisan typescript:transform
 
       - name: Commit changes
