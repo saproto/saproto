@@ -49,7 +49,7 @@ jobs:
       - name: Generate Typescript
         run: |
           php artisan typescript:transform
-          php artisan wayfinder:generate
+          php artisan wayfinder:generate --with-form
 
       - name: 📤 Upload WayFinder Artifact
         uses: actions/upload-artifact@v4
