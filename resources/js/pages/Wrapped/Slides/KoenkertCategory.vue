@@ -8,21 +8,21 @@ const props = defineProps<{
 const stats = props.data.koenkert
 </script>
 <template>
-    <div class="slide">
-        <div class="card">
-            <h1>The Cookie monster</h1>
-            <h1>you vibed with</h1>
-            <h1>the most this year is:</h1>
-            <h1 class="color-text">
-                <span class="dynamic">{{ stats.type }}</span>
-            </h1>
-        </div>
-        <img
-            class="koenkertImage"
-            :src="stats.imageName"
-            alt="Cookie Monster"
-        />
+  <div class="slide">
+    <div class="card">
+      <h1>The Cookie monster</h1>
+      <h1>you vibed with</h1>
+      <h1>the most this year is:</h1>
+      <h1 class="color-text">
+        <span class="dynamic">{{ stats.type }}</span>
+      </h1>
     </div>
+    <img
+      class="koenkertImage"
+      :src="stats.imageName"
+      alt="Cookie Monster"
+    >
+  </div>
 </template>
 
 <style scoped>

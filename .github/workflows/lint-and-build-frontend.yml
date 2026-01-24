@@ -28,7 +28,7 @@ jobs:
             - name: Run Prettier
               run: |
                 git fetch origin master --depth=1
-                git diff --diff-filter=MA --name-only origin/master... -- resources | xargs -r npx prettier --write
+                git diff --diff-filter=MA --name-only origin/master HEAD -- resources | xargs -r npx prettier --write
 
             - name: Commit changes
               uses: stefanzweifel/git-auto-commit-action@v5

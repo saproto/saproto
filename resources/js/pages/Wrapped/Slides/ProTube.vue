@@ -8,44 +8,44 @@ const props = defineProps<{
 const stats = props.data.protube
 </script>
 <template>
-    <div class="slide">
-        <h1>This year ProTube has played</h1>
-        <h1 class="bottom">
-            <span class="dynamic total">{{ stats.total.total_played }}</span>
-            songs!
-        </h1>
-        <h2>
-            You have put in
-            <span class="dynamic total-user">{{
-                stats.user.total_played
-            }}</span>
-            songs!
-        </h2>
-        <h2 class="bottom">
-            That estimates to
-            <span class="dynamic duration">{{
-                stats.user.duration_played
-            }}</span>
-            of music
-        </h2>
+  <div class="slide">
+    <h1>This year ProTube has played</h1>
+    <h1 class="bottom">
+      <span class="dynamic total">{{ stats.total.total_played }}</span>
+      songs!
+    </h1>
+    <h2>
+      You have put in
+      <span class="dynamic total-user">{{
+        stats.user.total_played
+      }}</span>
+      songs!
+    </h2>
+    <h2 class="bottom">
+      That estimates to
+      <span class="dynamic duration">{{
+        stats.user.duration_played
+      }}</span>
+      of music
+    </h2>
 
-        <h1 class="bottom">
-            You are in the top
-            <span class="dynamic percentile">{{ stats.user.percentile }}%</span>
-            of users
-        </h1>
+    <h1 class="bottom">
+      You are in the top
+      <span class="dynamic percentile">{{ stats.user.percentile }}%</span>
+      of users
+    </h1>
 
-        <div class="protube">
-            <img
-                v-for="i in 100"
-                id="protubeLogo"
-                :key="i"
-                :class="i > stats.user.percentile ? 'grey' : ''"
-                :style="`animation-delay:${noAnimation ? -30 : (100 - i) * 0.03}s`"
-                :src="data.images.proTubeLogo"
-            />
-        </div>
+    <div class="protube">
+      <img
+        v-for="i in 100"
+        id="protubeLogo"
+        :key="i"
+        :class="i > stats.user.percentile ? 'grey' : ''"
+        :style="`animation-delay:${noAnimation ? -30 : (100 - i) * 0.03}s`"
+        :src="data.images.proTubeLogo"
+      >
     </div>
+  </div>
 </template>
 
 <style scoped>
