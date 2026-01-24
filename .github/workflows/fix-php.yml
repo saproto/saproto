@@ -51,6 +51,16 @@ jobs:
           php artisan typescript:transform
           php artisan wayfinder:generate
 
+      - name: 📤 Upload WayFinder Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: wayfinder-actions
+          path: |
+            resources/js/actions
+            resources/js/routes
+            resources/js/wayfinder
+          retention-days: 1
+
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
