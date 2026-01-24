@@ -3,14 +3,16 @@ import AppLogoIcon from '@/components/AppLogoIcon.vue'
 </script>
 
 <template>
-  <div
-    class="border-sidebar-border/70 dark:border-sidebar-border flex aspect-square size-8 items-center justify-center rounded-md border"
-  >
-    <AppLogoIcon class="size-5 fill-current text-white dark:text-black" />
-  </div>
-  <div
-    class="ml-1 grid hidden flex-1 text-left text-sm md:visible md:inline-block"
-  >
-    <span class="mb-0.5 truncate leading-tight font-semibold">S.A. Proto</span>
-  </div>
+    <div
+        class="border-sidebar-border/70 dark:border-sidebar-border flex aspect-square size-8 items-center justify-center rounded-md border"
+    >
+        <AppLogoIcon class="size-5 fill-current text-white dark:text-black" />
+    </div>
+    <div
+        class="ml-1 grid hidden flex-1 text-left text-sm md:visible md:inline-block"
+    >
+        <span class="mb-0.5 truncate leading-tight font-semibold"
+            >S.A. Proto</span
+        >
+    </div>
 </template>
