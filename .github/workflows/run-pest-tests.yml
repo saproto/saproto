@@ -67,7 +67,6 @@ jobs:
           php artisan key:generate
           php artisan migrate
           php artisan passport:keys
-#          php artisan schema:dump
           vendor/bin/pest --ci --parallel --exclude-group=browser
 
 #      - name: Check if laravel caching works
