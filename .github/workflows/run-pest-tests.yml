@@ -3,11 +3,11 @@ on:
 
 jobs:
     pest:
-        name: 🐘 Pest Tests (Shard ${{ matrix.shard }}/2)
+        name: 🐘 Pest Tests (Shard ${{ matrix.shard }}/3)
         runs-on: ubuntu-latest
         strategy:
           matrix:
-            shard: [ 1, 2 ]
+            shard: [ 1, 2, 3 ]
         services:
             mysql:
                 image: mariadb:10.6
@@ -71,7 +71,7 @@ jobs:
                   php artisan key:generate
                   php artisan migrate
                   php artisan passport:keys
-                  vendor/bin/pest --ci --parallel --exclude-group=browser --shard ${{ matrix.shard }}/2
+                  vendor/bin/pest --ci --parallel --exclude-group=browser --shard ${{ matrix.shard }}/3
 
             - name: Check if laravel caching works
               run: |
