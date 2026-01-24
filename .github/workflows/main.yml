@@ -1,0 +1,21 @@
+name: main.yml
+on:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      php: ${{ steps.filter.outputs.php }}
+      js: ${{ steps.filter.outputs.js }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            js: ['resources/**', 'package-lock.json', 'vite.config.js']
+  php-fixer:
+    needs: changes
+    if: needs.changes.outputs.php == 'true'
+    uses: ./.github/workflows/fix-php.yml

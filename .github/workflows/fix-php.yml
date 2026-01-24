@@ -1,0 +1,30 @@
+name: ♻️ PHP Fixer & Generator
+on:
+  workflow_call:
+
+jobs:
+  php-tasks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: 🔍 Read Env
+        run: grep -E 'PHP_VERSION' .env.prod >> $GITHUB_ENV
+
+      - name: 🖱️ Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+
+      - uses: ramsey/composer-install@v3
+
+      - name: Run Fixers & Generators
+        run: |
+          vendor/bin/rector --ansi
+          ./vendor/bin/pint --parallel
+          php artisan typescript:transform
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: PHP Automatic Fixing (Pint & Rector)
