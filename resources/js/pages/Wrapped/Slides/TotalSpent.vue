@@ -7,22 +7,22 @@ const props = defineProps<{
 const stats = props.data.totalSpent
 </script>
 <template>
-    <div class="slide">
-        <h1>You spent a total of</h1>
-        <h1 class="amount">
-            €<span class="dynamic">{{ stats.amount.toFixed(2) }}</span>
-        </h1>
-        <h1>That could have gotten you</h1>
-        <h1 class="torondos">
-            <span class="dynamic">{{ Math.floor(stats.amount / 0.3) }}</span>
-            Torondos!
-        </h1>
-        <h2>Together with your other Proto members you spent a total of</h2>
-        <h1 class="total">
-            €<span class="dynamic">{{ stats.total.toFixed(2) }}</span>
-        </h1>
-        <img :src="props.data.images.cookieMonster" />
-    </div>
+  <div class="slide">
+    <h1>You spent a total of</h1>
+    <h1 class="amount">
+      €<span class="dynamic">{{ stats.amount.toFixed(2) }}</span>
+    </h1>
+    <h1>That could have gotten you</h1>
+    <h1 class="torondos">
+      <span class="dynamic">{{ Math.floor(stats.amount / 0.3) }}</span>
+      Torondos!
+    </h1>
+    <h2>Together with your other Proto members you spent a total of</h2>
+    <h1 class="total">
+      €<span class="dynamic">{{ stats.total.toFixed(2) }}</span>
+    </h1>
+    <img :src="props.data.images.cookieMonster">
+  </div>
 </template>
 
 <style scoped>

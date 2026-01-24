@@ -13,7 +13,10 @@ const forwarded = useForwardPropsEmits(props, emits)
 </script>
 
 <template>
-    <MenubarSub data-slot="menubar-sub" v-bind="forwarded">
-        <slot />
-    </MenubarSub>
+  <MenubarSub
+    data-slot="menubar-sub"
+    v-bind="forwarded"
+  >
+    <slot />
+  </MenubarSub>
 </template>
