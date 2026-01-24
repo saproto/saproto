@@ -35,7 +35,7 @@ jobs:
       - name: Cache Pint
         uses: actions/cache@v4
         with:
-          path: .tmp/.pint.cache
+          path: .tmp/pint.cache
           key: ${{ runner.os }}-pint-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-pint-
