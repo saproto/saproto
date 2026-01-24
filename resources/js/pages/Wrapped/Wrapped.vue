@@ -57,33 +57,30 @@ loadData()
 </script>
 
 <template>
-  <Head title="Wrapped" />
-  <Transition>
-    <main v-if="loaded">
-      <SlideShow :data="data" />
-    </main>
-    <main
-      v-else
-      id="welcome"
-    >
-      <h1>
-        {{ $page.props.auth.user.calling_name }}'s
-        <span class="omnomcom">Proto</span> Wrapped
-      </h1>
-      <div id="loader">
-        <div class="bar">
-          <div
-            class="progress-bar"
-            :style="{ width: (currentStep / steps) * 100 + '%' }"
-          />
-        </div>
-        <div>
-          Loading:
-          <span id="loading" />
-        </div>
-      </div>
-    </main>
-  </Transition>
+    <Head title="Wrapped" />
+    <Transition>
+        <main v-if="loaded">
+            <SlideShow :data="data" />
+        </main>
+        <main v-else id="welcome">
+            <h1>
+                {{ $page.props.auth.user.calling_name }}'s
+                <span class="omnomcom">Proto</span> Wrapped
+            </h1>
+            <div id="loader">
+                <div class="bar">
+                    <div
+                        class="progress-bar"
+                        :style="{ width: (currentStep / steps) * 100 + '%' }"
+                    />
+                </div>
+                <div>
+                    Loading:
+                    <span id="loading" />
+                </div>
+            </div>
+        </main>
+    </Transition>
 </template>
 
 <style scoped>
