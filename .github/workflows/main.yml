@@ -17,5 +17,5 @@ jobs:
             js: ['resources/**', 'package-lock.json', 'vite.config.js']
   php-fixer:
     needs: changes
-    if: needs.changes.outputs.php == 'true'
+    #if: needs.changes.outputs.php == 'true'
     uses: ./.github/workflows/fix-php.yml
