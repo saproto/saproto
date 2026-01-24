@@ -1,0 +1,42 @@
+name: Lint and build front end JS
+on:
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: 🔍 Read Env
+        run: grep -E 'NODE_VERSION' .env.prod >> $GITHUB_ENV
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci --ignore-scripts
+
+      - name: Lint & Fix
+        run: |
+          npx eslint resources/ --fix
+          npx prettier --write resources/
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Automatic linting (Prettier and eslint)
+
+      - name: 🔨 build front-end
+        run: |
+          npm run build
+
+      - name: 📤 Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled-assets
+          path: public/build/
+          retention-days: 1

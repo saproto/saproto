@@ -19,3 +19,7 @@ jobs:
     needs: changes
     #if: needs.changes.outputs.php == 'true'
     uses: ./.github/workflows/fix-php.yml
+  js-fixer:
+    needs: [changes, php-fixer]
+    #if: needs.changes.outputs.js == 'true'
+    uses: ./.github/workflows/lint-and-build-frontend.yml
