@@ -17,14 +17,14 @@ global.ExifReader = ExifReader
 // import quagga from 'quagga';
 // global.Quagga = quagga;
 
-import './countdown-timer'
-import './utilities'
-import './broto'
-import './night'
-// Execute theme JavaScript
-if (new Date().getMonth() + 1 !== 12) {
-    window[config.theme]?.()
-}
+                            import './countdown-timer'
+                            import './utilities'
+                            import './broto'
+                            import './night'
+                            // Execute theme JavaScript
+                            if (new Date().getMonth() + 1 !== 12) {
+                                window[config.theme]?.()
+                            }
 
 // Disable submit buttons after a form has been submitted so
 // spamming the button does not result in multiple requests
