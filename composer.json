@@ -98,7 +98,7 @@
         "mockery/mockery": "^1.6",
         "pestphp/pest-plugin-laravel": "^4.0.0",
         "beyondcode/expose": "^3.0",
-        "pestphp/pest-plugin-browser": "^4.0"
+        "pestphp/pest-plugin-browser": "^4.2"
     },
     "autoload": {
         "psr-4": {

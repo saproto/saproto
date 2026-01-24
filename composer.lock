@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b466a75036c908b00f53c912d4f7b274",
+    "content-hash": "a3b13f092e67eac8cb7d1336b53b8600",
     "packages": [
         {
             "name": "abcaeffchen/sepa-utilities",
