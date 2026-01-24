@@ -222,62 +222,49 @@ const { lengthX } = useSwipe(slideElement, {
 </script>
 
 <template>
-  <div
-    id="slideshow"
-    @click="pageClick"
-  >
-    <div>
-      <h1>
-        {{ $page.props.auth.user.calling_name }}'s
-        <span class="omnomcom">Proto</span> Wrapped
-      </h1>
-    </div>
+    <div id="slideshow" @click="pageClick">
+        <div>
+            <h1>
+                {{ $page.props.auth.user.calling_name }}'s
+                <span class="omnomcom">Proto</span> Wrapped
+            </h1>
+        </div>
 
-    <div id="progress">
-      <div
-        v-for="(otherSlide, i) in slides"
-        :key="i"
-        class="bar"
-      >
-        <div
-          class="progress-bar"
-          :class="{
-            playing: currentSlide === i && !touched,
-            ended: currentSlide > i,
-            tostart: currentSlide < i,
-          }"
-          :style="{ animationDuration: otherSlide[1] + 's' }"
-          @animationend="nextSlide()"
-        />
-      </div>
-    </div>
+        <div id="progress">
+            <div v-for="(otherSlide, i) in slides" :key="i" class="bar">
+                <div
+                    class="progress-bar"
+                    :class="{
+                        playing: currentSlide === i && !touched,
+                        ended: currentSlide > i,
+                        tostart: currentSlide < i,
+                    }"
+                    :style="{ animationDuration: otherSlide[1] + 's' }"
+                    @animationend="nextSlide()"
+                />
+            </div>
+        </div>
 
-    <div
-      id="slide-holder"
-      ref="slide"
-    >
-      <Transition :name="transition">
-        <component
-          :is="slides[currentSlide][0]"
-          ref="slideElement"
-          class="slide"
-          :data="data"
-          :time="slides[currentSlide][1]"
-          :no-animation="sharing"
-          @click="slideClick"
-          @mousedown="startTouch"
-          @mouseup="stopTouch"
-        />
-      </Transition>
+        <div id="slide-holder" ref="slide">
+            <Transition :name="transition">
+                <component
+                    :is="slides[currentSlide][0]"
+                    ref="slideElement"
+                    class="slide"
+                    :data="data"
+                    :time="slides[currentSlide][1]"
+                    :no-animation="sharing"
+                    @click="slideClick"
+                    @mousedown="startTouch"
+                    @mouseup="stopTouch"
+                />
+            </Transition>
+        </div>
+        <button id="share" @click="shareSlide()">
+            <ArrowUp />
+            Share this slide
+        </button>
     </div>
-    <button
-      id="share"
-      @click="shareSlide()"
-    >
-      <ArrowUp />
-      Share this slide
-    </button>
-  </div>
 </template>
 
 <style scoped>
