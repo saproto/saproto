@@ -25,10 +25,19 @@ jobs:
               run: |
                   npx eslint resources/ --fix
 
+            - name: Cache Prettier
+              uses: actions/cache@v4
+              with:
+                path: .tmp/prettier
+                key: ${{ runner.os }}-prettier-${{ hashFiles('**/composer.lock') }}-${{ github.run_id }}
+                restore-keys: |
+                  ${{ runner.os }}-prettier-${{ hashFiles('**/composer.lock') }}-
+                  ${{ runner.os }}-prettier-
+
             - name: Run Prettier
               run: |
-                git fetch origin master --depth=1
-                git diff --diff-filter=MA --name-only origin/master HEAD -- resources | xargs -r npx prettier --write
+                mkdir -p .tmp/prettier
+                npx prettier resources/ --write --cache --cache-location=.tmp/prettier --cache-strategy metadata
 
             - name: Commit changes
               uses: stefanzweifel/git-auto-commit-action@v5
