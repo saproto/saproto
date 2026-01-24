@@ -36,7 +36,6 @@ jobs:
 
             - name: Run Prettier
               run: |
-                mkdir -p .tmp/prettier
                 npx prettier resources/ --write --cache --cache-location=.tmp/prettier --cache-strategy metadata
 
             - name: Commit changes
