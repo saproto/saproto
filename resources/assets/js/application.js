@@ -5,11 +5,9 @@ Sentry.init({
     dsn: config.sentry_dsn,
     integrations: [Sentry.browserTracingIntegration()],
     tracesSampleRate: parseFloat(config.sentry_sample_rate),
+    sendDefaultPii: false,
     // Set `tracePropagationTargets` to control for which URLs trace propagation should be enabled
-    tracePropagationTargets: [
-        'localhost',
-        /^https:\/\/proto\.utwente\.nl/,
-    ],
+    tracePropagationTargets: ['localhost', /^https:\/\/proto\.utwente\.nl/],
 })
 
 import.meta.glob(['../images/**'])

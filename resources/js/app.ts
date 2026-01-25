@@ -28,6 +28,10 @@ createInertiaApp({
                 dsn: sentryDsn,
                 sendDefaultPii: false,
                 tracesSampleRate: !sentrySampleRate?undefined:parseFloat(sentrySampleRate),
+                tracePropagationTargets: [
+                    'localhost',
+                    /^https:\/\/proto\.utwente\.nl/,
+                ],
             })
 
             app.use(plugin)
