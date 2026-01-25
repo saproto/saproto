@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Database\Events\DatabaseRefreshed;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\ServiceProvider;
 use Override;
 use Spatie\Permission\PermissionRegistrar;
 
@@ -19,7 +19,7 @@ class TestServiceProvider extends ServiceProvider
         if ($this->app->environment('testing')) {
             Event::listen(DatabaseRefreshed::class, function () {
                 Artisan::call('db:seed', ['--class' => 'RolesAndPermissionsSeeder']);
-                app(PermissionRegistrar::class)->forgetCachedPermissions();
+                resolve(PermissionRegistrar::class)->forgetCachedPermissions();
             });
         }
     }
@@ -30,7 +30,5 @@ class TestServiceProvider extends ServiceProvider
      * @return void
      */
     #[Override]
-    public function register()
-    {
-    }
+    public function register() {}
 }
