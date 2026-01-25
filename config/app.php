@@ -231,6 +231,7 @@ return [
         /*
          * Application Service Providers...
          */
+        \App\Providers\TestServiceProvider::class,
         AppServiceProvider::class,
         EventServiceProvider::class,
         RouteServiceProvider::class,
