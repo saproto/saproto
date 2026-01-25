@@ -40,8 +40,8 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'sentry' => [
-                'dsn' => Config::string('app-proto.sentry-dsn'),
-                'sampling_rate' => Config::string('app-proto.sentry-sample-rate'),
+                'dsn' => Config::get('app-proto.sentry-dsn'),
+                'sampling_rate' => Config::get('app-proto.sentry-sample-rate'),
             ],
             'auth.user' => fn (): ?AuthUserData => AuthUserData::fromModel($request->user()),
             'flash' => [
