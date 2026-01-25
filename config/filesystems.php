@@ -72,6 +72,17 @@ return [
             'endpoint' => env('GARAGE_ENDPOINT'),
             'use_path_style_endpoint' => env('GARAGE_USE_PATH_STYLE', true),
             'throw' => true,
+        ],
+
+        'garage-public' => [
+            'driver' => env('GARAGE_DRIVER', 's3'),
+            'key'    => env('GARAGE_KEY'),
+            'secret' => env('GARAGE_SECRET'),
+            'region' => env('GARAGE_REGION'),
+            'bucket' => env('GARAGE_BUCKET_PUBLIC'),
+            'endpoint' => env('GARAGE_ENDPOINT'),
+            'use_path_style_endpoint' => env('GARAGE_USE_PATH_STYLE', true),
+            'throw' => true,
             'url' => env('GARAGE_WEB_URL'),
         ],
     ],

@@ -127,11 +127,13 @@ for changes to scripts or stylesheets.
 When adding a new library or client-side dependency through npm don't forget to require the scripts in `application.js`
 and the stylesheet in `vendor.scss`.
 
-#### Garage container
+### Garage container (storage)
 To set the alias to the garage docker container run the following command:
 ```shell
 echo "alias garage='docker exec -ti garage /garage'" >> ~/.bash_aliases
 ```
+
+#### Setup
 
 You can now run `garage status`. Copy the ID of the node.
 
@@ -143,25 +145,27 @@ garage layout assign -z dc1 -c 1G <node_id>
 garage layout apply --version 1
 ```
 
+From this point on you can use the [Garage WebUI](https://github.com/khairul169/garage-webui).
+
+We expect two buckets for development: laravel and laravel-public
+
 
 Creating keys and buckets:
 ```shell
-garage bucket create laravel
+garage bucket create laravel && garage bucket create laravel-public 
 garage key create laravel-key
 ```
 Copy the Key ID and secret to the GARAGE_KEY and GARAGE_SECRET in your .env respectively.
 
 Then run:
 ```shell
-garage bucket allow \
-  --read \
-  --write \
-  --owner \
-  laravel \
-  --key laravel-key
+garage bucket allow --read --write --owner laravel --key laravel-key
+garage bucket allow --read --write --owner laravel-public --key laravel-key
 ```
 and to enable public access:
-`garage bucket website --allow laravel`
+`garage bucket website --allow laravel-public`
+
+#### Setup
 
 #### WebPush notifications
 For WebPush notifications we use the [webpush](https://github.com/laravel-notification-channels/webpush) notification channels.
@@ -183,7 +187,7 @@ When you have finished the above setup the following port will be exposed on loc
 - `8080` = Website
 - `8081` = PhpMyAdmin
 - `8082` = [Mailpit](https://github.com/axllent/mailpit)
-
+- `3909` = [Garage WebUI](https://github.com/khairul169/garage-webui)
 You can sign in with the same Proto username you use on the ***live*** website and the password given to you during the
 database seeding. This user will have full admin rights on the ***local*** website.
 
