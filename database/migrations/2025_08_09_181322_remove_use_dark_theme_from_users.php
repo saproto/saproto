@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!DB::connection() instanceof SQLiteConnection) {
+        if (! DB::connection() instanceof SQLiteConnection) {
             Schema::table('users', function (Blueprint $table) {
                 $table->dropColumn('use_dark_theme');
             });
