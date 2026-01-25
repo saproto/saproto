@@ -45,6 +45,7 @@ return [
             'throw' => false,
             'report' => false,
         ],
+
         'stack' => [
             'driver' => 'sftp',
             'host' => env('SFTP_HOST'),
