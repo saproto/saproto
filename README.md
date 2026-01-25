@@ -98,7 +98,7 @@ to `~/.bash_aliases` (WSL2/Linux) or `~/.zshenv` (macOS) the alias will persist 
 WSL2/Linux/macOS High Sierra or earlier:
 
 ```shell
-echo "alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'" > ~/.bash_aliases
+echo "alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'" >> ~/.bash_aliases
 ```
 
 macOS Catalina or newer:
@@ -128,29 +128,38 @@ When adding a new library or client-side dependency through npm don't forget to 
 and the stylesheet in `vendor.scss`.
 
 #### Garage container
+To set the alias to the garage docker container run the following command:
 ```shell
-echo "alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'" > ~/.zshenv
+echo "alias garage='docker exec -ti garage /garage'" >> ~/.bash_aliases
 ```
-`alias garage="docker exec -ti garage /garage"`
 
-Then run `garage status` and copy the ID.
-Create a layout with:`garage layout assign -z dc1 -c 1G <node_id>`
-`garage layout apply --version 1`
+You can now run `garage status`. Copy the ID of the node.
+
+
+You need to assign the node a layout. Replace <node_id> with the id you just copied.
+
+```shell
+garage layout assign -z dc1 -c 1G <node_id>
+garage layout apply --version 1
+```
+
 
 Creating keys and buckets:
-`garage bucket create laravel`
-
-`garage key create laravel-key`
+```shell
+garage bucket create laravel
+garage key create laravel-key
+```
 Copy the Key ID and secret to the GARAGE_KEY and GARAGE_SECRET in your .env respectively.
 
 Then run:
-`garage bucket allow \
+```shell
+garage bucket allow \
   --read \
   --write \
   --owner \
   laravel \
-  --key laravel-key`
-
+  --key laravel-key
+```
 and to enable public access:
 `garage bucket website --allow laravel`
 
