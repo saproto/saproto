@@ -1,6 +1,6 @@
 window.global ||= window
 
-import * as Sentry from "@sentry/browser";
+import * as Sentry from '@sentry/browser'
 Sentry.init({
     dsn: config.sentry_dsn,
     integrations: [Sentry.browserTracingIntegration()],

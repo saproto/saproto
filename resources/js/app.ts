@@ -17,25 +17,25 @@ createInertiaApp({
             import.meta.glob<DefineComponent>('./pages/**/*.vue')
         ),
     setup({ el, App, props, plugin }) {
-
         const sentryDsn = props.initialPage.props.sentry.dsn
         const sentrySampleRate = props.initialPage.props.sentry.sampling_rate
 
-        const app = createApp({ render: () => h(App, props) });
+        const app = createApp({ render: () => h(App, props) })
 
-            Sentry.init({
-                app,
-                dsn: sentryDsn,
-                sendDefaultPii: false,
-                tracesSampleRate: !sentrySampleRate?undefined:parseFloat(sentrySampleRate),
-                tracePropagationTargets: [
-                    'localhost',
-                    /^https:\/\/proto\.utwente\.nl/,
-                ],
-            })
+        Sentry.init({
+            app,
+            dsn: sentryDsn,
+            sendDefaultPii: false,
+            tracesSampleRate: !sentrySampleRate
+                ? undefined
+                : parseFloat(sentrySampleRate),
+            tracePropagationTargets: [
+                'localhost',
+                /^https:\/\/proto\.utwente\.nl/,
+            ],
+        })
 
-            app.use(plugin)
-            .mount(el)
+        app.use(plugin).mount(el)
     },
     progress: {
         color: '#4B5563',
