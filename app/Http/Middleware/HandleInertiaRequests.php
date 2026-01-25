@@ -7,6 +7,7 @@ use App\Data\PhotoAlbumData;
 use App\Models\PhotoAlbum;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
 use Inertia\Middleware;
 use Override;
@@ -38,6 +39,10 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
+            'sentry' => [
+                'dsn'=>Config::string('app-proto.sentry-dsn'),
+                'sampling_rate'=>Config::string('app-proto.sentry-sample-rate'),
+            ],
             'auth.user' => fn (): ?AuthUserData => AuthUserData::fromModel($request->user()),
             'flash' => [
                 'message' => $request->session()->get('flash_message'),
