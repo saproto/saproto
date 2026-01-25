@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('events', function (Blueprint $table) {
+            $table->dropIndex('events_image_id_index');
             $table->dropColumn('image_id');
+
         });
     }
 
