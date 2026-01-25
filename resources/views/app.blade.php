@@ -6,6 +6,8 @@
 
         <meta name="csrf-token" content="{{ csrf_token() }}" />
 
+        {!! Integration::sentryMeta() !!}
+
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
         <link
