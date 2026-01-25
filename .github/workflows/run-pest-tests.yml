@@ -1,0 +1,197 @@
+on:
+    workflow_call:
+
+jobs:
+    pest:
+        name: 🐘 Pest Tests (Shard ${{ matrix.shard }}/3)
+        runs-on: ubuntu-latest
+        strategy:
+          matrix:
+            shard: [ 1, 2, 3 ]
+        services:
+            mysql:
+                image: mariadb:10.6
+                env:
+                    MYSQL_ROOT_PASSWORD: secret
+                    MYSQL_DATABASE: testing
+                ports:
+                    - 3306
+                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        steps:
+            - name: 🛎️ Checkout project
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.head_ref }}
+
+            - name: 🔍 Read .env
+              run: (grep -E 'PHP_VERSION' .env.prod >> $GITHUB_ENV && cp .env.ci .env)
+
+            - name: 🖱️ Setup PHP v${{ env.PHP_VERSION }}
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ env.PHP_VERSION }}
+                  coverage: xdebug
+
+            - uses: ramsey/composer-install@v3
+              with:
+                  composer-options: '--ignore-platform-reqs --optimize-autoloader --prefer-dist'
+
+            - name: 📥 Download Build Artifact
+              uses: actions/download-artifact@v4
+              with:
+                  name: compiled-assets
+                  path: public/build/
+
+            - name: Cache Pest test results
+              uses: actions/cache@v4
+              with:
+                  path: .tmp/phpunit.cache/test-results
+                  key: ${{ runner.os }}-pest-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: ${{ runner.os }}-pest-
+
+            - name: Verify MariaDB connection
+              env:
+                  PORT: ${{ job.services.mysql.ports['3306'] }}
+              run: |
+                  while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
+                    sleep 1
+                  done
+
+            - name: Set up Pest tests
+              run: |
+                  mkdir -p .tmp/phpunit.cache
+                  composer remove pestphp/pest-plugin-browser --dev --no-interaction
+                  php artisan key:generate
+                  php artisan passport:keys
+
+            - name: Run migrations
+              env:
+                DB_CONNECTION: mysql
+                DB_DATABASE: testing
+                DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+                DB_USERNAME: root
+                DB_PASSWORD: secret
+                DB_HOST: 127.0.0.1
+              run: |
+                  php artisan migrate
+
+            - name: 🐘 Run Pest tests
+              env:
+                  DB_CONNECTION: mysql
+                  DB_DATABASE: testing
+                  DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+                  DB_USERNAME: root
+                  DB_PASSWORD: secret
+                  DB_HOST: 127.0.0.1
+              run: |
+                  vendor/bin/pest --ci --parallel --exclude-group=browser --shard ${{ matrix.shard }}/3
+
+            - name: Check if laravel caching works
+              run: |
+                  php artisan optimize:clear
+                  php artisan optimize
+
+            - uses: actions/upload-artifact@v4
+              if: failure()
+              with:
+                  name: laravel-failure-artifact
+                  path: storage/logs/laravel.log
+
+    pest-browser:
+      name: 🐘 Pest Browser Tests
+      runs-on: ubuntu-latest
+      services:
+        mysql:
+          image: mariadb:10.6
+          env:
+            MYSQL_ROOT_PASSWORD: secret
+            MYSQL_DATABASE: testing
+          ports:
+            - 3306
+          options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+      steps:
+        - name: 🛎️ Checkout project
+          uses: actions/checkout@v4
+          with:
+            ref: ${{ github.head_ref }}
+
+        - name: 🔍 Read .env
+          run: (grep -E 'PHP_VERSION' .env.prod >> $GITHUB_ENV && cp .env.ci .env)
+
+        - name: 🖱️ Setup PHP v${{ env.PHP_VERSION }}
+          uses: shivammathur/setup-php@v2
+          with:
+            php-version: ${{ env.PHP_VERSION }}
+            coverage: xdebug
+
+        - name: 🔍 Read .env
+          run: grep -E 'NODE_VERSION' .env.prod >> $GITHUB_ENV
+
+        - name: 🖱️ Set Node v${{ env.NODE_VERSION }}
+          uses: actions/setup-node@v4
+          with:
+            node-version: ${{ env.NODE_VERSION }}
+            cache: npm
+
+        - name: Cache Playwright
+          uses: actions/cache@v4
+          id: playwright-cache
+          with:
+            path: |
+              ~/.cache/ms-playwright
+            key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+            restore-keys: |
+              ${{ runner.os }}-playwright-
+
+        - name: 📥 Install front-end dependencies
+          run: npm ci --ignore-scripts
+
+        - name: Install playwright deps
+          run: npx playwright install --with-deps chromium
+          if: steps.playwright-cache.outputs.cache-hit != 'true'
+
+        - uses: ramsey/composer-install@v3
+          with:
+            composer-options: '--ignore-platform-reqs --optimize-autoloader --prefer-dist'
+
+        - name: 📥 Download Build Artifact
+          uses: actions/download-artifact@v4
+          with:
+            name: compiled-assets
+            path: public/build/
+
+        - name: Cache Pest test results
+          uses: actions/cache@v4
+          with:
+            path: .tmp/phpunit.cache/test-results
+            key: ${{ runner.os }}-pest-${{ hashFiles('**/composer.lock') }}
+            restore-keys: ${{ runner.os }}-pest-
+
+        - name: Verify MariaDB connection
+          env:
+            PORT: ${{ job.services.mysql.ports['3306'] }}
+          run: |
+            while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
+              sleep 1
+            done
+
+        - name: 🐘 Run Pest tests
+          env:
+            DB_CONNECTION: mysql
+            DB_DATABASE: testing
+            DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+            DB_USERNAME: root
+            DB_PASSWORD: secret
+            DB_HOST: 127.0.0.1
+          run: |
+            mkdir -p .tmp/phpunit.cache
+            php artisan key:generate
+            php artisan migrate
+            php artisan passport:keys
+            vendor/bin/pest --ci --parallel --group=browser
+
+        - uses: actions/upload-artifact@v4
+          if: failure()
+          with:
+            name: laravel-failure-artifact
+            path: storage/logs/laravel.log

@@ -1,0 +1,62 @@
+name: Lint and build front end JS
+on:
+    workflow_call:
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.head_ref }}
+                  fetch-depth: 0
+
+            - name: 🔍 Read Env
+              run: grep -E 'NODE_VERSION' .env.prod >> $GITHUB_ENV
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: npm
+
+            - run: npm ci --ignore-scripts
+
+            - name: Run eslint
+              run: |
+                  npx eslint resources/ --fix
+
+            - name: Cache Prettier
+              uses: actions/cache@v4
+              with:
+                path: .tmp/prettier
+                key: ${{ runner.os }}-prettier-${{ hashFiles('**/package-lock.json', '.prettierrc*') }}
+                restore-keys: |
+                  ${{ runner.os }}-prettier-${{ hashFiles('**/package-lock.json', '.prettierrc*') }}
+                  ${{ runner.os }}-prettier-
+
+            - name: Run Prettier
+              run: |
+                npx prettier resources/ --write --cache --cache-location=.tmp/prettier --cache-strategy content
+
+            - name: Commit changes
+              uses: stefanzweifel/git-auto-commit-action@v5
+              with:
+                  commit_message: Automatic linting (Prettier and eslint)
+
+            - name: 📥 Download WayFinder Artifact
+              uses: actions/download-artifact@v4
+              with:
+                  name: wayfinder-actions
+                  path: resources/js/
+
+            - name: 🔨 build front-end
+              run: |
+                  npm run build
+
+            - name: 📤 Upload Build Artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: compiled-assets
+                  path: public/build/
+                  if-no-files-found: error
+                  retention-days: 1
