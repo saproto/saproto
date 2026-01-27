@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Models\MenuItem;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ServiceProvider;
@@ -29,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
         Passport::$clientUuids = false;
         Passport::authorizationView('vendor.passport.authorize');
 
-        if (!$this->app->isProduction()) {
+        if (! $this->app->isProduction()) {
             Passport::$validateKeyPermissions = false;
         }
 
