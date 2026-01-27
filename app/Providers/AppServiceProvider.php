@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
         Passport::$clientUuids = false;
         Passport::authorizationView('vendor.passport.authorize');
 
-        if (App::environment('testing')) {
+        if (!$this->app->isProduction()) {
             Passport::$validateKeyPermissions = false;
         }
 
