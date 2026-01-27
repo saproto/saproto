@@ -3,6 +3,7 @@
 use App\Providers\AppServiceProvider;
 use App\Providers\EventServiceProvider;
 use App\Providers\RouteServiceProvider;
+use App\Providers\TestServiceProvider;
 use GrahamCampbell\Markdown\Facades\Markdown;
 use GrahamCampbell\Markdown\MarkdownServiceProvider;
 use Illuminate\Auth\AuthServiceProvider;
@@ -231,6 +232,7 @@ return [
         /*
          * Application Service Providers...
          */
+        TestServiceProvider::class,
         AppServiceProvider::class,
         EventServiceProvider::class,
         RouteServiceProvider::class,
