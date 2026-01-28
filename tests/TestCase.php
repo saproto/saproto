@@ -20,10 +20,10 @@ abstract class TestCase extends BaseTestCase
         if (DB::connection() instanceof SQLiteConnection) {
             $db = DB::connection()->getPdo();
 
-            // 1. Fix SqLite not having the FROM_UNIXTIME function
+            // Fix SqLite not having the FROM_UNIXTIME function
             $db->sqliteCreateFunction('FROM_UNIXTIME', fn ($value) => date('Y-m-d H:i:s', $value));
 
-            // 2. Fix SqLite not having the YEAR function
+            // Fix SqLite not having the YEAR function
             $db->sqliteCreateFunction('YEAR', fn ($value) => date('Y', strtotime((string) $value)));
         }
 
