@@ -36,6 +36,7 @@ return new class extends Migration
         }
 
         Schema::table('oauth_clients', function (Blueprint $table) {
+            $table->dropIndex(['user_id']);
             $table->dropColumn(['user_id', 'redirect', 'personal_access_client', 'password_client']);
 
             $table->text('redirect_uris')->nullable(false)->change();

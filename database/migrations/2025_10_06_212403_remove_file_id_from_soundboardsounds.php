@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('soundboard_sounds', function (Blueprint $table) {
+            $table->dropIndex(['file_id']);
             $table->dropColumn('file_id');
         });
     }
