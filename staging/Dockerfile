@@ -51,7 +51,6 @@ COPY --from=composer/composer:latest-bin /composer /usr/bin/composer
 COPY . .
 RUN git config --global --add safe.directory /var/www/html
 RUN composer install --no-dev 
-RUN php artisan key:generate
 RUN php artisan wayfinder:generate --with-form
 
 # -----------------------------
