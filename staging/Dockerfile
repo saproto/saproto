@@ -82,6 +82,6 @@ RUN chown -R www-data:www-data storage
 
 RUN cp staging/.env.staging .env
 
-EXPOSE 80
+EXPOSE 3000
 
 CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
