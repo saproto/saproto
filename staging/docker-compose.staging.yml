@@ -1,5 +1,5 @@
 services:
-    laravel.test:
+    laravel:
         container_name: 'Staging'
         build:
             context: .
