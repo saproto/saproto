@@ -4,5 +4,7 @@ services:
         build:
             context: .
             dockerfile: staging/Dockerfile
+        expose:
+            - '80'
         volumes:
             - 'storage_volume:/var/www/html/storage'
