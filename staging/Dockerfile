@@ -81,6 +81,8 @@ COPY --from=node-build /app .
 RUN php artisan storage:link
 RUN chown -R www-data:www-data .
 
+RUN cp staging/.env.staging .env
+
 EXPOSE 80
 
 CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
