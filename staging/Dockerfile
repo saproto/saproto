@@ -1,7 +1,7 @@
 # -----------------------------
 # Step 1: Setup PHP environment
 # -----------------------------
-FROM php:8.4-fpm-alpine as phpenv
+FROM php:${PHP_VERSION}-fpm-alpine as phpenv
 
 WORKDIR /var/www/html
 
@@ -57,7 +57,7 @@ RUN php artisan wayfinder:generate --with-form
 # -----------------------------
 # Step 4: Build frontend assets
 # -----------------------------
-FROM node:22-alpine AS node-build
+FROM node:${NODE_VERSION}-alpine AS node-build
 
 WORKDIR /app
 

@@ -1,0 +1,14 @@
+services:
+    laravel.test:
+        container_name: 'Staging'
+        build:
+            context: .
+            dockerfile: staging/Dockerfile
+        image: 'staging'
+        ports:
+            - 80:80'
+        environment:
+            NODE_VERSION: 22
+            PHP_VERSION: 8.4
+        volumes:
+            - 'storage_volume:/var/www/html/storage'
