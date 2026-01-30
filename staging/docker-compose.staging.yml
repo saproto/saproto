@@ -4,8 +4,5 @@ services:
         build:
             context: .
             dockerfile: staging/Dockerfile
-        args:
-            NODE_VERSION: 22
-            PHP_VERSION: 8.4
         volumes:
             - 'storage_volume:/var/www/html/storage'
