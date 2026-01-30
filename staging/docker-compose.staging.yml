@@ -2,7 +2,7 @@ services:
     laravel.test:
         container_name: 'Staging'
         build:
-            context: ../
+            context: .
             dockerfile: staging/Dockerfile
         environment:
             NODE_VERSION: 22
