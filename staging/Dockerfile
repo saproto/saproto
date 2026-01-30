@@ -78,7 +78,7 @@ FROM phpenv as final
 
 COPY --from=node-build /app .
 RUN php artisan storage:link
-RUN chown -R www-data:www-data .
+RUN chown -R www-data:www-data storage
 
 RUN cp staging/.env.staging .env
 
