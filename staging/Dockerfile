@@ -10,6 +10,7 @@ WORKDIR /var/www/html
 # -----------------------------
 
 # System deps for PHP extensions
+# Along with 2 packages for mysql (migrations)
 RUN apk add \
     nginx \
     bash \
@@ -23,7 +24,12 @@ RUN apk add \
     curl-dev \
     libpng-dev \
     libjpeg-turbo-dev \
-    freetype-dev
+    freetype-dev \
+    mysql \
+    mariadb-connector-c
+
+# Disable ssl for mysql client
+RUN printf "[client]\nssl=0\n" >> /etc/my.cnf
 
 # PHP extensions (match your platform reqs)
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
