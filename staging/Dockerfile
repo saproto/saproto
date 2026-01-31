@@ -25,7 +25,7 @@ RUN apk add \
     libpng-dev \
     libjpeg-turbo-dev \
     freetype-dev \
-    mysql \
+    mysql-client \
     mariadb-connector-c
 
 # Disable ssl for mysql client
