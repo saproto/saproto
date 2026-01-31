@@ -9,7 +9,7 @@ if [[ $BRANCH == "staging" ]]; then
 fi
 
 SRC_DB="staging"
-DST_DB="app_dev"
+DST_DB="db_${BRANCH}"
 MYSQL_ROOT_USER="${DB_ROOT_USER:-root}"
 
 if [ -z "$MYSQL_ROOT_PWD" ]; then
