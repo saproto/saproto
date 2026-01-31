@@ -1,8 +1,7 @@
 #! /bin/bash
 set -euo pipefail
 
-#BRANCH="$(git rev-parse --abbrev-ref HEAD)"
-BRANCH="test"
+BRANCH="${COOLIFY_BRANCH//\"/}"
 
 if [[ $BRANCH == "staging" ]]; then
     echo "Not cloning branch on staging"
