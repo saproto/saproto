@@ -1,6 +1,8 @@
 #! /bin/sh
 set -euo pipefail
 
+echo $(printenv)
+
 if [ "${BRANCH:-}" = "staging" ]; then
     echo "Not cloning branch on staging"
     exit 0
