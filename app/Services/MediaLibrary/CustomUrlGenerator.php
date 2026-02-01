@@ -12,7 +12,8 @@ class CustomUrlGenerator extends BaseUrlGenerator
 {
     public function getUrl(): string
     {
-        if ($this->conversion instanceof Conversion && $this->media->conversions_disk !== 'garage-public' || ! $this->conversion instanceof Conversion && $this->media->disk !== 'garage-public') {
+        $public_disks = ['public', 'garage-public'];
+        if ($this->conversion instanceof Conversion && !in_array($this->media->conversions_disk, $public_disks) || ! $this->conversion instanceof Conversion && !in_array($this->media->disk, $public_disks)) {
             return route('media::show', [
                 'id' => $this->media->id,
                 'conversion' => $this->conversion?->getName(),
