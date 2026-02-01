@@ -66,7 +66,7 @@ return [
 
         'garage' => [
             'driver' => env('GARAGE_DRIVER', 's3'),
-            'key'    => env('GARAGE_KEY'),
+            'key' => env('GARAGE_KEY'),
             'secret' => env('GARAGE_SECRET'),
             'region' => env('GARAGE_REGION'),
             'bucket' => env('GARAGE_BUCKET'),
@@ -77,7 +77,7 @@ return [
 
         'garage-public' => [
             'driver' => env('GARAGE_DRIVER', 's3'),
-            'key'    => env('GARAGE_KEY'),
+            'key' => env('GARAGE_KEY'),
             'secret' => env('GARAGE_SECRET'),
             'region' => env('GARAGE_REGION'),
             'bucket' => env('GARAGE_BUCKET_PUBLIC'),
