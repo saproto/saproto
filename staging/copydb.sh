@@ -1,9 +1,9 @@
 #! /bin/sh
 set -euo pipefail
 
-BRANCH="$(printf '%s' "$COOLIFY_BRANCH" | tr -d '"' | tr '/' '_')"
+echo $(printenv)
 
-if [ "$BRANCH" = "staging" ]; then
+if [ "${BRANCH:-}" = "staging" ]; then
     echo "Not cloning branch on staging"
     exit 0
 fi
