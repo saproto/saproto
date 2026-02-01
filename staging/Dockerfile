@@ -88,7 +88,7 @@ RUN chown -R www-data:www-data storage
 
 RUN cp staging/.env.staging .env
 
-ENTRYPOINT ["sh", "staging/entrypoint.sh"]
+ENV ENV=/var/www/html/staging/env.sh
 
 EXPOSE 3000
 
