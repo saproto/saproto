@@ -1,7 +1,7 @@
 #! /bin/bash
 set -euo pipefail
 
-BRANCH="${COOLIFY_BRANCH//\"/}"
+BRANCH="${COOLIFY_BRANCH//[\"\/]/_}"
 
 if [[ $BRANCH == "staging" ]]; then
     echo "Not cloning branch on staging"
