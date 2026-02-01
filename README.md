@@ -18,7 +18,7 @@
     <img alt="open source badge" src="https://badges.frapsoft.com/os/v2/open-source.svg?v=103">
 </p>
 
-## Contributorsyneyne
+## Contributors
 
 [Here](https://github.com/saproto/saproto/graphs/contributors) you can find the people that have contributed to the code
 to this project. But, let's not forget the other members of
