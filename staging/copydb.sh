@@ -8,7 +8,7 @@ if [[ $BRANCH == "staging" ]]; then
     exit 0
 fi
 
-SRC_DB="staging"
+SRC_DB="db_staging"
 DST_DB="db_${BRANCH}"
 MYSQL_ROOT_USER="${DB_ROOT_USER:-root}"
 
