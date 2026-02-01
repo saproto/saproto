@@ -1,14 +1,14 @@
 #! /bin/bash
 set -euo pipefail
 
-BRANCH="${COOLIFY_BRANCH//\"/}"
+BRANCH="${COOLIFY_BRANCH//[\"\/]/_}"
 
 if [[ $BRANCH == "staging" ]]; then
     echo "Not cloning branch on staging"
     exit 0
 fi
 
-SRC_DB="staging"
+SRC_DB="db_staging"
 DST_DB="db_${BRANCH}"
 MYSQL_ROOT_USER="${DB_ROOT_USER:-root}"
 
