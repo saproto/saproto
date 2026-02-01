@@ -1,7 +1,7 @@
-#! /bin/bash
+#! /bin/sh
 set -euo pipefail
 
-if [[ $BRANCH == "staging" ]]; then
+if [ $BRANCH == "staging" ]; then
     echo "Not cloning branch on staging"
     exit 0
 fi
