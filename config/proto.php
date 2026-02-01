@@ -270,6 +270,9 @@ return [
         'static' => [
             env(' ASSET_URL'),
         ],
+        'garage' =>[
+            env('GARAGE_WEB_URL')
+        ]
     ],
 
     /*

@@ -28,12 +28,8 @@ class ProtoApi implements Preset
             'data:',
         ]);
 
-        if (App::environment('local')) {
             $policy->add(Directive::IMG,
-                [
-                    'http://laravel.web.garage.localhost:3902',
-                ]);
-        }
+                Config::array('proto.domains.garage'));
 
         $policy->add(Directive::FORM_ACTION, Config::array('proto.domains.protube'));
     }
