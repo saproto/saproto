@@ -2,7 +2,6 @@
 
 namespace App\Csp\Presets;
 
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Spatie\Csp\Directive;
 use Spatie\Csp\Policy;
@@ -28,8 +27,8 @@ class ProtoApi implements Preset
             'data:',
         ]);
 
-            $policy->add(Directive::IMG,
-                Config::array('proto.domains.garage'));
+        $policy->add(Directive::IMG,
+            Config::array('proto.domains.garage'));
 
         $policy->add(Directive::FORM_ACTION, Config::array('proto.domains.protube'));
     }
