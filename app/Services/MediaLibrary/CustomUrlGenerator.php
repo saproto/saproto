@@ -22,7 +22,8 @@ class CustomUrlGenerator extends BaseUrlGenerator
 
         $url = $this->versionUrl($this->getDisk()->url($this->getPathRelativeToRoot()));
 
-        if (Config::get('app-proto.assets-domain') != null) {
+        //do not cache the garage disk via cloudflare for now
+        if (Config::get('app-proto.assets-domain') != null && ($this->media->conversions_disk == 'public' || $this->media->disk == 'public')) {
             return str_replace(Config::string('app-proto.primary-domain'), Config::string('app-proto.assets-domain'), $url);
         }
 
