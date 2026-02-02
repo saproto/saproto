@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use PHPUnit\Framework\EmptyStringException;
 use PragmaRX\Google2FA\Exceptions\IncompatibleWithGoogleAuthenticatorException;
 use PragmaRX\Google2FA\Exceptions\InvalidCharactersException;
 use PragmaRX\Google2FA\Exceptions\SecretKeyTooShortException;
@@ -43,8 +44,8 @@ class AuthController extends Controller
         $request->validate([
             'email' => ['required', 'unique:users', 'email:rfc', new NotUtwenteEmail],
             'create_without_ut_account' => ['nullable'],
-            'name' => ['required_if:create_without_ut_account,true', 'string'],
-            'calling_name' => ['required_if:create_without_ut_account,true', 'string'],
+            'name' => ['exclude_unless:create_without_ut_account,on', 'required', 'string', 'min:3', 'max:100'],
+            'calling_name' => ['exclude_unless:create_without_ut_account,on', 'required', 'string', 'min:2', 'max:100'],
             'g-recaptcha-response' => ['required', 'captcha'],
             'privacy_policy_acceptance' => ['required', 'accepted'],
         ]);
