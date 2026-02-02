@@ -31,4 +31,7 @@ mariadb --skip-ssl -h "$DB_HOST" -P "$DB_PORT" -u"$MYSQL_ROOT_USER" \
    -p"$MYSQL_ROOT_PWD" -e \
    "GRANT ALL PRIVILEGES ON $DST_DB.* TO '$DB_USERNAME'@'%';"
 
+echo "Adding the DB_DATABASE env var to the .env"
+echo "DB_DATABASE=$DST_DB" >> /var/www/html/.env
+
 echo "Done."
