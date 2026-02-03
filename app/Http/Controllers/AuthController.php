@@ -43,8 +43,8 @@ class AuthController extends Controller
         $request->validate([
             'email' => ['required', 'unique:users', 'email:rfc', new NotUtwenteEmail],
             'create_without_ut_account' => ['nullable'],
-            'name' => ['exclude_unless:create_without_ut_account,on', 'required', 'string', 'min:3', 'max:100'],
-            'calling_name' => ['exclude_unless:create_without_ut_account,on', 'required', 'string', 'min:2', 'max:100'],
+            'name' => ['exclude_unless:create_without_ut_account,on', 'required', 'string'],
+            'calling_name' => ['exclude_unless:create_without_ut_account,on', 'required', 'string'],
             'g-recaptcha-response' => ['required', 'captcha'],
             'privacy_policy_acceptance' => ['required', 'accepted'],
         ]);
