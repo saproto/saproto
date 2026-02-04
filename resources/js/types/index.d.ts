@@ -14,6 +14,10 @@ export type AppPageProps<
     T extends Record<string, unknown> = Record<string, unknown>,
 > = T & {
     menuitems: Array<App.Data.MenuItemData>
+    sentry: {
+        dsn: string | undefined
+        sampling_rate: string | undefined
+    }
     auth: { user: App.Data.AuthUserData }
     menu: { photos: Array<App.Data.PhotoAlbumData> }
 }

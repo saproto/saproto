@@ -48,6 +48,7 @@ return [
      * Sentry config
      */
     'sentry-dsn' => env('SENTRY_PUBLIC_DSN'),
+    'sentry-sample-rate' => env('SENTRY_TRACES_SAMPLE_RATE'),
 
     /*
      * ProBoto config
