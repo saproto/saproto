@@ -13,15 +13,12 @@ Sentry.init({
 import.meta.glob(['../images/**'])
 
 // Vendors
-import SignaturePad from 'signature_pad'
-
-global.SignaturePad = SignaturePad
 import moment from 'moment/moment.js'
 
 global.moment = moment
 
-import ExifReader from 'exifreader'
-global.ExifReader = ExifReader
+// import ExifReader from 'exifreader'
+// global.ExifReader = ExifReader
 //Temporarily disabled due to an import error: Uncaught ReferenceError: glMatrixArrayType is not defined
 // import quagga from 'quagga';
 // global.Quagga = quagga;

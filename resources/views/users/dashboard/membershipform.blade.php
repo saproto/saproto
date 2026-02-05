@@ -4,12 +4,15 @@
     Sign membership contract
 @endsection
 
+
 @push('javascript')
+    @vite('resources/assets/js/signature-pad.js')
     <script type="text/javascript" @cspNonce>
+        // import SignaturePad from 'signature_pad'
         window.addEventListener('load', () => {
             const signatureAlert = document.getElementById('signature-alert')
             const canvas = document.getElementById('signature-pad')
-            const signaturePad = new SignaturePad(canvas)
+            const signaturePad = new window.SignaturePad(canvas)
 
             window.addEventListener('resize', resizeCanvas)
             resizeCanvas()

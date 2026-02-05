@@ -32,6 +32,8 @@ export default defineConfig({
                 //js files that get included individually
                 '/resources/assets/js/application.js',
                 '/resources/assets/js/echo.js',
+                '/resources/assets/js/signature-pad.js',
+                '/resources/assets/js/exifreader.js',
 
                 //resources for the sticker functionality
                 '/resources/assets/js/leaflet.js',
@@ -63,7 +65,9 @@ export default defineConfig({
             output: {
                 manualChunks: {
                     bootstrap: ['bootstrap', '@popperjs/core'],
-                    interface: ['easymde', 'swiper', 'signature_pad', 'codethereal-iconpicker'],
+                    editor: ['easymde'],
+                    carousel: ['swiper'],
+                    iconpicker: ['codethereal-iconpicker'],
                 },
             },
         },
