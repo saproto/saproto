@@ -81,7 +81,7 @@ jobs:
         run: grep -E 'NODE_VERSION' .env.prod >> $GITHUB_ENV
 
       - name: 🖱️ Set Node v${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
