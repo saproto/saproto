@@ -8,7 +8,7 @@ use App\Models\Photo;
 it('shows the search page', function () {
     $routes = ['/search', '/opensearch'];
     visit($routes)->assertNoSmoke();
-});
+})->group('browser');
 
 it('shows an event on the search page', function () {
     Event::factory()->create([
