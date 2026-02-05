@@ -183,7 +183,7 @@ class ActivityController extends Controller
         /** @var HelpingCommittee $help */
         $help = HelpingCommittee::query()->findOrFail($id);
 
-        foreach (ActivityParticipation::withTrashed()->where('committees_activities_id', $help->id)->get() as $participation) {
+        foreach (ActivityParticipation::query()->where('committees_activities_id', $help->id)->get() as $participation) {
             $participation->delete();
         }
 
