@@ -1,4 +1,7 @@
 @extends('website.layouts.redesign.dashboard')
+@php
+    /** @var \Illuminate\Support\Collection<\App\Models\Event> $events */
+@endphp
 
 @section('page-title')
     Activity Overview between {{ date('Y-m-d', $start) }} and
