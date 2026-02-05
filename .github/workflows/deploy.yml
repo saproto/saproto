@@ -50,6 +50,9 @@ jobs:
           VITE_PUSHER_APP_KEY: ${{ secrets.PUSHER_APP_KEY }}
           VITE_PUSHER_HOST: ${{ secrets.PUSHER_HOST }}
           VITE_PUSHER_PORT: ${{ secrets.PUSHER_PORT }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.VIMEXX_SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ env.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ env.SENTRY_PROJECT }}
         run: npm run build
 
       - name: Cache Playwright
@@ -68,15 +71,6 @@ jobs:
 
       - name: 🗑️ Remove storage directory
         run: rm -rf storage
-
-      - name: 📝 Create Sentry release
-        uses: getsentry/action-release@v3
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.VIMEXX_SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ env.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ env.SENTRY_PROJECT }}
-        with:
-          environment: production
 
       - name: 📁 Create build directory
         run: mkdir ${{ env.BUILD_ARTIFACT_STAGING_DIR }}
