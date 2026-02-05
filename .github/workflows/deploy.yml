@@ -43,7 +43,7 @@ jobs:
       - name: 📥 Install front-end dependencies
         run: npm ci --ignore-scripts
 
-      - run: php artisan wayfinder:generate
+      - run: php artisan wayfinder:generate --with-form
 
       - name: 🔨 build front-end
         env:

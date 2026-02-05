@@ -47,7 +47,7 @@ jobs:
 
       - run: php artisan typescript:transform
 
-      - run: php artisan wayfinder:generate
+      - run: php artisan wayfinder:generate --with-form
 
       - name: Cache Rector
         uses: actions/cache@v4
