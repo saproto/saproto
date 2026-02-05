@@ -125,6 +125,10 @@ jobs:
           skip_fetch: true
 
       - name: 🔨 build front-end
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.VIMEXX_SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ env.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ env.SENTRY_PROJECT }}
         run: npm run build --if-present
 
       - name: Cache Pest test results
