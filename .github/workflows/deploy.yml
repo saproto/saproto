@@ -56,7 +56,7 @@ jobs:
         run: npm run build
 
       - name: Cache Playwright
-        uses: actions/cache@v6
+        uses: actions/cache@v5
         id: playwright-cache
         with:
           path: |
