@@ -264,7 +264,9 @@ if (countdownList.length) {
 
 const shiftElements = document.querySelectorAll('.shift-select')
 if (shiftElements.length) {
-    await import('./shift-select')
+    const [{ default: shiftSelect }] = await Promise.all([
+        import('./shift-select.js'),
+    ])
     shiftElements.forEach((el) =>
         el.hasAttribute('data-name')
             ? shiftSelect(el, el.getAttribute('data-name'))
