@@ -346,25 +346,6 @@
                                         </a>
                                     @endcan
 
-                                    @canany(['alfred', 'board'])
-                                        <li
-                                            role="separator"
-                                            class="dropdown-divider"
-                                        ></li>
-                                        <a
-                                            class="dropdown-item"
-                                            href="{{ route('dmx.fixtures.index') }}"
-                                        >
-                                            Fixtures
-                                        </a>
-                                        <a
-                                            class="dropdown-item"
-                                            href="{{ route('dmx.overrides.index') }}"
-                                        >
-                                            Override
-                                        </a>
-                                    @endcanany
-
                                     @canany(['alfred', 'sysadmin'])
                                         <li
                                             role="separator"

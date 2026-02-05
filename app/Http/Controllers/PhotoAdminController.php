@@ -146,7 +146,7 @@ class PhotoAdminController extends Controller
                             continue;
                         }
 
-                        Photo::query()->find($photoId)->delete();
+                        Photo::query()->find($photoId)?->delete();
                     }
 
                     break;
@@ -163,7 +163,7 @@ class PhotoAdminController extends Controller
 
                     foreach ($photos as $photoId) {
                         $photo = Photo::query()->find($photoId);
-                        if ($album->published && $photo->private) {
+                        if (! $photo || ($album->published && $photo->private)) {
                             continue;
                         }
 

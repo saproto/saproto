@@ -12,9 +12,9 @@ class Websockets implements Preset
     public function configure(Policy $policy): void
     {
         $policy->add(Directive::CONNECT, [
-            'https://websockets.saproto.nl:*',
-            'ws://websockets.saproto.nl:*',
-            'wss://websockets.saproto.nl:*',
+            'https://soketi.haveyoutriedturningitoffandonagain.nl:*',
+            'ws://soketi.haveyoutriedturningitoffandonagain.nl:*',
+            'wss://soketi.haveyoutriedturningitoffandonagain.nl:*',
             'ws://localhost:3000',
         ]);
 

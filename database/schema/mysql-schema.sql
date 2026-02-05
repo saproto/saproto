@@ -88,8 +88,8 @@ CREATE TABLE `activities_users` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `backup` tinyint(1) NOT NULL DEFAULT 0,
+  `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_committee_user_activity` (`user_id`,`activity_id`,`committees_activities_id`),
   KEY `activities_users_user_id_index` (`user_id`),
   KEY `activities_users_activity_id_index` (`activity_id`),
   KEY `activities_users_committees_activities_id_index` (`committees_activities_id`)
@@ -366,40 +366,6 @@ CREATE TABLE `dinnerforms` (
   PRIMARY KEY (`id`),
   KEY `dinnerforms_event_id_index` (`event_id`),
   KEY `dinnerforms_ordered_by_user_id_index` (`ordered_by_user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `dmx_channels`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `dmx_channels` (
-  `id` bigint(20) unsigned NOT NULL,
-  `name` mediumtext NOT NULL,
-  `special_function` char(10) NOT NULL DEFAULT 'none',
-  KEY `dmx_channels_id_index` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `dmx_fixtures`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `dmx_fixtures` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `name` mediumtext NOT NULL,
-  `channel_start` int(11) NOT NULL,
-  `channel_end` int(11) NOT NULL,
-  `follow_timetable` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `dmx_overrides`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `dmx_overrides` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `fixtures` varchar(255) NOT NULL,
-  `color` varchar(255) NOT NULL,
-  `start` varchar(255) NOT NULL,
-  `end` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `emails`;
@@ -1884,4 +1850,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_11_03_235144_remov
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2024_06_01_000001_create_oauth_device_codes_table',196);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_01_03_214942_create_push_subscriptions_table',197);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2022_11_01_000001_create_features_table',198);
-INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_01_05_095005_add_unique_to_activities_users',199);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_01_09_172626_remove_dmx_tables',199);

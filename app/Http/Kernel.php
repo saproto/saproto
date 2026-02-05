@@ -21,6 +21,9 @@ use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode;
+use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
+use Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks;
+use Illuminate\Foundation\Http\Middleware\TrimStrings;
 use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 use Illuminate\Http\Middleware\HandleCors;
@@ -41,11 +44,13 @@ class Kernel extends HttpKernel
      * @var array<int, class-string|string>
      */
     protected $middleware = [
+        InvokeDeferredCallbacks::class,
+        TrustProxies::class,
         HandleCors::class,
         CheckForMaintenanceMode::class,
         ValidatePostSize::class,
-        StartSession::class,
-        TrustProxies::class,
+        TrimStrings::class,
+        ConvertEmptyStringsToNull::class,
         GenerateAndSetCspNonce::class,
     ];
 
@@ -53,6 +58,7 @@ class Kernel extends HttpKernel
         'web' => [
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
+            StartSession::class,
             ShareErrorsFromSession::class,
             VerifyCsrfToken::class,
             EnforceHTTPS::class,

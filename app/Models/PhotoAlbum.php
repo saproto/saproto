@@ -105,7 +105,7 @@ class PhotoAlbum extends Model
 
     public function thumb(): ?string
     {
-        return $this->thumbPhoto?->getUrl(PhotoEnum::MEDIUM);
+        return $this->thumbPhoto?->getUrl(PhotoEnum::SMALL);
     }
 
     protected function casts(): array

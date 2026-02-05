@@ -28,6 +28,10 @@ class AppServiceProvider extends ServiceProvider
         Passport::$clientUuids = false;
         Passport::authorizationView('vendor.passport.authorize');
 
+        if (! $this->app->isProduction()) {
+            Passport::$validateKeyPermissions = false;
+        }
+
         Password::defaults(function () {
             $rule = Password::min(10)->max(72)->letters();
 

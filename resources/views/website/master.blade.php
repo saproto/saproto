@@ -1,3 +1,7 @@
+@php
+    use Sentry\Laravel\Integration;
+@endphp
+
 <!DOCTYPE html>
 <html lang="en" class="position-relative mh-100">
     <head>
@@ -8,6 +12,8 @@
             content="initial-scale=1, maximum-scale=1, user-scalable=no"
         />
         <meta name="csrf-token" content="{{ csrf_token() }}" />
+
+        {!! Integration::sentryMeta() !!}
 
         <meta name="theme-color" content="#C1FF00" />
 

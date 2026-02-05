@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\SQLiteConnection;
 use Illuminate\Support\Facades\DB;
 
 // migration taken from https://gist.github.com/hrsa/7a45420329e745315ee02a08ddbf3d41 which itself is forked from https://gist.github.com/NBZ4live/04d5981eaf0244b57d0296b381e04195
@@ -9,7 +10,9 @@ return new class extends Migration
 {
     public function up(): void
     {
-        $this->migrateCharsetTo('utf8mb4', 'utf8mb4_unicode_520_ci');
+        if (! DB::connection() instanceof SQLiteConnection) {
+            $this->migrateCharsetTo('utf8mb4', 'utf8mb4_unicode_520_ci');
+        }
     }
 
     public function down(): void

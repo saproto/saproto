@@ -217,7 +217,7 @@
         <div class="col-lg-9">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-center text-white">
-                    Add photos
+                    Add photos (max. 5MB)
                 </div>
                 @if (! $album->published)
                     <div class="card-body">
@@ -384,7 +384,9 @@
 @endsection
 
 @push('javascript')
+    @vite('resources/assets/js/exifreader.js')
     <script async type="text/javascript" @cspNonce>
+        const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
         window.addEventListener('load', () => {
             let fileSizeLimit = '{{ $fileSizeLimit }}B'
             let fileId = 1
@@ -440,15 +442,31 @@
                     let fileQueue = []
 
                     for (const file of files) {
-                        if (
-                            ['image/png', 'image/jpg', 'image/jpeg'].includes(
-                                file.type
+                        const acceptedType = [
+                            'image/png',
+                            'image/jpg',
+                            'image/jpeg',
+                        ].includes(file.type)
+                        if (!acceptedType) {
+                            uploadError(
+                                file,
+                                new Error(
+                                    `File type is not supported: ${file.type}`
+                                )
                             )
-                        ) {
-                            file.id = fileId++
-                            const loadedFile = await readFile(file)
-                            fileQueue.push(loadedFile)
+                            continue
                         }
+                        const underSizeLimit = file.size <= MAX_FILE_SIZE
+                        if (!underSizeLimit) {
+                            uploadError(
+                                file,
+                                new Error(`The image is too big!`)
+                            )
+                            continue
+                        }
+                        file.id = fileId++
+                        const loadedFile = await readFile(file)
+                        fileQueue.push(loadedFile)
                     }
 
                     await uploadFiles(fileQueue)
