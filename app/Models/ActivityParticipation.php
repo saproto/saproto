@@ -7,9 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
-use Override;
 
 /**
  * Activity Participation Model.
@@ -22,7 +20,6 @@ use Override;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property bool $backup
- * @property Carbon|null $deleted_at
  * @property-read Activity|null $activity
  * @property-read HelpingCommittee|null $help
  * @property-read User|null $user
@@ -30,19 +27,15 @@ use Override;
  * @method static ActivityParticipationFactory factory($count = null, $state = [])
  * @method static Builder<static>|ActivityParticipation newModelQuery()
  * @method static Builder<static>|ActivityParticipation newQuery()
- * @method static Builder<static>|ActivityParticipation onlyTrashed()
  * @method static Builder<static>|ActivityParticipation query()
  * @method static Builder<static>|ActivityParticipation whereActivityId($value)
  * @method static Builder<static>|ActivityParticipation whereBackup($value)
  * @method static Builder<static>|ActivityParticipation whereCommitteesActivitiesId($value)
  * @method static Builder<static>|ActivityParticipation whereCreatedAt($value)
- * @method static Builder<static>|ActivityParticipation whereDeletedAt($value)
  * @method static Builder<static>|ActivityParticipation whereId($value)
  * @method static Builder<static>|ActivityParticipation whereIsPresent($value)
  * @method static Builder<static>|ActivityParticipation whereUpdatedAt($value)
  * @method static Builder<static>|ActivityParticipation whereUserId($value)
- * @method static Builder<static>|ActivityParticipation withTrashed()
- * @method static Builder<static>|ActivityParticipation withoutTrashed()
  *
  * @mixin \Eloquent
  */
@@ -50,8 +43,6 @@ class ActivityParticipation extends Model
 {
     /** @use HasFactory<ActivityParticipationFactory>*/
     use HasFactory;
-
-    use SoftDeletes;
 
     protected $table = 'activities_users';
 
@@ -84,13 +75,5 @@ class ActivityParticipation extends Model
     public function help(): BelongsTo
     {
         return $this->belongsTo(HelpingCommittee::class, 'committees_activities_id');
-    }
-
-    #[Override]
-    protected function casts(): array
-    {
-        return [
-            'deleted_at' => 'datetime',
-        ];
     }
 }
