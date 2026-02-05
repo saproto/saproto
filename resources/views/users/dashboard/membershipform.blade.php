@@ -4,7 +4,6 @@
     Sign membership contract
 @endsection
 
-
 @push('javascript')
     @vite('resources/assets/js/signature-pad.js')
     <script type="text/javascript" @cspNonce>

@@ -383,7 +383,6 @@
     </div>
 @endsection
 
-
 @push('javascript')
     @vite('resources/assets/js/exifreader.js')
     <script async type="text/javascript" @cspNonce>

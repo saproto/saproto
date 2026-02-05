@@ -71,7 +71,6 @@
     @vite('resources/assets/js/echo.js')
     @vite('resources/assets/js/moment.js')
 
-
     <script type="text/javascript" @cspNonce>
         const statusElement = document.getElementById('alfred-status')
         const text = document.getElementById('alfred-text')
