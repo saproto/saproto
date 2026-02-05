@@ -1,3 +1,4 @@
+@vite('resources/assets/js/iconpicker.js')
 <div class="form-group">
     @isset($label)
         <label for="iconpicker-{{ $name }}">{{ $label }}</label>
