@@ -33,6 +33,7 @@ export default defineConfig({
                 '/resources/assets/js/signature-pad.js',
                 '/resources/assets/js/exifreader.js',
                 '/resources/assets/js/iconpicker.js',
+                '/resources/assets/js/moment.js',
 
                 //resources for the sticker functionality
                 '/resources/assets/js/leaflet.js',
@@ -69,7 +70,6 @@ export default defineConfig({
             output: {
                 manualChunks: {
                     bootstrap: ['bootstrap', '@popperjs/core'],
-                    interface: ['easymde', 'swiper'],
                 },
             },
         },
