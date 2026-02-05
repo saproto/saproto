@@ -27,7 +27,6 @@ use Illuminate\Support\Carbon;
  * @method static ActivityParticipationFactory factory($count = null, $state = [])
  * @method static Builder<static>|ActivityParticipation newModelQuery()
  * @method static Builder<static>|ActivityParticipation newQuery()
- * @method static Builder<static>|ActivityParticipation onlyTrashed()
  * @method static Builder<static>|ActivityParticipation query()
  * @method static Builder<static>|ActivityParticipation whereActivityId($value)
  * @method static Builder<static>|ActivityParticipation whereBackup($value)
@@ -37,8 +36,6 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|ActivityParticipation whereIsPresent($value)
  * @method static Builder<static>|ActivityParticipation whereUpdatedAt($value)
  * @method static Builder<static>|ActivityParticipation whereUserId($value)
- * @method static Builder<static>|ActivityParticipation withTrashed()
- * @method static Builder<static>|ActivityParticipation withoutTrashed()
  *
  * @mixin \Eloquent
  */
