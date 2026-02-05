@@ -321,7 +321,6 @@ class Activity extends Validatable
         return ActivityParticipation::query()->where('activity_id', $this->id)
             ->where('is_present', true)
             ->where('backup', false)
-            ->whereNull('deleted_at')
             ->count();
     }
 
