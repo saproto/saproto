@@ -9,6 +9,9 @@ jobs:
   pest:
     name: 🐘 Pest Tests
     runs-on: ubuntu-latest
+    env:
+      SENTRY_ORG: sa-proto
+      SENTRY_PROJECT: sa-proto-website
     services:
       mysql:
         image: mariadb:10.6
