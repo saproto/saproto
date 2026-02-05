@@ -1,11 +1,10 @@
-import {glob} from 'glob';
-import {defineConfig} from 'vite';
-import laravel from 'laravel-vite-plugin';
-import vue from '@vitejs/plugin-vue';
-import eslintPlugin from '@nabla/vite-plugin-eslint';
-import path from 'path';
-import { wayfinder } from "@laravel/vite-plugin-wayfinder";
-
+import { glob } from 'glob'
+import { defineConfig } from 'vite'
+import laravel from 'laravel-vite-plugin'
+import vue from '@vitejs/plugin-vue'
+import eslintPlugin from '@nabla/vite-plugin-eslint'
+import path from 'path'
+import { wayfinder } from '@laravel/vite-plugin-wayfinder'
 
 /**
  * https://vitejs.dev/config/
@@ -13,10 +12,9 @@ import { wayfinder } from "@laravel/vite-plugin-wayfinder";
  */
 export default defineConfig({
     resolve: {
-        alias:
-            {
-                '@': path.resolve('./resources/js'),
-            }
+        alias: {
+            '@': path.resolve('./resources/js'),
+        },
     },
     plugins: [
         laravel({
@@ -32,6 +30,10 @@ export default defineConfig({
                 //js files that get included individually
                 '/resources/assets/js/application.js',
                 '/resources/assets/js/echo.js',
+                '/resources/assets/js/signature-pad.js',
+                '/resources/assets/js/exifreader.js',
+                '/resources/assets/js/iconpicker.js',
+                '/resources/assets/js/moment.js',
 
                 //resources for the sticker functionality
                 '/resources/assets/js/leaflet.js',
@@ -55,15 +57,19 @@ export default defineConfig({
         }),
         eslintPlugin({
             fix: true,
-            ignores: ['vendor/**/*.js', '/virtual:/**', 'node_modules/**', 'resources/assets/js/**'],
-        })
+            ignores: [
+                'vendor/**/*.js',
+                '/virtual:/**',
+                'node_modules/**',
+                'resources/assets/js/**',
+            ],
+        }),
     ],
     build: {
         rollupOptions: {
             output: {
                 manualChunks: {
                     bootstrap: ['bootstrap', '@popperjs/core'],
-                    interface: ['easymde', 'swiper', 'signature_pad', 'codethereal-iconpicker'],
                 },
             },
         },
@@ -80,9 +86,9 @@ export default defineConfig({
                     'import',
                     'color-functions',
                     'global-builtin',
-                    'if-function'
+                    'if-function',
                 ],
             },
         },
     },
-});
+})

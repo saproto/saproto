@@ -135,6 +135,7 @@
 @endsection
 
 @push('javascript')
+    @vite('resources/assets/js/moment.js')
     <script type="text/javascript" @cspNonce>
         function updateTimetable() {
             const timetable = document.getElementById('timetable')
