@@ -7,6 +7,7 @@ use Closure;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class EnforceWizard
 {
@@ -18,12 +19,22 @@ class EnforceWizard
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        if (Auth::check() && HashMapItem::query()->key('wizard')->subkey((string) Auth::user()->id)->first() && ! $request->is('api/*')) {
-            if (! $request->is('becomeamember')) {
-                return to_route('becomeamember');
-            }
+        if (! $request->is('api/*') && Auth::check()) {
+            $id = Auth::id();
+            $wizard = Cache::remember("user_wizard_{$id}", 60, function () {
+                return HashMapItem::query()->key('wizard')->subkey((string) Auth::id())->exists();
+            });
+            if($wizard) {
+                if (! $request->is('becomeamember')) {
+                    return to_route('becomeamember');
+                }
+                HashMapItem::query()
+                    ->key('wizard')
+                    ->subkey((string) $id)
+                    ->delete();
 
-            HashMapItem::query()->key('wizard')->subkey((string) Auth::user()->id)->first()->delete();
+                Cache::forget("user_wizard_{$id}");
+            }
         }
 
         return $next($request);
