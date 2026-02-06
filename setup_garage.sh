@@ -14,6 +14,7 @@ GARAGE_ID="$($GARAGE status | awk '($1 ~ /^[0-9a-f]{16}$/){print $1; exit}')"
 echo "Garage ID found: $GARAGE_ID"
 
 LAYOUT_EXISTS="$($GARAGE layout show | grep -c 'dc1')"
+LAYOUT_EXISTS="$($GARAGE layout show | grep -c 'dc1' || true)"
 
 # Create layout if it doesn't exist
 if [ "$LAYOUT_EXISTS" -eq "0" ]; then
