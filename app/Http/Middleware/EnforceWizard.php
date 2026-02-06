@@ -19,7 +19,7 @@ class EnforceWizard
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        if (! $request->is('api/*') && Auth::check() && ! Auth::user()->is_member) {
+        if (! $request->is('api/*') && Auth::check()) {
             $id = Auth::id();
             $wizard = Cache::remember("user_wizard_{$id}", 60, fn () => HashMapItem::query()->key('wizard')->subkey((string) Auth::id())->exists());
             if ($wizard) {
