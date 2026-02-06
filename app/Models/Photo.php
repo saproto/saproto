@@ -100,6 +100,10 @@ class Photo extends Model implements HasMedia
             ->fit(Fit::Max, 1920, 1920)
             ->format('webp');
 
+        $this->addMediaConversion(PhotoEnum::MEDIUM->value)
+            ->fit(Fit::Max, 750, 750)
+            ->format('webp');
+
         $this->addMediaConversion(PhotoEnum::SMALL->value)
             ->nonQueued()
             ->fit(Fit::Max, 420, 420)
