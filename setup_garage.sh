@@ -13,7 +13,6 @@ GARAGE_ID="$($GARAGE status | awk '($1 ~ /^[0-9a-f]{16}$/){print $1; exit}')"
 
 echo "Garage ID found: $GARAGE_ID"
 
-LAYOUT_EXISTS="$($GARAGE layout show | grep -c 'dc1')"
 LAYOUT_EXISTS="$($GARAGE layout show | grep -c 'dc1' || true)"
 
 # Create layout if it doesn't exist
@@ -65,7 +64,7 @@ echo
 echo "Add the following to your .env file:"
 echo "GARAGE_KEY=$KEY_ID"
 echo "GARAGE_SECRET=$SECRET_KEY"
-echo 
+echo
 
 
 # Create buckets and set permissions
