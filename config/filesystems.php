@@ -45,6 +45,7 @@ return [
             'throw' => false,
             'report' => false,
         ],
+
         'stack' => [
             'driver' => 'sftp',
             'host' => env('SFTP_HOST'),
@@ -61,6 +62,29 @@ return [
             'username' => env('SFTP_USERNAME'),
             'password' => env('SFTP_PASSWORD'),
             'root' => env('SFTP_ROOT_BACKUP', 'laravel_backup'),
+        ],
+
+        'garage' => [
+            'driver' => env('GARAGE_DRIVER', 's3'),
+            'key' => env('GARAGE_KEY'),
+            'secret' => env('GARAGE_SECRET'),
+            'region' => env('GARAGE_REGION'),
+            'bucket' => env('GARAGE_BUCKET'),
+            'endpoint' => env('GARAGE_ENDPOINT'),
+            'use_path_style_endpoint' => env('GARAGE_USE_PATH_STYLE', true),
+            'throw' => true,
+        ],
+
+        'garage-public' => [
+            'driver' => env('GARAGE_DRIVER', 's3'),
+            'key' => env('GARAGE_KEY'),
+            'secret' => env('GARAGE_SECRET'),
+            'region' => env('GARAGE_REGION'),
+            'bucket' => env('GARAGE_BUCKET_PUBLIC'),
+            'endpoint' => env('GARAGE_ENDPOINT'),
+            'use_path_style_endpoint' => env('GARAGE_USE_PATH_STYLE', true),
+            'throw' => true,
+            'url' => env('GARAGE_WEB_URL'),
         ],
     ],
     /*
