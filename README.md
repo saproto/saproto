@@ -142,6 +142,7 @@ You can either use the automatic setup script or do it manually
 Open the terminal where your docker works (wsl e.g., so not inside the sail container)
 And run:
 ```shell
+ chmod +x setup_garage.sh
 ./setup_garage.sh
 ```
 This will reset the garage environment and create 2 new buckets for you based on your .env file.
