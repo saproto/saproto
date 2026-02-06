@@ -70,7 +70,7 @@ export enum MembershipTypeEnum { PENDING = 0, REGULAR = 1, PET = 2, LIFELONG = 3
 export enum NarrowcastingEnum { LARGE = 'large', SMALL = 'small' };
 export enum NewsEnum { CARD = 'card', LARGE = 'large' };
 export enum PageEnum { LARGE = 'large' };
-export enum PhotoEnum { ORIGINAL = 'original', LARGE = 'large', SMALL = 'small' };
+export enum PhotoEnum { ORIGINAL = 'original', LARGE = 'large', MEDIUM = 'medium', SMALL = 'small' };
 export enum ProductEnum { LARGE = 'large', THUMB = 'thumb' };
 export enum StickerEnum { LARGE = 'large', SMALL = 'small' };
 export enum StickerTypeEnum { LARGE = 'large', TINY = 'tiny' };
