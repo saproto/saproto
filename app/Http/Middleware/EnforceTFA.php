@@ -24,7 +24,7 @@ class EnforceTFA
                 return Auth::user()->hasRole(Config::array('proto.tfaroles'));
             });
             $rootCommittee = Cache::remember('rootCommittee', 300, function () {
-                Committee::whereSlug(Config::string('proto.rootcommittee'))->firstOrFail();
+                return Committee::whereSlug(Config::string('proto.rootcommittee'))->firstOrFail();
             });
 
             if(($has2faRole || $rootCommittee->isMember(Auth::user())) && ! Auth::user()->hasTFAEnabled()){
