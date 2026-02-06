@@ -135,6 +135,20 @@ echo "alias garage='docker exec -ti garage /garage'" >> ~/.bash_aliases
 
 #### Setup
 
+You can either use the automatic setup script or do it manually
+
+##### Automatic
+
+Open the terminal where your docker works (wsl e.g., so not inside the sail container)
+And run:
+```shell
+./setup_garage.sh
+```
+This will reset the garage environment and create 2 new buckets for you based on your .env file.
+It prints a GARAGE_SECRET and GARAGE_KEY which you need to paste in your .env
+
+##### Manually
+
 You can now run `garage status`. Copy the ID of the node.
 
 
