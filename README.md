@@ -130,7 +130,7 @@ and the stylesheet in `vendor.scss`.
 ### Garage container (storage)
 To set the alias to the garage docker container run the following command:
 ```shell
-echo "alias garage='docker exec -ti garage /garage'" >> ~/.bash_aliases
+echo "alias garage='docker exec -it garage /garage'" >> ~/.bash_aliases
 ```
 
 #### Setup
