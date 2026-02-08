@@ -83,7 +83,7 @@
         "globals": "^17.0.0",
         "laravel-echo": "^2.1.5",
         "laravel-vite-plugin": "^2.0.1",
-        "playwright": "^1.55.0",
+        "playwright": "^1.58.2",
         "postcss": "^8.2.7",
         "postcss-discard-comments": "^7.0.3",
         "prettier": "^3.5.3",
