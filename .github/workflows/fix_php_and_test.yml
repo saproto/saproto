@@ -20,7 +20,7 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       - name: 🛎️ Checkout project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.head_ref }}
 
@@ -50,7 +50,7 @@ jobs:
       - run: php artisan wayfinder:generate --with-form
 
       - name: Cache Rector
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .tmp/rector
           key: ${{ runner.os }}-rector-${{ github.run_id }}-${{ hashFiles('**/composer.lock') }}
@@ -62,7 +62,7 @@ jobs:
         run: vendor/bin/rector --ansi
 
       - name: Cache Pint
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .tmp/pint.cache
           key: ${{ runner.os }}-pint-${{ hashFiles('**/composer.lock') }}
@@ -72,7 +72,7 @@ jobs:
         run: ./vendor/bin/pint --parallel
 
       - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: PHP Automatic Fixing (Pint & Rector)
           skip_fetch: true
@@ -81,13 +81,13 @@ jobs:
         run: grep -E 'NODE_VERSION' .env.prod >> $GITHUB_ENV
 
       - name: 🖱️ Set Node v${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
 
       - name: Cache Playwright
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: playwright-cache
         with:
           path: |
@@ -119,7 +119,7 @@ jobs:
         run: npx prettier --write resources/
 
       - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: Automatic linting (Prettier and eslint)
           skip_fetch: true
@@ -128,7 +128,7 @@ jobs:
         run: npm run build --if-present
 
       - name: Cache Pest test results
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .tmp/phpunit.cache/test-results
           key: ${{ runner.os }}-pest-${{ hashFiles('**/composer.lock') }}
@@ -152,7 +152,7 @@ jobs:
           vendor/bin/pest --ci --parallel
 
       - name: Commit changes (schema dump)
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: Changed sql schema (artisan dump)
           skip_fetch: true
@@ -162,7 +162,7 @@ jobs:
           php artisan optimize:clear
           php artisan optimize
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: failure()
         with:
           name: laravel-failure-artifact
@@ -173,7 +173,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🛎️ Checkout project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.head_ref }}
 
@@ -191,7 +191,7 @@ jobs:
           composer-options: "--ignore-platform-reqs --optimize-autoloader --prefer-dist"
 
       - name: Cache PHPStan results
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .tmp/phpstan
           key: ${{ runner.os }}-phpstan-${{ hashFiles('phpstan.neon', 'composer.lock') }}

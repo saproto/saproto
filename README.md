@@ -98,7 +98,7 @@ to `~/.bash_aliases` (WSL2/Linux) or `~/.zshenv` (macOS) the alias will persist 
 WSL2/Linux/macOS High Sierra or earlier:
 
 ```shell
-echo "alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'" > ~/.bash_aliases
+echo "alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'" >> ~/.bash_aliases
 ```
 
 macOS Catalina or newer:
@@ -127,6 +127,61 @@ for changes to scripts or stylesheets.
 When adding a new library or client-side dependency through npm don't forget to require the scripts in `application.js`
 and the stylesheet in `vendor.scss`.
 
+### Garage container (storage)
+To set the alias to the garage docker container run the following command:
+```shell
+echo "alias garage='docker exec -it garage /garage'" >> ~/.bash_aliases
+```
+
+#### Setup
+
+You can either use the automatic setup script or do it manually
+
+##### Automatic
+
+Open the terminal where your docker works (wsl e.g., so not inside the sail container)
+And run:
+```shell
+ chmod +x setup_garage.sh
+./setup_garage.sh
+```
+This will reset the garage environment and create 2 new buckets for you based on your .env file.
+It prints a GARAGE_SECRET and GARAGE_KEY which you need to paste in your .env
+
+##### Manually
+
+You can now run `garage status`. Copy the ID of the node.
+
+
+You need to assign the node a layout. Replace <node_id> with the id you just copied.
+
+```shell
+garage layout assign -z dc1 -c 1G <node_id>
+garage layout apply --version 1
+```
+
+From this point on you can use the [Garage WebUI](https://github.com/khairul169/garage-webui).
+
+We expect two buckets for development: laravel and laravel-public
+
+
+Creating keys and buckets:
+```shell
+garage bucket create laravel && garage bucket create laravel-public 
+garage key create laravel-key
+```
+Copy the Key ID and secret to the GARAGE_KEY and GARAGE_SECRET in your .env respectively.
+
+Then run:
+```shell
+garage bucket allow --read --write --owner laravel --key laravel-key
+garage bucket allow --read --write --owner laravel-public --key laravel-key
+```
+and to enable public access:
+`garage bucket website --allow laravel-public`
+
+#### Setup
+
 #### WebPush notifications
 For WebPush notifications we use the [webpush](https://github.com/laravel-notification-channels/webpush) notification channels.
 To set it up you need to generate the vapid keys once by running:
@@ -147,7 +202,7 @@ When you have finished the above setup the following port will be exposed on loc
 - `8080` = Website
 - `8081` = PhpMyAdmin
 - `8082` = [Mailpit](https://github.com/axllent/mailpit)
-
+- `3909` = [Garage WebUI](https://github.com/khairul169/garage-webui)
 You can sign in with the same Proto username you use on the ***live*** website and the password given to you during the
 database seeding. This user will have full admin rights on the ***local*** website.
 

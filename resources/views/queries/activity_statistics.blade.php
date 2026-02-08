@@ -1,4 +1,7 @@
 @extends('website.layouts.redesign.dashboard')
+@php
+    /** @var \Illuminate\Support\Collection<\App\Models\EventCategory> $eventCategories */
+@endphp
 
 @section('page-title')
     Activity statistics

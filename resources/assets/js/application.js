@@ -275,29 +275,35 @@ if (shiftElements.length) {
 }
 
 //Lazy load background images
-if ('IntersectionObserver' in window) {
-    document.addEventListener('DOMContentLoaded', function () {
-        function handleIntersection(entries) {
-            entries.map((entry) => {
-                if (entry.isIntersecting) {
-                    entry.target.style.backgroundPosition = 'center'
-                    entry.target.style.backgroundRepeat = 'no-repeat'
-                    entry.target.style.backgroundSize = 'cover'
-                    entry.target.style.backgroundImage =
-                        "url('" + entry.target.dataset.bgimage + "')"
-                    observer.unobserve(entry.target)
-                }
-            })
-        }
-
-        const headers = document.querySelectorAll(
-            'div[data-bgimage]:not([data-bgimage=""])'
-        )
-        const observer = new IntersectionObserver(handleIntersection, {
-            rootMargin: '200px',
+const setupLazyLoading = () => {
+    function handleIntersection(entries) {
+        entries.map((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.style.backgroundPosition = 'center'
+                entry.target.style.backgroundRepeat = 'no-repeat'
+                entry.target.style.backgroundSize = 'cover'
+                entry.target.style.backgroundImage =
+                    "url('" + entry.target.dataset.bgimage + "')"
+                observer.unobserve(entry.target)
+            }
         })
-        headers.forEach((header) => observer.observe(header))
+    }
+
+    const headers = document.querySelectorAll(
+        'div[data-bgimage]:not([data-bgimage=""])'
+    )
+    const observer = new IntersectionObserver(handleIntersection, {
+        rootMargin: '200px',
     })
+    headers.forEach((header) => observer.observe(header))
+}
+if ('IntersectionObserver' in window) {
+    //check if loading has already finished and therefore the event never will fire
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupLazyLoading)
+    } else {
+        setupLazyLoading()
+    }
 } else {
     // No interaction support? Load all background images automatically
     const headers = document.querySelectorAll('.bg-img')

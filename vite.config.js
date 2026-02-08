@@ -5,7 +5,7 @@ import vue from '@vitejs/plugin-vue'
 import eslintPlugin from '@nabla/vite-plugin-eslint'
 import path from 'path'
 import { wayfinder } from '@laravel/vite-plugin-wayfinder'
-
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 /**
  * https://vitejs.dev/config/
  * @type {import('vite').UserConfig}
@@ -40,7 +40,6 @@ export default defineConfig({
                 '/node_modules/leaflet-geosearch/dist/geosearch.css',
                 '/node_modules/leaflet.markercluster/dist/MarkerCluster.css',
                 '/node_modules/leaflet/dist/leaflet.css',
-                //exif-reader for getting the date_taken from photos
             ],
             refresh: true,
         }),
@@ -64,8 +63,24 @@ export default defineConfig({
                 'resources/assets/js/**',
             ],
         }),
+        process.env.SENTRY_AUTH_TOKEN &&
+            sentryVitePlugin({
+                org: process.env.SENTRY_ORG,
+                project: process.env.SENTRY_PROJECT,
+                authToken: process.env.SENTRY_AUTH_TOKEN,
+                sourcemaps: {
+                    // As you're enabling client source maps, you probably want to delete them after they're uploaded to Sentry.
+                    // Set the appropriate glob pattern for your output folder - some glob examples below:
+                    filesToDeleteAfterUpload: [
+                        './**/*.map',
+                        '.*/**/public/**/*.map',
+                        './dist/**/client/**/*.map',
+                    ],
+                },
+            }),
     ],
     build: {
+        sourcemap: 'hidden',
         rollupOptions: {
             output: {
                 manualChunks: {
@@ -86,9 +101,9 @@ export default defineConfig({
                     'import',
                     'color-functions',
                     'global-builtin',
-                    'if-function',
+                    'if-function'
                 ],
             },
         },
     },
-})
+});
