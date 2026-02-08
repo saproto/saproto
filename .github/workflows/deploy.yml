@@ -76,7 +76,7 @@ jobs:
         run: mkdir ${{ env.BUILD_ARTIFACT_STAGING_DIR }}
 
       - name: 🗄️ ZIP Build
-        uses: TheDoctor0/zip-release@0.7.5
+        uses: TheDoctor0/zip-release@0.7.6
         with:
           type: 'zip'
           filename: ${{ env.BUILD_ARTIFACT_STAGING_DIR }}build.zip
