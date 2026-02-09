@@ -72,7 +72,7 @@ class Page extends Model implements HasMedia
         $this->addMediaCollection('images')
             ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/jpg', 'image/webp'])
             ->useDisk(App::environment('local') ? 'local' : 'stack')
-            ->storeConversionsOnDisk('public');
+            ->storeConversionsOnDisk('garage-public');
     }
 
     public function registerMediaConversions(?Media $media = null): void
