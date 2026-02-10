@@ -326,6 +326,8 @@
 
                         console.log('Wallstreet drink is active:', data.id)
                     }
+                }).catch(()=>{
+                    console.log('No wallstreet drink active!')
                 })
 
                 function updatePrice(id, price) {
