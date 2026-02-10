@@ -138,6 +138,7 @@ class Newsitem extends Model implements HasMedia
         });
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [

@@ -127,6 +127,7 @@ class Photo extends Model implements HasMedia
         return $this->getFirstMediaUrl($this->private ? 'private' : 'public', $photoEnum->value);
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [

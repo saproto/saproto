@@ -37,6 +37,7 @@ use Laravel\Passport\HasApiTokens;
 use Laravel\Passport\Token;
 use Laravel\Pennant\Concerns\HasFeatures;
 use NotificationChannels\WebPush\HasPushSubscriptions;
+use Override;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -683,6 +684,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         Mail::to($this)->queue(new UsernameReminderEmail($this)->onQueue('high'));
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [

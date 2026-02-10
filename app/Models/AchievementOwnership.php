@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Override;
 
 /**
  * Achievement Ownership Model.
@@ -69,6 +70,7 @@ class AchievementOwnership extends Model
         return $this->belongsTo(Achievement::class);
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [

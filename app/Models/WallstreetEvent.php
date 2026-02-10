@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
+use Override;
 
 /**
  * Class WallstreetEvent.
@@ -46,6 +47,7 @@ class WallstreetEvent extends Model
         return $this->belongsToMany(Product::class, 'wallstreet_drink_event_product', 'wallstreet_drink_event_id');
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [

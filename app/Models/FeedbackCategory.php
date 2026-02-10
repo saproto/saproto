@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Override;
 
 /**
  * Feedback model.
@@ -62,6 +63,7 @@ class FeedbackCategory extends Model
         return $this->belongsTo(User::class, 'reviewer_id');
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [

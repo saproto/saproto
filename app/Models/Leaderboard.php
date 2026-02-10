@@ -78,6 +78,7 @@ class Leaderboard extends Model
         return $this->committee->users->contains($user);
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [
