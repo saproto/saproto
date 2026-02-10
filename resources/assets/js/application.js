@@ -91,7 +91,6 @@ if (popoverTriggerList.length)
 import { Modal } from 'bootstrap'
 
 let modalList = Array.from(document.getElementsByClassName('modal'))
-window.modals = {}
 if (modalList.length) {
     modalList.forEach((el) => {
         window.modals[el.id] = Modal.getOrCreateInstance(el)
