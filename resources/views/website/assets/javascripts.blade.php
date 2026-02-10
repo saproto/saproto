@@ -16,6 +16,8 @@
         theme: "{{ Auth::check() && Auth::user()->theme !== null ? Config::array('proto.themes')[Auth::user()->theme] : 'light' }}",
         @isset($companies) company_count: {{ count($companies) }} @endisset
     };
+
+    window.modals = {}
 </script>
 
 @vite('resources/assets/js/application.js')
