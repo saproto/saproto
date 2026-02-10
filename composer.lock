@@ -372,16 +372,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.369.19",
+            "version": "3.369.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "32fee3a25290186724ede9ca177d5090f7c5a837"
+                "reference": "8a0fc0da51eff807f8978613a82df9871b236718"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/32fee3a25290186724ede9ca177d5090f7c5a837",
-                "reference": "32fee3a25290186724ede9ca177d5090f7c5a837",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/8a0fc0da51eff807f8978613a82df9871b236718",
+                "reference": "8a0fc0da51eff807f8978613a82df9871b236718",
                 "shasum": ""
             },
             "require": {
@@ -463,9 +463,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.369.19"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.369.30"
             },
-            "time": "2026-01-23T19:05:51+00:00"
+            "time": "2026-02-09T19:19:31+00:00"
         },
         {
             "name": "brick/math",
@@ -1473,16 +1473,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.431.0",
+            "version": "v0.432.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-api-php-client-services.git",
-                "reference": "0a3b9c8feb2ed473eb4e47214edd3211e8c29045"
+                "reference": "c0d8b801cf615f8edf1b5b356a3d121d0c95ef92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/0a3b9c8feb2ed473eb4e47214edd3211e8c29045",
-                "reference": "0a3b9c8feb2ed473eb4e47214edd3211e8c29045",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/c0d8b801cf615f8edf1b5b356a3d121d0c95ef92",
+                "reference": "c0d8b801cf615f8edf1b5b356a3d121d0c95ef92",
                 "shasum": ""
             },
             "require": {
@@ -1511,9 +1511,9 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/google-api-php-client-services/issues",
-                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.431.0"
+                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.432.0"
             },
-            "time": "2026-02-02T01:06:19+00:00"
+            "time": "2026-02-09T01:14:27+00:00"
         },
         {
             "name": "google/auth",
@@ -15837,16 +15837,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "12.5.2",
+            "version": "12.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "4a9739b51cbcb355f6e95659612f92e282a7077b"
+                "reference": "b015312f28dd75b75d3422ca37dff2cd1a565e8d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/4a9739b51cbcb355f6e95659612f92e282a7077b",
-                "reference": "4a9739b51cbcb355f6e95659612f92e282a7077b",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/b015312f28dd75b75d3422ca37dff2cd1a565e8d",
+                "reference": "b015312f28dd75b75d3422ca37dff2cd1a565e8d",
                 "shasum": ""
             },
             "require": {
@@ -15902,7 +15902,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
                 "security": "https://github.com/sebastianbergmann/php-code-coverage/security/policy",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/12.5.2"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/12.5.3"
             },
             "funding": [
                 {
@@ -15922,7 +15922,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-12-24T07:03:04+00:00"
+            "time": "2026-02-06T06:01:44+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -16367,21 +16367,21 @@
         },
         {
             "name": "rector/rector",
-            "version": "2.3.5",
+            "version": "2.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "9442f4037de6a5347ae157fe8e6c7cda9d909070"
+                "reference": "ca9ebb81d280cd362ea39474dabd42679e32ca6b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/9442f4037de6a5347ae157fe8e6c7cda9d909070",
-                "reference": "9442f4037de6a5347ae157fe8e6c7cda9d909070",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/ca9ebb81d280cd362ea39474dabd42679e32ca6b",
+                "reference": "ca9ebb81d280cd362ea39474dabd42679e32ca6b",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.4|^8.0",
-                "phpstan/phpstan": "^2.1.36"
+                "phpstan/phpstan": "^2.1.38"
             },
             "conflict": {
                 "rector/rector-doctrine": "*",
@@ -16415,7 +16415,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/2.3.5"
+                "source": "https://github.com/rectorphp/rector/tree/2.3.6"
             },
             "funding": [
                 {
@@ -16423,7 +16423,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-01-28T15:22:48+00:00"
+            "time": "2026-02-06T14:25:06+00:00"
         },
         {
             "name": "revolt/event-loop",
@@ -17646,5 +17646,5 @@
         "ext-zlib": "*"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
