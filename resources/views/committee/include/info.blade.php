@@ -33,7 +33,7 @@
     @if ($committee->hasMedia())
         <img
             class="card-img-top"
-            src="{{ $committee->getImageUrl() }}"
+            src="{{ $committee->getImageUrl(CommitteeEnum::HEADER) }}"
             width="100%"
         />
     @endif
