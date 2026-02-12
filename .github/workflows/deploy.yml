@@ -40,6 +40,19 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
 
+      - name: Cache Prettier
+        uses: actions/cache@v4
+        with:
+          path: .tmp/prettier
+          key: ${{ runner.os }}-prettier-${{ hashFiles('**/package-lock.json', '.prettierrc*') }}
+          restore-keys: |
+            ${{ runner.os }}-prettier-${{ hashFiles('**/package-lock.json', '.prettierrc*') }}
+            ${{ runner.os }}-prettier-
+
+      - name: Check with Prettier
+        run: |
+          npx prettier resources/ --check --cache --cache-location=.tmp/prettier --cache-strategy content
+
       - name: 📥 Install front-end dependencies
         run: npm ci --ignore-scripts
 
