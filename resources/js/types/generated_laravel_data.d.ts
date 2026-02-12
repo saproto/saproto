@@ -62,7 +62,7 @@ image_url: string;
 };
 }
 declare namespace App.Enums {
-export enum CommitteeEnum { CARD = 'card', BLOCK = 'block' };
+export enum CommitteeEnum { CARD = 'card', BLOCK = 'block', HEADER = 'header' };
 export enum CompanyEnum { LARGE = 'large', SMALL = 'small' };
 export enum HeaderImageEnum { LARGE = 'large' };
 export enum IsAlfredThereEnum { THERE = 'there', AWAY = 'away', UNKNOWN = 'unknown', JUR = 'jur', TEXT_ONLY = 'text' };
