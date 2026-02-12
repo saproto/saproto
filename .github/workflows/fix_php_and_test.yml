@@ -114,18 +114,9 @@ jobs:
         if: steps.changes.outputs.resources == 'true'
         run: npx eslint resources/ --fix
 
-      - name: Cache Prettier
-        uses: actions/cache@v4
-        with:
-          path: .tmp/prettier
-          key: ${{ runner.os }}-prettier-${{ hashFiles('**/package-lock.json', '.prettierrc*') }}
-          restore-keys: |
-            ${{ runner.os }}-prettier-${{ hashFiles('**/package-lock.json', '.prettierrc*') }}
-            ${{ runner.os }}-prettier-
-
-      - name: Run Prettier
-        run: |
-          npx prettier resources/ --write --cache --cache-location=.tmp/prettier --cache-strategy content
+      - name: lint with prettier
+        if: steps.changes.outputs.resources == 'true'
+        run: npx prettier --write resources/
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v7
