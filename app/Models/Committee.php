@@ -92,15 +92,16 @@ class Committee extends Model implements HasMedia
 
     public function registerMediaConversions(?Media $media = null): void
     {
-        // 800x300
-        // 450x300
-        $this->addMediaConversion(CommitteeEnum::CARD->value)
+        $this->addMediaConversion(CommitteeEnum::HEADER->value)
             ->nonQueued()
+            ->fit(Fit::Crop, 1600, 600)
+            ->format('webp');
+
+        $this->addMediaConversion(CommitteeEnum::CARD->value)
             ->fit(Fit::Crop, 800, 300)
             ->format('webp');
 
         $this->addMediaConversion(CommitteeEnum::BLOCK->value)
-            ->nonQueued()
             ->fit(Fit::Crop, 450, 300)
             ->format('webp');
     }
