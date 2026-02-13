@@ -109,7 +109,7 @@ class ActivityController extends Controller
             return back();
         }
 
-        ActivityParticipation::withTrashed()->where('activity_id', $event->activity->id)->forceDelete();
+        ActivityParticipation::query()->where('activity_id', $event->activity->id)->delete();
 
         $event->activity->delete();
 
@@ -183,7 +183,7 @@ class ActivityController extends Controller
         /** @var HelpingCommittee $help */
         $help = HelpingCommittee::query()->findOrFail($id);
 
-        foreach (ActivityParticipation::withTrashed()->where('committees_activities_id', $help->id)->get() as $participation) {
+        foreach (ActivityParticipation::query()->where('committees_activities_id', $help->id)->get() as $participation) {
             $participation->delete();
         }
 
