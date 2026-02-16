@@ -60,7 +60,7 @@ class TicketController extends Controller
         $ticket->product_id = Product::query()->findOrFail($request->input('product'))->id;
         $ticket->members_only = $request->has('is_members_only');
         $ticket->has_buy_limit = $request->has('has_buy_limit');
-        $ticket->buy_limit = $request->input('buy_limit', $ticket->buy_limit);
+        $ticket->buy_limit = $request->input('buy_limit') ?? 0;
         $ticket->is_prepaid = $request->has('is_prepaid');
         $ticket->available_from = $request->date('available_from')->timestamp;
         $ticket->available_to = $request->date('available_to')->timestamp;
