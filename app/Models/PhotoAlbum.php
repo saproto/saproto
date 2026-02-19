@@ -108,6 +108,7 @@ class PhotoAlbum extends Model
         return $this->thumbPhoto?->getUrl(PhotoEnum::SMALL);
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [

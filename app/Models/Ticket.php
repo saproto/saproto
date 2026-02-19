@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Date;
+use Override;
 
 /**
  * Ticket Model.
@@ -125,6 +126,7 @@ class Ticket extends Model
         })->sum('total_price');
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [

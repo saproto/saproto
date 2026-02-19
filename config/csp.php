@@ -17,6 +17,7 @@ use Spatie\Csp\Presets\GoogleFonts;
 use Spatie\Csp\Presets\GoogleRecaptcha;
 use Spatie\Csp\Presets\GoogleTlds;
 use Spatie\Csp\Presets\JsDelivr;
+use Spatie\Csp\Presets\Sentry;
 
 return [
 
@@ -25,6 +26,7 @@ return [
      * any class that implements `Spatie\Csp\Preset`
      */
     'presets' => [
+        Sentry::class,
         Basic::class,
         GoogleRecaptcha::class,
         JsDelivr::class,

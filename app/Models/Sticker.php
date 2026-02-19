@@ -62,7 +62,7 @@ class Sticker extends Model implements HasMedia
     {
         $this->addMediaCollection('default')
             ->useDisk(App::environment('local') ? 'public' : 'stack')
-            ->storeConversionsOnDisk('public')
+            ->storeConversionsOnDisk('garage-public')
             ->singleFile();
     }
 

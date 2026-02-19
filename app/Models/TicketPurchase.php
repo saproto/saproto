@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Override;
 
 /**
  * Ticket Purchase Model.
@@ -76,6 +77,7 @@ class TicketPurchase extends Model
             ($this->orderline->molliePayment?->translatedStatus() == 'paid');
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [
