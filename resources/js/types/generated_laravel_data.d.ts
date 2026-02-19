@@ -7,6 +7,11 @@ is_member: boolean;
 avatar: string;
 email: string;
 };
+export type MediaData = {
+id: number;
+url: string;
+srcset: string;
+};
 export type MenuItemData = {
 menuname: string;
 parsed_url: string | null;
@@ -38,6 +43,7 @@ large_url: string;
 likes_count: number | null;
 liked_by_me: boolean | null;
 album: App.Data.PhotoAlbumData | null;
+media: App.Data.MediaData | null;
 };
 export type PlayedVideoData = {
 video_id: string;
