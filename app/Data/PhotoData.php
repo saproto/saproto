@@ -18,6 +18,7 @@ class PhotoData extends Data
         public ?int $likes_count,
         public ?bool $liked_by_me,
         public ?PhotoAlbumData $album,
+        public ?MediaData $media,
     ) {}
 
     public static function fromModel(?Photo $photo): ?self
@@ -30,7 +31,8 @@ class PhotoData extends Data
             $photo->getUrl(PhotoEnum::LARGE),
             $photo->likes_count,
             $photo->liked_by_me,
-            $photo->relationLoaded('album') ? PhotoAlbumData::from($photo->album) : null
+            $photo->relationLoaded('album') ? PhotoAlbumData::from($photo->album) : null,
+            MediaData::fromModel($photo->getFirstMedia('*')),
         ) : null;
     }
 }

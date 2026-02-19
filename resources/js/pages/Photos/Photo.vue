@@ -46,7 +46,9 @@ const state = reactive({
             : 0,
 })
 
-const currentPhoto = computed(() => photoList.value[state.index])
+const currentPhoto = computed(() => photoList.value[state.index] as PhotoData)
+
+console.log(currentPhoto.value.media)
 const previousPhoto = computed(() =>
     state.index > 0 ? photoList.value[state.index - 1] : null
 )
@@ -281,6 +283,7 @@ onMounted(() => {
                     :src="currentPhoto.large_url"
                     class="w-full object-contain"
                     style="max-height: 70vh"
+                    :srcset="currentPhoto.media?.srcset"
                     :alt="'Image '.concat(currentPhoto.id.toString())"
                     @click="handlePhotoTap"
                 />

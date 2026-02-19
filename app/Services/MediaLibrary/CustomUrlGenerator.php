@@ -4,6 +4,7 @@ namespace App\Services\MediaLibrary;
 
 use DateTimeInterface;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\Conversions\Conversion;
 use Spatie\MediaLibrary\Support\UrlGenerator\BaseUrlGenerator;
@@ -53,7 +54,11 @@ class CustomUrlGenerator extends BaseUrlGenerator
     {
         $path = $this->pathGenerator->getPathForResponsiveImages($this->media);
 
-        return Str::finish($this->getDisk()->url($path), '/');
+        $diskName = $this->media->conversions_disk;
+//            ?
+//            : $this->media->disk;
+
+        return Str::finish(Storage::disk($diskName)->url($path), '/');
     }
 
     protected function getRootOfDisk(): string
