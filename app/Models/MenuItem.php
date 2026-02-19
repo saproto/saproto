@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Override;
 
 /**
  * Menu Item Model.
@@ -123,6 +124,7 @@ class MenuItem extends Model
         return $this->id == $highest->id;
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [

@@ -165,7 +165,7 @@ class Event extends Model implements HasMedia
     {
         $this->addMediaCollection('header')
             ->useDisk(App::environment('local') ? 'public' : 'stack')
-            ->storeConversionsOnDisk('public')
+            ->storeConversionsOnDisk('garage-public')
             ->singleFile();
     }
 

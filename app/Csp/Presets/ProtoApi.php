@@ -27,6 +27,9 @@ class ProtoApi implements Preset
             'data:',
         ]);
 
+        $policy->add(Directive::IMG,
+            Config::array('proto.domains.garage'));
+
         $policy->add(Directive::FORM_ACTION, Config::array('proto.domains.protube'));
     }
 }
