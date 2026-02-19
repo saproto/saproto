@@ -21,7 +21,7 @@
                     'components.forms.datetimepicker',
                     [
                         'name' => 'newDate',
-                        'label' => 'This will copy the event and move the start to:',
+                        'label' => 'This will copy the event and move the to: start',
                         'placeholder' => Carbon::createFromTimestamp(
                             $event->start,
                             date_default_timezone_get(),
