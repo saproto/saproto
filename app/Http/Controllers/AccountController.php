@@ -8,16 +8,13 @@ use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
 class AccountController extends Controller
 {
-    /**
-     * @return \Illuminate\Contracts\View\View|Factory
-     */
     public function index(): \Illuminate\Contracts\View\View|Factory
     {
         $accounts = Account::query()->orderBy('account_number')->withCount('products')->get();
@@ -97,8 +94,9 @@ class AccountController extends Controller
         /** @var Account $account */
         $account = Account::query()->findOrFail($account);
 
-        $start = Carbon::parse($request->start);
-        $end = Carbon::parse($request->end);
+        $start = Date::parse($request->start);
+        $end = Date::parse($request->end);
+
         return view('omnomcom.accounts.aggregation', [
             'aggregation' => $account->generatePeriodAggregation($start, $end),
             'start' => $request->start, 'end' => $request->end, 'account' => $account,
@@ -112,8 +110,9 @@ class AccountController extends Controller
     {
         if ($request->has('start') && $request->has('end')) {
             $account = Account::query()->findOrFail(Config::integer('omnomcom.omnomcom-account'));
-            $start = Carbon::parse($request->start);
-            $end = Carbon::parse($request->end);
+            $start = Date::parse($request->start);
+            $end = Date::parse($request->end);
+
             return view('omnomcom.accounts.aggregation', [
                 'aggregation' => $account->generatePeriodAggregation($start, $end),
                 'start' => $request->start, 'end' => $request->end, 'account' => $account,
