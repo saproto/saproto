@@ -886,6 +886,11 @@ Route::middleware('forcedomain')->group(function () {
         Route::get('{id}/{conversion?}', [PrivateMediaController::class, 'show'])->name('show');
     });
 
+    /* --- Fetching media: Private --- */
+    Route::middleware(['auth', 'member'])->prefix('responsive_media')->name('responsive::')->group(function () {
+        Route::get('{id}/{conversion?}', [PrivateMediaController::class, 'showResponsive'])->name('show');
+    });
+
     /* --- Fetching files: Public   --- */
     Route::prefix('file')->name('file::')->group(function () {
         Route::get('{id}/{hash}/{name?}', [FileController::class, 'get'])->name('get');

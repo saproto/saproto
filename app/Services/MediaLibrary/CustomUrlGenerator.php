@@ -52,13 +52,21 @@ class CustomUrlGenerator extends BaseUrlGenerator
 
     public function getResponsiveImagesDirectoryUrl(): string
     {
-        $path = $this->pathGenerator->getPathForResponsiveImages($this->media);
-
-        $diskName = $this->media->conversions_disk;
-//            ?
-//            : $this->media->disk;
-
-        return Str::finish(Storage::disk($diskName)->url($path), '/');
+        $public_disks = ['public', 'garage-public'];
+        $isPrivateConversion = $this->conversion instanceof Conversion && ! in_array($this->media->conversions_disk, $public_disks);
+        $isPrivateOriginal = ! $this->conversion instanceof Conversion && ! in_array($this->media->disk, $public_disks);
+        if ($isPrivateConversion || $isPrivateOriginal) {
+//            dd($this->media);
+            return route('responsive::show', [
+                'id' => $this->pathGenerator->getPathForResponsiveImages($this->media),
+            ]);
+        }
+//
+//        $path = $this->pathGenerator->getPathForResponsiveImages($this->media);
+//
+//        $diskName = $this->media->conversions_disk;
+//
+//        return Str::finish(Storage::disk($diskName)->url($path), '/');
     }
 
     protected function getRootOfDisk(): string

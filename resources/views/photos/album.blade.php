@@ -62,7 +62,7 @@
                                     'album' => $album?->id ?? 'liked',
                                     'photo' => $photo,
                                 ]),
-                                'img' => $photo->getUrl(PhotoEnum::SMALL),
+                                'media'=> $photo->getFirstMedia('*'),
                                 'html' => sprintf(
                                     '<i class="fas fa-heart %s"></i> %s %s',
                                     ! $photo->liked_by_me ? '' : 'text-danger',

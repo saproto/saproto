@@ -21,7 +21,7 @@
                             'website.home.cards.card-bg-image',
                             [
                                 'url' => route('albums::album::list', ['album' => $album->id]),
-                                'img' => $album->thumb(),
+                                'media'=> $album->thumbPhoto->getFirstMedia('*'),
                                 'html' => sprintf(
                                     '<sub>%s</sub><br>%s<strong>%s</strong>',
                                     date('M j, Y', $album->date_taken),
