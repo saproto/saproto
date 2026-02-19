@@ -25,53 +25,37 @@ class SearchController extends Controller
     {
         $term = $request->input('query');
 
-        $users = [];
+        $users = collect();
         if (Auth::user()?->is_member) {
-            $presearch_users = $this->getGenericSearchQuery(
+            $users = $this->getGenericSearchQuery(
                 User::class,
                 $term,
                 Auth::user()->can('board') ? ['id', 'name', 'calling_name', 'utwente_username', 'email'] : ['id', 'name', 'calling_name', 'email']
-            )?->with('media')->get();
-
-            if ($presearch_users) {
-                foreach ($presearch_users as $user) {
-                    /** @var User $user */
-                    if ($user->is_member) {
-                        $users[] = $user;
-                    }
-                }
-            }
+            )?->with('media')->get()->filter(function ($item) {
+                /** @var User $item */
+                return $item->is_member;
+            }) ?? [];
         }
 
-        $pages = [];
-        $presearch_pages = $this->getGenericSearchQuery(
+        $pages = $this->getGenericSearchQuery(
             Page::class,
             $term,
             ['slug', 'title', 'content']
-        )?->get();
-        if ($presearch_pages) {
-            foreach ($presearch_pages as $page) {
-                /** @var Page $page */
-                if (! $page->is_member_only || Auth::user()?->is_member) {
-                    $pages[] = $page;
-                }
-            }
-        }
+        )?->get()
+            ->filter(function ($item) {
+            /** @var Page $item */
+            return ! $item->is_member_only || Auth::user()?->is_member;
+        }) ?? [];
 
-        $committees = [];
-        $presearch_committees = $this->getGenericSearchQuery(
+        $committees = $this->getGenericSearchQuery(
             Committee::class,
             $term,
             ['id', 'name', 'slug']
-        )?->get();
-        if ($presearch_committees) {
-            foreach ($presearch_committees as $committee) {
-                /** @var Committee $committee */
-                if ($committee->public || Auth::user()?->can('board')) {
-                    $committees[] = $committee;
-                }
-            }
-        }
+        )?->get()
+            ->filter(function ($item) {
+            /** @var Committee $item */
+            return $item->public || Auth::user()?->can('board');
+        }) ?? [];
 
         $presearch_event_ids = $this->getGenericSearchQuery(
             Event::class,
@@ -83,7 +67,10 @@ class SearchController extends Controller
         if ($presearch_event_ids) {
             // load the events with all the correct data to show in the event block
 
-            Event::getEventBlockQuery()->whereIn('id', $presearch_event_ids)->get()->each(static function ($event) use ($events) {
+            Event::getEventBlockQuery()->whereIn('id', $presearch_event_ids)
+                ->reorder()
+                ->orderBy('start', 'desc')
+                ->get()->each(static function ($event) use ($events) {
                 /** @var Event $event */
                 if ($event->mayViewEvent(Auth::user())) {
                     $events->push($event);
@@ -91,27 +78,22 @@ class SearchController extends Controller
             });
         }
 
-        $photoAlbums = [];
-        $presearch_photo_albums = $this->getGenericSearchQuery(
+        $photoAlbums = $this->getGenericSearchQuery(
             PhotoAlbum::class,
             $term,
             ['id', 'name']
-        )?->get();
-        if ($presearch_photo_albums) {
-            foreach ($presearch_photo_albums as $album) {
-                /** @var PhotoAlbum $album */
-                if (! $album->private || Auth::user()?->can('protography')) {
-                    $photoAlbums[] = $album;
-                }
-            }
-        }
+        )?->orderBy('date_taken', 'desc')
+            ->unless(Auth::user()?->can('protography'), static function ($q) {
+                $q->where('private', false);
+            })
+            ->get();
 
         return view('search.search', [
             'term' => $term,
             'users' => $users,
             'pages' => $pages,
             'committees' => $committees,
-            'events' => $events->reverse(),
+            'events' => $events,
             'photoAlbums' => $photoAlbums,
         ]);
     }
