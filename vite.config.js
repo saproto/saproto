@@ -2,7 +2,6 @@ import { glob } from 'glob'
 import { defineConfig } from 'vite'
 import laravel from 'laravel-vite-plugin'
 import vue from '@vitejs/plugin-vue'
-import eslintPlugin from '@nabla/vite-plugin-eslint'
 import path from 'path'
 import { wayfinder } from '@laravel/vite-plugin-wayfinder'
 import { sentryVitePlugin } from '@sentry/vite-plugin'
@@ -54,15 +53,6 @@ export default defineConfig({
                 },
             },
         }),
-        eslintPlugin({
-            fix: true,
-            ignores: [
-                'vendor/**/*.js',
-                '/virtual:/**',
-                'node_modules/**',
-                'resources/assets/js/**',
-            ],
-        }),
         process.env.SENTRY_AUTH_TOKEN &&
             sentryVitePlugin({
                 org: process.env.SENTRY_ORG,
@@ -101,9 +91,9 @@ export default defineConfig({
                     'import',
                     'color-functions',
                     'global-builtin',
-                    'if-function'
+                    'if-function',
                 ],
             },
         },
     },
-});
+})
