@@ -29,7 +29,7 @@ class AuthLoginEventHandler
 
         // We will grant the user all roles to which they are entitled to!
         $committees = [
-            ['committee' => Committee::query()->where('slug', Config::string('proto.rootcommittee'))->first(), 'role' => 'protube', 'nda' => true],
+            ['committee' => Committee::query()->where('slug', Config::string('proto.rootcommittee'))->first(), 'role' => 'hyttioaoac', 'nda' => true],
             ['committee' => Committee::query()->find(Config::integer('proto.committee.board')), 'role' => 'board', 'nda' => true],
             ['committee' => Committee::query()->find(Config::integer('proto.committee.omnomcom')), 'role' => 'omnomcom', 'nda' => true],
             ['committee' => Committee::query()->find(Config::integer('proto.committee.tipcie')), 'role' => 'tipcie', 'nda' => true],

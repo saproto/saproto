@@ -35,7 +35,7 @@ return [
     |
     */
 
-    'tfaroles' => ['sysadmin', 'admin', 'board', 'finadmin', 'omnomcom', 'tipcie'],
+    'tfaroles' => ['sysadmin', 'admin', 'board', 'finadmin', 'omnomcom', 'tipcie', 'hyttioaoac'],
 
     /*
     |--------------------------------------------------------------------------

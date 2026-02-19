@@ -9,6 +9,10 @@ return [
             'display_name' => 'System Admin',
             'description' => 'Gives admin access to the application.',
         ],
+        'hyttioaoac' => (object) [
+            'display_name' => 'HYTTIOAOAc access',
+            'description' => 'Gives access to the relevant parts of the HYTTIOAOAc.',
+        ],
         'board' => (object) [
             'display_name' => 'Board Access',
             'description' => 'Gives access to the association administration.',
@@ -67,6 +71,11 @@ return [
             'display_name' => 'System Administrator',
             'description' => 'Can access all website functionality',
             'permissions' => '*',
+        ],
+        'hyttioaoac' => (object) [
+            'display_name' => 'Have you tried member',
+            'description' => 'Can access development related functionality',
+            'permissions' => ['protube', 'hyttioaoac'],
         ],
         'admin' => (object) [
             'display_name' => 'Application Administrator',
