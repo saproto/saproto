@@ -42,6 +42,7 @@ export default defineConfig({
             ],
             refresh: true,
         }),
+        command === 'serve' &&
         wayfinder({
             formVariants: true,
         }),
