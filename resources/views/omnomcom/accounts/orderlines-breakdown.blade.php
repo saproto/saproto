@@ -102,7 +102,7 @@
                 day.addEventListener('hide.bs.collapse', () => {
                     const children = [
                         ...document.getElementsByClassName(
-                            day.getAttribute('data-bs-target').slice(1)
+                            day.getAttribute('data-bs-target')?.slice(1)
                         ),
                     ]
                     children.forEach((child) => {
