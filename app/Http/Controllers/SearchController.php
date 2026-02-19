@@ -43,9 +43,9 @@ class SearchController extends Controller
             ['slug', 'title', 'content']
         )?->get()
             ->filter(function ($item) {
-            /** @var Page $item */
-            return ! $item->is_member_only || Auth::user()?->is_member;
-        }) ?? [];
+                /** @var Page $item */
+                return ! $item->is_member_only || Auth::user()?->is_member;
+            }) ?? [];
 
         $committees = $this->getGenericSearchQuery(
             Committee::class,
@@ -53,9 +53,9 @@ class SearchController extends Controller
             ['id', 'name', 'slug']
         )?->get()
             ->filter(function ($item) {
-            /** @var Committee $item */
-            return $item->public || Auth::user()?->can('board');
-        }) ?? [];
+                /** @var Committee $item */
+                return $item->public || Auth::user()?->can('board');
+            }) ?? [];
 
         $presearch_event_ids = $this->getGenericSearchQuery(
             Event::class,
@@ -71,11 +71,11 @@ class SearchController extends Controller
                 ->reorder()
                 ->orderBy('start', 'desc')
                 ->get()->each(static function ($event) use ($events) {
-                /** @var Event $event */
-                if ($event->mayViewEvent(Auth::user())) {
-                    $events->push($event);
-                }
-            });
+                    /** @var Event $event */
+                    if ($event->mayViewEvent(Auth::user())) {
+                        $events->push($event);
+                    }
+                });
         }
 
         $photoAlbums = $this->getGenericSearchQuery(
