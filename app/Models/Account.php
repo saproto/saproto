@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use stdClass;
 
@@ -50,7 +49,7 @@ class Account extends Model
     /**
      * @return Collection<int, stdClass>
      */
-    public function generatePeriodAggregation(int $start, int $end): Collection
+    public function generatePeriodAggregation(Carbon $start, Carbon $end): Collection
     {
         return DB::table('orderlines')
             ->join('products', 'orderlines.product_id', '=', 'products.id')
@@ -63,8 +62,8 @@ class Account extends Model
             )
             ->groupby('orderlines.product_id')
             ->where('accounts.id', '=', $this->id)
-            ->where('orderlines.created_at', '>=', Date::parse(strval($start))->toDateTimeString())
-            ->where('orderlines.created_at', '<', Date::parse(strval($end))->toDateTimeString())
+            ->where('orderlines.created_at', '>=', $start->toDateTimeString())
+            ->where('orderlines.created_at', '<', $end->toDateTimeString())
             ->get();
     }
 }
