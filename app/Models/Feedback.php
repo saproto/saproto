@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Override;
 
 /**
  * Feedback model.
@@ -87,6 +88,7 @@ class Feedback extends Model
         return $this->hasMany(FeedbackVote::class);
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [

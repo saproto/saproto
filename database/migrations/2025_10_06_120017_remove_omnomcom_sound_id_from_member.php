@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('members', function (Blueprint $table) {
+            $table->dropIndex(['omnomcom_sound_id']);
             $table->dropColumn('omnomcom_sound_id');
         });
     }

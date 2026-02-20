@@ -225,7 +225,7 @@ onMounted(() => {
                 </div>
                 <div class="flex items-center gap-2">
                     <Button
-                        v-if="currentPhoto.private || true"
+                        v-if="currentPhoto.private"
                         disabled
                         class="bg-blue-500"
                         title="Only visible to members"

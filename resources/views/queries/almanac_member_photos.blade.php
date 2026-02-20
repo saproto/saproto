@@ -1,5 +1,6 @@
 @php
     use App\Enums\PhotoEnum;
+    /** @var \Illuminate\Support\Collection<\App\Models\User> $users */
 @endphp
 
 @extends('website.layouts.redesign.dashboard')

@@ -285,48 +285,53 @@
             }
 
             async function initializeWallstreetDrink() {
-                await get(config.routes.api_wallstreet_active).then((data) => {
-                    if (data) {
-                        console.log(data)
-                        //listen to a new wallstreet price and update the prices accordingly
-                        Echo.private(`wallstreet-prices.${data.id}`).listen(
-                            'NewWallstreetPrice',
-                            (e) => {
-                                console.log(e)
-                                updatePrice(e.product.id, e.data.price)
-                            }
-                        )
-
-                        //get the current prices on the first load
-                        get(
-                            `{{ route('api::wallstreet::updated_prices', ['id' => '_id']) }}`.replace(
-                                '_id',
-                                data.id
-                            )
-                        )
-                            .then((response) => {
-                                console.log('updating prices!', response)
-                                if (
-                                    typeof response.products === 'undefined' ||
-                                    response.products.length === 0
-                                ) {
-                                    console.log(
-                                        'no products associated with the active drink!'
-                                    )
-                                    return
+                await get(config.routes.api_wallstreet_active)
+                    .then((data) => {
+                        if (data) {
+                            console.log(data)
+                            //listen to a new wallstreet price and update the prices accordingly
+                            Echo.private(`wallstreet-prices.${data.id}`).listen(
+                                'NewWallstreetPrice',
+                                (e) => {
+                                    console.log(e)
+                                    updatePrice(e.product.id, e.data.price)
                                 }
+                            )
 
-                                response.products.forEach((product) => {
-                                    updatePrice(product.id, product.price)
+                            //get the current prices on the first load
+                            get(
+                                `{{ route('api::wallstreet::updated_prices', ['id' => '_id']) }}`.replace(
+                                    '_id',
+                                    data.id
+                                )
+                            )
+                                .then((response) => {
+                                    console.log('updating prices!', response)
+                                    if (
+                                        typeof response.products ===
+                                            'undefined' ||
+                                        response.products.length === 0
+                                    ) {
+                                        console.log(
+                                            'no products associated with the active drink!'
+                                        )
+                                        return
+                                    }
+
+                                    response.products.forEach((product) => {
+                                        updatePrice(product.id, product.price)
+                                    })
                                 })
-                            })
-                            .catch((error) => {
-                                console.log(error)
-                            })
+                                .catch((error) => {
+                                    console.log(error)
+                                })
 
-                        console.log('Wallstreet drink is active:', data.id)
-                    }
-                })
+                            console.log('Wallstreet drink is active:', data.id)
+                        }
+                    })
+                    .catch(() => {
+                        console.log('No wallstreet drink active!')
+                    })
 
                 function updatePrice(id, price) {
                     price[id] = price

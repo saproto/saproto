@@ -2,6 +2,10 @@
     use App\Enums\PhotoEnum;
 @endphp
 
+@php
+    /** @var \Illuminate\Support\Collection<\App\Models\Photo> $photos */
+@endphp
+
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')

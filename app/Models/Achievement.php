@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Override;
 
 /**
  * Achievement Model.
@@ -95,6 +96,7 @@ class Achievement extends Model
         return $this->users();
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [

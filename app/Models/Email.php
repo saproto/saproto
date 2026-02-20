@@ -15,6 +15,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Override;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
@@ -258,6 +259,7 @@ class Email extends Model implements HasMedia
         return implode(', ', $footer);
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [

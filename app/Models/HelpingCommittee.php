@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
+use Override;
 
 /**
  * Helping Committee Model.
@@ -78,6 +79,7 @@ class HelpingCommittee extends Validatable
             ->withTrashed();
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [

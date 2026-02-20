@@ -12,7 +12,10 @@ class CustomUrlGenerator extends BaseUrlGenerator
 {
     public function getUrl(): string
     {
-        if ($this->conversion instanceof Conversion && $this->media->conversions_disk !== 'public' || ! $this->conversion instanceof Conversion && $this->media->disk !== 'public') {
+        $public_disks = ['public', 'garage-public'];
+        $isPrivateConversion = $this->conversion instanceof Conversion && ! in_array($this->media->conversions_disk, $public_disks);
+        $isPrivateOriginal = ! $this->conversion instanceof Conversion && ! in_array($this->media->disk, $public_disks);
+        if ($isPrivateConversion || $isPrivateOriginal) {
             return route('media::show', [
                 'id' => $this->media->id,
                 'conversion' => $this->conversion?->getName(),
@@ -21,7 +24,10 @@ class CustomUrlGenerator extends BaseUrlGenerator
 
         $url = $this->versionUrl($this->getDisk()->url($this->getPathRelativeToRoot()));
 
-        if (Config::get('app-proto.assets-domain') != null) {
+        // do not cache the garage disk via cloudflare for now
+        $conversionOnGarage = $this->conversion instanceof Conversion && $this->media->conversions_disk == 'garage-public';
+        $originalOnGarage = ! $this->conversion instanceof Conversion && $this->media->disk == 'garage-public';
+        if (Config::get('app-proto.assets-domain') != null && ! $conversionOnGarage && ! $originalOnGarage) {
             return str_replace(Config::string('app-proto.primary-domain'), Config::string('app-proto.assets-domain'), $url);
         }
 

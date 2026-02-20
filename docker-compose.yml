@@ -27,6 +27,7 @@ services:
             - mailpit
             - soketi
             - redis
+            - garage
     mariadb:
         container_name: '${SAIL_CONTAINER_NAME}-mariadb'
         image: 'mariadb:10.6'
@@ -94,6 +95,34 @@ services:
             timeout: 5s
         networks:
             - sail
+    garage:
+        image: dxflrs/garage:v2.1.0
+        container_name: garage
+        restart: unless-stopped
+        volumes:
+            - garage_data:/var/lib/garage/data
+            - garage_meta:/var/lib/garage/meta
+            - ./garage.toml:/etc/garage.toml:ro
+        ports:
+            - "3900:3900"   # S3 API
+            - "3901:3901"   # RPC
+            - "3902:3902"   # Web UI
+            - "3903:3903"   # Admin API
+        networks:
+            - sail
+    webui:
+        image: khairul169/garage-webui:latest
+        container_name: garage-webui
+        restart: unless-stopped
+        volumes:
+            - ./garage.toml:/etc/garage.toml:ro
+        ports:
+            - "3909:3909"
+        environment:
+            API_BASE_URL: "http://garage:3903"
+            S3_ENDPOINT_URL: "http://garage:3900"
+        networks:
+            - sail
 networks:
     sail:
         driver: bridge
@@ -101,4 +130,8 @@ volumes:
     sail-mariadb:
         driver: local
     sail-redis:
+        driver: local
+    garage_data:
+        driver: local
+    garage_meta:
         driver: local

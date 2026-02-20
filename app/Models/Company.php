@@ -70,7 +70,7 @@ class Company extends Model implements HasMedia
     {
         $this->addMediaCollection('default')
             ->useDisk(App::environment('local') ? 'public' : 'stack')
-            ->storeConversionsOnDisk('public')
+            ->storeConversionsOnDisk('garage-public')
             ->singleFile();
     }
 
@@ -100,6 +100,7 @@ class Company extends Model implements HasMedia
         return $this->hasMany(Joboffer::class, 'company_id');
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [

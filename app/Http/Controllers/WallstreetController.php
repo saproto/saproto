@@ -152,7 +152,7 @@ class WallstreetController extends Controller
      */
     public function getLatestPrices(WallstreetDrink $drink): Collection
     {
-        $products = $drink->products()->select('name', 'price', 'id')->get();
+        $products = $drink->products()->select('name', 'price', 'id')->with('media')->get();
         foreach ($products as $product) {
             /** @var Product $product */
             /** @phpstan-ignore-next-line */
