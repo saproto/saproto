@@ -17,7 +17,7 @@
                     'text' => "End edition <i class='fas fa-ban'></i>",
                     'title' => 'Confirm the ending of this edition',
                     'message' =>
-                        'Are you sure you want to all memberships in this edition? end',
+                        'Are you sure you want to finish all memberships in this edition?',
                     'confirm' => 'End',
                     'classes' => 'badge bg-danger float-end mt-1',
                 ]
