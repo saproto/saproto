@@ -9,7 +9,8 @@ import { sentryVitePlugin } from '@sentry/vite-plugin'
  * https://vitejs.dev/config/
  * @type {import('vite').UserConfig}
  */
-export default defineConfig({
+export default defineConfig(({ command }) => {
+return {
     resolve: {
         alias: {
             '@': path.resolve('./resources/js'),
@@ -42,6 +43,7 @@ export default defineConfig({
             ],
             refresh: true,
         }),
+        command === 'serve' &&
         wayfinder({
             formVariants: true,
         }),
@@ -96,4 +98,5 @@ export default defineConfig({
             },
         },
     },
+}
 })

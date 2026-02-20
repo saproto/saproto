@@ -1,0 +1,73 @@
+name: Fix PHP (Pint and Rector)
+on:
+    workflow_call:
+
+jobs:
+    php-tasks:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+              with:
+                  ref: ${{ github.head_ref }}
+
+            - name: 🔍 Read Env
+              run: grep -E 'PHP_VERSION' .env.prod >> $GITHUB_ENV
+
+            - name: 🖱️ Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ env.PHP_VERSION }}
+
+            - uses: ramsey/composer-install@v3
+              with:
+                composer-options: '--ignore-platform-reqs --optimize-autoloader --prefer-dist'
+
+            - name: Cache Rector
+              uses: actions/cache@v4
+              with:
+                  path: .tmp/rector
+                  key: ${{ runner.os }}-rector-${{ hashFiles('**/composer.lock') }}-${{ github.run_id }}
+                  restore-keys: |
+                      ${{ runner.os }}-rector-${{ hashFiles('**/composer.lock') }}-
+                      ${{ runner.os }}-rector-
+
+            - name: Run Rector
+              run: |
+                  mkdir -p .tmp/rector
+                  vendor/bin/rector --ansi
+
+            - name: Cache Pint
+              uses: actions/cache@v4
+              with:
+                  path: .tmp/pint.cache
+                  key: ${{ runner.os }}-pint-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-pint-
+
+            - name: Run Pint
+              run: |
+                  vendor/bin/pint --parallel
+
+            - name: Generate Typescript
+              run: |
+                  php artisan typescript:transform
+
+            - name: Generate Typescript Routes
+              run: |
+                  php artisan wayfinder:generate --with-form
+
+            - name: 📤 Upload WayFinder Artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: wayfinder-actions
+                  path: |
+                      resources/js/actions
+                      resources/js/routes
+                      resources/js/wayfinder
+                  if-no-files-found: error
+                  retention-days: 1
+
+            - name: Commit changes
+              uses: stefanzweifel/git-auto-commit-action@v5
+              with:
+                  commit_message: PHP Automatic Fixing (Pint & Rector)

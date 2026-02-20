@@ -1,0 +1,46 @@
+name: 🧠 Analyse code statically with phpstan
+on:
+    workflow_call:
+
+jobs:
+    larastan:
+        name: 🧠 Analyse code statically with phpstan
+        runs-on: ubuntu-latest
+        steps:
+            - name: 🛎️ Checkout project
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.head_ref }}
+
+            - name: 🔍 Read .env
+              run: (grep -E 'PHP_VERSION' .env.prod >> $GITHUB_ENV && cp .env.ci .env)
+
+            - name: 🖱️ Setup PHP v${{ env.PHP_VERSION }}
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ env.PHP_VERSION }}
+                  coverage: none
+
+            - uses: ramsey/composer-install@v3
+              with:
+                  composer-options: '--ignore-platform-reqs --optimize-autoloader --prefer-dist'
+
+            - name: Cache PHPStan results
+              uses: actions/cache@v4
+              with:
+                  path: .tmp/phpstan
+                  key: ${{ runner.os }}-phpstan-${{ hashFiles('**/composer.lock') }}-${{ github.run_id }}
+                  restore-keys: |
+                      ${{ runner.os }}-phpstan-${{ hashFiles('**/composer.lock') }}-
+                      ${{ runner.os }}-phpstan-
+
+            - name: generate laravel app key
+              run: php artisan key:generate
+
+            - name: run laravel-ide helper
+              run: php artisan ide-helper:generate
+
+            - name: 🧠 Run PHPStan static analysis
+              run: |
+                  mkdir -p .tmp/phpstan
+                  vendor/bin/phpstan analyse

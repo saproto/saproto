@@ -9,4 +9,4 @@ it('loads all the query pages', function () {
         route('queries::membership_totals'),
     ];
     visit($routes)->assertNoSmoke();
-});
+})->group('browser');
