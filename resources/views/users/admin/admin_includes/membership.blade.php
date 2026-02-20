@@ -22,7 +22,7 @@
                             'action' => route('user::member::endinseptember', ['id' => $user->id]),
                             'method' => 'POST',
                             'classes' => 'list-group-item text-warning',
-                            'text' => 'End membership at the end of September',
+                            'text' => 'End membership after September',
                             'message' => "Are you sure you want to end the membership of $user->name at the end of September?",
                         ]
                     )
