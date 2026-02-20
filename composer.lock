@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dca5cf09ccf4e885d9d2e9c3bd5143aa",
+    "content-hash": "104f044e58509da889f6e12bf7dec102",
     "packages": [
         {
             "name": "abcaeffchen/sepa-utilities",
@@ -372,16 +372,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.369.37",
+            "version": "3.369.38",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "bc599ce989b101ee630d5e1a1aeda387632df47b"
+                "reference": "6b39dcc5284fae1a1f7e5d4fd64878092a56594b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/bc599ce989b101ee630d5e1a1aeda387632df47b",
-                "reference": "bc599ce989b101ee630d5e1a1aeda387632df47b",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/6b39dcc5284fae1a1f7e5d4fd64878092a56594b",
+                "reference": "6b39dcc5284fae1a1f7e5d4fd64878092a56594b",
                 "shasum": ""
             },
             "require": {
@@ -463,9 +463,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.369.37"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.369.38"
             },
-            "time": "2026-02-18T19:16:34+00:00"
+            "time": "2026-02-19T19:06:55+00:00"
         },
         {
             "name": "brick/math",
@@ -2629,16 +2629,16 @@
         },
         {
             "name": "jwilsson/spotify-web-api-php",
-            "version": "7.0.0",
+            "version": "7.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jwilsson/spotify-web-api-php.git",
-                "reference": "d0928c14c5bc70465c95bbf07ad9698c867e9f16"
+                "reference": "ae0886d8854875d3f03df51d4b7fd8d0edf8550a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jwilsson/spotify-web-api-php/zipball/d0928c14c5bc70465c95bbf07ad9698c867e9f16",
-                "reference": "d0928c14c5bc70465c95bbf07ad9698c867e9f16",
+                "url": "https://api.github.com/repos/jwilsson/spotify-web-api-php/zipball/ae0886d8854875d3f03df51d4b7fd8d0edf8550a",
+                "reference": "ae0886d8854875d3f03df51d4b7fd8d0edf8550a",
                 "shasum": ""
             },
             "require": {
@@ -2674,9 +2674,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jwilsson/spotify-web-api-php/issues",
-                "source": "https://github.com/jwilsson/spotify-web-api-php/tree/7.0.0"
+                "source": "https://github.com/jwilsson/spotify-web-api-php/tree/7.1.0"
             },
-            "time": "2025-12-14T10:35:38+00:00"
+            "time": "2026-02-19T18:47:14+00:00"
         },
         {
             "name": "laravel-notification-channels/webpush",
@@ -4790,30 +4790,32 @@
         },
         {
             "name": "mollie/laravel-mollie",
-            "version": "v3.1.0",
+            "version": "v4.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mollie/laravel-mollie.git",
-                "reference": "98a89dff9f27d1b41da36e048282516a99271662"
+                "reference": "d23d7ae4b8183c0f24c0366895ecfd5bc29c267d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mollie/laravel-mollie/zipball/98a89dff9f27d1b41da36e048282516a99271662",
-                "reference": "98a89dff9f27d1b41da36e048282516a99271662",
+                "url": "https://api.github.com/repos/mollie/laravel-mollie/zipball/d23d7ae4b8183c0f24c0366895ecfd5bc29c267d",
+                "reference": "d23d7ae4b8183c0f24c0366895ecfd5bc29c267d",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "illuminate/support": "^10.0|^11.0|^12.0",
-                "mollie/mollie-api-php": "^2.60",
-                "php": "^8.1|^8.2"
+                "illuminate/support": "^11.0|^12.0",
+                "laravel/prompts": "^0.3.7",
+                "mollie/mollie-api-php": "^3.6",
+                "php": "^8.2"
             },
             "require-dev": {
-                "laravel/pint": "^1.1",
-                "laravel/socialite": "^5.5",
-                "mockery/mockery": "^1.4",
-                "orchestra/testbench": "^8.0|^9.0|^10.0",
-                "phpunit/phpunit": "^10.0|^11.5.3"
+                "graham-campbell/testbench": "^6.2",
+                "larastan/larastan": "^3.8",
+                "laravel/pint": "^1.25",
+                "laravel/socialite": "^5.23",
+                "phpstan/phpstan": "^2.1",
+                "phpunit/phpunit": "^11.0"
             },
             "suggest": {
                 "laravel/socialite": "Use Mollie Connect (OAuth) to authenticate via Laravel Socialite with the Mollie API. This is needed for some endpoints."
@@ -4825,7 +4827,8 @@
                         "Mollie": "Mollie\\Laravel\\Facades\\Mollie"
                     },
                     "providers": [
-                        "Mollie\\Laravel\\MollieServiceProvider"
+                        "Mollie\\Laravel\\MollieServiceProvider",
+                        "Mollie\\Laravel\\MollieSocialiteServiceProvider"
                     ]
                 }
             },
@@ -4879,37 +4882,41 @@
             ],
             "support": {
                 "issues": "https://github.com/mollie/laravel-mollie/issues",
-                "source": "https://github.com/mollie/laravel-mollie/tree/v3.1.0"
+                "source": "https://github.com/mollie/laravel-mollie/tree/v4.0.2"
             },
-            "time": "2025-02-19T13:32:59+00:00"
+            "time": "2026-01-15T11:20:40+00:00"
         },
         {
             "name": "mollie/mollie-api-php",
-            "version": "v2.79.1",
+            "version": "v3.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mollie/mollie-api-php.git",
-                "reference": "4c1cf5f603178dd15bdf60b5e3999f91bb59f5b0"
+                "reference": "e3c09fa114f5e2c3f6761830752d7450bf1c2546"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mollie/mollie-api-php/zipball/4c1cf5f603178dd15bdf60b5e3999f91bb59f5b0",
-                "reference": "4c1cf5f603178dd15bdf60b5e3999f91bb59f5b0",
+                "url": "https://api.github.com/repos/mollie/mollie-api-php/zipball/e3c09fa114f5e2c3f6761830752d7450bf1c2546",
+                "reference": "e3c09fa114f5e2c3f6761830752d7450bf1c2546",
                 "shasum": ""
             },
             "require": {
-                "composer/ca-bundle": "^1.2",
+                "composer/ca-bundle": "^1.4",
                 "ext-curl": "*",
                 "ext-json": "*",
                 "ext-openssl": "*",
-                "php": "^7.2|^8.0"
+                "nyholm/psr7": "^1.8",
+                "php": "^7.4|^8.0",
+                "psr/http-client": "^1.0",
+                "psr/http-factory": "^1.1",
+                "psr/http-message": "^1.1|^2.0"
             },
             "require-dev": {
-                "eloquent/liberator": "^2.0||^3.0",
-                "friendsofphp/php-cs-fixer": "^3.0",
-                "guzzlehttp/guzzle": "^6.3 || ^7.0",
-                "phpstan/phpstan": "^1.12",
-                "phpunit/phpunit": "^8.5 || ^9.5"
+                "brianium/paratest": "^6.11",
+                "guzzlehttp/guzzle": "^7.6",
+                "phpstan/phpstan": "^2.0",
+                "phpunit/phpunit": "^9.6",
+                "symfony/var-dumper": "^5.4|^6.4|^7.2"
             },
             "suggest": {
                 "mollie/oauth2-mollie-php": "Use OAuth to authenticate with the Mollie API. This is needed for some endpoints. Visit https://docs.mollie.com/ for more information."
@@ -4971,9 +4978,9 @@
             ],
             "support": {
                 "issues": "https://github.com/mollie/mollie-api-php/issues",
-                "source": "https://github.com/mollie/mollie-api-php/tree/v2.79.1"
+                "source": "https://github.com/mollie/mollie-api-php/tree/v3.9.0"
             },
-            "time": "2025-05-06T10:55:09+00:00"
+            "time": "2026-02-09T08:55:10+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -16370,16 +16377,16 @@
         },
         {
             "name": "rector/rector",
-            "version": "2.3.6",
+            "version": "2.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "ca9ebb81d280cd362ea39474dabd42679e32ca6b"
+                "reference": "9c46ad17f57963932c9788fd1b0f1d07ff450370"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/ca9ebb81d280cd362ea39474dabd42679e32ca6b",
-                "reference": "ca9ebb81d280cd362ea39474dabd42679e32ca6b",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/9c46ad17f57963932c9788fd1b0f1d07ff450370",
+                "reference": "9c46ad17f57963932c9788fd1b0f1d07ff450370",
                 "shasum": ""
             },
             "require": {
@@ -16418,7 +16425,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/2.3.6"
+                "source": "https://github.com/rectorphp/rector/tree/2.3.7"
             },
             "funding": [
                 {
@@ -16426,7 +16433,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-06T14:25:06+00:00"
+            "time": "2026-02-19T14:44:16+00:00"
         },
         {
             "name": "revolt/event-loop",
