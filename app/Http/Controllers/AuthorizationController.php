@@ -14,7 +14,7 @@ use Spatie\Permission\Models\Role;
 
 class AuthorizationController extends Controller
 {
-    public function index(): view
+    public function index(): View
     {
         $roles = Role::query()->with('users.media')->get();
         $permissions = Permission::all();
