@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dca5cf09ccf4e885d9d2e9c3bd5143aa",
+    "content-hash": "7b611ed037775b49964cada291c4e6ed",
     "packages": [
         {
             "name": "abcaeffchen/sepa-utilities",
@@ -4648,22 +4648,25 @@
         },
         {
             "name": "milon/barcode",
-            "version": "v12.1.0",
+            "version": "v13.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/milon/barcode.git",
-                "reference": "052e601665cfb99e119a630b6116fab0eb30183e"
+                "reference": "ce84b0ba0d9c0f19f1ef058cd39187bd9468dfc8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/milon/barcode/zipball/052e601665cfb99e119a630b6116fab0eb30183e",
-                "reference": "052e601665cfb99e119a630b6116fab0eb30183e",
+                "url": "https://api.github.com/repos/milon/barcode/zipball/ce84b0ba0d9c0f19f1ef058cd39187bd9468dfc8",
+                "reference": "ce84b0ba0d9c0f19f1ef058cd39187bd9468dfc8",
                 "shasum": ""
             },
             "require": {
                 "ext-gd": "*",
-                "illuminate/support": "^7.0|^8.0|^9.0|^10.0 | ^11.0 | ^12.0",
+                "illuminate/support": "^7.0|^8.0|^9.0|^10.0 | ^11.0 | ^12.0 | ^13.0",
                 "php": "^7.3 | ^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5 || ^10.0"
             },
             "type": "library",
             "extra": {
@@ -4707,7 +4710,7 @@
             ],
             "support": {
                 "issues": "https://github.com/milon/barcode/issues",
-                "source": "https://github.com/milon/barcode/tree/v12.1.0"
+                "source": "https://github.com/milon/barcode/tree/v13.1"
             },
             "funding": [
                 {
@@ -4719,7 +4722,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-07T00:42:12+00:00"
+            "time": "2026-02-24T01:48:58+00:00"
         },
         {
             "name": "minishlink/web-push",
