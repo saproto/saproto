@@ -84,8 +84,7 @@ class SurfConextController extends Controller
     public function provideMetadataForSurfConext(): Response
     {
         /** @phpstan-ignore-next-line  */
-        return Socialite::driver('saml2')
-            ->getServiceProviderMetadata();
+        return Socialite::driver('saml2')->getServiceProviderMetadata();
     }
 
     /**
