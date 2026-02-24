@@ -59,26 +59,26 @@
         "vue-sonner": "^2.0.8"
     },
     "devDependencies": {
-        "@eslint/eslintrc": "^3.3.1",
+        "@eslint/eslintrc": "^3.3.4",
         "@eslint/js": "^10.0.1",
         "@inertiajs/vue3": "^2.3.15",
         "@laravel/vite-plugin-wayfinder": "^0.1.7",
-        "@rushstack/eslint-patch": "^1.12.0",
+        "@rushstack/eslint-patch": "^1.16.1",
         "@sentry/vite-plugin": "^4.9.1",
         "@tailwindcss/forms": "^0.5.3",
-        "@tailwindcss/postcss": "^4.1.10",
+        "@tailwindcss/postcss": "^4.2.1",
         "@tailwindcss/typography": "^0.5.13",
         "@types/dom-to-image": "^2.6.7",
-        "@typescript-eslint/eslint-plugin": "^8.56.0",
-        "@typescript-eslint/parser": "^8.56.0",
+        "@typescript-eslint/eslint-plugin": "^8.56.1",
+        "@typescript-eslint/parser": "^8.56.1",
         "@vitejs/plugin-vue": "^6.0.1",
         "@vue/eslint-config-typescript": "^14.7.0",
         "autoprefixer": "^10.4.20",
         "cross-env": "^10.0.0",
-        "eslint": "^10.0.0",
+        "eslint": "^10.0.2",
         "eslint-config-prettier": "^10.1.5",
         "eslint-plugin-vue": "^10.8.0",
-        "glob": "^13.0.4",
+        "glob": "^13.0.6",
         "globals": "^17.0.0",
         "laravel-echo": "^2.1.5",
         "laravel-vite-plugin": "^2.0.1",
@@ -97,7 +97,7 @@
         "vite-plugin-checker": "^0.12.0",
         "vue": "^3.5.28",
         "vue-eslint-parser": "^10.4.0",
-        "vue-tsc": "^3.0.6"
+        "vue-tsc": "^3.2.5"
     },
     "type": "module"
 }
