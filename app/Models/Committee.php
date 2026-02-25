@@ -133,7 +133,9 @@ class Committee extends Model implements HasMedia
      */
     public function organizedEvents(): Builder
     {
-        return Event::getEventBlockQuery()->where('committee_id', $this->id);
+        return Event::query()
+            ->orderBy('start')
+            ->where('committee_id', $this->id);
     }
 
     /**
@@ -182,7 +184,9 @@ class Committee extends Model implements HasMedia
     {
         $activityIds = HelpingCommittee::query()->where('committee_id', $this->id)->pluck('activity_id');
 
-        return Event::getEventBlockQuery()->whereHas('activity', function (\Illuminate\Contracts\Database\Query\Builder $q) use ($activityIds) {
+        return Event::query()
+            ->orderBy('start')
+            ->whereHas('activity', function (\Illuminate\Contracts\Database\Query\Builder $q) use ($activityIds) {
             $q->whereIn('id', $activityIds);
         })
             ->unless(Auth::user()?->can('board'), static function ($q) {
