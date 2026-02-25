@@ -373,7 +373,9 @@ class Event extends Model implements HasMedia
         }
 
         if ($this->activity) {
-            $allUserIds = $allUserIds->merge($this->activity->users->pluck('id'));
+            $allUserIds = $allUserIds
+                ->merge($this->activity->users->pluck('id'))
+                ->merge($this->activity->helpingCommittees->flatMap(static fn (HelpingCommittee $c) => $c->users)->pluck('id'));
         }
 
         $this->unique_users_count = $allUserIds->unique()->count();

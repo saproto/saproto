@@ -27,6 +27,7 @@ class HelperController extends Controller
         abort_if($helpingCommittee->users->count() >= $helpingCommittee->amount, 403, 'There are already enough people of your committee helping, thanks though!');
 
         $helpingCommittee->users()->attach($user->id);
+        $helpingCommittee->activity->event->updateUniqueUsersCount();
         Session::flash('flash_message', 'Added '.$user->name.' as helper for '.$helpingCommittee->activity->event->title.'.');
 
         return back();
@@ -36,8 +37,8 @@ class HelperController extends Controller
     {
         abort_unless($user->id == Auth::id() || Auth::user()->can('board'), 403, 'You are not allowed to unsubscribe this user from this event.');
         $helpingCommittee->users()->detach($user->id);
+        $helpingCommittee->activity->event->updateUniqueUsersCount();
         Session::flash('flash_message', 'Removed '.$user->name.' as helper for the '.$helpingCommittee->committee->name.'.');
-
         return back();
     }
 }
