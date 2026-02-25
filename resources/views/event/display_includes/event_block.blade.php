@@ -74,7 +74,7 @@
                 @endif
             @endif
 
-            @if (Auth::check() && $event->activity->isHelping(Auth::user()))
+            @if (Auth::check() && $event->activity?->isHelping(Auth::user()))
                 <i
                     class="fas fa-life-ring fa-fw text-danger"
                     aria-hidden="true"
