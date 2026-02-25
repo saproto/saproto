@@ -229,9 +229,9 @@ class Activity extends Validatable
     /**
      * @return bool Whether the user or committee is helping
      */
-    public function isHelping(User $user, ?HelpingCommittee $h = null): bool
+    public function isHelping(User $user): bool
     {
-        return $this->getHelperParticipation($user, $h) instanceof ActivityParticipation;
+        return $this->getHelperParticipation($user) instanceof ActivityParticipation;
     }
 
     public function isEro(User $user): bool
