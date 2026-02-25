@@ -44,8 +44,6 @@ use Override;
  * @property-read int|null $helping_committees_count
  * @property-read Collection<int, ActivityParticipation> $participation
  * @property-read int|null $participation_count
- * @property-read Collection<int, User> $presentUsers
- * @property-read int|null $present_users_count
  * @property-read Collection<int, User> $users
  * @property-read int|null $users_count
  *
@@ -114,19 +112,6 @@ class Activity extends Validatable
         return $this->belongsToMany(User::class, 'activities_users')
             ->withPivot('id', 'is_present')
             ->whereNull('activities_users.deleted_at')
-            ->where('backup', false)
-            ->withTimestamps();
-    }
-
-    /**
-     * @return BelongsToMany<User, $this>
-     */
-    public function presentUsers(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'activities_users')
-            ->withPivot('id', 'is_present')
-            ->whereNull('activities_users.deleted_at')
-            ->where('activities_users.is_present', true)
             ->where('backup', false)
             ->withTimestamps();
     }
