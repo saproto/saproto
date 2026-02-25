@@ -21,6 +21,8 @@ class AppServiceProvider extends ServiceProvider
 
         Feature::discover();
 
+        Model::preventLazyLoading(! app()->isProduction());
+
         Model::automaticallyEagerLoadRelationships();
 
         Passport::$clientUuids = false;
