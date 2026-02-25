@@ -76,6 +76,23 @@ CREATE TABLE `activities` (
   KEY `activities_event_id_index` (`event_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `activities_helpers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `activities_helpers` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `committees_activities_id` bigint(20) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `activities_helpers_user_id_committees_activities_id_unique` (`user_id`,`committees_activities_id`),
+  KEY `activities_helpers_committees_activities_id_foreign` (`committees_activities_id`),
+  KEY `activities_helpers_user_id_committees_activities_id_index` (`user_id`,`committees_activities_id`),
+  CONSTRAINT `activities_helpers_committees_activities_id_foreign` FOREIGN KEY (`committees_activities_id`) REFERENCES `committees_activities` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `activities_helpers_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `activities_users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -84,15 +101,13 @@ CREATE TABLE `activities_users` (
   `activity_id` bigint(20) unsigned NOT NULL,
   `user_id` bigint(20) unsigned NOT NULL,
   `is_present` tinyint(1) NOT NULL DEFAULT 0,
-  `committees_activities_id` bigint(20) unsigned DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `backup` tinyint(1) NOT NULL DEFAULT 0,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `activities_users_user_id_index` (`user_id`),
-  KEY `activities_users_activity_id_index` (`activity_id`),
-  KEY `activities_users_committees_activities_id_index` (`committees_activities_id`)
+  KEY `activities_users_activity_id_index` (`activity_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `addresses`;
@@ -282,7 +297,6 @@ CREATE TABLE `committees_activities` (
   `activity_id` bigint(20) unsigned NOT NULL,
   `committee_id` bigint(20) unsigned NOT NULL,
   `amount` int(11) NOT NULL,
-  `notification_sent` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
@@ -1851,3 +1865,5 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2024_06_01_000001_creat
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_01_03_214942_create_push_subscriptions_table',197);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2022_11_01_000001_create_features_table',198);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_01_09_172626_remove_dmx_tables',199);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_02_25_102853_remove_committees_activities_id_from_activities_users',200);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_02_25_112153_remove_notification_sent_from_committees_activities',200);
