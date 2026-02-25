@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Activity;
 use App\Models\ActivityParticipation;
-use App\Models\Committee;
 use App\Models\Event;
-use App\Models\HelpingCommittee;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,7 +19,6 @@ class ActivityController extends Controller
      */
     public function store(Request $request, Event $event)
     {
-
         $new = $event->activity === null;
         $activity = ($new ? new Activity : $event->activity);
 
@@ -125,69 +122,5 @@ class ActivityController extends Controller
         abort_if($event->activity === null, 404, 'This event has no activity.');
 
         return view('event.checklist', ['event' => $event]);
-    }
-
-    public function addHelp(Request $request, Event $event): RedirectResponse
-    {
-        if (! $event->activity) {
-            Session::flash('flash_message', 'This event has no activity data.');
-
-            return back();
-        }
-
-        $amount = $request->input('amount');
-        if ($amount < 1) {
-            Session::flash('flash_message', 'The amount of helpers should be positive.');
-
-            return back();
-        }
-
-        $committee = Committee::query()->findOrFail($request->input('committee'));
-
-        if (HelpingCommittee::whereActivityId($event->activity->id)->whereCommitteeId($committee->id)->count() > 0) {
-            Session::flash('flash_message', 'This committee is already helping at this event.');
-
-            return back();
-        }
-
-        HelpingCommittee::query()->create([
-            'activity_id' => $event->activity->id,
-            'committee_id' => $committee->id,
-            'amount' => $amount,
-        ]);
-
-        Session::flash('flash_message', 'Added '.$committee->name.' as helping committee.');
-
-        return back();
-    }
-
-    public function updateHelp(Request $request, int $id): RedirectResponse
-    {
-        /** @var HelpingCommittee $help */
-        $help = HelpingCommittee::query()->findOrFail($id);
-        $amount = $request->input('amount');
-
-        $help->amount = ($amount > 0 ? $amount : $help->amount);
-
-        $help->save();
-
-        Session::flash('flash_message', 'Updated '.$help->committee->name.' as helping committee.');
-
-        return back();
-    }
-
-    public function deleteHelp(Request $request, int $id): RedirectResponse
-    {
-        //        /** @var HelpingCommittee $help */
-        //        $help = HelpingCommittee::query()->findOrFail($id);
-        //
-        //        foreach (ActivityParticipation::withTrashed()->where('committees_activities_id', $help->id)->get() as $participation) {
-        //            $participation->delete();
-        //        }
-        //
-        //        $help->delete();
-        //        Session::flash('flash_message', 'Removed '.$help->committee->name.' as helping committee.');
-        //
-        //        return back();
     }
 }

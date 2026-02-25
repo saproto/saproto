@@ -5,7 +5,7 @@
         <div class="card-body">
             <form
                 method="post"
-                action="{{ route('event::addhelp', ['event' => $event]) }}"
+                action="{{ route('event::help::add', ['event' => $event]) }}"
             >
                 @csrf
 
@@ -49,7 +49,7 @@
 
                 @foreach ($event->activity->helpingCommittees as $committee)
                     <p>
-                        <strong>{{ $committee->name }}</strong>
+                        <strong>{{ $committee->committee->name }}</strong>
                         <br />
                         Helps with
                         {{ $committee->users->count() }}
@@ -58,14 +58,14 @@
 
                     <form
                         method="post"
-                        action="{{ route('event::updatehelp', ['id' => $committee->id]) }}"
+                        action="{{ route('event::help::update', ['helpingCommittee' => $committee]) }}"
                     >
                         @csrf
 
                         <div class="row">
                             <div class="col-md-3">
                                 <a
-                                    href="{{ route('event::deletehelp', ['id' => $committee->id]) }}"
+                                    href="{{ route('event::help::delete', ['helpingCommittee' => $committee]) }}"
                                     class="btn btn-danger btn-sm btn-block"
                                 >
                                     Delete
