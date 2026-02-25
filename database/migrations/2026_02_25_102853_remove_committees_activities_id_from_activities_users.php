@@ -39,6 +39,9 @@ return new class extends Migration
             ->delete();
 
         Schema::table('activities_users', function (Blueprint $table) {
+            $table->dropIndex([
+                'committees_activities_id'
+            ]);
             $table->dropColumn('committees_activities_id');
         });
     }
