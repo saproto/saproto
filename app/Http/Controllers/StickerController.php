@@ -45,7 +45,7 @@ class StickerController extends Controller
                 'id' => $item->id,
                 'lat' => $item->lat,
                 'lng' => $item->lng,
-                'user' => $item->user?->calling_name ?? 'Unknown',
+                'user' => $item->user->calling_name ?? 'Unknown',
                 'image' => $item->getImageUrl(),
                 'is_owner' => Auth::user()->id === $item->user?->id,
                 'date' => $item->created_at->format('d-m-Y'),
@@ -65,7 +65,7 @@ class StickerController extends Controller
                 'id' => $item->id,
                 'lat' => $item->lat,
                 'lng' => $item->lng,
-                'user' => $item->user?->calling_name ?? 'Unknown',
+                'user' => $item->user->calling_name ?? 'Unknown',
             ]);
 
         return view('stickers.overviewmap', ['stickers' => $stickers]);

@@ -29,7 +29,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read User|null $reporter
- * @property-read User $user
+ * @property-read User|null $user
  *
  * @method static Builder<static>|Sticker newModelQuery()
  * @method static Builder<static>|Sticker newQuery()

@@ -20,28 +20,10 @@ parameters:
 			path: app/Console/Commands/GoogleSync.php
 
 		-
-			message: '#^Expression on left side of \?\? is not nullable\.$#'
-			identifier: nullCoalesce.expr
-			count: 1
-			path: app/Events/StickerPlacedEvent.php
-
-		-
 			message: '#^PHPDoc tag @var with type Illuminate\\Database\\Eloquent\\Builder\<App\\Models\\Member\> is not subtype of native type Illuminate\\Database\\Eloquent\\Builder\<Illuminate\\Database\\Eloquent\\Model\>\.$#'
 			identifier: varTag.nativeType
 			count: 1
 			path: app/Http/Controllers/QueryController.php
-
-		-
-			message: '#^Expression on left side of \?\? is not nullable\.$#'
-			identifier: nullCoalesce.expr
-			count: 2
-			path: app/Http/Controllers/StickerController.php
-
-		-
-			message: '#^Using nullsafe property access on non\-nullable type App\\Models\\User\. Use \-\> instead\.$#'
-			identifier: nullsafe.neverNull
-			count: 2
-			path: app/Http/Controllers/StickerController.php
 
 		-
 			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\<Illuminate\\Database\\Eloquent\\Model\>\:\:unpayed\(\)\.$#'

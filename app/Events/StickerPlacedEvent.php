@@ -43,7 +43,7 @@ class StickerPlacedEvent implements ShouldBroadcastNow
             'id' => $this->sticker->id,
             'lat' => $this->sticker->lat,
             'lng' => $this->sticker->lng,
-            'user' => $this->sticker->user?->calling_name ?? 'Unknown',
+            'user' => $this->sticker->user->calling_name ?? 'Unknown',
             'image' => $this->sticker->getImageUrl(),
             'is_owner' => false,
             'date' => $this->sticker->created_at->format('Y-m-d'),
