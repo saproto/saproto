@@ -187,8 +187,8 @@ class Committee extends Model implements HasMedia
         return Event::query()
             ->orderBy('start')
             ->whereHas('activity', function (\Illuminate\Contracts\Database\Query\Builder $q) use ($activityIds) {
-            $q->whereIn('id', $activityIds);
-        })
+                $q->whereIn('id', $activityIds);
+            })
             ->unless(Auth::user()?->can('board'), static function ($q) {
                 $q->where(function (\Illuminate\Contracts\Database\Query\Builder $q) {
                     $q->where('secret', false)->orWhere('publication', '<', Date::now()->timestamp)
