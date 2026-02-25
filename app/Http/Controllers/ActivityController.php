@@ -154,7 +154,6 @@ class ActivityController extends Controller
             'activity_id' => $event->activity->id,
             'committee_id' => $committee->id,
             'amount' => $amount,
-            'notification_sent' => false,
         ]);
 
         Session::flash('flash_message', 'Added '.$committee->name.' as helping committee.');
@@ -170,7 +169,6 @@ class ActivityController extends Controller
 
         $help->amount = ($amount > 0 ? $amount : $help->amount);
 
-        $help->notification_sent = false;
         $help->save();
 
         Session::flash('flash_message', 'Updated '.$help->committee->name.' as helping committee.');

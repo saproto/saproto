@@ -17,7 +17,6 @@ use Override;
  * @property int $activity_id
  * @property int $committee_id
  * @property int $amount
- * @property bool $notification_sent
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Activity|null $activity
@@ -77,13 +76,5 @@ class HelpingCommittee extends Validatable
             ->whereNull('activities_users.deleted_at')
             ->withPivot('id')
             ->withTrashed();
-    }
-
-    #[Override]
-    protected function casts(): array
-    {
-        return [
-            'notification_sent' => 'boolean',
-        ];
     }
 }
