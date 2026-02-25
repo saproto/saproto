@@ -68,7 +68,7 @@ class ParticipationController extends Controller
 
         Session::flash('flash_message', 'You added '.$user->name.' for '.$event->title.'.');
 
-        Mail::to($participation->user)->queue(new ActivitySubscribedTo($participation, $helping->committee->name ?? null)->onQueue('high'));
+        Mail::to($participation->user)->queue(new ActivitySubscribedTo($participation, null)->onQueue('high'));
 
         return back();
     }

@@ -187,7 +187,7 @@ class ApiController extends Controller
                 'deleted_at' => $activity_participation->deleted_at,
             ];
         }
-        /** @var Collection<OrderLine>|null $orderlines */
+        /** @var Collection<int, OrderLine>|null $orderlines */
         $orderlines = OrderLine::query()
             ->with('molliePayment')
             ->with('withdrawal')
