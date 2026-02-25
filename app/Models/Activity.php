@@ -34,8 +34,6 @@ use Override;
  * @property Carbon|null $updated_at
  * @property string|null $comment
  * @property string|null $redirect_url
- * @property-read Collection<int, User> $allUsers
- * @property-read int|null $all_users_count
  * @property-read Collection<int, User> $backupUsers
  * @property-read int|null $backup_users_count
  * @property-read Account|null $closedAccount
@@ -119,18 +117,6 @@ class Activity extends Validatable
     /**
      * @return BelongsToMany<User, $this>
      */
-    public function allUsers(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'activities_users')
-            ->withPivot('id', 'is_present')
-            ->whereNull('activities_users.deleted_at')
-            ->where('backup', false)
-            ->withTimestamps();
-    }
-
-    /**
-     * @return BelongsToMany<User, $this>
-     */
     public function backupUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'activities_users')
@@ -141,21 +127,19 @@ class Activity extends Validatable
     }
 
     /**
-     * @return HasMany<HelpingCommittee, $this>
+     * @return int|null how many people actually showed up
      */
-    public function helpingCommittees(): HasMany
+    public function getAttendees(): ?int
     {
-        return $this->hasMany(HelpingCommittee::class, 'activity_id');
+        $present = $this->countPresent();
+
+        return $present > 0 ? $present : $this->attendees;
     }
 
-    public function isHelping(User $user): bool
+    public function countPresent(): int
     {
-        return $this->helpingCommittees->flatMap(static fn (HelpingCommittee $c) => $c->users)->contains('id', $user->id);
-    }
-
-    public function isEro(User $user): bool
-    {
-        return $this->helpingCommittees->where('committee_id', Config::integer('proto.committee.ero'))->flatMap(static fn (HelpingCommittee $c) => $c->users)->contains('id', $user->id);
+        return $this->users->wherePivot('is_present', true)
+            ->count();
     }
 
     /**
@@ -179,11 +163,29 @@ class Activity extends Validatable
     }
 
     /**
+     * @return HasMany<HelpingCommittee, $this>
+     */
+    public function helpingCommittees(): HasMany
+    {
+        return $this->hasMany(HelpingCommittee::class, 'activity_id');
+    }
+
+    public function isHelping(User $user): bool
+    {
+        return $this->helpingCommittees->flatMap(static fn (HelpingCommittee $c) => $c->users)->contains('id', $user->id);
+    }
+
+    public function isEro(User $user): bool
+    {
+        return $this->helpingCommittees->where('committee_id', Config::integer('proto.committee.ero'))->flatMap(static fn (HelpingCommittee $c) => $c->users)->contains('id', $user->id);
+    }
+
+    /**
      * @return bool Whether the user participates
      */
     public function isParticipating(User $user): bool
     {
-        return $this->getParticipation($user) instanceof ActivityParticipation;
+        return $this->users->contains('id', $user->id);
     }
 
     /**
@@ -256,25 +258,6 @@ class Activity extends Validatable
     public function withParticipants(): bool
     {
         return $this->participants !== 0;
-    }
-
-    /**
-     * @return int|null how many people actually showed up
-     */
-    public function getAttendees(): ?int
-    {
-        $present = $this->getPresent();
-
-        return $present > 0 ? $present : $this->attendees;
-    }
-
-    public function getPresent(): int
-    {
-        return ActivityParticipation::query()->where('activity_id', $this->id)
-            ->where('is_present', true)
-            ->where('backup', false)
-            ->whereNull('deleted_at')
-            ->count();
     }
 
     #[Override]

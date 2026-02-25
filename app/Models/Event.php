@@ -354,7 +354,7 @@ class Event extends Model implements HasMedia
         }
 
         if ($this->activity) {
-            $users = $users->merge($this->activity->allUsers->sort(static function ($a, $b): int {
+            $users = $users->merge($this->activity->users->sort(static function ($a, $b): int {
                 return (int) isset($a->pivot->committees_activities_id);
                 // prefer helper participation registration
             })->unique());
