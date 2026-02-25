@@ -10,7 +10,6 @@
             $newAchievements = $newAchievementsQuery->get();
             if (count($newAchievements) > 0) {
                 $newAchievementsQuery->update(['alerted' => true]);
-                $view->with('newAchievements', $newAchievements);
             }
 
             Cache::put($key, true, now()->addHours(6));
