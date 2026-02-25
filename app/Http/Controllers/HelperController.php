@@ -39,6 +39,7 @@ class HelperController extends Controller
         $helpingCommittee->users()->detach($user->id);
         $helpingCommittee->activity->event->updateUniqueUsersCount();
         Session::flash('flash_message', 'Removed '.$user->name.' as helper for the '.$helpingCommittee->committee->name.'.');
+
         return back();
     }
 }
