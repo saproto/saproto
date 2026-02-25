@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Models\MenuItem;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -40,7 +39,7 @@ class AppServiceProvider extends ServiceProvider
                 : $rule;
         });
 
-//        Model::preventLazyLoading(! app()->isProduction());
+        //        Model::preventLazyLoading(! app()->isProduction());
 
         view()->composer('*', function ($view) {
             view()->share('viewName', Str::replace('.', '-', (string) $view->getName()));

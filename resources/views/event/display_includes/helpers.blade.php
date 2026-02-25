@@ -4,7 +4,7 @@
     </div>
 
     <ul class="list-group list-group-flush">
-        @foreach ($event->activity->helpingCommittees as $key => $instance)
+        @foreach ($event->activity->helpingCommittees as $instance)
             <li class="list-group-item">
                 <p class="card-title">
                     <strong>
@@ -38,7 +38,7 @@
                                             ->filter(function ($user) {
                                                 return $user->id === Auth::id();
                                             })
-                                            ->first()->pivot->id,
+                                            ->first()->id,
                                     ])
                                 }}"
                             >
@@ -83,7 +83,6 @@
                             </div>
                         </form>
                     @endif
-                </p>
             </li>
         @endforeach
     </ul>

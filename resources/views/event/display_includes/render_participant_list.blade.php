@@ -3,7 +3,6 @@
 @endphp
 
 @foreach ($participants as $user)
-
     <?php $u = $user::class == User::class ? $user : $user->user; ?>
 
     <div class="btn-group btn-group-sm mb-1">

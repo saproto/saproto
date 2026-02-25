@@ -178,16 +178,16 @@ class ActivityController extends Controller
 
     public function deleteHelp(Request $request, int $id): RedirectResponse
     {
-//        /** @var HelpingCommittee $help */
-//        $help = HelpingCommittee::query()->findOrFail($id);
-//
-//        foreach (ActivityParticipation::withTrashed()->where('committees_activities_id', $help->id)->get() as $participation) {
-//            $participation->delete();
-//        }
-//
-//        $help->delete();
-//        Session::flash('flash_message', 'Removed '.$help->committee->name.' as helping committee.');
-//
-//        return back();
+        //        /** @var HelpingCommittee $help */
+        //        $help = HelpingCommittee::query()->findOrFail($id);
+        //
+        //        foreach (ActivityParticipation::withTrashed()->where('committees_activities_id', $help->id)->get() as $participation) {
+        //            $participation->delete();
+        //        }
+        //
+        //        $help->delete();
+        //        Session::flash('flash_message', 'Removed '.$help->committee->name.' as helping committee.');
+        //
+        //        return back();
     }
 }

@@ -370,7 +370,7 @@ class Event extends Model implements HasMedia
             return false;
         }
 
-        return $this->activity->isEro($user);
+        return $this->activity?->isEro($user);
     }
 
     /**

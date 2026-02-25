@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
@@ -42,8 +41,6 @@ use Override;
  * @property-read Account|null $closedAccount
  * @property-read Event|null $event
  * @property-read Collection<int, HelpingCommittee> $helpingCommittees
- * @property-read int|null $helping_committee_instances_count
- * @property-read Collection<int, Committee> $helpingCommittees
  * @property-read int|null $helping_committees_count
  * @property-read Collection<int, ActivityParticipation> $participation
  * @property-read int|null $participation_count
@@ -158,8 +155,6 @@ class Activity extends Validatable
             ->withTimestamps();
     }
 
-
-
     /**
      * @return HasMany<HelpingCommittee, $this>
      */
@@ -170,25 +165,29 @@ class Activity extends Validatable
 
     public function isHelping(User $user): bool
     {
-        return $this->helpingCommittees->flatMap(static fn (HelpingCommittee $c) => $c->users)->contains($user);
+        return $this->helpingCommittees->flatMap(static fn (HelpingCommittee $c) => $c->users)->contains('id', $user->id);
     }
 
-//    /**
-//     * @return \Illuminate\Support\Collection<int, ActivityParticipation> The ActivityParticipations for the helping users.
-//     */
-//    public function helpingUsers(int $help_id): \Illuminate\Support\Collection
-//    {
-//        return ActivityParticipation::query()->whereNull('activities_users.deleted_at')->where('committees_activities_id', $help_id)->get();
-//    }
+    public function isEro(User $user): bool
+    {
+        return $this->helpingCommittees->where('committee_id', Config::integer('proto.committee.ero'))->flatMap(static fn (HelpingCommittee $c) => $c->users)->contains('id', $user->id);
+    }
 
-//    /**
-//     * @return BelongsToMany<User, $this>
-//     */
-//    public function helpingUsers(): BelongsToMany
-//    {
-//        return $this->belongsToMany(User::class, 'activities_helpers');
-//    }
+    //    /**
+    //     * @return \Illuminate\Support\Collection<int, ActivityParticipation> The ActivityParticipations for the helping users.
+    //     */
+    //    public function helpingUsers(int $help_id): \Illuminate\Support\Collection
+    //    {
+    //        return ActivityParticipation::query()->whereNull('activities_users.deleted_at')->where('committees_activities_id', $help_id)->get();
+    //    }
 
+    //    /**
+    //     * @return BelongsToMany<User, $this>
+    //     */
+    //    public function helpingUsers(): BelongsToMany
+    //    {
+    //        return $this->belongsToMany(User::class, 'activities_helpers');
+    //    }
 
     /**
      * @return HasMany<ActivityParticipation, $this>
@@ -197,20 +196,20 @@ class Activity extends Validatable
     {
         return $this->hasMany(ActivityParticipation::class, 'activity_id');
     }
-//
-//    public function getHelperParticipation(User $user, ?HelpingCommittee $h = null): ?ActivityParticipation
-//    {
-//        return $this->participation
-//            ->filter(fn ($p): bool => $p->user_id === $user->id)
-//            ->filter(fn ($p): bool => $p->committees_activities_id !== null)
-//            ->first(function ($p) use ($h): bool {
-//                if (! $h instanceof HelpingCommittee) {
-//                    return true;
-//                }
-//
-//                return $p->committees_activities_id === $h->id;
-//            });
-//    }
+    //
+    //    public function getHelperParticipation(User $user, ?HelpingCommittee $h = null): ?ActivityParticipation
+    //    {
+    //        return $this->participation
+    //            ->filter(fn ($p): bool => $p->user_id === $user->id)
+    //            ->filter(fn ($p): bool => $p->committees_activities_id !== null)
+    //            ->first(function ($p) use ($h): bool {
+    //                if (! $h instanceof HelpingCommittee) {
+    //                    return true;
+    //                }
+    //
+    //                return $p->committees_activities_id === $h->id;
+    //            });
+    //    }
 
     /**
      * @return ActivityParticipation|null Return the ActivityParticipation for the supplied user. Returns null if users doesn't participate.
@@ -232,20 +231,20 @@ class Activity extends Validatable
         return $this->getParticipation($user) instanceof ActivityParticipation;
     }
 
-//    /**
-//     * @return bool Whether the user or committee is helping
-//     */
-//    public function isHelping(User $user): bool
-//    {
-//        return $this->helpingUsers
-//            ->includes($user);
-//    }
+    //    /**
+    //     * @return bool Whether the user or committee is helping
+    //     */
+    //    public function isHelping(User $user): bool
+    //    {
+    //        return $this->helpingUsers
+    //            ->includes($user);
+    //    }
 
-//    public function isEro(User $user): bool
-//    {
-//        return $th
-//        return $this->participation->whereNotNull('committees_activities_id')->first(fn ($p): bool => $p->user_id === $user->id && $p->committees_activities_id === Config::integer('proto.committee.ero')) !== null;
-//    }
+    //    public function isEro(User $user): bool
+    //    {
+    //        return $th
+    //        return $this->participation->whereNotNull('committees_activities_id')->first(fn ($p): bool => $p->user_id === $user->id && $p->committees_activities_id === Config::integer('proto.committee.ero')) !== null;
+    //    }
 
     /**
      * @return bool Whether the activity is full
