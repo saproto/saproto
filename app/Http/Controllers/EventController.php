@@ -102,8 +102,6 @@ class EventController extends Controller
                 $query->where('user_id', Auth::id());
             },
             'activity.backupUsers.media',
-            'activity.helpingCommitteeInstances.committee',
-            'activity.helpingCommitteeInstances.users.media',
             'videos',
             'albums',
             'dinnerforms',
@@ -701,7 +699,7 @@ CALSCALE:GREGORIAN
             ]);
             $newActivity->save();
 
-            foreach ($event->activity->helpingCommitteeInstances as $helpingCommittee) {
+            foreach ($event->activity->helpingCommittees as $helpingCommittee) {
                 HelpingCommittee::query()->create([
                     'activity_id' => $newActivity->id,
                     'committee_id' => $helpingCommittee->committee_id,

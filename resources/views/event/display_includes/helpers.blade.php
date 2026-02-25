@@ -4,7 +4,7 @@
     </div>
 
     <ul class="list-group list-group-flush">
-        @foreach ($event->activity->helpingCommitteeInstances as $key => $instance)
+        @foreach ($event->activity->helpingCommittees as $key => $instance)
             <li class="list-group-item">
                 <p class="card-title">
                     <strong>

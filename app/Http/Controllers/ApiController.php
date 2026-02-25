@@ -174,7 +174,6 @@ class ApiController extends Controller
 
         $activityParticipations = ActivityParticipation::query()
             ->with('activity.event')
-            ->with('help.committee')
             ->where('user_id', $user->id)
             ->get();
         foreach ($activityParticipations as $activity_participation) {
@@ -182,15 +181,13 @@ class ApiController extends Controller
                 'name' => $activity_participation->activity?->event?->title,
                 'date' => $activity_participation->activity?->event ? Date::createFromTimestamp($activity_participation->activity->event->start, date_default_timezone_get())->format('Y-m-d') : null,
                 'was_present' => $activity_participation->is_present,
-                'helped_as' => $activity_participation->help ? $activity_participation->help->committee->name : null,
                 'backup' => $activity_participation->backup,
                 'created_at' => $activity_participation->created_at,
                 'updated_at' => $activity_participation->updated_at,
                 'deleted_at' => $activity_participation->deleted_at,
-
             ];
         }
-
+        /** @var Collection<OrderLine>|null $orderlines */
         $orderlines = OrderLine::query()
             ->with('molliePayment')
             ->with('withdrawal')

@@ -3,8 +3,6 @@
 @endphp
 
 @foreach ($participants as $user)
-    <?php $pid =
-    $user::class == User::class && $event ? $user->pivot->id : $user->id; ?>
 
     <?php $u = $user::class == User::class ? $user : $user->user; ?>
 
@@ -22,7 +20,7 @@
         </a>
         @if (Auth::user()->can('board') && $event && ! $event->activity->closed)
             <a
-                href="{{ route('event::deleteparticipation', ['participation' => $pid]) }}"
+                href="{{ route('event::deleteparticipation', ['participation' => $u->id]) }}"
                 class="btn btn-outline-warning"
             >
                 <i class="fas fa-times" aria-hidden="true"></i>

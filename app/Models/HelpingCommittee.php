@@ -72,9 +72,6 @@ class HelpingCommittee extends Validatable
     public function users(): BelongsToMany
     {
         return $this
-            ->belongsToMany(User::class, 'activities_users', 'committees_activities_id')
-            ->whereNull('activities_users.deleted_at')
-            ->withPivot('id')
-            ->withTrashed();
+            ->belongsToMany(User::class, 'activities_helpers', 'committees_activities_id');
     }
 }

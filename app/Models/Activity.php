@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
@@ -40,7 +41,7 @@ use Override;
  * @property-read int|null $backup_users_count
  * @property-read Account|null $closedAccount
  * @property-read Event|null $event
- * @property-read Collection<int, HelpingCommittee> $helpingCommitteeInstances
+ * @property-read Collection<int, HelpingCommittee> $helpingCommittees
  * @property-read int|null $helping_committee_instances_count
  * @property-read Collection<int, Committee> $helpingCommittees
  * @property-read int|null $helping_committees_count
@@ -114,9 +115,8 @@ class Activity extends Validatable
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'activities_users')
-            ->withPivot('id', 'committees_activities_id', 'is_present')
+            ->withPivot('id', 'is_present')
             ->whereNull('activities_users.deleted_at')
-            ->whereNull('committees_activities_id')
             ->where('backup', false)
             ->withTimestamps();
     }
@@ -127,9 +127,8 @@ class Activity extends Validatable
     public function presentUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'activities_users')
-            ->withPivot('id', 'committees_activities_id', 'is_present')
+            ->withPivot('id', 'is_present')
             ->whereNull('activities_users.deleted_at')
-            ->whereNull('committees_activities_id')
             ->where('activities_users.is_present', true)
             ->where('backup', false)
             ->withTimestamps();
@@ -141,7 +140,7 @@ class Activity extends Validatable
     public function allUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'activities_users')
-            ->withPivot('id', 'committees_activities_id', 'is_present')
+            ->withPivot('id', 'is_present')
             ->whereNull('activities_users.deleted_at')
             ->where('backup', false)
             ->withTimestamps();
@@ -154,35 +153,42 @@ class Activity extends Validatable
     {
         return $this->belongsToMany(User::class, 'activities_users')
             ->whereNull('activities_users.deleted_at')
-            ->whereNull('committees_activities_id')
             ->where('backup', true)
             ->withPivot('id')
             ->withTimestamps();
     }
 
-    /**
-     * @return BelongsToMany<Committee, $this>
-     */
-    public function helpingCommittees(): BelongsToMany
-    {
-        return $this->belongsToMany(Committee::class, 'committees_activities')->withPivot(['amount', 'id'])->withTimestamps();
-    }
+
 
     /**
      * @return HasMany<HelpingCommittee, $this>
      */
-    public function helpingCommitteeInstances(): HasMany
+    public function helpingCommittees(): HasMany
     {
         return $this->hasMany(HelpingCommittee::class, 'activity_id');
     }
 
-    /**
-     * @return \Illuminate\Support\Collection<int, ActivityParticipation> The ActivityParticipations for the helping users.
-     */
-    public function helpingUsers(int $help_id): \Illuminate\Support\Collection
+    public function isHelping(User $user): bool
     {
-        return ActivityParticipation::query()->whereNull('activities_users.deleted_at')->where('committees_activities_id', $help_id)->get();
+        return $this->helpingCommittees->flatMap(static fn (HelpingCommittee $c) => $c->users)->contains($user);
     }
+
+//    /**
+//     * @return \Illuminate\Support\Collection<int, ActivityParticipation> The ActivityParticipations for the helping users.
+//     */
+//    public function helpingUsers(int $help_id): \Illuminate\Support\Collection
+//    {
+//        return ActivityParticipation::query()->whereNull('activities_users.deleted_at')->where('committees_activities_id', $help_id)->get();
+//    }
+
+//    /**
+//     * @return BelongsToMany<User, $this>
+//     */
+//    public function helpingUsers(): BelongsToMany
+//    {
+//        return $this->belongsToMany(User::class, 'activities_helpers');
+//    }
+
 
     /**
      * @return HasMany<ActivityParticipation, $this>
@@ -191,20 +197,20 @@ class Activity extends Validatable
     {
         return $this->hasMany(ActivityParticipation::class, 'activity_id');
     }
-
-    public function getHelperParticipation(User $user, ?HelpingCommittee $h = null): ?ActivityParticipation
-    {
-        return $this->participation
-            ->filter(fn ($p): bool => $p->user_id === $user->id)
-            ->filter(fn ($p): bool => $p->committees_activities_id !== null)
-            ->first(function ($p) use ($h): bool {
-                if (! $h instanceof HelpingCommittee) {
-                    return true;
-                }
-
-                return $p->committees_activities_id === $h->id;
-            });
-    }
+//
+//    public function getHelperParticipation(User $user, ?HelpingCommittee $h = null): ?ActivityParticipation
+//    {
+//        return $this->participation
+//            ->filter(fn ($p): bool => $p->user_id === $user->id)
+//            ->filter(fn ($p): bool => $p->committees_activities_id !== null)
+//            ->first(function ($p) use ($h): bool {
+//                if (! $h instanceof HelpingCommittee) {
+//                    return true;
+//                }
+//
+//                return $p->committees_activities_id === $h->id;
+//            });
+//    }
 
     /**
      * @return ActivityParticipation|null Return the ActivityParticipation for the supplied user. Returns null if users doesn't participate.
@@ -215,7 +221,7 @@ class Activity extends Validatable
             return null;
         }
 
-        return $this->participation->whereNull('committees_activities_id')->first(static fn ($p): bool => $p->user_id === $user->id);
+        return $this->participation->first(static fn ($p): bool => $p->user_id === $user->id);
     }
 
     /**
@@ -226,18 +232,20 @@ class Activity extends Validatable
         return $this->getParticipation($user) instanceof ActivityParticipation;
     }
 
-    /**
-     * @return bool Whether the user or committee is helping
-     */
-    public function isHelping(User $user): bool
-    {
-        return $this->getHelperParticipation($user) instanceof ActivityParticipation;
-    }
+//    /**
+//     * @return bool Whether the user or committee is helping
+//     */
+//    public function isHelping(User $user): bool
+//    {
+//        return $this->helpingUsers
+//            ->includes($user);
+//    }
 
-    public function isEro(User $user): bool
-    {
-        return $this->participation->whereNotNull('committees_activities_id')->first(fn ($p): bool => $p->user_id === $user->id && $p->committees_activities_id === Config::integer('proto.committee.ero')) !== null;
-    }
+//    public function isEro(User $user): bool
+//    {
+//        return $th
+//        return $this->participation->whereNotNull('committees_activities_id')->first(fn ($p): bool => $p->user_id === $user->id && $p->committees_activities_id === Config::integer('proto.committee.ero')) !== null;
+//    }
 
     /**
      * @return bool Whether the activity is full

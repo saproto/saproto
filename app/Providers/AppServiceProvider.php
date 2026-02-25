@@ -40,7 +40,7 @@ class AppServiceProvider extends ServiceProvider
                 : $rule;
         });
 
-        Model::preventLazyLoading(! app()->isProduction());
+//        Model::preventLazyLoading(! app()->isProduction());
 
         view()->composer('*', function ($view) {
             view()->share('viewName', Str::replace('.', '-', (string) $view->getName()));
