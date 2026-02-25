@@ -78,7 +78,6 @@ use App\Models\Photo;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\View;
 
 require __DIR__.'/minisites.php';
 /* Route block convention:
@@ -98,11 +97,6 @@ require __DIR__.'/minisites.php';
  *
  *
  */
-
-/* --- Pass view name to body class --- */
-View::composer('*', function ($view) {
-    View::share('viewName', $view->getName());
-});
 
 Route::middleware('forcedomain')->group(function () {
     /* --- The main route for the frontpage --- */

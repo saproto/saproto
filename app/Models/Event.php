@@ -19,7 +19,6 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Str;
 use Override;
@@ -200,41 +199,6 @@ class Event extends Model implements HasMedia
 
         // show non-secret events only when published
         return ! $this->secret && (! $this->publication || $this->isPublished());
-    }
-
-    /**
-     * @return Builder<Event>
-     */
-    public static function getEventBlockQuery(?User $user = null): Builder
-    {
-        if (! $user instanceof User) {
-            $user = Auth::user();
-        }
-
-        return Event::query()
-            ->orderBy('start')
-            ->with('media')
-            ->with('activity', static function ($e) use ($user) {
-                $e
-                    ->with(['participation' => function ($q) use ($user) {
-                        $q->where('user_id', $user?->id);
-                    }])
-                    ->withCount([
-                        'users',
-                    ]);
-            })
-            ->with('committee', static function ($q) use ($user) {
-                $q->with(['users' => function ($q) use ($user) {
-                    $q->where('user_id', $user?->id);
-                }]);
-            })
-            ->with(['tickets' => function ($q) use ($user) {
-                $q->with('purchases', static function ($q) use ($user) {
-                    $q->where('user_id', $user?->id);
-                })->whereHas('purchases', static function ($q) use ($user) {
-                    $q->where('user_id', $user?->id);
-                });
-            }]);
     }
 
     public function isPublished(): bool

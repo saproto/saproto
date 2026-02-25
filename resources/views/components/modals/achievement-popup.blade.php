@@ -1,3 +1,23 @@
+@php
+    use Illuminate\Support\Facades\Auth;
+    use Illuminate\Support\Facades\Cache;
+    if (Auth::check()) {
+        $key = 'achievement-popup::user::' . Auth::id();
+        if (! Cache::has($key)) {
+            $newAchievementsQuery = Auth::user()
+                ->achievements()
+                ->where('alerted', false);
+            $newAchievements = $newAchievementsQuery->get();
+            if (count($newAchievements) > 0) {
+                $newAchievementsQuery->update(['alerted' => true]);
+                $view->with('newAchievements', $newAchievements);
+            }
+
+            Cache::put($key, true, now()->addHours(6));
+        }
+    }
+@endphp
+
 @if (isset($newAchievements) && count($newAchievements) > 0)
     <div
         class="modal fade"

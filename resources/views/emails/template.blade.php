@@ -32,7 +32,7 @@
     </head>
 
     <body
-        class="bg-body template-{{ $viewName }}"
+        class="bg-body"
         style="margin: 0; padding: 0; font-family: Arial, sans-serif"
     >
         <br />
