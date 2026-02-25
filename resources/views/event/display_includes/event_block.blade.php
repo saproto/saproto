@@ -54,7 +54,7 @@
                 $participation = $event->activity?->getParticipation(Auth::user());
             @endphp
 
-            @if (Auth::check() && ! empty($participation))
+            @if (Auth::check() && ! $event->activity->isParticipating(Auth::user()))
                 @if ($participation->backup)
                     <i
                         class="fas fa-check text-warning fa-fw"

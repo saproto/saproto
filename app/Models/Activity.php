@@ -136,6 +136,9 @@ class Activity extends Validatable
         return $present > 0 ? $present : $this->attendees;
     }
 
+    /**
+     * @return int how many people are marked as present with the tool
+     */
     public function countPresent(): int
     {
         return $this->users->wherePivot('is_present', true)
