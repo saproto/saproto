@@ -39,7 +39,8 @@ class EventController extends Controller
         $category = EventCategory::query()->find($request->input('category'));
 
         // if there is a category, get only the events that are in that category
-        $events = Event::getEventBlockQuery()
+        $events = Event::query()
+            ->orderBy('start')
             ->when($category, static function ($query) use ($category) {
                 $query->whereHas('Category', static function (Builder $q) use ($category) {
                     $q->where('id', $category->id)->where('deleted_at', null);
@@ -244,7 +245,8 @@ class EventController extends Controller
         $category = EventCategory::query()->find($request->input('category'));
 
         // if there is a category, get only the events that are in that category
-        $eventsPerMonth = Event::getEventBlockQuery()
+        $eventsPerMonth = Event::query()
+            ->orderBy('start')
             ->unless(empty($category), static function ($query) use ($category) {
                 $query->whereHas('Category', static function (Builder $q) use ($category) {
                     $q->where('id', $category->id)->where('deleted_at', null);
@@ -419,7 +421,8 @@ class EventController extends Controller
         $user = Auth::user() ?? null;
         $noFutureLimit = $request->boolean('no_future_limit');
         /** @var Collection<int, Event> $events */
-        $events = Event::getEventBlockQuery()
+        $events = Event::query()
+            ->orderBy('start')
             ->where('end', '>', Date::today()->timestamp)
             ->unless($noFutureLimit, static function ($query) {
                 $query->where('start', '<', Date::now()->addMonth()->timestamp);
@@ -557,7 +560,8 @@ CALSCALE:GREGORIAN
         $reminder = $user?->pref_calendar_alarm;
 
         $relevant_only = $user?->pref_calendar_relevant_only;
-        $events = Event::getEventBlockQuery($user)
+        $events = Event::query()
+            ->orderBy('start')
             ->where('start', '>', Date::now()->subMonths(6)->timestamp)
             ->unless($user, function ($query) {
                 $query->where('secret', false);
