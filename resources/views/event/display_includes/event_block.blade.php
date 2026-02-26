@@ -49,29 +49,22 @@
                 ></i>
             @endif
 
-            {{-- Participating --}}
-            @php
-                $participation = $event->activity?->getParticipation(Auth::user());
-            @endphp
-
-            @if (Auth::check() && ! $event->activity->isParticipating(Auth::user()))
-                @if ($participation->backup)
-                    <i
-                        class="fas fa-check text-warning fa-fw"
-                        aria-hidden="true"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="You are on the backuplist!"
-                    ></i>
-                @else
-                    <i
-                        class="fas fa-check fa-fw text-primary"
-                        aria-hidden="true"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="You are participating!"
-                    ></i>
-                @endif
+            @if (Auth::check() && ! $event->activity?->isParticipating(Auth::user()))
+                <i
+                    class="fas fa-check fa-fw text-primary"
+                    aria-hidden="true"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="You are participating!"
+                ></i>
+            @elseif (Auth::check() && $event->activity?->isOnBackupList(Auth::user()))
+                <i
+                    class="fas fa-check text-warning fa-fw"
+                    aria-hidden="true"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="You are on the backuplist!"
+                ></i>
             @endif
 
             @if (Auth::check() && $event->activity?->isHelping(Auth::user()))

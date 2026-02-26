@@ -192,6 +192,14 @@ class Activity extends Validatable
     }
 
     /**
+     * @return bool Whether the user is on the backup list
+     */
+    public function isOnBackupList(User $user): bool
+    {
+        return $this->backupUsers->contains('id', $user->id);
+    }
+
+    /**
      * @return bool Whether the activity is full
      */
     public function isFull(): bool

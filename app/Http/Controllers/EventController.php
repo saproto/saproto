@@ -446,7 +446,7 @@ class EventController extends Controller
                 'has_signup' => $event->activity !== null,
                 'price' => $event->activity?->price,
                 'no_show_fee' => $event->activity?->no_show_fee,
-                'user_signedup' => $user && $userParticipation !== null,
+                'user_signedup' => $user && ($event->activity?->isParticipating($user)||$event->activity?->isOnBackupList($user)),
                 'user_signedup_backup' => $user && $userParticipation?->backup,
                 'user_signedup_id' => $userParticipation?->id,
                 'can_signup' => ($user && $event->activity?->canSubscribe()),
@@ -560,7 +560,6 @@ CALSCALE:GREGORIAN
             $status = null;
 
             if ($user) {
-                $userParticipation = $event->activity?->getParticipation($user);
                 if ($event->isOrganising($user)) {
                     $status = 'Organizing';
                     $info_text .= ' You are organizing this activity.';
@@ -568,10 +567,10 @@ CALSCALE:GREGORIAN
                     if ($event->activity->isHelping($user)) {
                         $status = 'Helping';
                         $info_text .= ' You are helping with this activity.';
-                    } elseif ($userParticipation?->backup) {
+                    } elseif ($event->activity->isOnBackupList($user)) {
                         $status = 'On back-up list';
                         $info_text .= ' You are on the back-up list for this activity';
-                    } elseif ($userParticipation !== null || $event->hasBoughtTickets($user)) {
+                    } elseif ($event->activity->isParticipating($user) || $event->hasBoughtTickets($user)) {
                         $status = 'Participating';
                         $info_text .= ' You are participating in this activity.';
                     }
