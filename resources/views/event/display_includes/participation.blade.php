@@ -66,7 +66,7 @@
             @if ($event->activity->isParticipating(Auth::user()) && $event->activity->canUnsubscribe())
                 <a
                     class="list-group-item bg-danger text-white"
-                    href="{{ route('event::deleteparticipation', ['event' => $event, 'user'=>Auth::user()]) }}"
+                    href="{{ route('event::deleteparticipation', ['event' => $event, 'user' => Auth::user()]) }}"
                 >
                     Sign me out.
                     <i class="fas fa-frown-o" aria-hidden="true"></i>
@@ -74,7 +74,7 @@
             @elseif ($event->activity->isOnBackupList(Auth::user()))
                 <a
                     class="list-group-item bg-danger text-white"
-                    href="{{ route('event::deleteparticipation', ['event' => $event, 'user'=>Auth::user()]) }}"
+                    href="{{ route('event::deleteparticipation', ['event' => $event, 'user' => Auth::user()]) }}"
                 >
                     Sign me out of the back-up list.
                 </a>

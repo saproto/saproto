@@ -444,7 +444,7 @@ class EventController extends Controller
                 'has_signup' => $event->activity !== null,
                 'price' => $event->activity?->price,
                 'no_show_fee' => $event->activity?->no_show_fee,
-                'user_signedup' => $user && ($event->activity?->isParticipating($user)||$event->activity?->isOnBackupList($user)),
+                'user_signedup' => $user && ($event->activity?->isParticipating($user) || $event->activity?->isOnBackupList($user)),
                 'user_signedup_backup' => $user && $userParticipation?->backup,
                 'user_signedup_id' => $userParticipation?->id,
                 'can_signup' => ($user && $event->activity?->canSubscribe()),

@@ -19,7 +19,7 @@
         </a>
         @if (Auth::user()->can('board') && $event && ! $event->activity->closed)
             <a
-                href="{{ route('event::deleteparticipation', ['event' => $event, 'user'=>$user]) }}"
+                href="{{ route('event::deleteparticipation', ['event' => $event, 'user' => $user]) }}"
                 class="btn btn-outline-warning"
             >
                 <i class="fas fa-times" aria-hidden="true"></i>
