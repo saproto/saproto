@@ -114,6 +114,9 @@ class Activity extends Validatable
             ->withTimestamps();
     }
 
+    /**
+     * @return Attribute<Collection<int, User>, never>
+     */
     protected function users(): Attribute
     {
         return Attribute::make(
@@ -121,6 +124,9 @@ class Activity extends Validatable
         );
     }
 
+    /**
+     * @return Attribute<Collection<int, User>, never>
+     */
     protected function backupUsers(): Attribute
     {
         return Attribute::make(
@@ -143,7 +149,7 @@ class Activity extends Validatable
      */
     public function countPresent(): int
     {
-        return $this->users->wherePivot('is_present', true)
+        return $this->users->where('pivot.is_present', true)
             ->count();
     }
 

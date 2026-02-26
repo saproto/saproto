@@ -117,7 +117,7 @@ class ParticipationController extends Controller
 
     public static function processBackupQueue(Activity $activity): void
     {
-        while ($activity->backupUsers()->count() > 0 && $activity->users()->count() < $activity->participants) {
+        while ($activity->backupUsers->count() > 0 && $activity->users->count() < $activity->participants) {
             self::transferOneBackupUser($activity);
         }
     }
