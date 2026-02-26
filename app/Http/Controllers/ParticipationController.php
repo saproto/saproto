@@ -76,25 +76,25 @@ class ParticipationController extends Controller
     /**
      * @throws Exception
      */
-    public function destroy(ActivityParticipation $participation): RedirectResponse
+    public function destroy(Event $event, User $user): RedirectResponse
     {
-        $participation->load(['activity', 'activity.event', 'user']);
 
-        abort_unless($participation->user->id == Auth::id() || Auth::user()->can('board'), 403, 'You are not allowed to unsubscribe this user from this event.');
+        abort_unless($user->id == Auth::id() || Auth::user()->can('board'), 403, 'You are not allowed to unsubscribe this user from this event.');
 
-        abort_if($participation->activity->closed, 403, 'This activity is closed, you cannot change participation anymore.');
+        abort_if($event->activity->closed, 403, 'This activity is closed, you cannot change participation anymore.');
 
-        abort_unless($participation->backup || $participation->activity->canUnsubscribe() || Auth::user()->can('board'), 403, 'You cannot unsubscribe for this event at this time.');
+        abort_unless($event->activity->isOnBackupList($user) || $event->activity->canUnsubscribe() || Auth::user()->can('board'), 403, 'You cannot unsubscribe for this event at this time.');
 
-        if ($participation->user->id !== Auth::id()) {
-            Mail::to($participation->user)->queue(new ActivityUnsubscribedFrom($participation)->onQueue('high'));
+        $participation = ActivityParticipation::query()->where('activity_id', $event->activity->id)->where('user_id', $user->id)->firstOrFail();
+        if ($user->id !== Auth::id()) {
+            Mail::to($user)->queue(new ActivityUnsubscribedFrom($participation)->onQueue('high'));
         }
 
         $participation->delete();
 
         Session::flash('flash_message', $participation->user->name.' is not attending '.$participation->activity->event->title.' anymore.');
 
-        if (! $participation->backup && $participation->activity->users()->count() < $participation->activity->participants) {
+        if (! $participation->backup && $participation->activity->users->count() < $participation->activity->participants) {
             self::transferOneBackupUser($participation->activity);
         }
 

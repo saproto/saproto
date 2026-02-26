@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Database\Factories\ActivityFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -105,25 +106,26 @@ class Activity extends Validatable
     /**
      * @return BelongsToMany<User, $this>
      */
-    public function users(): BelongsToMany
+    public function allUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'activities_users')
-            ->withPivot('id', 'is_present')
+            ->withPivot('id', 'is_present', 'backup')
             ->whereNull('activities_users.deleted_at')
-            ->where('backup', false)
             ->withTimestamps();
     }
 
-    /**
-     * @return BelongsToMany<User, $this>
-     */
-    public function backupUsers(): BelongsToMany
+    protected function users(): Attribute
     {
-        return $this->belongsToMany(User::class, 'activities_users')
-            ->whereNull('activities_users.deleted_at')
-            ->where('backup', true)
-            ->withPivot('id')
-            ->withTimestamps();
+        return Attribute::make(
+            get: fn () => $this->allUsers->where('pivot.backup', false),
+        );
+    }
+
+    protected function backupUsers(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->allUsers->where('pivot.backup', true),
+        );
     }
 
     /**
