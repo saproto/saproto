@@ -443,7 +443,7 @@ class EventController extends Controller
                 'price' => $event->activity?->price,
                 'no_show_fee' => $event->activity?->no_show_fee,
                 'user_signedup' => $user && ($event->activity?->isParticipating($user) || $event->activity?->isOnBackupList($user)),
-                'user_signedup_backup' => $user &&  $event->activity?->isOnBackupList($user),
+                'user_signedup_backup' => $user && $event->activity?->isOnBackupList($user),
                 'can_signup' => ($user && $event->activity?->canSubscribe()),
                 'can_signup_backup' => ($user && $event->activity?->canSubscribeBackup()),
                 'can_signout' => ($user && $event->activity?->canUnsubscribe()),
