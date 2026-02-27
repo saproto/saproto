@@ -49,7 +49,7 @@
                 ></i>
             @endif
 
-            @if (Auth::check() && ! $event->activity?->isParticipating(Auth::user()))
+            @if (Auth::check() && $event->activity?->isParticipating(Auth::user()))
                 <i
                     class="fas fa-check fa-fw text-primary"
                     aria-hidden="true"
