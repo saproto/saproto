@@ -21,7 +21,6 @@ use Override;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property bool $backup
- * @property Carbon|null $deleted_at
  * @property-read Activity|null $activity
  * @property-read HelpingCommittee|null $help
  * @property-read User|null $user
@@ -35,7 +34,6 @@ use Override;
  * @method static Builder<static>|ActivityParticipation whereBackup($value)
  * @method static Builder<static>|ActivityParticipation whereCommitteesActivitiesId($value)
  * @method static Builder<static>|ActivityParticipation whereCreatedAt($value)
- * @method static Builder<static>|ActivityParticipation whereDeletedAt($value)
  * @method static Builder<static>|ActivityParticipation whereId($value)
  * @method static Builder<static>|ActivityParticipation whereIsPresent($value)
  * @method static Builder<static>|ActivityParticipation whereUpdatedAt($value)
@@ -49,8 +47,6 @@ class ActivityParticipation extends Model
 {
     /** @use HasFactory<ActivityParticipationFactory>*/
     use HasFactory;
-
-    use SoftDeletes;
 
     protected $table = 'activities_users';
 
@@ -75,13 +71,5 @@ class ActivityParticipation extends Model
     public function activity(): BelongsTo
     {
         return $this->belongsTo(Activity::class);
-    }
-
-    #[Override]
-    protected function casts(): array
-    {
-        return [
-            'deleted_at' => 'datetime',
-        ];
     }
 }

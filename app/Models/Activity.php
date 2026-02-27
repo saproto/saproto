@@ -110,7 +110,6 @@ class Activity extends Validatable
     {
         return $this->belongsToMany(User::class, 'activities_users')
             ->withPivot('id', 'is_present', 'backup')
-            ->whereNull('activities_users.deleted_at')
             ->withTimestamps();
     }
 
