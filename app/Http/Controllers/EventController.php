@@ -403,7 +403,7 @@ class EventController extends Controller
 
         foreach ($events as $event) {
             if ($event->secret && ($user == null || $event->activity == null || (
-                    ! $event->activity->isOnBackupList($user) &&
+                ! $event->activity->isOnBackupList($user) &&
                 ! $event->activity->isParticipating($user) &&
                 ! $event->activity->isHelping($user) &&
                 ! $event->isOrganising($user)
@@ -536,7 +536,7 @@ CALSCALE:GREGORIAN
                 continue;
             }
 
-            if (! $event->force_calendar_sync && $relevant_only && ! ($event->activity?->isParticipating($user) || $event->activity?->isOnBackupList($user)  || $event->isOrganising($user) || $event->hasBoughtTickets($user) || $event->activity?->isHelping($user))) {
+            if (! $event->force_calendar_sync && $relevant_only && ! ($event->activity?->isParticipating($user) || $event->activity?->isOnBackupList($user) || $event->isOrganising($user) || $event->hasBoughtTickets($user) || $event->activity?->isHelping($user))) {
                 continue;
             }
 
