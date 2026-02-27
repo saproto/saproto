@@ -153,26 +153,6 @@ class Activity extends Validatable
     }
 
     /**
-     * @return HasMany<ActivityParticipation, $this>
-     */
-    public function participation(): HasMany
-    {
-        return $this->hasMany(ActivityParticipation::class, 'activity_id');
-    }
-
-    /**
-     * @return ActivityParticipation|null Return the ActivityParticipation for the supplied user. Returns null if users doesn't participate.
-     */
-    public function getParticipation(?User $user): ?ActivityParticipation
-    {
-        if (! $user instanceof User) {
-            return null;
-        }
-
-        return $this->participation->first(static fn ($p): bool => $p->user_id === $user->id);
-    }
-
-    /**
      * @return HasMany<HelpingCommittee, $this>
      */
     public function helpingCommittees(): HasMany

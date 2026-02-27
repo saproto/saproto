@@ -411,8 +411,6 @@ class EventController extends Controller
                 continue;
             }
 
-            $userParticipation = $event->activity?->getParticipation($user);
-
             $participants = ($user?->is_member && $event->activity ? $event->activity->users->map(static fn ($item) => (object) [
                 'name' => $item->name,
                 'photo' => $item->getFirstMediaUrl('profile_picture', 'thumb'),
@@ -445,8 +443,7 @@ class EventController extends Controller
                 'price' => $event->activity?->price,
                 'no_show_fee' => $event->activity?->no_show_fee,
                 'user_signedup' => $user && ($event->activity?->isParticipating($user) || $event->activity?->isOnBackupList($user)),
-                'user_signedup_backup' => $user && $userParticipation?->backup,
-                'user_signedup_id' => $userParticipation?->id,
+                'user_signedup_backup' => $user &&  $event->activity?->isOnBackupList($user),
                 'can_signup' => ($user && $event->activity?->canSubscribe()),
                 'can_signup_backup' => ($user && $event->activity?->canSubscribeBackup()),
                 'can_signout' => ($user && $event->activity?->canUnsubscribe()),
