@@ -30,7 +30,7 @@ class ParticipationController extends Controller
 
         $data = ['activity_id' => $event->activity->id, 'user_id' => Auth::user()->id];
 
-        abort_if($event->activity->isParticipating(Auth::user()), 403, 'You are already subscribed for '.$event->title.'.');
+        abort_if($event->activity->isParticipating(Auth::user()) || $event->activity->isOnBackupList(Auth::user()), 403, 'You are already subscribed for '.$event->title.'.');
         abort_unless($event->activity->canSubscribeBackup(), 403, 'You cannot subscribe for '.$event->title.' at this time.');
 
         if ($event->activity->isFull() || ! $event->activity->canSubscribe()) {
@@ -60,7 +60,7 @@ class ParticipationController extends Controller
         $data = ['activity_id' => $event->activity->id, 'user_id' => $user->id];
 
         abort_unless($user->is_member, 403, $user->name.' is not a member of the association and therefore can not be subscribed for '.$event->title.'.');
-        abort_if($event->activity->isParticipating($user), 403, $user->name.' is already subscribed for '.$event->title.'.');
+        abort_if($event->activity->isParticipating($user) || $event->activity->isOnBackupList($user), 403, $user->name.' is already subscribed for '.$event->title.'.');
 
         $participation = ActivityParticipation::query()->create($data);
 

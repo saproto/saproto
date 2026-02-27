@@ -193,7 +193,7 @@ class Event extends Model implements HasMedia
         }
 
         // only show secret events if the user is participating, helping or organising
-        if ($this->secret && ($user instanceof User && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isHelping($user) || $this->isOrganising($user)))) {
+        if ($this->secret && ($user instanceof User && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isOnBackupList($user)  || $this->activity->isHelping($user) || $this->isOrganising($user)))) {
             return true;
         }
 
