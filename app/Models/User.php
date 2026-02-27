@@ -212,8 +212,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     protected $guarded = ['password', 'remember_token'];
 
-    protected $with = ['member'];
-
     protected $appends = ['is_member'];
 
     protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'tfa_totp_key', 'updated_at', 'diet'];

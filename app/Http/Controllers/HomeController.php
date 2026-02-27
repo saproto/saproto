@@ -105,17 +105,17 @@ class HomeController extends Controller
 
         $featuredEvents = (clone $upcomingQuery)
             ->where('is_featured', true)
-            ->limit(2)
-            ->get();
+            ->limit(2);
 
         $upcomingEvents = (clone $upcomingQuery)
             ->where('is_featured', false)
-            ->limit(5)
-            ->get();
+            ->limit(5);
+
+        $events = $featuredEvents->union($upcomingEvents)->get();
 
         return view('website.home.members', [
-            'upcomingEvents' => $upcomingEvents,
-            'featuredEvents' => $featuredEvents,
+            'upcomingEvents' => $events->where('is_featured', false),
+            'featuredEvents' => $events->where('is_featured', true),
             'companies' => $companies,
             'message' => $message,
             'newsitems' => $newsitems,
