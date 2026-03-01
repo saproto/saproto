@@ -19,6 +19,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Str;
 use Override;
@@ -447,6 +448,10 @@ class Event extends Model implements HasMedia
     protected static function boot(): void
     {
         parent::boot();
+
+        static::saved(function (Event $event) {
+            Cache::forget('home.events');
+        });
 
         self::updating(static function ($event) {
             $event->update_sequence++;
