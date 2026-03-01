@@ -26,6 +26,8 @@ use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\HeaderImageController;
+use App\Http\Controllers\HelperCommitteeController;
+use App\Http\Controllers\HelperController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IsAlfredThereController;
 use App\Http\Controllers\JobofferController;
@@ -542,14 +544,24 @@ Route::middleware('forcedomain')->group(function () {
         // Board only admin
         Route::middleware(['permission:board'])->group(function () {
             // Related to activities
-            Route::post('{event}/signup', [ActivityController::class, 'store'])->middleware(['permission:board'])->name('addsignup');
-            Route::get('{event}/signup/delete', [ActivityController::class, 'destroy'])->middleware(['permission:board'])->name('deletesignup');
-
-            // Related to helping committees
-            Route::post('{event}/addhelp', [ActivityController::class, 'addHelp'])->middleware(['permission:board'])->name('addhelp');
-            Route::post('updatehelp/{id}', [ActivityController::class, 'updateHelp'])->middleware(['permission:board'])->name('updatehelp');
-            Route::get('deletehelp/{id}', [ActivityController::class, 'deleteHelp'])->middleware(['permission:board'])->name('deletehelp');
+            Route::post('{event}/signup', [ActivityController::class, 'store'])->name('addsignup');
+            Route::get('{event}/signup/delete', [ActivityController::class, 'destroy'])->name('deletesignup');
         });
+
+        // Related to helper committees
+        Route::prefix('help')->name('help::')->group(function () {
+            Route::middleware(['permission:board'])->group(function () {
+                Route::post('{event}/store', [HelperCommitteeController::class, 'store'])->name('add');
+                Route::post('update/{helpingCommittee}', [HelperCommitteeController::class, 'update'])->name('update');
+                Route::get('destroy/{helpingCommittee}', [HelperCommitteeController::class, 'destroy'])->name('delete');
+            });
+
+            Route::prefix('helper')->name('helper::')->middleware(['member'])->group(function () {
+                Route::post('store/{helpingCommittee}', [HelperController::class, 'store'])->name('add');
+                Route::get('destroy/{helpingCommittee}/{user}', [HelperController::class, 'destroy'])->name('delete');
+            });
+        });
+
         // Public routes
         Route::get('{event}/checklist', [ActivityController::class, 'checklist'])->name('checklist');
 

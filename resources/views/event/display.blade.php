@@ -47,9 +47,9 @@
             </div>
         @endif
 
-        @if ((Auth::user()?->is_member && $event->activity?->helpingCommitteeInstances->count()) || $event->dinnerforms->count())
+        @if ((Auth::user()?->is_member && $event->activity?->helpingCommittees->count()) || $event->dinnerforms->count())
             <div class="col-md-4">
-                @if ($event->activity?->helpingCommitteeInstances->count() && Auth::user()?->is_member)
+                @if ($event->activity?->helpingCommittees->count() && Auth::user()?->is_member)
                     <div class="card mb-3">
                         @include(
                             'event.display_includes.helpers',

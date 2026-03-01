@@ -18,7 +18,6 @@ use Override;
  * @property int $activity_id
  * @property int $user_id
  * @property bool $is_present
- * @property int|null $committees_activities_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property bool $backup
@@ -76,14 +75,6 @@ class ActivityParticipation extends Model
     public function activity(): BelongsTo
     {
         return $this->belongsTo(Activity::class);
-    }
-
-    /**
-     * @return BelongsTo<HelpingCommittee, $this>
-     */
-    public function help(): BelongsTo
-    {
-        return $this->belongsTo(HelpingCommittee::class, 'committees_activities_id');
     }
 
     #[Override]

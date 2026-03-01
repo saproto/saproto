@@ -5,7 +5,7 @@
         <div class="card-body">
             <form
                 method="post"
-                action="{{ route('event::addhelp', ['event' => $event]) }}"
+                action="{{ route('event::help::add', ['event' => $event]) }}"
             >
                 @csrf
 
@@ -44,28 +44,28 @@
                 </div>
             </form>
 
-            @if ($event->activity->helpingCommittees()->count() > 0)
+            @if ($event->activity->helpingCommittees->count() > 0)
                 <hr />
 
                 @foreach ($event->activity->helpingCommittees as $committee)
                     <p>
-                        <strong>{{ $committee->name }}</strong>
+                        <strong>{{ $committee->committee->name }}</strong>
                         <br />
                         Helps with
-                        {{ $event->activity->helpingUsers($committee->pivot->id)->count() }}
-                        people. {{ $committee->pivot->amount }} are needed.
+                        {{ $committee->users->count() }}
+                        people. {{ $committee->amount }} are needed.
                     </p>
 
                     <form
                         method="post"
-                        action="{{ route('event::updatehelp', ['id' => $committee->pivot->id]) }}"
+                        action="{{ route('event::help::update', ['helpingCommittee' => $committee]) }}"
                     >
                         @csrf
 
                         <div class="row">
                             <div class="col-md-3">
                                 <a
-                                    href="{{ route('event::deletehelp', ['id' => $committee->pivot->id]) }}"
+                                    href="{{ route('event::help::delete', ['helpingCommittee' => $committee]) }}"
                                     class="btn btn-danger btn-sm btn-block"
                                 >
                                     Delete
@@ -88,7 +88,7 @@
                                         name="amount"
                                         min="1"
                                         required
-                                        value="{{ $committee->pivot->amount }}"
+                                        value="{{ $committee->amount }}"
                                     />
                                     <span
                                         class="input-group-text"

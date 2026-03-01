@@ -14,7 +14,6 @@ use App\Models\Product;
 use App\Models\User;
 use Exception;
 use Illuminate\Contracts\Database\Query\Builder;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -75,7 +74,6 @@ class EventController extends Controller
         ]);
     }
 
-    /** @return View */
     public function finindex(): \Illuminate\Contracts\View\View|Factory
     {
         $activities = Activity::query()
@@ -93,23 +91,6 @@ class EventController extends Controller
      */
     public function show(Event $event): View
     {
-        $event->load([
-            'committee',
-            'tickets.product',
-            'tickets.purchases.user.media',
-            'tickets.purchases.orderline.molliePayment',
-            'activity.users.media',
-            'activity.participation' => function ($query) {
-                $query->where('user_id', Auth::id());
-            },
-            'activity.backupUsers.media',
-            'activity.helpingCommitteeInstances.committee',
-            'activity.helpingCommitteeInstances.users.media',
-            'videos',
-            'albums',
-            'dinnerforms',
-        ]);
-
         $methods = [];
         if (Config::boolean('omnomcom.mollie.use_fees')) {
             $methods = MollieController::getPaymentMethods();
@@ -118,7 +99,6 @@ class EventController extends Controller
         return view('event.display', ['event' => $event, 'payment_methods' => $methods]);
     }
 
-    /** @return View */
     public function create(): \Illuminate\Contracts\View\View|Factory
     {
         return view('event.edit', ['event' => null]);
@@ -126,8 +106,6 @@ class EventController extends Controller
 
     /**
      * @return RedirectResponse
-     *
-     * @throws FileNotFoundException
      */
     public function store(StoreEventRequest $request)
     {
@@ -170,9 +148,6 @@ class EventController extends Controller
         return to_route('event::show', ['event' => $event]);
     }
 
-    /**
-     * @return View
-     */
     public function edit(Event $event): \Illuminate\Contracts\View\View|Factory
     {
         return view('event.edit', ['event' => $event]);
@@ -236,9 +211,6 @@ class EventController extends Controller
         return back();
     }
 
-    /**
-     * @return View
-     */
     public function archive(Request $request, int $year): \Illuminate\Contracts\View\View|Factory
     {
         /** @var EventCategory|null $category */
@@ -306,9 +278,6 @@ class EventController extends Controller
         return to_route('event::show', ['event' => $event]);
     }
 
-    /**
-     * @return RedirectResponse|View
-     */
     public function admin(Event $event): RedirectResponse|Factory|\Illuminate\Contracts\View\View
     {
         $event->load(['tickets.purchases.user', 'tickets.purchases.orderline.molliePayment', 'tickets.product']);
@@ -322,9 +291,6 @@ class EventController extends Controller
         return view('event.admin', ['event' => $event]);
     }
 
-    /**
-     * @return RedirectResponse|View
-     */
     public function scan(Event $event): RedirectResponse|Factory|\Illuminate\Contracts\View\View
     {
 
@@ -458,7 +424,7 @@ class EventController extends Controller
     public function setReminder(Request $request): RedirectResponse
     {
         $user = Auth::user();
-        $hours = floatval($request->get('hours'));
+        $hours = floatval($request->input('hours'));
 
         if ($request->has('delete') || $hours <= 0) {
             $user->setCalendarAlarm(null);
@@ -663,7 +629,7 @@ CALSCALE:GREGORIAN
             ]);
             $newActivity->save();
 
-            foreach ($event->activity->helpingCommitteeInstances as $helpingCommittee) {
+            foreach ($event->activity->helpingCommittees as $helpingCommittee) {
                 HelpingCommittee::query()->create([
                     'activity_id' => $newActivity->id,
                     'committee_id' => $helpingCommittee->committee_id,
