@@ -50,8 +50,8 @@ class HomeController extends Controller
             ->where('published_at', '>', Date::now()->subWeek())
             ->where('is_weekly', true)
             ->orderBy('published_at', 'desc')
-            ->first()
-        );
+            ->get()
+        )->first();
 
         $newsitems = Cache::remember('home.newsitems', Date::tomorrow(), fn () => Newsitem::query()
             ->whereNotNull('published_at')
