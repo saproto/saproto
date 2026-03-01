@@ -165,6 +165,7 @@
                         [
                             'participants' => $event->activity->users,
                             'event' => $event,
+                            'templateId'=>'template_users'
                         ]
                     )
                 </div>
@@ -217,6 +218,7 @@
                     [
                         'participants' => $event->activity->backupUsers,
                         'event' => $event,
+                        'templateId'=>'template_backup_users'
                     ]
                 )
             </div>
@@ -290,3 +292,29 @@
         </div>
     </div>
 </div>
+
+
+@push('javascript')
+    @vite('resources/assets/js/echo.js')
+    <script type="text/javascript" @cspNonce>
+        let id = @json($event->id);
+        template = document.querySelector('#template_users');
+        window.addEventListener('load', () => {
+
+            Echo.private(`events.${id}`).listen(
+                '.App\\Events\\Events\\UserSignedupEvent',
+                (e) => {
+                    const clone = document.importNode(template.content, true);
+                    clone.querySelector(".participant-profile-link").href = e.user_profile_link ;
+                    clone.querySelector(".participant-remove-link").href = e.user_remove_link ;
+                    clone.querySelector(".participant-avatar").src = e.user_avatar;
+                    clone.querySelector(".participant-name").innerHTML = e.user_name;
+                    console.log(clone);
+                    console.log(template.parentNode)
+                    template.parentNode.appendChild(clone);
+                    console.log(e)
+                }
+            )
+        })
+    </script>
+@endpush

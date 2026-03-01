@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\Events\UserSignedupEvent;
 use App\Mail\ActivityMovedFromBackup;
 use App\Mail\ActivitySubscribedTo;
 use App\Mail\ActivityUnsubscribedFrom;
@@ -41,6 +42,9 @@ class ParticipationController extends Controller
         }
 
         ActivityParticipation::query()->create($data);
+
+        UserSignedupEvent::dispatch($event, Auth::user());
+
         $event->updateUniqueUsersCount();
 
         if ($event->activity->redirect_url) {
@@ -63,6 +67,8 @@ class ParticipationController extends Controller
         abort_if($event->activity->isParticipating($user) || $event->activity->isOnBackupList($user), 403, $user->name.' is already subscribed for '.$event->title.'.');
 
         $participation = ActivityParticipation::query()->create($data);
+
+        UserSignedupEvent::dispatch($event, $user);
 
         $event->updateUniqueUsersCount();
 

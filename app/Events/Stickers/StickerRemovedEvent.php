@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Stickers;
 
 use App\Models\Sticker;
 use Illuminate\Broadcasting\Channel;
@@ -10,7 +10,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Override;
 
-class StickerPlacedEvent implements ShouldBroadcastNow
+class StickerRemovedEvent implements ShouldBroadcastNow
 {
     use Dispatchable;
     use InteractsWithSockets;
@@ -35,18 +35,14 @@ class StickerPlacedEvent implements ShouldBroadcastNow
     }
 
     /**
-     * @return array<string, mixed>
+     *@return array{
+     *     id: int
+     *}
      */
     public function broadcastWith(): array
     {
         return [
             'id' => $this->sticker->id,
-            'lat' => $this->sticker->lat,
-            'lng' => $this->sticker->lng,
-            'user' => $this->sticker->user?->calling_name ?? 'Unknown',
-            'image' => $this->sticker->getImageUrl(),
-            'is_owner' => false,
-            'date' => $this->sticker->created_at->format('Y-m-d'),
             'stickerType' => $this->sticker->sticker_type_id,
         ];
     }

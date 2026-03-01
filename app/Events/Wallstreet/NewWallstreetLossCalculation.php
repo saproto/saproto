@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Wallstreet;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;

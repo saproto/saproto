@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Enums\StickerTypeEnum;
-use App\Events\StickerPlacedEvent;
-use App\Events\StickerRemovedEvent;
+use App\Events\Stickers\StickerPlacedEvent;
+use App\Events\Stickers\StickerRemovedEvent;
 use App\Models\Sticker;
 use App\Models\StickerType;
 use Illuminate\Http\RedirectResponse;
