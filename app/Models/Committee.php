@@ -134,6 +134,7 @@ class Committee extends Model implements HasMedia
     public function organizedEvents(): Builder
     {
         return Event::query()
+            ->eagerLoadEventBlock(Auth::user())
             ->orderBy('start')
             ->where('committee_id', $this->id);
     }
@@ -185,6 +186,7 @@ class Committee extends Model implements HasMedia
         $activityIds = HelpingCommittee::query()->where('committee_id', $this->id)->pluck('activity_id');
 
         return Event::query()
+            ->eagerLoadEventBlock(Auth::user())
             ->orderBy('start')
             ->whereHas('activity', function (\Illuminate\Contracts\Database\Query\Builder $q) use ($activityIds) {
                 $q->whereIn('id', $activityIds);

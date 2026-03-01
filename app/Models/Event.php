@@ -71,6 +71,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static Builder<static>|Event newQuery()
  * @method static Builder<static>|Event onlyTrashed()
  * @method static Builder<static>|Event query()
+ * @method static Builder<static>|Event eagerloadEventBlock($user = null)
  * @method static Builder<static>|Event whereCategoryId($value)
  * @method static Builder<static>|Event whereCommitteeId($value)
  * @method static Builder<static>|Event whereCreatedAt($value)
@@ -183,6 +184,32 @@ class Event extends Model implements HasMedia
     public function committee(): BelongsTo
     {
         return $this->belongsTo(Committee::class);
+    }
+
+    /** @param Builder<$this> $query
+     * @return Builder<$this>
+     */
+    protected function scopeEagerloadEventBlock(Builder $query, ?User $user): Builder
+    {
+        $userId = $user->id ?? null;
+
+        return $query
+            ->with('media')
+            ->with('activity.helpingCommittees.users', function ($q) use ($userId) {
+                $q->where('users.id', $userId);
+            })
+            ->with('activity', function ($q) use ($userId) {
+                $q
+                    ->with('allUsers', function ($q) use ($userId) {
+                        $q->where('users.id', $userId);
+                    })
+                    ->withCount(['allUsers as users_count' => function ($q) {
+                        $q->where('backup', false);
+                    }]);
+            })
+            ->with('tickets.purchases', function ($q) use ($userId) {
+                $q->where('ticket_purchases.user_id', $userId);
+            });
     }
 
     public function mayViewEvent(?User $user): bool

@@ -92,6 +92,7 @@ class HomeController extends Controller
         $message = Cache::remember(WelcomeMessage::getCacheKey(Auth::id()), Date::tomorrow(), fn () => WelcomeMessage::query()->where('user_id', Auth::id())->first());
 
         $upcomingQuery = Event::query()
+            ->eagerLoadEventBlock(Auth::user())
             ->orderBy('start')
             ->where([
                 ['end', '>=', Date::now()->timestamp],

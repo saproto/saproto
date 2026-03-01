@@ -39,6 +39,7 @@ class EventController extends Controller
 
         // if there is a category, get only the events that are in that category
         $events = Event::query()
+            ->eagerLoadEventBlock(Auth::user())
             ->orderBy('start')
             ->when($category, static function ($query) use ($category) {
                 $query->whereHas('Category', static function (Builder $q) use ($category) {
@@ -217,6 +218,7 @@ class EventController extends Controller
 
         // if there is a category, get only the events that are in that category
         $eventsPerMonth = Event::query()
+            ->eagerLoadEventBlock(Auth::user())
             ->orderBy('start')
             ->unless(empty($category), static function ($query) use ($category) {
                 $query->whereHas('Category', static function (Builder $q) use ($category) {
@@ -387,6 +389,7 @@ class EventController extends Controller
         $noFutureLimit = $request->boolean('no_future_limit');
         /** @var Collection<int, Event> $events */
         $events = Event::query()
+            ->eagerLoadEventBlock(Auth::user())
             ->orderBy('start')
             ->where('end', '>', Date::today()->timestamp)
             ->unless($noFutureLimit, static function ($query) {
@@ -522,6 +525,7 @@ CALSCALE:GREGORIAN
 
         $relevant_only = $user?->pref_calendar_relevant_only;
         $events = Event::query()
+            ->eagerLoadEventBlock(Auth::user())
             ->orderBy('start')
             ->where('start', '>', Date::now()->subMonths(6)->timestamp)
             ->unless($user, function ($query) {
