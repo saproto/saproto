@@ -79,7 +79,7 @@ class EventController extends Controller
     {
         $activities = Activity::query()
             ->with('event')
-            ->withCount(['allUsers as users_count' => function($q){
+            ->withCount(['allUsers as users_count' => function ($q) {
                 $q->where('backup', false);
             }])
             ->where('closed', false)
