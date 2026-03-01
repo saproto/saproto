@@ -525,7 +525,7 @@ CALSCALE:GREGORIAN
 
         $relevant_only = $user?->pref_calendar_relevant_only;
         $events = Event::query()
-            ->eagerLoadEventBlock(Auth::user())
+            ->eagerLoadEventBlock($user)
             ->orderBy('start')
             ->where('start', '>', Date::now()->subMonths(6)->timestamp)
             ->unless($user, function ($query) {
