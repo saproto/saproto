@@ -79,6 +79,9 @@ class EventController extends Controller
     {
         $activities = Activity::query()
             ->with('event')
+            ->withCount(['allUsers as users_count' => function($q){
+                $q->where('backup', false);
+            }])
             ->where('closed', false)
             ->orderBy('registration_end')
             ->get();
@@ -383,78 +386,39 @@ class EventController extends Controller
     /**
      * @return array<int, object>
      */
-    public function apiUpcomingEvents(int $limit, Request $request): array
+    public function apiUpcomingEvents(Request $request, ?int $limit = 4): array
     {
-        $user = Auth::user() ?? null;
-        $noFutureLimit = $request->boolean('no_future_limit');
+        $limit = min($limit, 100);
         /** @var Collection<int, Event> $events */
         $events = Event::query()
-            ->eagerLoadEventBlock(Auth::user())
             ->orderBy('start')
             ->where('end', '>', Date::today()->timestamp)
-            ->unless($noFutureLimit, static function ($query) {
-                $query->where('start', '<', Date::now()->addMonth()->timestamp);
-            })
-            ->whereNull('publication')
+            ->where('start', '<', Date::now()->addMonth()->timestamp)
+            ->where([
+                [static function ($query) {
+                    $query->where('publication', '<', Date::now()->timestamp)
+                        ->orWhereNull('publication');
+                }],
+            ])
+            ->where('secret', false)
             ->orderBy('start')
-            ->with('committee.users')
-            ->with('tickets')
-            ->take($limit)
+            ->when($limit, function ($query) use ($limit) {
+                $query->limit($limit);
+            })
             ->get();
 
         $data = [];
 
         foreach ($events as $event) {
-            if ($event->secret && ($user == null || $event->activity == null || (
-                ! $event->activity->isOnBackupList($user) &&
-                ! $event->activity->isParticipating($user) &&
-                ! $event->activity->isHelping($user) &&
-                ! $event->isOrganising($user)
-            ))) {
-                continue;
-            }
-
-            $participants = ($user?->is_member && $event->activity ? $event->activity->users->map(static fn ($item) => (object) [
-                'name' => $item->name,
-                'photo' => $item->getFirstMediaUrl('profile_picture', 'thumb'),
-            ]) : null);
-            $backupParticipants = ($user?->is_member && $event->activity ? $event->activity->backupUsers->map(static fn ($item) => (object) [
-                'name' => $item->name,
-                'photo' => $item->getFirstMediaUrl('profile_picture', 'thumb'),
-            ]) : null);
             $data[] = (object) [
                 'id' => $event->id,
                 'title' => $event->title,
                 'image' => ($event->getFirstMediaUrl('header', 'card')),
                 'description' => $event->description,
                 'start' => $event->start,
-                'organizing_committee' => ($event->committee ? [
-                    'id' => $event->committee->id,
-                    'name' => $event->committee->name,
-                ] : null),
-                'registration_start' => $event->activity?->registration_start,
-                'registration_end' => $event->activity?->registration_end,
-                'deregistration_end' => $event->activity?->deregistration_end,
-                'total_places' => $event->activity?->participants,
-                'available_places' => $event->activity?->freeSpots(),
-                'is_full' => $event->activity?->isFull(),
                 'end' => $event->end,
-                'location' => $event->location,
-                'current' => $event->current(),
                 'over' => $event->over(),
-                'has_signup' => $event->activity !== null,
-                'price' => $event->activity?->price,
-                'no_show_fee' => $event->activity?->no_show_fee,
-                'user_signedup' => $user && ($event->activity?->isParticipating($user) || $event->activity?->isOnBackupList($user)),
-                'user_signedup_backup' => $user && $event->activity?->isOnBackupList($user),
-                'can_signup' => ($user && $event->activity?->canSubscribe()),
-                'can_signup_backup' => ($user && $event->activity?->canSubscribeBackup()),
-                'can_signout' => ($user && $event->activity?->canUnsubscribe()),
-                'tickets' => ($user && $event->tickets->count() > 0 ? $event->tickets->pluck('purchases')->flatten()->filter(fn ($purchase): bool => $purchase->user_id === Auth::id())->pluck('api_attributes') : null),
-                'participants' => $participants,
-                'is_helping' => ($user && $event->activity ? $event->activity->isHelping($user) : null),
-                'is_organizing' => ($user && $event->committee ? $event->committee->isMember($user) : null),
-                'backupParticipants' => $backupParticipants,
+                'location' => $event->location,
             ];
         }
 
