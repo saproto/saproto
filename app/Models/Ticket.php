@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
 use Override;
 
@@ -135,5 +136,15 @@ class Ticket extends Model
             'show_participants' => 'boolean',
             'has_buy_limit' => 'boolean',
         ];
+    }
+
+    #[Override]
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::saved(function (Ticket $ticket) {
+            Cache::forget('home.events');
+        });
     }
 }

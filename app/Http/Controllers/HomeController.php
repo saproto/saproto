@@ -32,7 +32,7 @@ class HomeController extends Controller
                 ->with('media')
                 ->get())->shuffle();
 
-        $header = Cache::remember('home.headerimages', Date::tomorrow(), fn () => HeaderImage::query()->with('user')->get())->shuffle()->first();
+        $header = Cache::remember('home.headerimages', Date::tomorrow(), fn () => HeaderImage::query()->with('user.member')->get())->shuffle()->first();
 
         $albums =
             Cache::remember('home.albums', Date::tomorrow(), fn () => PhotoAlbum::query()->orderBy('date_taken', 'desc')
@@ -93,29 +93,47 @@ class HomeController extends Controller
 
         $upcomingQuery = Event::query()
             ->orderBy('start')
+            ->with([
+                'media',
+                'activity.helpingCommittees',
+                'tickets',
+            ])
             ->where([
                 ['end', '>=', Date::now()->timestamp],
                 ['secret', false],
                 [static function ($query) {
-                    $query->where('publication', '<', Date::now()->timestamp)
+                    $query->where('publication', '<', Date::tomorrow()->timestamp)
                         ->orWhereNull('publication');
                 }],
-            ])
-            ->orderBy('start');
+            ]);
 
         $featuredEvents = (clone $upcomingQuery)
             ->where('is_featured', true)
-            ->limit(2)
-            ->get();
+            ->limit(4);
 
         $upcomingEvents = (clone $upcomingQuery)
             ->where('is_featured', false)
-            ->limit(5)
-            ->get();
+            ->limit(10);
+
+        $events = Cache::remember('home.events', Date::tomorrow(), fn () => $featuredEvents->union($upcomingEvents)->get())
+            ->filter(fn ($event) => $event->publication == null || $event->publication < Date::now()->timestamp)
+            ->where('end', '>=', Date::now()->timestamp)
+            ->loadMissing([
+                'activity.helpingCommittees.users' => function ($q) {
+                    $q->where('users.id', Auth::id());
+                },
+            ])
+            ->loadMissing(['activity.allUsers' => function ($q) {
+                $q->where('activities_users.user_id', Auth::id()
+                );
+            }])
+            ->loadMissing(['tickets.purchases' => function ($q) {
+                $q->where('ticket_purchases.user_id', Auth::id());
+            }]);
 
         return view('website.home.members', [
-            'upcomingEvents' => $upcomingEvents,
-            'featuredEvents' => $featuredEvents,
+            'upcomingEvents' => $events->where('is_featured', false)->take(5),
+            'featuredEvents' => $events->where('is_featured', true)->take(2),
             'companies' => $companies,
             'message' => $message,
             'newsitems' => $newsitems,

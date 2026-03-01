@@ -1,4 +1,7 @@
-@php($authParticipation = $event->activity?->getParticipation(Auth::user()))
+@php
+    /** @var \App\Models\Event $event */
+@endphp
+
 @if ($event->activity && Auth::user()?->is_member && $event->activity->withParticipants())
     <div class="card mb-3">
         <ul class="list-group list-group-flush text-center">
@@ -11,24 +14,22 @@
                         (Account
                         {{ $event->activity->closedAccount->account_number }} ,
                         {{ $event->activity->closedAccount->name }})
-                    @else()
+                    @else
                             (Unknown account.)
                     @endif
                 </li>
             @endif
 
-            @if ($authParticipation !== null)
-                @if ($authParticipation->backup)
-                    <li class="list-group-item bg-warning text-white">
-                        You are on the
-                        <strong>back-up list</strong>
-                        .
-                    </li>
-                @else
-                    <li class="list-group-item bg-success text-white">
-                        You are signed up!
-                    </li>
-                @endif
+            @if ($event->activity->isParticipating(Auth::user()))
+                <li class="list-group-item bg-success text-white">
+                    You are signed up!
+                </li>
+            @elseif ($event->activity->isOnBackupList(Auth::user()))
+                <li class="list-group-item bg-warning text-white">
+                    You are on the
+                    <strong>back-up list</strong>
+                    .
+                </li>
             @else
                 <li class="list-group-item">
                     You are
@@ -62,20 +63,21 @@
                 </a>
             @endif
 
-            @if ($authParticipation !== null)
-                @if ($event->activity->canUnsubscribe() || $authParticipation->backup)
-                    <a
-                        class="list-group-item bg-danger text-white"
-                        href="{{ route('event::deleteparticipation', ['participation' => $authParticipation->id]) }}"
-                    >
-                        @if ($authParticipation->backup)
-                            Sign me out of the back-up list.
-                        @else
-                            Sign me out.
-                            <i class="fas fa-frown-o" aria-hidden="true"></i>
-                        @endif
-                    </a>
-                @endif
+            @if ($event->activity->isParticipating(Auth::user()) && $event->activity->canUnsubscribe())
+                <a
+                    class="list-group-item bg-danger text-white"
+                    href="{{ route('event::deleteparticipation', ['event' => $event, 'user' => Auth::user()]) }}"
+                >
+                    Sign me out.
+                    <i class="fas fa-frown-o" aria-hidden="true"></i>
+                </a>
+            @elseif ($event->activity->isOnBackupList(Auth::user()))
+                <a
+                    class="list-group-item bg-danger text-white"
+                    href="{{ route('event::deleteparticipation', ['event' => $event, 'user' => Auth::user()]) }}"
+                >
+                    Sign me out of the back-up list.
+                </a>
             @else
                 @if ($event->activity->canSubscribeBackup())
                     <a

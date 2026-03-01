@@ -27,7 +27,6 @@ class RefreshEventUniqueUsers extends Command
     public function handle(): void
     {
         $query = Event::query()
-            ->with('activity.users')
             ->with('tickets');
 
         $bar = $this->output->createProgressBar($query->count());

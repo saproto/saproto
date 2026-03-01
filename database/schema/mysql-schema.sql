@@ -104,8 +104,8 @@ CREATE TABLE `activities_users` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `backup` tinyint(1) NOT NULL DEFAULT 0,
-  `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `activities_users_activity_user_unique` (`activity_id`,`user_id`),
   KEY `activities_users_user_id_index` (`user_id`),
   KEY `activities_users_activity_id_index` (`activity_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
@@ -1867,3 +1867,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2022_11_01_000001_creat
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_01_09_172626_remove_dmx_tables',199);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_02_25_102853_remove_committees_activities_id_from_activities_users',200);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_02_25_112153_remove_notification_sent_from_committees_activities',200);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_02_27_004429_drop_softdeletes_from_activities_users',201);

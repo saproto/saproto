@@ -55,8 +55,8 @@ class OrderLineController extends Controller
         $selected_month = $date ?? Date::now()->format('Y-m');
 
         $outstanding = Activity::query()
-            ->whereHas('users', static function (Builder $query) {
-                $query->where('user_id', Auth::user()->id);
+            ->whereHas('allUsers', static function (Builder $query) {
+                $query->where('user_id', Auth::user()->id)->where('backup', false);
             })->where('closed', false)
             ->with('event')->where('price', '>', 0)
             ->get();
