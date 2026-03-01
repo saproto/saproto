@@ -1,4 +1,4 @@
-<div class="btn-group btn-group-sm mb-1">
+<div class="btn-group btn-group-sm mb-1 participant-id" data-user-id="{{$user?->id}}">
     <a
         href="{{ route('user::profile', ['id' => $user?->getPublicId()]) }}"
         class="btn btn-outline-primary participant-profile-link"

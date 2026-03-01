@@ -146,7 +146,7 @@
     @if ($event->activity->users->count() > 0 || Auth::user()->can('board'))
         <div class="card mb-3">
             <div class="card-header bg-dark text-center text-white">
-                {{ $event->activity->users->count() }} participants
+                <span id="users-count">{{ $event->activity->users->count() }}</span> participants
             </div>
 
             @if ($event->activity->hide_participants)
@@ -208,7 +208,9 @@
     @if ($event->activity->backupUsers->count() > 0)
         <div class="card">
             <div class="card-header bg-dark text-center text-white">
-                {{ $event->activity->backupUsers->count() }} people on the
+                <span id="backup-count">
+                    {{ $event->activity->backupUsers->count() }}
+                </span> people on the
                 back-up list
             </div>
 
@@ -299,20 +301,56 @@
     <script type="text/javascript" @cspNonce>
         let id = @json($event->id);
         template = document.querySelector('#template_users');
+        template_backup_users = document.querySelector('#template_backup_users');
+        backup_count = document.querySelector('#backup-count');
+        users_count = document.querySelector('#users-count');
         window.addEventListener('load', () => {
+            const addUser = (user, local_template) => {
+                const clone = document.importNode(local_template.content, true);
+                clone.querySelector(".participant-profile-link").href = user.user_profile_link ;
+                clone.querySelector(".participant-remove-link").href = user.user_remove_link ;
+                clone.querySelector(".participant-avatar").src = user.user_avatar;
+                clone.querySelector(".participant-name").innerHTML = user.user_name;
+                clone.querySelector(".participant-id").dataset.userId = user.user_id;
+                template.parentNode.appendChild(clone);
+            };
 
-            Echo.private(`events.${id}`).listen(
-                '.App\\Events\\Events\\UserSignedupEvent',
+            const removeUser = (user_id) => {
+                const element = document.querySelector(`[data-user-id="${user_id}"]`);
+                if (element) {
+                    element.remove();
+                }
+            };
+
+            const recountUsers = (template, counter) => {
+                const count = template?.parentNode.querySelectorAll('.participant-id').length;
+                if(count){
+                    counter.innerHTML = count;
+                }
+            }
+            // todo: figure out what to do when the backuplist or list element does not exist
+            //  (for instance when there was no one there before or it is hidden)
+            Echo.private(`events.${id}`)
+                .listen(
+                    '.App\\Events\\Events\\UserSignedupEvent',
+                    (e) => {
+                        removeUser(e.user_id)
+
+                        if(e.backup){
+                            addUser(e, template_backup_users);
+                        }else{
+                            addUser(e, template)
+                        }
+                        recountUsers(template_backup_users, backup_count);
+                        recountUsers(template, users_count)
+                    }
+            )
+            .listen(
+                '.App\\Events\\Events\\UserSignedOutEvent',
                 (e) => {
-                    const clone = document.importNode(template.content, true);
-                    clone.querySelector(".participant-profile-link").href = e.user_profile_link ;
-                    clone.querySelector(".participant-remove-link").href = e.user_remove_link ;
-                    clone.querySelector(".participant-avatar").src = e.user_avatar;
-                    clone.querySelector(".participant-name").innerHTML = e.user_name;
-                    console.log(clone);
-                    console.log(template.parentNode)
-                    template.parentNode.appendChild(clone);
-                    console.log(e)
+                    removeUser(e.user_id)
+                    recountUsers(template, users_count)
+                    recountUsers(template_backup_users, backup_count);
                 }
             )
         })

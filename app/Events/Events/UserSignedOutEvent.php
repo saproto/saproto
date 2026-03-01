@@ -12,7 +12,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Override;
 
-class UserSignedupEvent implements ShouldBroadcast
+class UserSignedOutEvent implements ShouldBroadcast
 {
     use Dispatchable;
     use InteractsWithSockets;
@@ -23,8 +23,7 @@ class UserSignedupEvent implements ShouldBroadcast
      */
     public function __construct(
         public Event $event,
-        public User $user,
-        public bool $backup = false
+        public User $user
     ) {}
 
     /**
@@ -54,12 +53,7 @@ class UserSignedupEvent implements ShouldBroadcast
     public function broadcastWith(): array
     {
         return [
-            'user_name' => $this->user->name,
             'user_id' => $this->user->id,
-            'user_avatar' => $this->user->getFirstMediaUrl('profile_picture', 'preview') ,
-            'user_remove_link' => route('event::deleteparticipation', ['event' => $this->event, 'user' => $this->user]) ,
-            'user_profile_link' => route('user::profile', ['id' => $this->user?->getPublicId()]),
-            'backup' => $this->backup,
         ];
     }
 }
