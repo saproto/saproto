@@ -71,7 +71,7 @@
 @section('body')
     <div class="row text-black">
         {{-- narrowcasting or protube --}}
-        <div class="col-9">
+        <div class="col-9 protubecard">
             @if (! empty($protube))
                 @include('smartxp.protube_iframe')
             @else
