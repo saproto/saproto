@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Committee;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -17,10 +16,12 @@ class EnforceTFA
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        if (App::environment('production') && Auth::check() && (Auth::user()->hasRole(Config::array('proto.tfaroles')) || Committee::whereSlug(Config::string('proto.rootcommittee'))->firstOrFail()->isMember(Auth::user())) && ! Auth::user()->hasTFAEnabled() && (! $request->is('user/dashboard') && ! $request->is('auth/logout') && ! $request->is('user/quit_impersonating') && ! $request->is('user/*/2fa/*') && ! $request->is('user/2fa/*') && ! $request->is('api/*'))) {
-            Session::flash('flash_message', 'Your account permissions require you to enable Two Factor Authentication on your account before being able to use your account.');
+        if (App::environment('production') && Auth::check() && (! $request->is('user/dashboard') && ! $request->is('auth/logout') && ! $request->is('user/quit_impersonating') && ! $request->is('user/*/2fa/*') && ! $request->is('user/2fa/*') && ! $request->is('api/*'))) {
+            if (! Auth::user()->hasTFAEnabled() && Auth::user()->hasRole(Config::array('proto.tfaroles'))) {
+                Session::flash('flash_message', 'Your account permissions require you to enable Two Factor Authentication on your account before being able to use your account.');
 
-            return to_route('user::dashboard::show', ['#2fa']);
+                return to_route('user::dashboard::show', ['#2fa']);
+            }
         }
 
         return $next($request);
