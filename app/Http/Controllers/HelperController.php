@@ -28,7 +28,7 @@ class HelperController extends Controller
         $user = Auth::user();
         if ($request->has('user_id')) {
             $user = User::query()->findOrFail($request->input('user_id'));
-            if ($user->id !== Auth::id() || ! Auth::user()->can('board')) {
+            if ($user->id !== Auth::id() && ! Auth::user()->can('board')) {
                 Session::flash('flash_message', 'You are not allowed to add this helper to this event.');
 
                 return back();
@@ -61,7 +61,7 @@ class HelperController extends Controller
 
     public function destroy(HelpingCommittee $helpingCommittee, User $user): RedirectResponse
     {
-        if ($user->id !== Auth::id() || ! Auth::user()->can('board')) {
+        if ($user->id !== Auth::id() && ! Auth::user()->can('board')) {
             Session::flash('flash_message', 'You are not allowed to unsubscribe this user from this event.');
 
             return back();
