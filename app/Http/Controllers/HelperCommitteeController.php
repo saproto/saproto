@@ -70,6 +70,9 @@ class HelperCommitteeController extends Controller
         $committee = $helpingCommittee->committee->name;
         $helpingCommittee->users()->detach();
         $helpingCommittee->delete();
+
+        $helpingCommittee->activity->event->updateUniqueUsersCount();
+
         Session::flash('flash_message', 'Removed '.$committee.' as helping committee.');
 
         return back();
