@@ -14,7 +14,7 @@ class HelperController extends Controller
     public function store(Request $request, HelpingCommittee $helpingCommittee): RedirectResponse
     {
         if (! $helpingCommittee->activity) {
-            Session::flash('flash_message', $helpingCommittee->activity->event->title.' does not have a signup.');
+            Session::flash('flash_message', 'This event does not have a signup.');
 
             return back();
         }
