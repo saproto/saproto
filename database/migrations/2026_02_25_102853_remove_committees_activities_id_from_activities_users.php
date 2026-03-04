@@ -24,7 +24,7 @@ return new class extends Migration
             ->whereNotNull('committees_activities_id')
             ->whereNull('deleted_at');
 
-        $rowsQuery->chunkById(100, function ($rows){
+        $rowsQuery->chunkById(100, function ($rows) {
             foreach ($rows as $row) {
                 DB::table('activities_helpers')->insert([
                     'user_id' => $row->user_id,
