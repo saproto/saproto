@@ -20,19 +20,20 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        $rows = DB::table('activities_users')
+        $rowsQuery = DB::table('activities_users')
             ->whereNotNull('committees_activities_id')
-            ->whereNull('deleted_at')
-            ->get();
+            ->whereNull('deleted_at');
 
-        foreach ($rows as $row) {
-            DB::table('activities_helpers')->insert([
-                'user_id' => $row->user_id,
-                'committees_activities_id' => $row->committees_activities_id,
-                'created_at' => $row->created_at,
-                'updated_at' => $row->updated_at,
-            ]);
-        }
+        $rowsQuery->chunkById(100, function ($rows){
+            foreach ($rows as $row) {
+                DB::table('activities_helpers')->insert([
+                    'user_id' => $row->user_id,
+                    'committees_activities_id' => $row->committees_activities_id,
+                    'created_at' => $row->created_at,
+                    'updated_at' => $row->updated_at,
+                ]);
+            }
+        });
 
         DB::table('activities_users')
             ->whereNotNull('committees_activities_id')
