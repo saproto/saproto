@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
-use Override;
 
 /**
  * Helping Committee Model.
@@ -17,7 +16,6 @@ use Override;
  * @property int $activity_id
  * @property int $committee_id
  * @property int $amount
- * @property bool $notification_sent
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Activity|null $activity
@@ -73,17 +71,6 @@ class HelpingCommittee extends Validatable
     public function users(): BelongsToMany
     {
         return $this
-            ->belongsToMany(User::class, 'activities_users', 'committees_activities_id')
-            ->whereNull('activities_users.deleted_at')
-            ->withPivot('id')
-            ->withTrashed();
-    }
-
-    #[Override]
-    protected function casts(): array
-    {
-        return [
-            'notification_sent' => 'boolean',
-        ];
+            ->belongsToMany(User::class, 'activities_helpers', 'committees_activities_id', 'user_id');
     }
 }

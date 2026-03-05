@@ -4,7 +4,7 @@
     </div>
 
     <ul class="list-group list-group-flush">
-        @foreach ($event->activity->helpingCommitteeInstances as $key => $instance)
+        @foreach ($event->activity->helpingCommittees as $instance)
             <li class="list-group-item">
                 <p class="card-title">
                     <strong>
@@ -20,37 +20,40 @@
                         </p>
                     @else
                         @include(
-                            'event.display_includes.render_participant_list',
+                            'event.display_includes.render_helper_list',
                             [
                                 'participants' => $instance->users,
                                 'event' => $event,
+                                'helpingCommittee' => $instance,
                             ]
                         )
                     @endif
 
-                    @if (! $event->activity->closed && $instance->users->contains(Auth::user()))
+                    @if (! $event->activity->closed && $instance->committee->users->contains(Auth::user()))
                         @if ($instance->users->contains(Auth::user()))
                             <a
                                 class="btn btn-outline-warning btn-block mt-1"
                                 href="{{
-                                    route('event::deleteparticipation', [
-                                        'participation' => $instance->users
-                                            ->filter(function ($user) {
-                                                return $user->id === Auth::id();
-                                            })
-                                            ->first()->pivot->id,
+                                    route('event::help::helper::delete', [
+                                        'helpingCommittee' => $instance,
+                                        'user' => Auth::user(),
                                     ])
                                 }}"
                             >
                                 I won't help anymore.
                             </a>
                         @elseif ($instance->users->count() < $instance->amount)
-                            <a
-                                class="btn btn-outline-success btn-block mt-1"
-                                href="{{ route('event::addparticipation', ['event' => $event, 'helping_committee_id' => $instance->id]) }}"
+                            <form
+                                method="post"
+                                action="{{ route('event::help::helper::add', ['helpingCommittee' => $instance]) }}"
                             >
-                                I'll help!
-                            </a>
+                                <button
+                                    class="btn btn-outline-success btn-block mt-1"
+                                >
+                                    I'll help!
+                                </button>
+                                @csrf
+                            </form>
                         @endif
                     @endif
 
@@ -58,7 +61,7 @@
                         <form
                             class="form-horizontal mt-2"
                             method="post"
-                            action="{{ route('event::addparticipationfor', ['event' => $event, 'helping_committee_id' => $instance->id]) }}"
+                            action="{{ route('event::help::helper::add', ['helpingCommittee' => $instance]) }}"
                         >
                             {{ csrf_field() }}
 
