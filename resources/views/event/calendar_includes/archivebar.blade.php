@@ -52,7 +52,9 @@
                 </a>
             @endcan
 
-            @php($categories = \App\Models\EventCategory::all())
+            @php($categories = Cache::remember('archivebar.event_categories', \Illuminate\Support\Facades\Date::tomorrow(), function(){
+                return \App\Models\EventCategory::query()->select(['id', 'name'])->orderBy('name')->get();
+            }))
             @if (count($categories) > 0)
                 <form
                     class="form-inline ms-3"
@@ -75,7 +77,7 @@
                             @foreach ($categories as $category)
                                 <option
                                     value="{{ $category->id }}"
-                                    @selected($cur_category == $category)
+                                    @selected($cur_category?->id == $category->id)
                                 >
                                     {{ $category->name }}
                                 </option>
