@@ -316,13 +316,18 @@
 @push('javascript')
     @vite('resources/assets/js/echo.js')
     <script type="text/javascript" @cspNonce>
-        let id = @json($event->id)
-        template = document.querySelector('#template_users')
-        template_backup_users = document.querySelector('#template_backup_users')
-        backup_count = document.querySelector('#backup-count')
-        users_count = document.querySelector('#users-count')
-        signupContainer = document.querySelector('#signupContainer')
-        backupContainer = document.querySelector('#backupContainer')
+        ;{{-- format-ignore-start --}}
+        let id = @json($event->id);
+        {{-- format-ignore-end --}}
+
+        const template = document.querySelector('#template_users')
+        const template_backup_users = document.querySelector(
+            '#template_backup_users'
+        )
+        const backup_count = document.querySelector('#backup-count')
+        const users_count = document.querySelector('#users-count')
+        const signupContainer = document.querySelector('#signupContainer')
+        const backupContainer = document.querySelector('#backupContainer')
         window.addEventListener('load', () => {
             const addUser = (user, local_template) => {
                 const clone = document.importNode(local_template.content, true)
