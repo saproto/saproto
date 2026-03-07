@@ -333,8 +333,14 @@
                 const clone = document.importNode(local_template.content, true)
                 clone.querySelector('.participant-profile-link').href =
                     user.user_profile_link
-                clone.querySelector('.participant-remove-link').href =
-                    user.user_remove_link
+
+                const removeLink = clone.querySelector(
+                    '.participant-remove-link'
+                )
+                if (removeLink) {
+                    removeLink.href = user.user_remove_link
+                }
+
                 clone.querySelector('.participant-avatar').src =
                     user.user_avatar
                 clone.querySelector('.participant-name').innerHTML =
