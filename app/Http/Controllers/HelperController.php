@@ -13,18 +13,44 @@ class HelperController extends Controller
 {
     public function store(Request $request, HelpingCommittee $helpingCommittee): RedirectResponse
     {
-        abort_if(! $helpingCommittee->activity, 403, $helpingCommittee->activity->event->title.' does not have a signup.');
-        abort_if($helpingCommittee->activity->closed, 403, 'This activity is closed, you cannot change participation anymore.');
+        if (! $helpingCommittee->activity) {
+            Session::flash('flash_message', 'This event does not have a signup.');
+
+            return back();
+        }
+
+        if ($helpingCommittee->activity->closed) {
+            Session::flash('flash_message', 'This activity is closed, you cannot change participation anymore.');
+
+            return back();
+        }
 
         $user = Auth::user();
         if ($request->has('user_id')) {
             $user = User::query()->findOrFail($request->input('user_id'));
-            abort_unless($user->id == Auth::id() || Auth::user()->can('board'), 403, 'You are not allowed to add this helper to this event.');
+            if ($user->id !== Auth::id() && ! Auth::user()->can('board')) {
+                Session::flash('flash_message', 'You are not allowed to add this helper to this event.');
+
+                return back();
+            }
+        }
+        if (! $helpingCommittee->committee->isMember($user)) {
+            Session::flash('flash_message', $user->name.' is not a member of the '.$helpingCommittee->committee->name.' and thus cannot help on behalf of it.');
+
+            return back();
         }
 
-        abort_unless($helpingCommittee->committee->isMember($user), 403, $user->name.' is not a member of the '.$helpingCommittee->committee->name.' and thus cannot help on behalf of it.');
-        abort_if($helpingCommittee->users->contains('id', $user->id), 403, $user->name.' is already helping for the '.$helpingCommittee->committee->name);
-        abort_if($helpingCommittee->users->count() >= $helpingCommittee->amount, 403, 'There are already enough people of your committee helping, thanks though!');
+        if ($helpingCommittee->users->contains('id', $user->id)) {
+            Session::flash('flash_message', $user->name.' is already helping for the '.$helpingCommittee->committee->name);
+
+            return back();
+        }
+
+        if ($helpingCommittee->users->count() >= $helpingCommittee->amount) {
+            Session::flash('flash_message', 'There are already enough people of your committee helping, thanks though!');
+
+            return back();
+        }
 
         $helpingCommittee->users()->attach($user->id);
         $helpingCommittee->activity->event->updateUniqueUsersCount();
@@ -35,7 +61,12 @@ class HelperController extends Controller
 
     public function destroy(HelpingCommittee $helpingCommittee, User $user): RedirectResponse
     {
-        abort_unless($user->id == Auth::id() || Auth::user()->can('board'), 403, 'You are not allowed to unsubscribe this user from this event.');
+        if ($user->id !== Auth::id() && ! Auth::user()->can('board')) {
+            Session::flash('flash_message', 'You are not allowed to unsubscribe this user from this event.');
+
+            return back();
+        }
+
         $helpingCommittee->users()->detach($user->id);
         $helpingCommittee->activity->event->updateUniqueUsersCount();
         Session::flash('flash_message', 'Removed '.$user->name.' as helper for the '.$helpingCommittee->committee->name.'.');

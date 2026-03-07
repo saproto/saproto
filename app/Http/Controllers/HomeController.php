@@ -74,6 +74,7 @@ class HomeController extends Controller
                 ->whereMonth('birthdate', Date::now()->month)
                 ->whereDay('birthdate', Date::now()->day)
                 ->with('media')
+                ->with('member')
                 ->get());
 
         $dinnerforms =

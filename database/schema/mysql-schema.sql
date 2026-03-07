@@ -1432,6 +1432,7 @@ CREATE TABLE `users` (
   `deleted_at` timestamp NULL DEFAULT NULL,
   `personal_key` varchar(64) DEFAULT NULL,
   `discord_id` varchar(255) DEFAULT NULL,
+  `wizard` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`),
   KEY `users_last_seen_at_index` (`last_seen_at`)
@@ -1867,4 +1868,5 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2022_11_01_000001_creat
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_01_09_172626_remove_dmx_tables',199);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_02_25_102853_remove_committees_activities_id_from_activities_users',200);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_02_25_112153_remove_notification_sent_from_committees_activities',200);
-INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_02_27_004429_drop_softdeletes_from_activities_users',201);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_03_07_130629_add_wizard_to_users',201);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_02_27_004429_drop_softdeletes_from_activities_users',202);
