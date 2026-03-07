@@ -52,9 +52,16 @@
                 </a>
             @endcan
 
-            @php($categories = Cache::remember('archivebar.event_categories', \Illuminate\Support\Facades\Date::tomorrow(), function(){
-                return \App\Models\EventCategory::query()->select(['id', 'name'])->orderBy('name')->get();
-            }))
+            @php($categories = Cache::remember(
+                'archivebar.event_categories',
+                \Illuminate\Support\Facades\Date::tomorrow(),
+                function () {
+                    return \App\Models\EventCategory::query()
+                        ->select(['id', 'name'])
+                        ->orderBy('name')
+                        ->get();
+                },
+            ))
             @if (count($categories) > 0)
                 <form
                     class="form-inline ms-3"
