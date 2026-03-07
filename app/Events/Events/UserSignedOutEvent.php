@@ -27,6 +27,15 @@ class UserSignedOutEvent implements ShouldBroadcast
     ) {}
 
     /**
+     * Determine if this event should broadcast.
+     */
+    public function broadcastWhen(): bool
+    {
+        // do not broadcast if the event hides its participants, so they do not get leaked
+        return ! $this->event->activity?->hide_participants;
+    }
+
+    /**
      * Get the channels the event should broadcast on.
      *
      * @return array<int, PrivateChannel>

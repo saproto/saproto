@@ -28,6 +28,15 @@ class UserSignedupEvent implements ShouldBroadcast
     ) {}
 
     /**
+     * Determine if this event should broadcast.
+     */
+    public function broadcastWhen(): bool
+    {
+        // do not broadcast if the event hides its participants, so they do not get leaked
+        return ! $this->event->activity?->hide_participants;
+    }
+
+    /**
      * Get the channels the event should broadcast on.
      *
      * @return array<int, PrivateChannel>
@@ -56,8 +65,8 @@ class UserSignedupEvent implements ShouldBroadcast
         return [
             'user_name' => $this->user->name,
             'user_id' => $this->user->id,
-            'user_avatar' => $this->user->getFirstMediaUrl('profile_picture', 'preview') ,
-            'user_remove_link' => route('event::deleteparticipation', ['event' => $this->event, 'user' => $this->user]) ,
+            'user_avatar' => $this->user->getFirstMediaUrl('profile_picture', 'preview'),
+            'user_remove_link' => route('event::deleteparticipation', ['event' => $this->event, 'user' => $this->user]),
             'user_profile_link' => route('user::profile', ['id' => $this->user?->getPublicId()]),
             'backup' => $this->backup,
         ];

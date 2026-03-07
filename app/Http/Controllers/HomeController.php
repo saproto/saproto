@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Enums\MembershipTypeEnum;
-use App\Events\Events\UserSignedOutEvent;
 use App\Models\Committee;
 use App\Models\CommitteeMembership;
 use App\Models\Company;
@@ -27,8 +26,6 @@ class HomeController extends Controller
     /** Display the homepage. */
     public function show(): \Illuminate\Contracts\View\View|Factory
     {
-
-//        UserSignedOutEvent::dispatch(Event::findOrFail(2856), Auth::user());
         $companies =
             Cache::remember('home.companies', Date::tomorrow(), fn () => Company::query()
                 ->where('in_logo_bar', true)

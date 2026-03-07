@@ -143,89 +143,107 @@
         </div>
     </div>
 
-    @if ($event->activity->users->count() > 0 || Auth::user()->can('board'))
-        <div class="card mb-3">
-            <div class="card-header bg-dark text-center text-white">
-                <span id="users-count">{{ $event->activity->users->count() }}</span> participants
+    <div
+        id="signupContainer"
+        @class([
+            'mb-3',
+            'card',
+            'd-none' =>
+                $event->activity->users->count() <= 0 && Auth::user()->cannot('board'),
+        ])
+    >
+        <div class="card-header bg-dark text-center text-white">
+            <span id="users-count">
+                {{ $event->activity->users->count() }}
+            </span>
+            participants
+        </div>
+
+        @if ($event->activity->hide_participants)
+            <div class="card-header bg-warning text-center text-white">
+                <strong>The participants for this activity are hidden!</strong>
+                <i class="fas fa-ghost"></i>
             </div>
+        @endif
 
-            @if ($event->activity->hide_participants)
-                <div class="card-header bg-warning text-center text-white">
-                    <strong>
-                        The participants for this activity are hidden!
-                    </strong>
-                    <i class="fas fa-ghost"></i>
-                </div>
-            @endif()
+        @if (! $event->activity->hide_participants || $event->isEventAdmin(Auth::user()) || Auth::user()->can('board') || Auth::user()->can('finadmin'))
+            <div class="card-body">
+                @include(
+                    'event.display_includes.render_participant_list',
+                    [
+                        'participants' => $event->activity->users,
+                        'event' => $event,
+                        'templateId' => 'template_users',
+                    ]
+                )
+            </div>
+        @endif
 
-            @if (! $event->activity->hide_participants || $event->isEventAdmin(Auth::user()) || Auth::user()->can('board') || Auth::user()->can('finadmin'))
-                <div class="card-body">
-                    @include(
-                        'event.display_includes.render_participant_list',
-                        [
-                            'participants' => $event->activity->users,
-                            'event' => $event,
-                            'templateId'=>'template_users'
-                        ]
-                    )
-                </div>
-            @endif
+        <div class="card-footer">
+            @if (Auth::user()->can('board') && ! $event->activity->closed)
+                <form
+                    class="form-horizontal"
+                    action="{{ route('event::addparticipationfor', ['event' => $event]) }}"
+                    method="post"
+                >
+                    {{ csrf_field() }}
 
-            <div class="card-footer">
-                @if (Auth::user()->can('board') && ! $event->activity->closed)
-                    <form
-                        class="form-horizontal"
-                        action="{{ route('event::addparticipationfor', ['event' => $event]) }}"
-                        method="post"
-                    >
-                        {{ csrf_field() }}
-
-                        <div class="row mb-3">
-                            <div class="col-9">
-                                <div class="form-group autocomplete">
-                                    <input
-                                        class="form-control user-search"
-                                        name="user_id"
-                                        required
-                                    />
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <button
-                                    class="btn btn-outline-primary btn-block"
-                                    type="submit"
-                                >
-                                    <i class="fas fa-plus-circle"></i>
-                                </button>
+                    <div class="row mb-3">
+                        <div class="col-9">
+                            <div class="form-group autocomplete">
+                                <input
+                                    class="form-control user-search"
+                                    name="user_id"
+                                    required
+                                />
                             </div>
                         </div>
-                    </form>
-                @endif
-            </div>
+                        <div class="col-3">
+                            <button
+                                class="btn btn-outline-primary btn-block"
+                                type="submit"
+                            >
+                                <i class="fas fa-plus-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            @endif
         </div>
-    @endif
+    </div>
+    <div
+        id="backupContainer"
+        @class(['card', 'd-none' => $event->activity->backupUsers->count() == 0])
+    >
+        <div class="card-header bg-dark text-center text-white">
+            <span id="backup-count">
+                {{ $event->activity->backupUsers->count() }}
+            </span>
+            people on the back-up list
+        </div>
 
-    @if ($event->activity->backupUsers->count() > 0)
-        <div class="card">
-            <div class="card-header bg-dark text-center text-white">
-                <span id="backup-count">
-                    {{ $event->activity->backupUsers->count() }}
-                </span> people on the
-                back-up list
+        @if ($event->activity->hide_participants)
+            <div class="card-header bg-warning text-center text-white">
+                <strong>
+                    The backup participants for this activity are hidden!
+                </strong>
+                <i class="fas fa-ghost"></i>
             </div>
+        @endif
 
+        @if (! $event->activity->hide_participants || $event->isEventAdmin(Auth::user()) || Auth::user()->can('board') || Auth::user()->can('finadmin'))
             <div class="card-body">
                 @include(
                     'event.display_includes.render_participant_list',
                     [
                         'participants' => $event->activity->backupUsers,
                         'event' => $event,
-                        'templateId'=>'template_backup_users'
+                        'templateId' => 'template_backup_users',
                     ]
                 )
             </div>
-        </div>
-    @endif
+        @endif
+    </div>
 @elseif ($event->activity?->withParticipants())
     <div class="card">
         <div class="card-header bg-dark text-center text-white">
@@ -295,64 +313,71 @@
     </div>
 </div>
 
-
 @push('javascript')
     @vite('resources/assets/js/echo.js')
     <script type="text/javascript" @cspNonce>
-        let id = @json($event->id);
-        template = document.querySelector('#template_users');
-        template_backup_users = document.querySelector('#template_backup_users');
-        backup_count = document.querySelector('#backup-count');
-        users_count = document.querySelector('#users-count');
+        let id = @json($event->id)
+        template = document.querySelector('#template_users')
+        template_backup_users = document.querySelector('#template_backup_users')
+        backup_count = document.querySelector('#backup-count')
+        users_count = document.querySelector('#users-count')
+        signupContainer = document.querySelector('#signupContainer')
+        backupContainer = document.querySelector('#backupContainer')
         window.addEventListener('load', () => {
             const addUser = (user, local_template) => {
-                const clone = document.importNode(local_template.content, true);
-                clone.querySelector(".participant-profile-link").href = user.user_profile_link ;
-                clone.querySelector(".participant-remove-link").href = user.user_remove_link ;
-                clone.querySelector(".participant-avatar").src = user.user_avatar;
-                clone.querySelector(".participant-name").innerHTML = user.user_name;
-                clone.querySelector(".participant-id").dataset.userId = user.user_id;
-                template.parentNode.appendChild(clone);
-            };
+                const clone = document.importNode(local_template.content, true)
+                clone.querySelector('.participant-profile-link').href =
+                    user.user_profile_link
+                clone.querySelector('.participant-remove-link').href =
+                    user.user_remove_link
+                clone.querySelector('.participant-avatar').src =
+                    user.user_avatar
+                clone.querySelector('.participant-name').innerHTML =
+                    user.user_name
+                clone.querySelector('.participant-id').dataset.userId =
+                    user.user_id
+                local_template.parentNode.appendChild(clone)
+            }
 
             const removeUser = (user_id) => {
-                const element = document.querySelector(`[data-user-id="${user_id}"]`);
+                const element = document.querySelector(
+                    `[data-user-id="${user_id}"]`
+                )
                 if (element) {
-                    element.remove();
-                }
-            };
-
-            const recountUsers = (template, counter) => {
-                const count = template?.parentNode.querySelectorAll('.participant-id').length;
-                if(count){
-                    counter.innerHTML = count;
+                    element.remove()
                 }
             }
-            // todo: figure out what to do when the backuplist or list element does not exist
-            //  (for instance when there was no one there before or it is hidden)
-            Echo.private(`events.${id}`)
-                .listen(
-                    '.App\\Events\\Events\\UserSignedupEvent',
-                    (e) => {
-                        removeUser(e.user_id)
 
-                        if(e.backup){
-                            addUser(e, template_backup_users);
-                        }else{
-                            addUser(e, template)
-                        }
-                        recountUsers(template_backup_users, backup_count);
-                        recountUsers(template, users_count)
+            const recountUsers = (template, counter) => {
+                const count =
+                    template?.parentNode.querySelectorAll(
+                        '.participant-id'
+                    ).length
+                if (count) {
+                    counter.innerHTML = count
+                } else {
+                    counter.innerHTML = 0
+                }
+            }
+
+            Echo.private(`events.${id}`)
+                .listen('.App\\Events\\Events\\UserSignedupEvent', (e) => {
+                    removeUser(e.user_id)
+                    if (e.backup) {
+                        backupContainer.classList.remove('d-none')
+                        addUser(e, template_backup_users)
+                    } else {
+                        signupContainer.classList.remove('d-none')
+                        addUser(e, template)
                     }
-            )
-            .listen(
-                '.App\\Events\\Events\\UserSignedOutEvent',
-                (e) => {
+                    recountUsers(template_backup_users, backup_count)
+                    recountUsers(template, users_count)
+                })
+                .listen('.App\\Events\\Events\\UserSignedOutEvent', (e) => {
                     removeUser(e.user_id)
                     recountUsers(template, users_count)
-                    recountUsers(template_backup_users, backup_count);
-                }
-            )
+                    recountUsers(template_backup_users, backup_count)
+                })
         })
     </script>
 @endpush

@@ -16,6 +16,4 @@ Broadcast::channel('isalfredthere', fn ($user): true => true);
 
 Broadcast::channel('stickers', fn (User $user): bool => $user->is_member);
 
-Broadcast::channel('events.{eventId}', function (User $user, int $eventId) {
-    return Event::query()->find($eventId)?->mayViewEvent($user)??false;
-});
+Broadcast::channel('events.{eventId}', fn (User $user, int $eventId) => $user->is_member && Event::query()->find($eventId)?->mayViewEvent($user) ?? false);

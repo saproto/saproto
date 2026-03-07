@@ -44,7 +44,7 @@ class ParticipationController extends Controller
 
         $participation = ActivityParticipation::query()->create($data);
 
-        UserSignedupEvent::dispatch($event, Auth::user(), $participation->backup);
+        event(new UserSignedupEvent($event, Auth::user(), $participation->backup ?? false));
 
         $event->updateUniqueUsersCount();
 
@@ -69,7 +69,7 @@ class ParticipationController extends Controller
 
         $participation = ActivityParticipation::query()->create($data);
 
-        UserSignedupEvent::dispatch($event, Auth::user(), $participation->backup);
+        event(new UserSignedupEvent($event, $user, $participation->backup ?? false));
 
         $event->updateUniqueUsersCount();
 
@@ -99,7 +99,7 @@ class ParticipationController extends Controller
 
         $participation->delete();
 
-        UserSignedOutEvent::dispatch($event, $user);
+        event(new UserSignedOutEvent($event, $user));
 
         Session::flash('flash_message', $participation->user->name.' is not attending '.$participation->activity->event->title.' anymore.');
 
@@ -145,7 +145,7 @@ class ParticipationController extends Controller
 
         $backup_participation->update(['backup' => false]);
 
-        UserSignedupEvent::dispatch($activity->event, Auth::user(), backup: false);
+        event(new UserSignedupEvent($activity->event, $backup_participation->user, backup: false));
 
         $backup_participation->activity->event->updateUniqueUsersCount();
 
