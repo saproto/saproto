@@ -57,7 +57,7 @@ class UserSignedOutEvent implements ShouldBroadcast
     }
 
     /**
-     * @return array<string, WallstreetEvent>
+     * @return array<string, integer>
      */
     public function broadcastWith(): array
     {

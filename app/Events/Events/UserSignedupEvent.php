@@ -58,7 +58,7 @@ class UserSignedupEvent implements ShouldBroadcast
     }
 
     /**
-     * @return array<string, WallstreetEvent>
+     * @return array<string, string|int|bool>
      */
     public function broadcastWith(): array
     {
@@ -67,7 +67,7 @@ class UserSignedupEvent implements ShouldBroadcast
             'user_id' => $this->user->id,
             'user_avatar' => $this->user->getFirstMediaUrl('profile_picture', 'preview'),
             'user_remove_link' => route('event::deleteparticipation', ['event' => $this->event, 'user' => $this->user]),
-            'user_profile_link' => route('user::profile', ['id' => $this->user?->getPublicId()]),
+            'user_profile_link' => route('user::profile', ['id' => $this->user->getPublicId()]),
             'backup' => $this->backup,
         ];
     }
