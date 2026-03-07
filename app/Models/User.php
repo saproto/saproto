@@ -67,6 +67,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property bool $address_visible
  * @property bool $receive_sms
  * @property bool $keep_protube_history
+ * @property bool $wizard
  * @property float|null $pref_calendar_alarm
  * @property bool $show_birthday
  * @property bool $show_achievements
@@ -700,6 +701,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             'signed_nda' => 'boolean',
             'did_study_create' => 'boolean',
             'did_study_itech' => 'boolean',
+            'wizard' => 'boolean',
         ];
     }
 }
