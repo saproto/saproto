@@ -78,7 +78,7 @@ class SearchController extends Controller
                     if ($event->mayViewEvent(Auth::user())) {
                         $events->push($event);
                     }
-                }) ?? [];
+                });
         }
 
         $photoAlbums = $this->getGenericSearchQuery(
