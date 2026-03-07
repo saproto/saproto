@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\HashMapItem;
 use Closure;
 use Exception;
 use Illuminate\Http\Request;
@@ -18,12 +17,13 @@ class EnforceWizard
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        if (Auth::check() && HashMapItem::query()->key('wizard')->subkey((string) Auth::user()->id)->first() && ! $request->is('api/*')) {
+        if (! $request->is('api/*') && Auth::check() && Auth::user()->wizard) {
             if (! $request->is('becomeamember')) {
                 return to_route('becomeamember');
             }
-
-            HashMapItem::query()->key('wizard')->subkey((string) Auth::user()->id)->first()->delete();
+            Auth::user()->update([
+                'wizard' => false,
+            ]);
         }
 
         return $next($request);
