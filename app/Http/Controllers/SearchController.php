@@ -88,7 +88,7 @@ class SearchController extends Controller
             ->unless(Auth::user()?->can('protography'), static function ($q) {
                 $q->where('private', false);
             })
-            ->get();
+            ->get() ?? [];
 
         return view('search.search', [
             'term' => $term,
