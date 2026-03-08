@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Override;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
@@ -60,8 +61,6 @@ class Photo extends Model implements HasMedia
     protected $table = 'photos';
 
     protected $guarded = ['id'];
-
-    protected $with = ['media'];
 
     #[Override]
     protected static function booted(): void
@@ -124,7 +123,7 @@ class Photo extends Model implements HasMedia
 
     public function getUrl(PhotoEnum $photoEnum = PhotoEnum::ORIGINAL): string
     {
-        return $this->getFirstMediaUrl($this->private ? 'private' : 'public', $photoEnum->value);
+        return Cache::remember("photo::{$this->id}::url::{$photoEnum->value}::{$this->private}", now()->addWeek(), fn () => $this->getFirstMediaUrl($this->private ? 'private' : 'public', $photoEnum->value));
     }
 
     #[Override]
