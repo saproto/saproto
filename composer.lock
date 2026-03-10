@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7b611ed037775b49964cada291c4e6ed",
+    "content-hash": "8083412667ffb18fdaa104aa0b4963b1",
     "packages": [
         {
             "name": "abcaeffchen/sepa-utilities",
@@ -193,16 +193,16 @@
         },
         {
             "name": "alaouy/youtube",
-            "version": "v2.2.5",
+            "version": "v2.2.6",
             "source": {
                 "type": "git",
-                "url": "https://github.com/alaouy/Youtube.git",
-                "reference": "6cd66013b18a958b85f4e71f72fb6fac7dc25c14"
+                "url": "https://github.com/alaouy/YouTube.git",
+                "reference": "bacd8002bf22f1867eddf2cfc66ea02e2f4b4fd1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alaouy/Youtube/zipball/6cd66013b18a958b85f4e71f72fb6fac7dc25c14",
-                "reference": "6cd66013b18a958b85f4e71f72fb6fac7dc25c14",
+                "url": "https://api.github.com/repos/alaouy/YouTube/zipball/bacd8002bf22f1867eddf2cfc66ea02e2f4b4fd1",
+                "reference": "bacd8002bf22f1867eddf2cfc66ea02e2f4b4fd1",
                 "shasum": ""
             },
             "require": {
@@ -210,7 +210,7 @@
                 "php": "^7.0|^8.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^6.1|^9.3"
+                "phpunit/phpunit": "12.5.8"
             },
             "type": "library",
             "extra": {
@@ -247,10 +247,10 @@
                 "youtube"
             ],
             "support": {
-                "issues": "https://github.com/alaouy/Youtube/issues",
-                "source": "https://github.com/alaouy/Youtube/tree/v2.2.5"
+                "issues": "https://github.com/alaouy/YouTube/issues",
+                "source": "https://github.com/alaouy/YouTube/tree/v2.2.6"
             },
-            "time": "2020-12-14T16:14:02+00:00"
+            "time": "2026-03-03T21:22:32+00:00"
         },
         {
             "name": "anhskohbo/no-captcha",
@@ -13941,16 +13941,16 @@
         },
         {
             "name": "driftingly/rector-laravel",
-            "version": "2.1.9",
+            "version": "2.1.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/driftingly/rector-laravel.git",
-                "reference": "aee9d4a1d489e7ec484fc79f33137f8ee051b3f7"
+                "reference": "2a2175eefabca6d15c247d55de17c75dc2f787a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/driftingly/rector-laravel/zipball/aee9d4a1d489e7ec484fc79f33137f8ee051b3f7",
-                "reference": "aee9d4a1d489e7ec484fc79f33137f8ee051b3f7",
+                "url": "https://api.github.com/repos/driftingly/rector-laravel/zipball/2a2175eefabca6d15c247d55de17c75dc2f787a9",
+                "reference": "2a2175eefabca6d15c247d55de17c75dc2f787a9",
                 "shasum": ""
             },
             "require": {
@@ -13971,9 +13971,9 @@
             "description": "Rector upgrades rules for Laravel Framework",
             "support": {
                 "issues": "https://github.com/driftingly/rector-laravel/issues",
-                "source": "https://github.com/driftingly/rector-laravel/tree/2.1.9"
+                "source": "https://github.com/driftingly/rector-laravel/tree/2.1.12"
             },
-            "time": "2025-12-25T23:31:36+00:00"
+            "time": "2026-03-06T19:59:21+00:00"
         },
         {
             "name": "fakerphp/faker",
