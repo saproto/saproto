@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\Events\UserSignedOutEvent;
+use App\Events\Events\UserSignedupEvent;
 use App\Mail\ActivityMovedFromBackup;
 use App\Mail\ActivitySubscribedTo;
 use App\Mail\ActivityUnsubscribedFrom;
@@ -40,7 +42,10 @@ class ParticipationController extends Controller
             Session::flash('flash_message', 'You claimed a spot for '.$event->title.'.');
         }
 
-        ActivityParticipation::query()->create($data);
+        $participation = ActivityParticipation::query()->create($data);
+
+        event(new UserSignedupEvent($event, Auth::user(), $participation->backup ?? false));
+
         $event->updateUniqueUsersCount();
 
         if ($event->activity->redirect_url) {
@@ -63,6 +68,8 @@ class ParticipationController extends Controller
         abort_if($event->activity->isParticipating($user) || $event->activity->isOnBackupList($user), 403, $user->name.' is already subscribed for '.$event->title.'.');
 
         $participation = ActivityParticipation::query()->create($data);
+
+        event(new UserSignedupEvent($event, $user, $participation->backup ?? false));
 
         $event->updateUniqueUsersCount();
 
@@ -91,6 +98,8 @@ class ParticipationController extends Controller
         }
 
         $participation->delete();
+
+        event(new UserSignedOutEvent($event, $user));
 
         Session::flash('flash_message', $participation->user->name.' is not attending '.$participation->activity->event->title.' anymore.');
 
@@ -135,6 +144,8 @@ class ParticipationController extends Controller
         }
 
         $backup_participation->update(['backup' => false]);
+
+        event(new UserSignedupEvent($activity->event, $backup_participation->user, backup: false));
 
         $backup_participation->activity->event->updateUniqueUsersCount();
 
