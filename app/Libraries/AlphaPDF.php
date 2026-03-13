@@ -4,7 +4,7 @@ namespace App\Libraries;
 
 use tFPDF;
 
-class AlphaPDF extends tFpdf
+class AlphaPDF extends tFPDF
 {
     protected $extgstates = [];
 

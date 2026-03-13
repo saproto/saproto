@@ -48,7 +48,7 @@ return [
      * Register additional global CSP directives here.
      */
     'directives' => [
-        [Directive::STYLE, KeyWord::UNSAFE_INLINE],
+        [Directive::STYLE, Keyword::UNSAFE_INLINE],
     ],
 
     /*

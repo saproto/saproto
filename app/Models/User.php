@@ -182,9 +182,9 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static Builder<static>|User withoutRole($roles, $guard = null)
  * @method static Builder<static>|User withoutTrashed()
  *
- * @property-read Collection<int, \App\Models\Activity> $activities
+ * @property-read Collection<int, Activity> $activities
  * @property-read int|null $activities_count
- * @property-read Collection<int, \App\Models\Activity> $backupActivities
+ * @property-read Collection<int, Activity> $backupActivities
  * @property-read int|null $backup_activities_count
  * @property-read MediaCollection<int, Media> $media
  * @property-read int|null $media_count
