@@ -14,5 +14,4 @@
 @push ('javascript')
     <script @cspNonce
         window.location.href = '{{ $url }}'
-    </script>
 @endpush

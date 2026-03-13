@@ -70,25 +70,29 @@
 </div>
 
 @push ('javascript')
-    <script type="text/javascript" @cspNonce
-        var checkboxes = document.querySelectorAll('input[type=checkbox]')
-        checkboxes.forEach((checkbox) => {
-            checkbox.addEventListener('change', function (event) {
-                //disable the checkbox
-                event.target.disabled = true
-                //send the request
-                get('{{ urldecode(route('api::wallstreet::toggle_event')) }}', {
-                    id: event.target.value,
-                }).then((response) => {
-                    if (response.id != null) {
-                        event.target.checked = response.active
-                        event.target.disabled = false
-                    } else {
-                        event.target.checked = !event.target.checked
-                        event.target.disabled = false
-                    }
-                })
-            })
-        })
+    <script
+        type="text/javascript"
+        @cspNonce
+        var
+        checkboxes="document.querySelectorAll('input[type=checkbox]')"
+        checkboxes.forEach((checkbox)=""
+        {
+                   checkbox.addEventListener('change', function (event) {
+                       //disable the checkbox
+                       event.target.disabled = true
+                       //send the request
+                       get('{{ urldecode(route('api::wallstreet::toggle_event')) }}', {
+                           id: event.target.value,
+                       }).then((response) => {
+                           if (response.id != null) {
+                               event.target.checked = response.active
+                               event.target.disabled = false
+                           } else {
+                               event.target.checked = !event.target.checked
+                               event.target.disabled = false
+                           }
+                       })
+                   })
+               })
     </script>
 @endpush

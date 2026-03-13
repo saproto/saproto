@@ -21,8 +21,10 @@
         @cspNonce
         src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"
     ></script>
-    <script @cspNonce
-        // Initialize when page is loaded
+    <script
+        @cspNonce
+    />
+    / Initialize when page is loaded
         window.addEventListener('load', () => {
             const ctx = document.getElementById('myChart')
 
@@ -56,7 +58,7 @@
                 })
 
                 let id = {{ $id }}
-                //listen to a new wallstreet price
+    //listen to a new wallstreet price
                 Echo.private(`wallstreet-prices.${id}`).listen(
                     'NewWallstreetPrice',
                     (e) => {

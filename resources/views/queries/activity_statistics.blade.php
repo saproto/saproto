@@ -135,49 +135,58 @@
         @cspNonce
         src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"
     ></script>
-    <script type="text/javascript" @cspNonce
-        const ctx = document.getElementById('chart')
-        var chart = null
-        var data = {!! json_encode($events->toArray(), JSON_HEX_TAG) !!}
-
-        function createDataSets(data) {
-            let myData = {
-                datasets: [],
-            }
-            Object.values(data).forEach((product) => {
-                let prices = []
-                product.forEach((item) => {
-                    date = new Date(item.start * 1000)
-                    date = date.setFullYear(date.getFullYear(), date.getMonth(), 1)
-                    prices.push({
-                        x: date,
-                        y: item.total,
-                    })
-                })
-                myData.datasets.push({ label: product[0].board, data: prices })
-            })
-            return myData
+    <script
+        type="text/javascript"
+        @cspNonce
+        const
+        ctx="document.getElementById('chart')"
+        var
+        chart="null"
+        var
+        data={!! json_encode($events->toArray(), JSON_HEX_TAG) !!}
+        function
+        createDataSets(data)
+        {
+        let
+        myData="{"
+        datasets:
+        [],
         }
+        Object.values(data).forEach((product)=""
+        >{
+                       let prices = []
+                       product.forEach((item) => {
+                           date = new Date(item.start * 1000)
+                           date = date.setFullYear(date.getFullYear(), date.getMonth(), 1)
+                           prices.push({
+                               x: date,
+                               y: item.total,
+                           })
+                       })
+                       myData.datasets.push({ label: product[0].board, data: prices })
+                   })
+                   return myData
+               }
 
-        console.log('creating chart')
+               console.log('creating chart')
 
-        chart = new Chart(ctx, {
-            type: 'line',
-            options: {
-                offset: true,
-                spanGaps: true,
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: {
-                            unit: 'month',
-                        },
-                        parsing: false,
-                    },
-                },
-                responsive: true,
-            },
-            data: createDataSets(data),
-        })
+               chart = new Chart(ctx, {
+                   type: 'line',
+                   options: {
+                       offset: true,
+                       spanGaps: true,
+                       scales: {
+                           x: {
+                               type: 'time',
+                               time: {
+                                   unit: 'month',
+                               },
+                               parsing: false,
+                           },
+                       },
+                       responsive: true,
+                   },
+                   data: createDataSets(data),
+               })
     </script>
 @endpush

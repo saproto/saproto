@@ -41,51 +41,55 @@
 @endpush
 
 @push ('javascript')
-    <script type="text/javascript" @cspNonce
-        window.addEventListener('load', () => {
-            window.Echo.channel(`stickers`)
-                .listen('StickerPlacedEvent', (marker) => {
-                    addMarkerToMap(marker)
-                })
-                .error((error) => {
-                    console.error(error)
-                    setTimeout(() => {
-                        window.location.reload()
-                    }, 10000)
-                })
+    <script
+        type="text/javascript"
+        @cspNonce
+        window.addEventListener('load',
+        ()=""
+        {
+                   window.Echo.channel(`stickers`)
+                       .listen('StickerPlacedEvent', (marker) => {
+                           addMarkerToMap(marker)
+                       })
+                       .error((error) => {
+                           console.error(error)
+                           setTimeout(() => {
+                               window.location.reload()
+                           }, 10000)
+                       })
 
-            const map = L.map('map').setView([52.00888875842265, 5.70001], 7)
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution:
-                    '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-            }).addTo(map)
+                   const map = L.map('map').setView([52.00888875842265, 5.70001], 7)
+                   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                       attribution:
+                           '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                   }).addTo(map)
 
-            const markerFiles = ['chip', 'cloud', 'gear', 'heart', 'light', 'world']
+                   const markerFiles = ['chip', 'cloud', 'gear', 'heart', 'light', 'world']
 
-            const markerIcons = markerFiles.map((path) => {
-                return L.icon({
-                    iconUrl: `/images/logo/markers/${path}.png`,
-                    iconSize: [15, 30], // size of the icon
-                    iconAnchor: [7, 32], // point of the icon which will correspond to marker's location
-                    popupAnchor: [5, -55], // point from which the popup should open relative to the iconAnchor
-                })
-            })
+                   const markerIcons = markerFiles.map((path) => {
+                       return L.icon({
+                           iconUrl: `/images/logo/markers/${path}.png`,
+                           iconSize: [15, 30], // size of the icon
+                           iconAnchor: [7, 32], // point of the icon which will correspond to marker's location
+                           popupAnchor: [5, -55], // point from which the popup should open relative to the iconAnchor
+                       })
+                   })
 
-            let stickerAmount = document.getElementById('sticker-amount')
+                   let stickerAmount = document.getElementById('sticker-amount')
 
-            var markerCount = 0
-            const placedMarkers = {!! json_encode($stickers) !!}
+                   var markerCount = 0
+                   const placedMarkers = {!! json_encode($stickers) !!}
 
-            placedMarkers.forEach((marker) => {
-                addMarkerToMap(marker)
-            })
-            function addMarkerToMap(marker) {
-                L.marker([marker.lat, marker.lng], {
-                    icon: markerIcons[Math.floor(Math.random() * markerIcons.length)],
-                }).addTo(map)
-                markerCount++
-                stickerAmount.textContent = markerCount
-            }
-        })
+                   placedMarkers.forEach((marker) => {
+                       addMarkerToMap(marker)
+                   })
+                   function addMarkerToMap(marker) {
+                       L.marker([marker.lat, marker.lng], {
+                           icon: markerIcons[Math.floor(Math.random() * markerIcons.length)],
+                       }).addTo(map)
+                       markerCount++
+                       stickerAmount.textContent = markerCount
+                   }
+               })
     </script>
 @endpush

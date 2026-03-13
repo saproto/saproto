@@ -131,23 +131,25 @@
 @endsection
 
 @push ('javascript')
-    <script type="text/javascript" @cspNonce
-        present = document.getElementById('present')
-
-        document.querySelectorAll('.is_present').forEach((el) => {
-            el.onclick = () => {
-                get(
-                    '{{ route('event::togglepresence', ['participation' => 'id']) }}'.replace(
-                        'id',
-                        el.getAttribute('data-id')
-                    )
-                ).then((data) => {
-                    el.classList.toggle('bg-success')
-                    el.classList.toggle('bg-danger')
-                    el.innerHTML = el.innerHTML === 'Present' ? 'Absent' : 'Present'
-                    present.innerHTML = data
-                })
-            }
-        })
+    <script
+        type="text/javascript"
+        @cspNonce
+        present="document.getElementById('present')"
+        document.querySelectorAll('.is_present').forEach((el)=""
+        {
+                   el.onclick = () => {
+                       get(
+                           '{{ route('event::togglepresence', ['participation' => 'id']) }}'.replace(
+                               'id',
+                               el.getAttribute('data-id')
+                           )
+                       ).then((data) => {
+                           el.classList.toggle('bg-success')
+                           el.classList.toggle('bg-danger')
+                           el.innerHTML = el.innerHTML === 'Present' ? 'Absent' : 'Present'
+                           present.innerHTML = data
+                       })
+                   }
+               })
     </script>
 @endpush

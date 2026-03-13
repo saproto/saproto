@@ -380,8 +380,10 @@
 
 @push ('javascript')
     @vite ('resources/assets/js/exifreader.js')
-    <script async type="text/javascript" @cspNonce
-        const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+    <script async type="text/javascript" const MAX_FILE_SIZE="5" * 1024 * 1024 /
+        @cspNonce
+    />
+    5MB
         window.addEventListener('load', () => {
             let fileSizeLimit = '{{ $fileSizeLimit }}B'
             let fileId = 1
@@ -521,8 +523,10 @@
             function uploadError(file, err) {
                 document.getElementById('error-bar').classList.remove('d-none')
                 document.querySelector('#error-bar ul').innerHTML +=
-                    `<li> ${file.name} <small><i>${err}</i></small> </li>`
-            }
-        })
+                    `
+    <li>
+        ${file.name} <small><i>${err}</i></small>
+    </li>
+    ` } })
     </script>
 @endpush

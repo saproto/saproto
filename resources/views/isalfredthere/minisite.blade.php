@@ -81,7 +81,12 @@
                 color: 'bg-success',
             },
             jur: {
-                text: 'No! But Jur is here to help you! <br> <div style="font-size: 30px;">Please call  +31 53 489 5646 for assistance</div>',
+                text: 'No! But Jur is here to help you!
+    <br />
+    <div style="font-size: 30px">
+        Please call +31 53 489 5646 for assistance
+    </div>
+    ',
                 htmlElement: document.getElementById('jur-there'),
                 color: 'bg-success',
             },
