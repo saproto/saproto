@@ -380,7 +380,16 @@
 
 @push ('javascript')
     @vite ('resources/assets/js/exifreader.js')
-    <script async type="text/javascript" const MAX_FILE_SIZE="5" * 1024 * 1024 /
+    <script
+        async
+        type="text/javascript"
+        const
+        MAX_FILE_SIZE="5"
+        *
+        1024
+        *
+        1024
+        /
         @cspNonce
     />
     5MB

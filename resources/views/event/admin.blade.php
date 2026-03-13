@@ -240,41 +240,44 @@
         window.addEventListener('load',
         ()=""
         {
-                   const scanList = Array.from(document.getElementsByClassName('scan'))
-                   const unscanList = Array.from(document.getElementsByClassName('unscan'))
-                   scanList.forEach((el) => setEventListener(el, false))
-                   unscanList.forEach((el) => setEventListener(el, true))
-               })
+        const
+        scanList="Array.from(document.getElementsByClassName('scan'))"
+        const
+        unscanList="Array.from(document.getElementsByClassName('unscan'))"
+        scanList.forEach((el)=""
+        setEventListener(el, false))
+                          unscanList.forEach((el) => setEventListener(el, true))
+                      })
 
-               const scanRequest = (barcode, unscan) =>
-                   get('{{ route('api::scan', ['event' => $event->id]) }}', {
-                       barcode: barcode,
-                       ...(unscan && { unscan: true }),
-                   })
+                      const scanRequest = (barcode, unscan) =>
+                          get('{{ route('api::scan', ['event' => $event->id]) }}', {
+                              barcode: barcode,
+                              ...(unscan && { unscan: true }),
+                          })
 
-               function setEventListener(el, unscan) {
-                   el.addEventListener('click', (e) => {
-                       e.preventDefault()
-                       let barcode = e.target.getAttribute('data-id')
-                       let parent = e.target.parentElement
-                       if (barcode === undefined) throw new Error("Can't find barcode")
-                       scanRequest(barcode, unscan)
-                           .then(() => {
-                               console.log('Scanned barcode ' + barcode)
-                               let link = document.createElement('a')
-                               link.href = '#'
-                               link.setAttribute('data-id', barcode)
-                               link.innerHTML = unscan ? 'Scan Manually' : 'Unscan'
-                               link.className = unscan ? 'scan dontprint' : 'unscan dontprint'
-                               parent.innerHTML = ''
-                               parent.append(link)
-                               setEventListener(link, !unscan)
-                           })
-                           .catch((err) => {
-                               console.error(err)
-                               window.alert("Couldn't register scan.")
-                           })
-                   })
-               }
+                      function setEventListener(el, unscan) {
+                          el.addEventListener('click', (e) => {
+                              e.preventDefault()
+                              let barcode = e.target.getAttribute('data-id')
+                              let parent = e.target.parentElement
+                              if (barcode === undefined) throw new Error("Can't find barcode")
+                              scanRequest(barcode, unscan)
+                                  .then(() => {
+                                      console.log('Scanned barcode ' + barcode)
+                                      let link = document.createElement('a')
+                                      link.href = '#'
+                                      link.setAttribute('data-id', barcode)
+                                      link.innerHTML = unscan ? 'Scan Manually' : 'Unscan'
+                                      link.className = unscan ? 'scan dontprint' : 'unscan dontprint'
+                                      parent.innerHTML = ''
+                                      parent.append(link)
+                                      setEventListener(link, !unscan)
+                                  })
+                                  .catch((err) => {
+                                      console.error(err)
+                                      window.alert("Couldn't register scan.")
+                                  })
+                          })
+                      }
     </script>
 @endpush

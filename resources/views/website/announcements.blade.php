@@ -43,7 +43,6 @@
                     {
                                            modals['{{ $announcement->modal_id }}'].show()
                                        })
-                </script>
             @endpush
         @else
             <div

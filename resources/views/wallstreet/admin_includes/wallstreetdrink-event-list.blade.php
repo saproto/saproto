@@ -72,13 +72,18 @@
 @push ('javascript')
     <script
         type="text/javascript"
-        @cspNonce
         var
         checkboxes="document.querySelectorAll('input[type=checkbox]')"
         checkboxes.forEach((checkbox)=""
         {
-                   checkbox.addEventListener('change', function (event) {
-                       //disable the checkbox
+        checkbox.addEventListener('change',
+        function
+        (event)
+        {
+
+        @cspNonce
+    />
+    /disable the checkbox
                        event.target.disabled = true
                        //send the request
                        get('{{ urldecode(route('api::wallstreet::toggle_event')) }}', {

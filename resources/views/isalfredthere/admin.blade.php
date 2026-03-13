@@ -185,23 +185,25 @@
         )
         radioList.forEach((el)=""
         {
-                   el.addEventListener('change', () => {
-                       if (el.checked && el.value === '{{ IsAlfredThereEnum::AWAY }}') {
-                           dateSelect.classList.remove('d-none')
-                           alfredText.classList.remove('d-none')
-                           alfredText.querySelector('input').placeholder = 'Additional message'
-                           dateBack.required = true
-                       } else if (el.checked && el.value === 'text') {
-                           alfredText.classList.remove('d-none')
-                           dateSelect.classList.add('d-none')
-                           alfredText.querySelector('input').placeholder = 'Message!'
-                           alfredText.required = true
-                       } else {
-                           dateSelect.classList.add('d-none')
-                           alfredText.classList.add('d-none')
-                           dateBack.required = false
-                       }
-                   })
-               })
+        el.addEventListener('change',
+        ()=""
+        {
+                              if (el.checked && el.value === '{{ IsAlfredThereEnum::AWAY }}') {
+                                  dateSelect.classList.remove('d-none')
+                                  alfredText.classList.remove('d-none')
+                                  alfredText.querySelector('input').placeholder = 'Additional message'
+                                  dateBack.required = true
+                              } else if (el.checked && el.value === 'text') {
+                                  alfredText.classList.remove('d-none')
+                                  dateSelect.classList.add('d-none')
+                                  alfredText.querySelector('input').placeholder = 'Message!'
+                                  alfredText.required = true
+                              } else {
+                                  dateSelect.classList.add('d-none')
+                                  alfredText.classList.add('d-none')
+                                  dateBack.required = false
+                              }
+                          })
+                      })
     </script>
 @endsection

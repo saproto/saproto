@@ -106,37 +106,39 @@
         type="text/javascript"
         @cspNonce
         document.querySelectorAll('.qr-button').forEach((el)=""
-            el.addEventListener('click', (e) => {
-                const modal = document.querySelector(el.getAttribute('data-bs-target'))
+        el.addEventListener('click',
+        (e)=""
+        {
+                       const modal = document.querySelector(el.getAttribute('data-bs-target'))
 
-                const id = el.getAttribute('data-url-id')
+                       const id = el.getAttribute('data-url-id')
 
-                modal.querySelector('#qr-modal-url').src =
-                    `{{ route('short_urls.qr_code', ['id' => '_id']) }}`.replace('_id', id)
-            })
-        )
+                       modal.querySelector('#qr-modal-url').src =
+                           `{{ route('short_urls.qr_code', ['id' => '_id']) }}`.replace('_id', id)
+                   })
+               )
 
-        document.querySelector('#qr-modal-copy').addEventListener('click', (e) => {
-            const image = document.getElementById('qr-modal-url')
-            const canvas = document.createElement('canvas')
-            const margin = 10 //the margin of the QR code in the image in percentage
-            const scale = 10
-            canvas.width = image.width * scale
-            canvas.height = image.height * scale
-            const ctx = canvas.getContext('2d')
-            ctx.fillStyle = 'white'
-            ctx.fillRect(0, 0, canvas.width, canvas.height)
-            ctx.drawImage(
-                image,
-                (image.width * (margin / 100) * scale) / 2,
-                (image.height * (margin / 100) * scale) / 2,
-                (1 - margin / 100) * image.width * scale,
-                (1 - margin / 100) * image.height * scale
-            )
-            canvas.toBlob((blob) => {
-                navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
-            }, 'image/png')
-        })
+               document.querySelector('#qr-modal-copy').addEventListener('click', (e) => {
+                   const image = document.getElementById('qr-modal-url')
+                   const canvas = document.createElement('canvas')
+                   const margin = 10 //the margin of the QR code in the image in percentage
+                   const scale = 10
+                   canvas.width = image.width * scale
+                   canvas.height = image.height * scale
+                   const ctx = canvas.getContext('2d')
+                   ctx.fillStyle = 'white'
+                   ctx.fillRect(0, 0, canvas.width, canvas.height)
+                   ctx.drawImage(
+                       image,
+                       (image.width * (margin / 100) * scale) / 2,
+                       (image.height * (margin / 100) * scale) / 2,
+                       (1 - margin / 100) * image.width * scale,
+                       (1 - margin / 100) * image.height * scale
+                   )
+                   canvas.toBlob((blob) => {
+                       navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
+                   }, 'image/png')
+               })
     </script>
 @endpush
 

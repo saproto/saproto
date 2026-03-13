@@ -112,11 +112,10 @@
             const s = stock[id]
             if (s
     <= 0) { modals['outofstock-modal'].show() } else { cart[id]++ stock[id]--
-    update('add') } } async{{ $store_slug }}', }).then((data)> {
-    data.forEach((product) => { const id = product.id images[id] =
-    product.image_url ?? '' cart[id] = 0 stock[id] = product.stock price[id] =
-    product.price }) }) const categoryBtnList = Array.from(
-    document.getElementsByClassName('btn-category') )
+    update({{ $store_slug }}', }> { data.forEach((product) => { const id =
+    product.id images[id] = product.image_url ?? '' cart[id] = 0 stock[id] =
+    product.stock price[id] = product.price }) }) const categoryBtnList =
+    Array.from( document.getElementsByClassName('btn-category') )
     categoryBtnList.forEach((el) => { el.addEventListener('click', () => {
     setTabActive(el) }) }) let lastSelectedTab = document.querySelector(
     `[data-id="${localStorage.getItem('currentProductPageId')}"]` ) if

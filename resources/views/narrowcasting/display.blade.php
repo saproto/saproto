@@ -121,102 +121,102 @@
         get('{{ route('api::screen::narrowcasting') }}')
         .then((data)=""
         >{
-                           if (campaigns.length !== 0 && campaigns.length !== data.length) {
-                               window.location.reload()
+                                   if (campaigns.length !== 0 && campaigns.length !== data.length) {
+                                       window.location.reload()
+                                   }
+
+                                   campaigns = data
+                               })
+                               .catch((error) =>
+                                   console.log('Error loading campaigns from server:', error)
+                               )
+                       }
+
+                       function onPlayerReady(event) {
+                           event.target.mute()
+                           event.target.playVideo()
+                           // updateSlide()
+                       }
+
+                       function onPlayerStateChange(event) {
+                           if (event.data == YT.PlayerState.PLAYING) {
+                               setTimeout(updateSlide, (youtubePlayer.getDuration() - 1) * 1000)
                            }
-
-                           campaigns = data
-                       })
-                       .catch((error) =>
-                           console.log('Error loading campaigns from server:', error)
-                       )
-               }
-
-               function onPlayerReady(event) {
-                   event.target.mute()
-                   event.target.playVideo()
-                   // updateSlide()
-               }
-
-               function onPlayerStateChange(event) {
-                   if (event.data == YT.PlayerState.PLAYING) {
-                       setTimeout(updateSlide, (youtubePlayer.getDuration() - 1) * 1000)
-                   }
-               }
-
-               function updateSlide() {
-                   const text = document.getElementById('fullpagetext')
-                   const textContainer = document.getElementById('text-container')
-                   const slides = document.getElementById('slideshow')
-                   const player = document.getElementById('yt-player')
-
-                   if (campaigns.length === 0) {
-                       textContainer.innerHTML = 'There are no messages to display. :)'
-                       text.classList.remove(hideClass)
-                       slides.classList.add(hideClass)
-                       player.classList.add(hideClass)
-                       setTimeout(updateSlide, 1000)
-                   } else {
-                       textContainer.innerHTML = 'Loading slideshow... :)'
-                       text.classList.add(hideClass)
-                       player.classList.add(hideClass)
-                       slides.classList.add(hideClass)
-
-                       if (currentCampaign >= campaigns.length) {
-                           currentCampaign = 0
-                       }
-                       const campaign = campaigns[currentCampaign]
-
-                       //hide the last slide
-                       let oldCampaign = currentCampaign - 1
-                       if (oldCampaign < 0) oldCampaign += campaigns.length
-                       const oldSlide = document.getElementById('slide-' + oldCampaign)
-                       if (oldSlide) {
-                           oldSlide.classList.add(hideClass)
                        }
 
-                       if (campaign.hasOwnProperty('image')) {
-                           slides.classList.remove(hideClass)
+                       function updateSlide() {
+                           const text = document.getElementById('fullpagetext')
+                           const textContainer = document.getElementById('text-container')
+                           const slides = document.getElementById('slideshow')
+                           const player = document.getElementById('yt-player')
 
-                           //show the new slide if it exists, otherwise create it
-                           const slide = document.getElementById('slide-' + currentCampaign)
-                           if (slide) {
-                               slide.classList.remove(hideClass)
+                           if (campaigns.length === 0) {
+                               textContainer.innerHTML = 'There are no messages to display. :)'
+                               text.classList.remove(hideClass)
+                               slides.classList.add(hideClass)
+                               player.classList.add(hideClass)
+                               setTimeout(updateSlide, 1000)
                            } else {
-                               slides.innerHTML +=
-                                   '
-        <div
-            id="slide-' +
-                            currentCampaign +
-                            '"
-            class="slide"
-            style="
-                background-image: url(' +
-                            campaign.image +
-                            ');
-            "
-        ></div>
-        '
+                               textContainer.innerHTML = 'Loading slideshow... :)'
+                               text.classList.add(hideClass)
+                               player.classList.add(hideClass)
+                               slides.classList.add(hideClass)
+
+                               if (currentCampaign >= campaigns.length) {
+                                   currentCampaign = 0
+                               }
+                               const campaign = campaigns[currentCampaign]
+
+                               //hide the last slide
+                               let oldCampaign = currentCampaign - 1
+                               if (oldCampaign < 0) oldCampaign += campaigns.length
+                               const oldSlide = document.getElementById('slide-' + oldCampaign)
+                               if (oldSlide) {
+                                   oldSlide.classList.add(hideClass)
+                               }
+
+                               if (campaign.hasOwnProperty('image')) {
+                                   slides.classList.remove(hideClass)
+
+                                   //show the new slide if it exists, otherwise create it
+                                   const slide = document.getElementById('slide-' + currentCampaign)
+                                   if (slide) {
+                                       slide.classList.remove(hideClass)
+                                   } else {
+                                       slides.innerHTML +=
+                                           '
+                <div
+                    id="slide-' +
+                                    currentCampaign +
+                                    '"
+                    class="slide"
+                    style="
+                        background-image: url(' +
+                                    campaign.image +
+                                    ');
+                    "
+                ></div>
+                '
+                                    }
+                                    setTimeout(updateSlide, campaign.slide_duration * 1000)
+
+                                    previousWasVideo = false
+                                } else {
+                                    youtubePlayer.loadVideoById(campaign.video, 'highres')
+                                    youtubePlayer.playVideo()
+
+                                    player.classList.remove(hideClass)
+
+                                    previousWasVideo = true
+                                }
+                                currentCampaign++
                             }
-                            setTimeout(updateSlide, campaign.slide_duration * 1000)
-
-                            previousWasVideo = false
-                        } else {
-                            youtubePlayer.loadVideoById(campaign.video, 'highres')
-                            youtubePlayer.playVideo()
-
-                            player.classList.remove(hideClass)
-
-                            previousWasVideo = true
                         }
-                        currentCampaign++
-                    }
-                }
 
-                window.addEventListener('load', () => {
-                    updateCampaigns()
-                    const everyTwoHours = 60 * 60 * 2 * 1000
-                    setInterval(updateCampaigns, everyTwoHours)
-                })
+                        window.addEventListener('load', () => {
+                            updateCampaigns()
+                            const everyTwoHours = 60 * 60 * 2 * 1000
+                            setInterval(updateCampaigns, everyTwoHours)
+                        })
     </script>
 @endpush

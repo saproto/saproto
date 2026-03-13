@@ -78,18 +78,19 @@
         activate.addEventListener('click',
         ()=""
         {
-                   fishcamSrc.src = '{{ Config::string('app-proto.fishcam-url') }}'
-                   fishcamSrc.classList.remove('d-none')
-                   warning.classList.add('d-none')
-               })
+        fishcamSrc.src='{{ Config::string('app-proto.fishcam-url') }}'
+        fishcamSrc.classList.remove('d-none')
+        warning.classList.add('d-none')
+        })
+        fishcamSrc.addEventListener('error',
+        ()=""
+        >{
+                          unavailable.classList.remove('d-none')
+                          fishcam.classList.add('d-none')
+                      })
 
-               fishcamSrc.addEventListener('error', () => {
-                   unavailable.classList.remove('d-none')
-                   fishcam.classList.add('d-none')
-               })
-
-               fishcamSrc.addEventListener('load', () => {
-                   fishcam.classList.remove('d-none')
-               })
+                      fishcamSrc.addEventListener('load', () => {
+                          fishcam.classList.remove('d-none')
+                      })
     </script>
 @endpush

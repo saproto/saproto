@@ -21,9 +21,7 @@
         @cspNonce
         src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"
     ></script>
-    <script
-        @cspNonce
-    />
+    <script @cspNonce />
     / Initialize when page is loaded
         window.addEventListener('load', () => {
             const ctx = document.getElementById('myChart')

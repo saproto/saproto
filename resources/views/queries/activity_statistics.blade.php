@@ -154,39 +154,39 @@
         }
         Object.values(data).forEach((product)=""
         >{
-                       let prices = []
-                       product.forEach((item) => {
-                           date = new Date(item.start * 1000)
-                           date = date.setFullYear(date.getFullYear(), date.getMonth(), 1)
-                           prices.push({
-                               x: date,
-                               y: item.total,
+                               let prices = []
+                               product.forEach((item) => {
+                                   date = new Date(item.start * 1000)
+                                   date = date.setFullYear(date.getFullYear(), date.getMonth(), 1)
+                                   prices.push({
+                                       x: date,
+                                       y: item.total,
+                                   })
+                               })
+                               myData.datasets.push({ label: product[0].board, data: prices })
                            })
-                       })
-                       myData.datasets.push({ label: product[0].board, data: prices })
-                   })
-                   return myData
-               }
+                           return myData
+                       }
 
-               console.log('creating chart')
+                       console.log('creating chart')
 
-               chart = new Chart(ctx, {
-                   type: 'line',
-                   options: {
-                       offset: true,
-                       spanGaps: true,
-                       scales: {
-                           x: {
-                               type: 'time',
-                               time: {
-                                   unit: 'month',
+                       chart = new Chart(ctx, {
+                           type: 'line',
+                           options: {
+                               offset: true,
+                               spanGaps: true,
+                               scales: {
+                                   x: {
+                                       type: 'time',
+                                       time: {
+                                           unit: 'month',
+                                       },
+                                       parsing: false,
+                                   },
                                },
-                               parsing: false,
+                               responsive: true,
                            },
-                       },
-                       responsive: true,
-                   },
-                   data: createDataSets(data),
-               })
+                           data: createDataSets(data),
+                       })
     </script>
 @endpush

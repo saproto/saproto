@@ -253,29 +253,30 @@
         @cspNonce
         Array.from(document.getElementsByClassName('le-points')).forEach((el)=""
         {
-                   ;['click', 'keyup'].forEach((e) =>
-                       el.addEventListener(e, (e) => {
-                           const id = el.getAttribute('data-id')
-                           const input = el.querySelector('.le-points-input')
-                           let points = input.value
-                           if (e.target.classList.contains('le-points-increase')) points++
-                           else if (e.target.classList.contains('le-points-decrease')) points--
-                           input.value = points
-                           updatePoints(id, points)
-                       })
-                   )
-               })
+        ;['click',
+        'keyup'].forEach((e)=""
+                el.addEventListener(e, (e) => {
+                    const id = el.getAttribute('data-id')
+                    const input = el.querySelector('.le-points-input')
+                    let points = input.value
+                    if (e.target.classList.contains('le-points-increase')) points++
+                    else if (e.target.classList.contains('le-points-decrease')) points--
+                    input.value = points
+                    updatePoints(id, points)
+                })
+            )
+        })
 
-               function updatePoints(id, points) {
-                   post('{{ route('leaderboards::entries::update') }}', {
-                       id: id,
-                       points: points,
-                   }).catch((err) => {
-                       console.error(err)
-                       window.alert(
-                           'Something went wrong while updating the points. Please try again.'
-                       )
-                   })
-               }
+        function updatePoints(id, points) {
+            post('{{ route('leaderboards::entries::update') }}', {
+                id: id,
+                points: points,
+            }).catch((err) => {
+                console.error(err)
+                window.alert(
+                    'Something went wrong while updating the points. Please try again.'
+                )
+            })
+        }
     </script>
 @endpush

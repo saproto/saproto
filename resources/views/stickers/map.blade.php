@@ -340,421 +340,423 @@
         window.addEventListener('load',
         ()=""
         {
-                   window.Echo.channel(`stickers`)
-                       .listen('StickerPlacedEvent', (marker) => {
-                           addMarkerToMap(marker)
-                           updateMarkerCount()
-                       })
-                       .listen('StickerRemovedEvent', (marker) => {
-                           removeMarkerFromMap(marker.id, marker.stickerType)
-                           updateMarkerCount()
-                       })
-                       .error((error) => {
-                           console.error(error)
-                           setTimeout(() => {
-                               window.location.reload()
-                           }, 10000)
-                       })
+        window.Echo.channel(`stickers`)
+        .listen('StickerPlacedEvent',
+        (marker)=""
+        {
+                                  addMarkerToMap(marker)
+                                  updateMarkerCount()
+                              })
+                              .listen('StickerRemovedEvent', (marker) => {
+                                  removeMarkerFromMap(marker.id, marker.stickerType)
+                                  updateMarkerCount()
+                              })
+                              .error((error) => {
+                                  console.error(error)
+                                  setTimeout(() => {
+                                      window.location.reload()
+                                  }, 10000)
+                              })
 
-                   const url = new URL(window.location.href)
-                   let currentZoom = url.searchParams.get('zoom') ?? 1
-                   let currentLat = url.searchParams.get('lat') ?? 52.23888875842265
-                   let currentLng = url.searchParams.get('lng') ?? 6.85738688030243
+                          const url = new URL(window.location.href)
+                          let currentZoom = url.searchParams.get('zoom') ?? 1
+                          let currentLat = url.searchParams.get('lat') ?? 52.23888875842265
+                          let currentLng = url.searchParams.get('lng') ?? 6.85738688030243
 
-                   const markerInstances = new Map()
+                          const markerInstances = new Map()
 
-                   const map = L.map('map', {
-                       minZoom: 2,
-                       worldCopyJump: true,
-                       maxBoundsViscosity: 0.9,
-                   }).setView([currentLat, currentLng], currentZoom)
+                          const map = L.map('map', {
+                              minZoom: 2,
+                              worldCopyJump: true,
+                              maxBoundsViscosity: 0.9,
+                          }).setView([currentLat, currentLng], currentZoom)
 
-                   const bounds = [
-                       [-90, -180],
-                       [90, 180],
-                   ]
-                   map.setMaxBounds(bounds)
+                          const bounds = [
+                              [-90, -180],
+                              [90, 180],
+                          ]
+                          map.setMaxBounds(bounds)
 
-                   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                       maxZoom: 19,
-                       attribution:
-                           '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-                   }).addTo(map)
+                          L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                              maxZoom: 19,
+                              attribution:
+                                  '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                          }).addTo(map)
 
-                   map.addControl(window.GeoSearch)
+                          map.addControl(window.GeoSearch)
 
-                   const markerFiles = ['chip', 'cloud', 'gear', 'heart', 'light', 'world']
+                          const markerFiles = ['chip', 'cloud', 'gear', 'heart', 'light', 'world']
 
-                   const markerIcons = markerFiles.map((path) => {
-                       return L.icon({
-                           iconUrl: `images/logo/markers/${path}.png`,
-                           iconSize: [30, 60], // size of the icon
-                           iconAnchor: [12, 60], // point of the icon which will correspond to marker's location
-                           popupAnchor: [5, -55], // point from which the popup should open relative to the iconAnchor
-                       })
-                   })
-                   var locationButton = L.control({ position: 'topright' })
+                          const markerIcons = markerFiles.map((path) => {
+                              return L.icon({
+                                  iconUrl: `images/logo/markers/${path}.png`,
+                                  iconSize: [30, 60], // size of the icon
+                                  iconAnchor: [12, 60], // point of the icon which will correspond to marker's location
+                                  popupAnchor: [5, -55], // point from which the popup should open relative to the iconAnchor
+                              })
+                          })
+                          var locationButton = L.control({ position: 'topright' })
 
-                   locationButton.onAdd = function (map) {
-                       var div = L.DomUtil.create(
-                           'div',
-                           'leaflet-bar leaflet-control leaflet-control-custom'
-                       )
-                       div.innerHTML =
-                           '<button id="locateMe" class="btn btn-primary"><i class="fas fa-location-dot"></i></button>'
-                       div.style.cursor = 'pointer'
+                          locationButton.onAdd = function (map) {
+                              var div = L.DomUtil.create(
+                                  'div',
+                                  'leaflet-bar leaflet-control leaflet-control-custom'
+                              )
+                              div.innerHTML =
+                                  '<button id="locateMe" class="btn btn-primary"><i class="fas fa-location-dot"></i></button>'
+                              div.style.cursor = 'pointer'
 
-                       L.DomEvent.on(div, 'click', function (ev) {
-                           L.DomEvent.stopPropagation(ev)
-                           if (!navigator.geolocation) {
-                               alert('Geolocation is not supported by your browser.')
-                               return
-                           }
+                              L.DomEvent.on(div, 'click', function (ev) {
+                                  L.DomEvent.stopPropagation(ev)
+                                  if (!navigator.geolocation) {
+                                      alert('Geolocation is not supported by your browser.')
+                                      return
+                                  }
 
-                           navigator.geolocation.getCurrentPosition(
-                               function (position) {
-                                   const lat = position.coords.latitude
-                                   const lng = position.coords.longitude
+                                  navigator.geolocation.getCurrentPosition(
+                                      function (position) {
+                                          const lat = position.coords.latitude
+                                          const lng = position.coords.longitude
 
-                                   map.flyTo([lat, lng], 18) // Zoom into user's location
-                                   addTempMarker(lat, lng)
-                               },
-                               function () {
-                                   alert('Unable to retrieve your location.')
-                               }
-                           )
-                       })
+                                          map.flyTo([lat, lng], 18) // Zoom into user's location
+                                          addTempMarker(lat, lng)
+                                      },
+                                      function () {
+                                          alert('Unable to retrieve your location.')
+                                      }
+                                  )
+                              })
 
-                       return div
-                   }
+                              return div
+                          }
 
-                   locationButton.addTo(map)
+                          locationButton.addTo(map)
 
-                   const types = {!! json_encode($stickerTypes) !!}
+                          const types = {!! json_encode($stickerTypes) !!}
 
-                   const markerClusterGroups = new Map()
+                          const markerClusterGroups = new Map()
 
-                   const otherMarkerIcons = new Map()
+                          const otherMarkerIcons = new Map()
 
-                   types.forEach((type) => {
-                       const markers = L.markerClusterGroup({
-                           animateAddingMarkers: true,
-                           iconCreateFunction: (cluster) => {
-                               const childCount = cluster.getChildCount()
-                               return new L.DivIcon({
-                                   html: '<div><span>' + childCount + '</span></div>',
-                                   className: `cluster-icon-${type['id']}`,
-                                   iconSize: [40, 40],
-                               })
-                           },
-                       })
-                       map.addLayer(markers)
-                       markerClusterGroups.set(type.id, markers)
-                       otherMarkerIcons.set(
-                           type.id,
-                           L.icon({
-                               iconUrl: `${type.tiny_image}`,
-                               iconSize: [40, 40], // size of the icon
-                               iconAnchor: [20, 20], // point of the icon which will correspond to marker's location
-                               popupAnchor: [0, -20], // point from which the popup should open relative to the iconAnchor
-                           })
-                       )
-                   })
+                          types.forEach((type) => {
+                              const markers = L.markerClusterGroup({
+                                  animateAddingMarkers: true,
+                                  iconCreateFunction: (cluster) => {
+                                      const childCount = cluster.getChildCount()
+                                      return new L.DivIcon({
+                                          html: '<div><span>' + childCount + '</span></div>',
+                                          className: `cluster-icon-${type['id']}`,
+                                          iconSize: [40, 40],
+                                      })
+                                  },
+                              })
+                              map.addLayer(markers)
+                              markerClusterGroups.set(type.id, markers)
+                              otherMarkerIcons.set(
+                                  type.id,
+                                  L.icon({
+                                      iconUrl: `${type.tiny_image}`,
+                                      iconSize: [40, 40], // size of the icon
+                                      iconAnchor: [20, 20], // point of the icon which will correspond to marker's location
+                                      popupAnchor: [0, -20], // point from which the popup should open relative to the iconAnchor
+                                  })
+                              )
+                          })
 
-                   var tempMarker
+                          var tempMarker
 
-                   const placedMarkers = {!! json_encode($stickers) !!}
-                   placedMarkers.forEach((marker) => {
-                       addMarkerToMap(marker)
-                   })
+                          const placedMarkers = {!! json_encode($stickers) !!}
+                          placedMarkers.forEach((marker) => {
+                              addMarkerToMap(marker)
+                          })
 
-                   function updateMarkerCount() {
-                       const sum = types.reduce(
-                           (accumulator, type) =>
-                               accumulator +
-                               markerClusterGroups.get(type['id']).getLayers().length,
-                           0
-                       )
+                          function updateMarkerCount() {
+                              const sum = types.reduce(
+                                  (accumulator, type) =>
+                                      accumulator +
+                                      markerClusterGroups.get(type['id']).getLayers().length,
+                                  0
+                              )
 
-                       let stickerAmount = document.getElementById('sticker-amount')
+                              let stickerAmount = document.getElementById('sticker-amount')
 
-                       const url = new URL(window.location.href)
-                       let currentId = url.searchParams.get('type') ?? null
-                       if (currentId === null) {
-                           stickerAmount.textContent = `In total ${sum}`
-                           return
-                       }
-                       let match = types.filter((type) => {
-                           return type['id'] == currentId
-                       })
-                       stickerAmount.textContent = `${sum} ${match[0]['title']}`
-                   }
-                   updateMarkerCount()
+                              const url = new URL(window.location.href)
+                              let currentId = url.searchParams.get('type') ?? null
+                              if (currentId === null) {
+                                  stickerAmount.textContent = `In total ${sum}`
+                                  return
+                              }
+                              let match = types.filter((type) => {
+                                  return type['id'] == currentId
+                              })
+                              stickerAmount.textContent = `${sum} ${match[0]['title']}`
+                          }
+                          updateMarkerCount()
 
-                   function addMarkerToMap(marker) {
-                       const markerInstance = L.marker([marker.lat, marker.lng], {
-                           icon:
-                               marker.stickerType === 1
-                                   ? markerIcons[
-                                         Math.floor(Math.random() * markerIcons.length)
-                                     ]
-                                   : otherMarkerIcons.get(marker.stickerType),
-                       })
-                       bindMarkerPopup(marker, markerInstance)
-                       markerInstances.set(marker.id, markerInstance)
-                       const layer = markerClusterGroups.get(marker['stickerType'])
-                       if (!layer) {
-                           window.location.reload()
-                       }
-                       layer.addLayer(markerInstance)
-                   }
+                          function addMarkerToMap(marker) {
+                              const markerInstance = L.marker([marker.lat, marker.lng], {
+                                  icon:
+                                      marker.stickerType === 1
+                                          ? markerIcons[
+                                                Math.floor(Math.random() * markerIcons.length)
+                                            ]
+                                          : otherMarkerIcons.get(marker.stickerType),
+                              })
+                              bindMarkerPopup(marker, markerInstance)
+                              markerInstances.set(marker.id, markerInstance)
+                              const layer = markerClusterGroups.get(marker['stickerType'])
+                              if (!layer) {
+                                  window.location.reload()
+                              }
+                              layer.addLayer(markerInstance)
+                          }
 
-                   function removeMarkerFromMap(markerId, stickerType) {
-                       const markerInstance = markerInstances.get(markerId)
-                       markerClusterGroups.get(stickerType).removeLayer(markerInstance)
-                       markerInstances.delete(markerId)
-                   }
+                          function removeMarkerFromMap(markerId, stickerType) {
+                              const markerInstance = markerInstances.get(markerId)
+                              markerClusterGroups.get(stickerType).removeLayer(markerInstance)
+                              markerInstances.delete(markerId)
+                          }
 
-                   function bindMarkerPopup(marker, markerInstance) {
-                       const popupContent = document.createElement('div')
+                          function bindMarkerPopup(marker, markerInstance) {
+                              const popupContent = document.createElement('div')
 
-                       if (marker.image) {
-                           const img = document.createElement('img')
-                           img.loading = 'lazy'
-                           img.src = marker.image
-                           img.style.width = '100%'
-                           popupContent.appendChild(img)
-                       }
+                              if (marker.image) {
+                                  const img = document.createElement('img')
+                                  img.loading = 'lazy'
+                                  img.src = marker.image
+                                  img.style.width = '100%'
+                                  popupContent.appendChild(img)
+                              }
 
-                       const detailsDiv = document.createElement('div')
-                       detailsDiv.className = 'mx-2 mt-2'
+                              const detailsDiv = document.createElement('div')
+                              detailsDiv.className = 'mx-2 mt-2'
 
-                       const ownerP = document.createElement('div')
-                       ownerP.innerHTML = `Stuck by: ${marker.is_owner ? 'you!' : (marker.user ?? 'Unknown')}`
-                       detailsDiv.appendChild(ownerP)
+                              const ownerP = document.createElement('div')
+                              ownerP.innerHTML = `Stuck by: ${marker.is_owner ? 'you!' : (marker.user ?? 'Unknown')}`
+                              detailsDiv.appendChild(ownerP)
 
-                       const dateP = document.createElement('div')
-                       dateP.innerHTML = `On: ${marker.date}`
-                       detailsDiv.appendChild(dateP)
+                              const dateP = document.createElement('div')
+                              dateP.innerHTML = `On: ${marker.date}`
+                              detailsDiv.appendChild(dateP)
 
-                       popupContent.appendChild(detailsDiv)
+                              popupContent.appendChild(detailsDiv)
 
-                       const controlsDiv = document.createElement('div')
-                       controlsDiv.className =
-                           'w-100 d-inline-flex text-center justify-content-center'
-                       const isBoard = '{{ Auth::user()->can('board') }}'
-                       if (marker.is_owner || isBoard) {
-                           const removeButton = document.createElement('button')
-                           removeButton.className = 'btn btn-sm'
-                           removeButton.innerHTML =
-                               '<i class="h5 fas fa-trash text-danger"></i>'
-                           removeButton.addEventListener('click', function () {
-                               removeSticker(marker)
-                           })
-                           controlsDiv.appendChild(removeButton)
-                       }
+                              const controlsDiv = document.createElement('div')
+                              controlsDiv.className =
+                                  'w-100 d-inline-flex text-center justify-content-center'
+                              const isBoard = '{{ Auth::user()->can('board') }}'
+                              if (marker.is_owner || isBoard) {
+                                  const removeButton = document.createElement('button')
+                                  removeButton.className = 'btn btn-sm'
+                                  removeButton.innerHTML =
+                                      '<i class="h5 fas fa-trash text-danger"></i>'
+                                  removeButton.addEventListener('click', function () {
+                                      removeSticker(marker)
+                                  })
+                                  controlsDiv.appendChild(removeButton)
+                              }
 
-                       if (!marker.is_owner || isBoard) {
-                           const reportButton = document.createElement('button')
-                           reportButton.className = 'btn btn-sm'
-                           reportButton.innerHTML =
-                               '<i class="h5 fas fa-triangle-exclamation text-warning"></i>'
-                           reportButton.addEventListener('click', function () {
-                               reportSticker(marker)
-                           })
-                           controlsDiv.appendChild(reportButton)
-                       }
+                              if (!marker.is_owner || isBoard) {
+                                  const reportButton = document.createElement('button')
+                                  reportButton.className = 'btn btn-sm'
+                                  reportButton.innerHTML =
+                                      '<i class="h5 fas fa-triangle-exclamation text-warning"></i>'
+                                  reportButton.addEventListener('click', function () {
+                                      reportSticker(marker)
+                                  })
+                                  controlsDiv.appendChild(reportButton)
+                              }
 
-                       popupContent.appendChild(controlsDiv)
+                              popupContent.appendChild(controlsDiv)
 
-                       const offset = marker.stickerType === 1 ? [5, -55] : [0, -20]
-                       markerInstance.bindTooltip(marker.user, {
-                           direction: 'top',
-                           offset: offset,
-                       })
-                       markerInstance.bindPopup(popupContent).openPopup()
-                   }
+                              const offset = marker.stickerType === 1 ? [5, -55] : [0, -20]
+                              markerInstance.bindTooltip(marker.user, {
+                                  direction: 'top',
+                                  offset: offset,
+                              })
+                              markerInstance.bindPopup(popupContent).openPopup()
+                          }
 
-                   let checkbox = document.getElementById('today_checkbox')
-                   checkbox?.addEventListener('change', function () {
-                       if (checkbox.checked) {
-                           document
-                               .getElementById('datetimepicker-stick_date-form')
-                               .classList.add('d-none')
-                       } else {
-                           document
-                               .getElementById('datetimepicker-stick_date-form')
-                               .classList.remove('d-none')
-                       }
-                   })
+                          let checkbox = document.getElementById('today_checkbox')
+                          checkbox?.addEventListener('change', function () {
+                              if (checkbox.checked) {
+                                  document
+                                      .getElementById('datetimepicker-stick_date-form')
+                                      .classList.add('d-none')
+                              } else {
+                                  document
+                                      .getElementById('datetimepicker-stick_date-form')
+                                      .classList.remove('d-none')
+                              }
+                          })
 
-                   function removeSticker(marker) {
-                       const deleteDate = document.getElementById('sticker-delete-date')
-                       deleteDate.textContent = marker.date
+                          function removeSticker(marker) {
+                              const deleteDate = document.getElementById('sticker-delete-date')
+                              deleteDate.textContent = marker.date
 
-                       const deleteImage = document.getElementById('sticker-delete-image')
-                       deleteImage.src = marker.image
+                              const deleteImage = document.getElementById('sticker-delete-image')
+                              deleteImage.src = marker.image
 
-                       const deleteForm = document.getElementById('sticker-delete-form')
-                       deleteForm.action = '{{ route('stickers.destroy', ['sticker' => 'id']) }}'.replace(
-                           'id',
-                           marker.id
-                       )
+                              const deleteForm = document.getElementById('sticker-delete-form')
+                              deleteForm.action = '{{ route('stickers.destroy', ['sticker' => 'id']) }}'.replace(
+                                  'id',
+                                  marker.id
+                              )
 
-                       window.modals['sticker-confirm-delete-modal'].show()
-                   }
-                   const reportForm = document.getElementById('sticker-report-form')
+                              window.modals['sticker-confirm-delete-modal'].show()
+                          }
+                          const reportForm = document.getElementById('sticker-report-form')
 
-                   function reportSticker(marker) {
-                       const reportImage = document.getElementById('sticker-report-image')
-                       reportImage.src = marker.image
+                          function reportSticker(marker) {
+                              const reportImage = document.getElementById('sticker-report-image')
+                              reportImage.src = marker.image
 
-                       reportForm.action = '{{ route('stickers.report', ['sticker' => 'id']) }}'.replace(
-                           'id',
-                           marker.id
-                       )
-                       reportForm.setAttribute('data-sticker-id', marker.id)
+                              reportForm.action = '{{ route('stickers.report', ['sticker' => 'id']) }}'.replace(
+                                  'id',
+                                  marker.id
+                              )
+                              reportForm.setAttribute('data-sticker-id', marker.id)
 
-                       window.modals['sticker-report-modal'].show()
-                   }
+                              window.modals['sticker-report-modal'].show()
+                          }
 
-                   map.on('click', onMapClick)
-                   map.on('moveend', () => {
-                       const center = map.getCenter()
-                       const url = new URL(window.location.href)
-                       url.searchParams.set('lat', center.lat)
-                       url.searchParams.set('lng', center.lng)
-                       window.history.replaceState(null, '', url.toString())
-                   })
-                   map.on('zoomend', function () {
-                       const zoomLevel = map.getZoom()
-                       const url = new URL(window.location.href)
-                       url.searchParams.set('zoom', zoomLevel)
-                       window.history.replaceState(null, '', url.toString())
-                   })
+                          map.on('click', onMapClick)
+                          map.on('moveend', () => {
+                              const center = map.getCenter()
+                              const url = new URL(window.location.href)
+                              url.searchParams.set('lat', center.lat)
+                              url.searchParams.set('lng', center.lng)
+                              window.history.replaceState(null, '', url.toString())
+                          })
+                          map.on('zoomend', function () {
+                              const zoomLevel = map.getZoom()
+                              const url = new URL(window.location.href)
+                              url.searchParams.set('zoom', zoomLevel)
+                              window.history.replaceState(null, '', url.toString())
+                          })
 
-                   function onMapClick(e) {
-                       const lat = e.latlng.lat.toFixed(6)
-                       const lng = e.latlng.lng.toFixed(6)
-                       addTempMarker(lat, lng)
-                   }
+                          function onMapClick(e) {
+                              const lat = e.latlng.lat.toFixed(6)
+                              const lng = e.latlng.lng.toFixed(6)
+                              addTempMarker(lat, lng)
+                          }
 
-                   function addTempMarker(lat, lng) {
-                       if (tempMarker) {
-                           if (
-                               tempMarker.getLatLng().lat === parseFloat(lat) &&
-                               tempMarker.getLatLng().lng === parseFloat(lng)
-                           ) {
-                               return // Prevent reopening the popup on the same location
-                           }
-                           map.removeLayer(tempMarker)
-                       }
+                          function addTempMarker(lat, lng) {
+                              if (tempMarker) {
+                                  if (
+                                      tempMarker.getLatLng().lat === parseFloat(lat) &&
+                                      tempMarker.getLatLng().lng === parseFloat(lng)
+                                  ) {
+                                      return // Prevent reopening the popup on the same location
+                                  }
+                                  map.removeLayer(tempMarker)
+                              }
 
-                       tempMarker = L.marker([lat, lng], {
-                           icon: markerIcons[4],
-                       }).addTo(map)
-                       var popupContent = document.createElement('div')
-                       popupContent.className = 'm-3'
-                       popupContent.innerHTML = `<p>Stick at: ${lat}, ${lng}</p>`
+                              tempMarker = L.marker([lat, lng], {
+                                  icon: markerIcons[4],
+                              }).addTo(map)
+                              var popupContent = document.createElement('div')
+                              popupContent.className = 'm-3'
+                              popupContent.innerHTML = `<p>Stick at: ${lat}, ${lng}</p>`
 
-                       var addButton = document.createElement('button')
-                       addButton.className = 'btn btn-primary btn-sm'
-                       addButton.textContent = 'Stick sticker here!'
-                       addButton.addEventListener('click', function () {
-                           confirmMarker(lat, lng)
-                       })
+                              var addButton = document.createElement('button')
+                              addButton.className = 'btn btn-primary btn-sm'
+                              addButton.textContent = 'Stick sticker here!'
+                              addButton.addEventListener('click', function () {
+                                  confirmMarker(lat, lng)
+                              })
 
-                       var cancelButton = document.createElement('button')
-                       cancelButton.className = 'btn btn-danger btn-sm'
-                       cancelButton.textContent = 'Cancel'
-                       cancelButton.addEventListener('click', function () {
-                           cancelMarker()
-                       })
+                              var cancelButton = document.createElement('button')
+                              cancelButton.className = 'btn btn-danger btn-sm'
+                              cancelButton.textContent = 'Cancel'
+                              cancelButton.addEventListener('click', function () {
+                                  cancelMarker()
+                              })
 
-                       const buttonDiv = document.createElement('div')
-                       buttonDiv.className = 'd-flex flex-row justify-content-between'
-                       buttonDiv.appendChild(addButton)
-                       buttonDiv.appendChild(cancelButton)
-                       popupContent.appendChild(buttonDiv)
+                              const buttonDiv = document.createElement('div')
+                              buttonDiv.className = 'd-flex flex-row justify-content-between'
+                              buttonDiv.appendChild(addButton)
+                              buttonDiv.appendChild(cancelButton)
+                              popupContent.appendChild(buttonDiv)
 
-                       tempMarker
-                           .bindPopup(popupContent, {
-                               closeButton: false,
-                           })
-                           .openPopup()
-                   }
+                              tempMarker
+                                  .bindPopup(popupContent, {
+                                      closeButton: false,
+                                  })
+                                  .openPopup()
+                          }
 
-                   function confirmMarker(lat, lng) {
-                       document.getElementById('modal-lat').value = lat
-                       document.getElementById('modal-lng').value = lng
-                       window.modals.markerModal.show()
-                   }
+                          function confirmMarker(lat, lng) {
+                              document.getElementById('modal-lat').value = lat
+                              document.getElementById('modal-lng').value = lng
+                              window.modals.markerModal.show()
+                          }
 
-                   function cancelMarker() {
-                       if (tempMarker) {
-                           map.removeLayer(tempMarker)
-                           tempMarker = null
-                       }
-                   }
+                          function cancelMarker() {
+                              if (tempMarker) {
+                                  map.removeLayer(tempMarker)
+                                  tempMarker = null
+                              }
+                          }
 
-                   const imgInput = document.querySelector('#stickerImage')
-                   const previewImg = document.querySelector('#previewImg')
-                   const stickerSubmit = document.querySelector('#stickerSubmit')
-                   imgInput.addEventListener('input', (e) => {
-                       stickerSubmit.disabled = true
-                       const file = e.target.files[0]
-                       if (!file) return
+                          const imgInput = document.querySelector('#stickerImage')
+                          const previewImg = document.querySelector('#previewImg')
+                          const stickerSubmit = document.querySelector('#stickerSubmit')
+                          imgInput.addEventListener('input', (e) => {
+                              stickerSubmit.disabled = true
+                              const file = e.target.files[0]
+                              if (!file) return
 
-                       const reader = new FileReader()
-                       reader.onload = function (readerEvent) {
-                           const image = new Image()
-                           image.onload = function () {
-                               //resize to the largest side of 1920px
-                               const maxSize = 1920
-                               const oldWidth = image.naturalWidth
-                               const oldHeight = image.naturalHeight
-                               const scale = Math.min(
-                                   maxSize / oldWidth,
-                                   maxSize / oldHeight,
-                                   1
-                               )
+                              const reader = new FileReader()
+                              reader.onload = function (readerEvent) {
+                                  const image = new Image()
+                                  image.onload = function () {
+                                      //resize to the largest side of 1920px
+                                      const maxSize = 1920
+                                      const oldWidth = image.naturalWidth
+                                      const oldHeight = image.naturalHeight
+                                      const scale = Math.min(
+                                          maxSize / oldWidth,
+                                          maxSize / oldHeight,
+                                          1
+                                      )
 
-                               const width = oldWidth * scale
-                               const height = oldHeight * scale
+                                      const width = oldWidth * scale
+                                      const height = oldHeight * scale
 
-                               const canvas = document.createElement('canvas')
-                               canvas.width = width
-                               canvas.height = height
-                               canvas.getContext('2d').drawImage(image, 0, 0, width, height)
+                                      const canvas = document.createElement('canvas')
+                                      canvas.width = width
+                                      canvas.height = height
+                                      canvas.getContext('2d').drawImage(image, 0, 0, width, height)
 
-                               // Convert to Blob
-                               canvas.toBlob(
-                                   (blob) => {
-                                       const newFile = new File([blob], file.name, {
-                                           type: 'image/jpeg',
-                                           lastModified: Date.now(),
-                                       })
+                                      // Convert to Blob
+                                      canvas.toBlob(
+                                          (blob) => {
+                                              const newFile = new File([blob], file.name, {
+                                                  type: 'image/jpeg',
+                                                  lastModified: Date.now(),
+                                              })
 
-                                       // Replace the input file with the new resized file
-                                       const dataTransfer = new DataTransfer()
-                                       dataTransfer.items.add(newFile)
-                                       imgInput.files = dataTransfer.files
+                                              // Replace the input file with the new resized file
+                                              const dataTransfer = new DataTransfer()
+                                              dataTransfer.items.add(newFile)
+                                              imgInput.files = dataTransfer.files
 
-                                       // Show preview
-                                       previewImg.src = URL.createObjectURL(blob)
-                                       previewImg.onload = () => {
-                                           URL.revokeObjectURL(previewImg.src)
-                                       }
-                                       stickerSubmit.disabled = false
-                                   },
-                                   'image/jpeg',
-                                   0.75
-                               )
-                           }
-                           image.src = readerEvent.target.result
-                       }
-                       reader.readAsDataURL(file)
-                   })
-               })
+                                              // Show preview
+                                              previewImg.src = URL.createObjectURL(blob)
+                                              previewImg.onload = () => {
+                                                  URL.revokeObjectURL(previewImg.src)
+                                              }
+                                              stickerSubmit.disabled = false
+                                          },
+                                          'image/jpeg',
+                                          0.75
+                                      )
+                                  }
+                                  image.src = readerEvent.target.result
+                              }
+                              reader.readAsDataURL(file)
+                          })
+                      })
     </script>
 @endpush

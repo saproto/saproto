@@ -158,25 +158,27 @@
             .querySelectorAll('.toggle-navbar-{{ $feedback->id }}')
             .forEach((element)=""
             {
-                               element.addEventListener('click', () => {
-                                   const enabled = document
-                                       .getElementById(
-                                           'feedback__{{ $feedback->id }}__collapse'
-                                       )
-                                       .classList.toggle('show')
-                                   if (enabled) {
-                                       document
-                                           .getElementById(
-                                               'feedback__{{ $feedback->id }}__reply'
-                                           )
-                                           .focus()
-                                   } else {
-                                       document.getElementById(
-                                           'feedback__{{ $feedback->id }}__reply'
-                                       ).value = ''
-                                   }
-                               })
-                           })
+            element.addEventListener('click',
+            ()=""
+            {
+                                              const enabled = document
+                                                  .getElementById(
+                                                      'feedback__{{ $feedback->id }}__collapse'
+                                                  )
+                                                  .classList.toggle('show')
+                                              if (enabled) {
+                                                  document
+                                                      .getElementById(
+                                                          'feedback__{{ $feedback->id }}__reply'
+                                                      )
+                                                      .focus()
+                                              } else {
+                                                  document.getElementById(
+                                                      'feedback__{{ $feedback->id }}__reply'
+                                                  ).value = ''
+                                              }
+                                          })
+                                      })
         </script>
     @endif
 @endpush
