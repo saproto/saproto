@@ -1,9 +1,9 @@
-@extends('website.master')
-@section('page-title')
+@extends ('website.master')
+@section ('page-title')
     Wallstreet Marquee!
 @endsection
 
-@push('stylesheet')
+@push ('stylesheet')
     <style @cspNonce>
         :root {
             --wallstreet-dark: #303030;
@@ -137,7 +137,7 @@
     </style>
 @endpush
 
-@section('body')
+@section ('body')
     @if (! $activeDrink)
         <div class="d-flex justify-content-center h-100 w-100">
             <div class="alert alert-danger align-self-center">
@@ -306,22 +306,19 @@
     @endif
 @endsection
 
-@push('javascript')
+@push ('javascript')
     {{-- chart.js and the date adapter --}}
     <script @cspNonce src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script
         @cspNonce
         src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"
     ></script>
-
     <script
         src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"
         @cspNonce
     ></script>
-
-    @vite('resources/assets/js/echo.js')
-
-    <script type="text/javascript" @cspNonce>
+    @vite ('resources/assets/js/echo.js')
+    <script type="text/javascript" @cspNonce
         window.addEventListener('load', () => {
             const swiper = new Swiper('#swiper-container', {
                 loop: true,
@@ -336,9 +333,7 @@
 
             const ctx = document.getElementById('wallstreet-graph-canvas')
 
-            get(
-                `{{ route('api::wallstreet::all_prices', ['id' => $activeDrink->id]) }}`
-            ).then((products) => {
+            get(`{{ route('api::wallstreet::all_prices', ['id' => $activeDrink->id]) }}`).then((products) => {
                 var chart = new Chart(ctx, {
                     type: 'line',
                     options: {
@@ -421,16 +416,16 @@
                                     card.querySelector('#diff').classList.add(
                                         'text-danger'
                                     )
-                                    card.querySelector(
-                                        '#diff'
-                                    ).classList.remove('text-green')
+                                    card.querySelector('#diff').classList.remove(
+                                        'text-green'
+                                    )
                                 } else {
                                     card.querySelector('#diff').classList.add(
                                         'text-green'
                                     )
-                                    card.querySelector(
-                                        '#diff'
-                                    ).classList.remove('text-danger')
+                                    card.querySelector('#diff').classList.remove(
+                                        'text-danger'
+                                    )
                                 }
                             })
                         }

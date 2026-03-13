@@ -1,15 +1,15 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
-        Mollie Transaction #{{ $transaction->id }}
+@section ('page-title')
+    Mollie Transaction #{{ $transaction->id }}
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card mb-3">
                 <div class="card-header bg-dark mb-1 text-white">
-                    @yield('page-title')
+                    @yield ('page-title')
                 </div>
 
                 <table class="table-borderless table-sm table">
@@ -33,8 +33,7 @@
                             @if (App\Models\MollieTransaction::translateStatus($mollie->status) == 'open')
                                 <a href="{{ $transaction->payment_url }}">
                                     <span class="label label-success">
-                                        {{ $mollie->status }} - Continue
-                                        Payment
+                                        {{ $mollie->status }} - Continue Payment
                                     </span>
                                 </a>
                             @elseif (App\Models\MollieTransaction::translateStatus($mollie->status) == 'paid')
@@ -56,17 +55,9 @@
 
                 <div class="card-body">
                     @if (App\Models\MollieTransaction::translateStatus($mollie->status) == 'failed')
-                        <p>
-                            This payment has failed. All orderlines associated
-                            with this payment have been set back to unpaid. You
-                            can try to start a new payment.
-                        </p>
+                        <p>This payment has failed. All orderlines associated with this payment have been set back to unpaid. You can try to start a new payment.</p>
                     @else
-                        <p>
-                            Below you can find all the orderlines associated
-                            with this payment.
-                        </p>
-
+                        <p>Below you can find all the orderlines associated with this payment.</p>
                         <table
                             class="table-hover table-borderless table-sm table"
                         >

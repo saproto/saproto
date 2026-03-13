@@ -1,9 +1,9 @@
 <div class="card mb-3">
     <div class="card-header bg-dark text-white">
-        @yield('page-title')
+        @yield ('page-title')
     </div>
 
-    @isset($orderlines)
+    @isset ($orderlines)
         <table class="table-borderless table-hover table-sm mt-1 table">
             <?php $current_date = null; ?>
 
@@ -12,7 +12,6 @@
                     <?php $current_date = \Illuminate\Support\Facades\Date::parse(
                         $orderline->created_at,
                     )->format('d-m-Y'); ?>
-
                     <tr class="bg-dark mt-3 text-white">
                         <td class="text-end">
                             <i class="fas fa-calendar-alt"></i>
@@ -22,11 +21,9 @@
                         </td>
                     </tr>
                 @endif
-
                 <tr>
                     <td class="text-end">
-                        &euro;
-                        {{ number_format($orderline->total_price, 2, '.', '') }}
+                        &euro; {{ number_format($orderline->total_price, 2, '.', '') }}
                     </td>
                     <td>
                         <span class="text-muted me-2">
@@ -51,9 +48,7 @@
         </table>
     @else
         <div class="card-body">
-            <p class="card-text text-center">
-                You didn't buy anything in this month.
-            </p>
+            <p class="card-text text-center">You didn't buy anything in this month.</p>
         </div>
     @endif
 </div>

@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Activity Administration
 @endsection
 
-@section('container')
+@section ('container')
     @if (count($activities) > 0)
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -79,8 +79,7 @@
                                                 <option
                                                     value="{{ $account->id }}"
                                                 >
-                                                    ({{ $account->account_number }}
-                                                    ) {{ $account->name }}
+                                                    ({{ $account->account_number }} ) {{ $account->name }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -111,8 +110,6 @@
             </div>
         </div>
     @else
-        <p class="mt-3 text-center">
-            There are no activities to close! Hurray!
-        </p>
+        <p class="mt-3 text-center">There are no activities to close! Hurray!</p>
     @endif
 @endsection

@@ -1,4 +1,4 @@
-@php($authParticipation = $event->activity?->getParticipation(Auth::user()))
+@php ($authParticipation = $event->activity?->getParticipation(Auth::user()))
 @if ($event->activity && Auth::user()?->is_member && $event->activity->withParticipants())
     <div class="card mb-3">
         <ul class="list-group list-group-flush text-center">
@@ -11,8 +11,8 @@
                         (Account
                         {{ $event->activity->closedAccount->account_number }} ,
                         {{ $event->activity->closedAccount->name }})
-                    @else()
-                            (Unknown account.)
+                    @else ()
+                        (Unknown account.)
                     @endif
                 </li>
             @endif
@@ -44,7 +44,7 @@
                     @if ($event->activity->price > 0)
                         &euro;{{ number_format($event->activity->price, 2, '.', ',') }}
                     @else
-                            &euro;0,-
+                        &euro;0,-
                     @endif
                 </strong>
             </li>
@@ -57,8 +57,7 @@
                     data-bs-target="#noshow-modal"
                 >
                     <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
-                    &nbsp;&nbsp;Not showing up can cost you
-                    &euro;{{ number_format($event->activity->no_show_fee + $event->activity->price, 2, '.', ',') }}
+                    &nbsp;&nbsp;Not showing up can cost you &euro;{{ number_format($event->activity->no_show_fee + $event->activity->price, 2, '.', ',') }}
                 </a>
             @endif
 
@@ -87,14 +86,14 @@
                                 {{ $event->activity->isFull() ? 'Full!' : 'Closed!' }}
                                 Put me on the back-up list.
                             @else
-                                    Sign me up!
+                                Sign me up!
                             @endif
                             |
 
                             @if ($event->activity->price > 0)
                                 &euro;{{ number_format($event->activity->price, 2, '.', ',') }}
                             @else
-                                    Free!
+                                Free!
                             @endif
                         </strong>
                         <br />
@@ -140,7 +139,6 @@
             </p>
         </div>
     </div>
-
     @if ($event->activity->users->count() > 0 || Auth::user()->can('board'))
         <div class="card mb-3">
             <div class="card-header bg-dark text-center text-white">
@@ -154,11 +152,11 @@
                     </strong>
                     <i class="fas fa-ghost"></i>
                 </div>
-            @endif()
+            @endif ()
 
             @if (! $event->activity->hide_participants || $event->isEventAdmin(Auth::user()) || Auth::user()->can('board') || Auth::user()->can('finadmin'))
                 <div class="card-body">
-                    @include(
+                    @include (
                         'event.display_includes.render_participant_list',
                         [
                             'participants' => $event->activity->users,
@@ -201,7 +199,6 @@
             </div>
         </div>
     @endif
-
     @if ($event->activity->backupUsers->count() > 0)
         <div class="card">
             <div class="card-header bg-dark text-center text-white">
@@ -210,7 +207,7 @@
             </div>
 
             <div class="card-body">
-                @include(
+                @include (
                     'event.display_includes.render_participant_list',
                     [
                         'participants' => $event->activity->backupUsers,
@@ -231,23 +228,13 @@
                 you are a member.
 
                 @if (! Auth::check())
-                    <p class="card-text">
-                        Please
-                        <a
-                            href="{{ route('event::login', ['event' => $event]) }}"
-                        >
-                            log-in
-                        </a>
-                        if you are already a member.
-                    </p>
+                    <p class="card-text">Please
+                    <a href="{{ route('event::login', ['event' => $event]) }}"> log-in </a>
+                    if you are already a member.</p>
                 @elseif (! Auth::user()->is_member)
-                    <p class="card-text">
-                        Please
-                        <a href="{{ route('becomeamember') }}">
-                            become a member
-                        </a>
-                        to sign-up for this activity.
-                    </p>
+                    <p class="card-text">Please
+                    <a href="{{ route('becomeamember') }}"> become a member </a>
+                    to sign-up for this activity.</p>
                 @endif
             </p>
         </div>
@@ -267,23 +254,13 @@
                 ></button>
             </div>
             <div class="modal-body">
-                <p>
-                    For some activities Proto, or another party, sponsors part
-                    of the participation fee or other costs associated with an
-                    activity. As an example, for a barbecue a sponsor may pay
-                    for the food.
-                </p>
+                <p>For some activities Proto, or another party, sponsors part of the participation fee or other costs associated with an activity. As an example, for a barbecue a sponsor may pay for the food.</p>
 
-                <p>
-                    For these kinds of activities a
-                    <i>no show fee</i>
-                    may be enacted, which compensates for the fact that money
-                    has been spent for people who do not show up. This means
-                    that if you sign up, but don't show up for the activity, the
-                    <i>no show fee</i>
-                    may be charged to you. This may even be the case for free
-                    activities.
-                </p>
+                <p>For these kinds of activities a
+                <i>no show fee</i>
+                may be enacted, which compensates for the fact that money has been spent for people who do not show up. This means that if you sign up, but don't show up for the activity, the
+                <i>no show fee</i>
+                may be charged to you. This may even be the case for free activities.</p>
             </div>
         </div>
     </div>

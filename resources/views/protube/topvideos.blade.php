@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     ProTube Hits
 @endsection
 
-@section('container')
+@section ('container')
     <div class="btn btn-block mb-3 text-center">
         <i class="fas fa-bolt me-3"></i>
         ProTube is developed with
@@ -31,7 +31,6 @@
             Get the ProTube Hits Spotify playlist!
         </a>
     </div>
-
     <div class="row mb-3">
         @foreach ($data as $period => $content)
             <div class="col-md-4">
@@ -49,12 +48,10 @@
 
                     <div class="card-body">
                         @if (count($content) == 0)
-                            <p class="card-text">
-                                This list is currently empty.
-                            </p>
+                            <p class="card-text">This list is currently empty.</p>
                         @else
                             @foreach ($content as $video)
-                                @include(
+                                @include (
                                     'protube.includes.song_block',
                                     [
                                         'video' => $video,
@@ -67,6 +64,5 @@
             </div>
         @endforeach
     </div>
-
     &nbsp;
 @endsection

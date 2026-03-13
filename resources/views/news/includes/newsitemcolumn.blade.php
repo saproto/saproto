@@ -22,7 +22,7 @@
                             $published = '<br>Published ' . Carbon::parse($newsitem->published_at)->diffForHumans() . ' ';
                         @endphp
 
-                        @include(
+                        @include (
                             'website.home.cards.card-bg-image',
                             [
                                 'url' => $newsitem->url,

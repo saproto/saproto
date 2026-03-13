@@ -30,7 +30,7 @@
                                 </a>
                             </td>
                             <td>
-                                @isset($dinnerform->event)
+                                @isset ($dinnerform->event)
                                     <a
                                         href="{{ route('event::show', ['event' => $dinnerform->event]) }}"
                                     >
@@ -89,7 +89,7 @@
                             <td class="text-center">
                                 @if (! $dinnerform->closed)
                                     @if ($dinnerform->isCurrent())
-                                        @include(
+                                        @include (
                                             'components.modals.confirm-modal',
                                             [
                                                 'action' => route('dinnerform::close', ['id' => $dinnerform->id]),
@@ -100,13 +100,12 @@
                                             ]
                                         )
                                     @endif
-
                                     <a
                                         href="{{ route('dinnerform::edit', ['id' => $dinnerform->id]) }}"
                                     >
                                         <i class="fas fa-edit me-4"></i>
                                     </a>
-                                    @include(
+                                    @include (
                                         'components.modals.confirm-modal',
                                         [
                                             'action' => route('dinnerform::delete', ['id' => $dinnerform->id]),

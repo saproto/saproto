@@ -160,7 +160,6 @@
             {{-- External --}}
             @if ($event->is_external)
                 <br />
-
                 <span>
                     <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
                     Not Organized by S.A. Proto

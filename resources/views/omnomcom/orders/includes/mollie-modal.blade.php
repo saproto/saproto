@@ -28,7 +28,7 @@
                             {{ $method->description . ($loop->last ? '.' : ', ') }}
                         @endforeach
                     @else
-                            various payment methods.
+                        various payment methods.
                     @endif
 
                     @if ($use_fees)
@@ -43,11 +43,7 @@
                     @endif
                 </p>
 
-                <p>
-                    If you wish to pay only a part of your outstanding balance,
-                    please use the field below to indicate the maximum amount
-                    you would like to pay.
-                </p>
+                <p>If you wish to pay only a part of your outstanding balance, please use the field below to indicate the maximum amount you would like to pay.</p>
             </div>
             <form method="post" action="{{ route('omnomcom::mollie::pay') }}">
                 @csrf
@@ -58,7 +54,7 @@
                             class="row justify-content-around btn-group-toggle mb-2"
                             data-bs-toggle="buttons"
                         >
-                            @include('omnomcom.mollie.list-all-payment-methods')
+                            @include ('omnomcom.mollie.list-all-payment-methods')
                         </div>
                     </div>
                 @endif

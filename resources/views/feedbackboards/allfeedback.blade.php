@@ -4,7 +4,7 @@
             class="d-flex align-items-center justify-content-between mb-2 justify-items-center"
         >
             <span class="">{{ $category->title }}</span>
-            @can('board')
+            @can ('board')
                 <div>
                     @if (count($data) > 0)
                         <a
@@ -36,7 +36,7 @@
             <div class="row">
                 @foreach ($data as $key => $entry)
                     <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                        @include(
+                        @include (
                             'feedbackboards.include.feedback',
                             [
                                 'feedback' => $entry,
@@ -47,16 +47,11 @@
                 @endforeach
             </div>
         @else
-            <p class="text-muted mt-3 text-center">
-                There are no {{ $category->title }} at the moment, be the first
-                to post a new one!
-            </p>
+            <p class="text-muted mt-3 text-center">There are no {{ $category->title }} at the moment, be the first to post a new one!</p>
         @endif
     </div>
 
     @if ($data->links() != '')
-        <div class="card-footer">
-            {{ $data->withQueryString()->links() }}
-        </div>
+        <div class="card-footer">{{ $data->withQueryString()->links() }}</div>
     @endif
 </div>

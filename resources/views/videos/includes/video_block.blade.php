@@ -1,4 +1,4 @@
-@include(
+@include (
     'website.home.cards.card-bg-image',
     [
         'url' => route('video::show', ['id' => $video->id]),

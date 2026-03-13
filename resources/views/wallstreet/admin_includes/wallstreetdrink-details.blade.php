@@ -15,7 +15,7 @@
                 <!-- Left column -->
                 <div class="col-md-6">
                     <!-- Start -->
-                    @include(
+                    @include (
                         'components.forms.datetimepicker',
                         [
                             'name' => 'start_time',
@@ -63,7 +63,7 @@
                 <!-- Right column -->
                 <div class="col-md-6">
                     <!-- End -->
-                    @include(
+                    @include (
                         'components.forms.datetimepicker',
                         [
                             'name' => 'end_time',
@@ -121,7 +121,7 @@
             <button type="submit" class="btn btn-success">Submit</button>
 
             @if ($currentDrink)
-                @include(
+                @include (
                     'components.modals.confirm-modal',
                     [
                         'action' => route('wallstreet::delete', ['id' => $currentDrink->id]),

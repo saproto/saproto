@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     {{ isset($item) ? 'Edit menu item' : 'Add new menu item' }}
 @endsection
 
-@section('container')
+@section ('container')
     <form
         method="post"
         action="{{ ! isset($item) ? route('menu::store') : route('menu::update', ['id' => $item->id]) }}"
@@ -16,7 +16,7 @@
             <div class="col-md-3">
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield('page-title')
+                        @yield ('page-title')
                     </div>
 
                     <div class="card-body">
@@ -41,7 +41,7 @@
                                 id="parent"
                             >
                                 <option
-                                    @selected(! isset($item) || $item->parent == null)
+                                    @selected (! isset($item) || $item->parent == null)
                                     value
                                 >
                                     No parent
@@ -49,8 +49,8 @@
                                 @foreach ($topMenuItems as $topMenuItem)
                                     <option
                                         value="{{ $topMenuItem->id }}"
-                                        @selected(isset($item) && $topMenuItem->id == $item->parent)
-                                        @disabled(isset($item) && $topMenuItem->id == $item->id)
+                                        @selected (isset($item) && $topMenuItem->id == $item->parent)
+                                        @disabled (isset($item) && $topMenuItem->id == $item->id)
                                     >
                                         {{ $topMenuItem->menuname }}
                                     </option>
@@ -58,7 +58,7 @@
                             </select>
                         </div>
 
-                        @include(
+                        @include (
                             'components.forms.checkbox',
                             [
                                 'name' => 'is_member_only',
@@ -75,13 +75,13 @@
                                 name="page_id"
                                 id="page_id"
                             >
-                                <option disabled @selected(! isset($item))>
+                                <option disabled @selected (! isset($item))>
                                     Select a page...
                                 </option>
                                 <option disabled>---</option>
                                 <option
                                     id="other-url-option"
-                                    @selected(isset($item) && $item->page_id)
+                                    @selected (isset($item) && $item->page_id)
                                     value
                                 >
                                     Other URL
@@ -89,7 +89,7 @@
                                 <option disabled>---</option>
                                 @foreach ($pages as $page)
                                     <option
-                                        @selected(isset($item) && $page->id == $item->page_id)
+                                        @selected (isset($item) && $page->id == $item->page_id)
                                         value="{{ $page->id }}"
                                     >
                                         {{ $page->title }}
@@ -119,7 +119,7 @@
                                 <select class="form-control" id="route">
                                     <option
                                         disabled
-                                        @selected(! isset($item) || $item->url == null)
+                                        @selected (! isset($item) || $item->url == null)
                                     >
                                         Select a route...
                                     </option>
@@ -129,13 +129,11 @@
                                             $uri = $route->uri() == '/' ? '' : $route->uri();
                                             $url = "https://$domain/$uri";
                                         @endphp
-
                                         <option
                                             value="{{ $url }}"
-                                            @selected(isset($item) && $item->url == '(route) ' . $route->getName())
+                                            @selected (isset($item) && $item->url == '(route) ' . $route->getName())
                                         >
-                                            [{{ $route->getName() }}] ->
-                                            {{ $route->domain() }}/{{ $route->uri }}
+                                            [{{ $route->getName() }}] -> {{ $route->domain() }}/{{ $route->uri }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -161,9 +159,9 @@
     </form>
 @endsection
 
-@push('javascript')
-    <script type="text/javascript" @cspNonce>
-        const otherUrlOption = document.getElementById('other-url-option')
+@push ('javascript')
+    <script type="text/javascript" @cspNonce
+        >const otherUrlOption = document.getElementById('other-url-option')
         const otherUrlFields = document.getElementById('other-url-fields')
         document.getElementById('page_id').addEventListener('change', (e) => {
             if (otherUrlOption.selected)

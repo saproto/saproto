@@ -1,17 +1,17 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     {{ $page->title }}
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-xl-8 col-lg-10 col-md-12 col-sm-12">
             <div class="card mb-3">
                 <div class="card-header">
                     <h3 class="card-title m-0">
-                        @yield('page-title')
-                        @can('board')
+                        @yield ('page-title')
+                        @can ('board')
                             <a
                                 href="{{ route('page::edit', ['id' => $page->id]) }}"
                                 class="btn btn-info float-end py-1"
@@ -28,7 +28,6 @@
 
                     @if ($page->hasMedia('files') && $page->show_attachments)
                         <hr />
-
                         <p>
                             <strong>Attachments</strong>
 

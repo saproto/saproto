@@ -6,13 +6,13 @@
     /** @var \Illuminate\Support\Collection<\App\Models\Photo> $photos */
 @endphp
 
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Most liked Photos
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row d-inline-flex justify-content-center w-100">
         <div class="col-10">
             <div class="card mb-3">
@@ -26,7 +26,7 @@
                                 Start:
                             </label>
                             <div class="col-sm-auto">
-                                @include(
+                                @include (
                                     'components.forms.datetimepicker',
                                     [
                                         'name' => 'start',
@@ -42,7 +42,7 @@
                                 End:
                             </label>
                             <div class="col-sm-auto">
-                                @include(
+                                @include (
                                     'components.forms.datetimepicker',
                                     [
                                         'name' => 'end',
@@ -65,7 +65,7 @@
                     <div class="row">
                         @foreach ($photos as $photo)
                             <div class="col-lg-2 col-lg-3 col-md-4 col-sm-6">
-                                @include(
+                                @include (
                                     'website.home.cards.card-bg-image',
                                     [
                                         'id' => sprintf('photo_%s', $photo->id),

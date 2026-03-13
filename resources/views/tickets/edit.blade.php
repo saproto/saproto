@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     {{ $ticket == null ? 'Create new ticket.' : 'Edit ticket ' . $ticket->product->name . '.' }}
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-4">
             <form
@@ -14,7 +14,7 @@
             >
                 <div class="card mb-3">
                     <div class="card-header bg-dark mb-1 text-white">
-                        @yield('page-title')
+                        @yield ('page-title')
                     </div>
 
                     <div class="card-body">
@@ -44,7 +44,7 @@
                             />
                         </div>
 
-                        @include(
+                        @include (
                             'components.forms.datetimepicker',
                             [
                                 'name' => 'available_from',
@@ -53,7 +53,7 @@
                             ]
                         )
 
-                        @include(
+                        @include (
                             'components.forms.datetimepicker',
                             [
                                 'name' => 'available_to',
@@ -62,7 +62,7 @@
                             ]
                         )
 
-                        @include(
+                        @include (
                             'components.forms.checkbox',
                             [
                                 'name' => 'is_members_only',
@@ -71,7 +71,7 @@
                             ]
                         )
 
-                        @include(
+                        @include (
                             'components.forms.checkbox',
                             [
                                 'name' => 'is_prepaid',
@@ -80,7 +80,7 @@
                             ]
                         )
 
-                        @include(
+                        @include (
                             'components.forms.checkbox',
                             [
                                 'name' => 'has_buy_limit',
@@ -112,7 +112,7 @@
                             </div>
                         </div>
 
-                        @include(
+                        @include (
                             'components.forms.checkbox',
                             [
                                 'name' => 'show_participants',
@@ -141,9 +141,9 @@
     </div>
 @endsection
 
-@push('javascript')
-    <script type="text/javascript" @cspNonce>
-        document.querySelectorAll('.buy_limit_checkbox').forEach((element) => {
+@push ('javascript')
+    <script type="text/javascript" @cspNonce
+        >document.querySelectorAll('.buy_limit_checkbox').forEach((element) => {
             element.addEventListener('click', () => {
                 document
                     .getElementById('buy_limit__collapse')

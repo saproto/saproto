@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Leaderboards
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div id="leaderboard-accordion" class="col-md-6 col-10">
             @foreach ($leaderboards as $leaderboard)
@@ -35,9 +35,7 @@
                                     <tr>
                                         <th></th>
                                         <th>Name</th>
-                                        <th>
-                                            {{ $leaderboard->points_name }}
-                                        </th>
+                                        <th>{{ $leaderboard->points_name }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -71,9 +69,7 @@
                             </table>
                         @else
                             <hr />
-                            <p class="text-muted pt-3 text-center">
-                                There are no entries yet.
-                            </p>
+                            <p class="text-muted pt-3 text-center">There are no entries yet.</p>
                         @endif
                     </div>
                 </div>

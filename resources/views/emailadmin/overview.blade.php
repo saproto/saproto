@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     E-mail Administration
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-5">
             <div class="card mb-4">
@@ -70,7 +70,7 @@
                                         <i class="fas fa-edit me-2"></i>
                                     </a>
 
-                                    @include(
+                                    @include (
                                         'components.modals.confirm-modal',
                                         [
                                             'action' => route('email::list::delete', ['id' => $list->id]),
@@ -87,7 +87,7 @@
                 </div>
             </div>
 
-            @include(
+            @include (
                 'emailadmin.admin_includes.filter',
                 [
                     'searchTerm' => $searchTerm ?? null,
@@ -144,30 +144,28 @@
                                 @elseif ($email->to_list)
                                     list(s)
                                     @foreach ($email->lists as $list)
-                                            {{ $list->name }}{{ $loop->last ? '' : ',' }}
+                                        {{ $list->name }}{{ $loop->last ? '' : ',' }}
                                     @endforeach
                                 @elseif ($email->to_event)
                                     event(s)
                                     {{ $email->to_backup ? 'with backup users' : '' }}:
                                     @foreach ($email->events()->get() as $event)
-                                            {{ $event->title }}.
+                                        {{ $event->title }}.
                                     @endforeach
                                 @elseif ($email->to_withdrawal)
                                     withdrawal(s)
                                     @foreach ($email->withdrawals as $withdrawal)
-                                            {{ $withdrawal->id }}.
+                                        {{ $withdrawal->id }}.
                                     @endforeach
                                 @endif
                             </td>
-                            <td>
-                                {{ date('d-m-Y H:i', $email->time) }}
-                            </td>
+                            <td>{{ date('d-m-Y H:i', $email->time) }}</td>
                             <td>
                                 @if (! $email->sent)
                                     @if ($email->ready)
                                         Queued
                                     @else
-                                            Draft
+                                        Draft
                                     @endif
                                 @else
                                     <i>Sent</i>
@@ -180,7 +178,7 @@
                                     <i class="fas fa-eye text-info me-2"></i>
                                 </a>
                                 @if (! $email->sent)
-                                    @include(
+                                    @include (
                                         'components.modals.confirm-modal',
                                         [
                                             'action' => route('email::delete', ['id' => $email->id]),

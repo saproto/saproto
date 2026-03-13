@@ -1,12 +1,12 @@
-@extends('emails.template')
+@extends ('emails.template')
 
-@section('body')
+@section ('body')
     <p>Hey {{ $user->calling_name }},</p>
-
     <p>
         @if ($user->member)
-            You're receiving this e-mail as a reminder that you are a member of S.A. Proto and that, as a consequence,
-            we process personal information about you.
+            You're receiving this e-mail as a reminder that you are a member of
+            S.A. Proto and that, as a consequence, we process personal
+            information about you.
         @else
             You're receiving this e-mail as a reminder that you still have an
             active user account at the website of S.A. Proto.
@@ -23,7 +23,6 @@
         </a>
         on the website. There you can also update most of the information.
     </p>
-
     <p>
         Name:
         <strong>{{ $user->name }}</strong>
@@ -37,7 +36,6 @@
             @if ($user->phone_visible && $user->member)
                 (Shown to other members.)
             @endif
-
             <br />
         @endif
 
@@ -85,7 +83,6 @@
             </p>
         @endif
     </p>
-
     <p>
         @if ($user->member)
             If you want us to stop processing your information altogether, you
@@ -95,8 +92,8 @@
             to terminate your membership, and delete your account from your
             dashboard as soon as your membership has been terminated.
         @else
-                If you want us to stop processing your information altogether,
-                you can delete your account from your dashboard.
+            If you want us to stop processing your information altogether, you
+            can delete your account from your dashboard.
         @endif
         Please be reminded that while using the website, you may have generated
         some information (like activity participation, purchases and committee
@@ -114,12 +111,8 @@
         newsletters (like the alumni newsletter) that you might have been
         subscribed to.
     </p>
-
     <p>We send you this reminder once per year.</p>
-
-    <p>
-        Kind regards,
-        <br />
-        The Have You Tried Turning It Off And On Again committee
-    </p>
+    <p>Kind regards,
+    <br />
+    The Have You Tried Turning It Off And On Again committee</p>
 @endsection

@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
-        Edit {{ $album->name }} ({{ date('M j, Y', $album->date_taken) }})
+@section ('page-title')
+    Edit {{ $album->name }} ({{ date('M j, Y', $album->date_taken) }})
 @endsection
 
-@section('container')
+@section ('container')
     @if ($album->event)
         <a
             class="btn btn-info btn-block mb-3"
@@ -14,11 +14,10 @@
             here to go to the event.
         </a>
     @endif
-
     <div class="row">
         <div class="col-lg-3">
             @if ($album->published)
-                @can('publishalbums')
+                @can ('publishalbums')
                     <a
                         class="btn btn-warning btn-block mb-3 text-white"
                         href="{{ route('albums::admin::unpublish', ['id' => $album->id]) }}"
@@ -36,7 +35,7 @@
                     </span>
                 @endcan
             @else
-                @can('publishalbums')
+                @can ('publishalbums')
                     @if ($album->thumbPhoto)
                         <a
                             class="btn btn-danger btn-block mb-3 text-white"
@@ -75,7 +74,6 @@
                     <div class="card-header bg-dark text-center text-white">
                         Edit album
                     </div>
-
                     <form method="post">
                         {{ csrf_field() }}
                         <div class="card-body">
@@ -90,7 +88,7 @@
                                     value="{{ $album->name }}"
                                 />
                             </div>
-                            @include(
+                            @include (
                                 'components.forms.datetimepicker',
                                 [
                                     'name' => 'date',
@@ -100,8 +98,7 @@
                                 ]
                             )
                             <p class="mt-2">
-                                Private album:
-                                {{ $album->private ? '✅' : '❌' }}
+                                Private album: {{ $album->private ? '✅' : '❌' }}
                             </p>
                         </div>
 
@@ -125,7 +122,6 @@
                     <div class="card-header bg-dark text-center text-white">
                         Edit album
                     </div>
-
                     <div class="card-body">
                         <b>Album name:</b>
                         {{ $album->name }}
@@ -270,8 +266,7 @@
                     {{ csrf_field() }}
 
                     <div class="card-header bg-dark text-center text-white">
-                        {{ $album->name }}
-                        ({{ date('M j, Y', $album->date_taken) }})
+                        {{ $album->name }} ({{ date('M j, Y', $album->date_taken) }})
                     </div>
 
                     <div class="card-body">
@@ -373,7 +368,7 @@
                             class="row shift-select"
                         >
                             @foreach ($album->items as $photo)
-                                @include('photos.includes.selectablephoto', ['photo' => $photo])
+                                @include ('photos.includes.selectablephoto', ['photo' => $photo])
                             @endforeach
                         </div>
                     </div>
@@ -383,9 +378,9 @@
     </div>
 @endsection
 
-@push('javascript')
-    @vite('resources/assets/js/exifreader.js')
-    <script async type="text/javascript" @cspNonce>
+@push ('javascript')
+    @vite ('resources/assets/js/exifreader.js')
+    <script async type="text/javascript" @cspNonce
         const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
         window.addEventListener('load', () => {
             let fileSizeLimit = '{{ $fileSizeLimit }}B'
@@ -450,18 +445,13 @@
                         if (!acceptedType) {
                             uploadError(
                                 file,
-                                new Error(
-                                    `File type is not supported: ${file.type}`
-                                )
+                                new Error(`File type is not supported: ${file.type}`)
                             )
                             continue
                         }
                         const underSizeLimit = file.size <= MAX_FILE_SIZE
                         if (!underSizeLimit) {
-                            uploadError(
-                                file,
-                                new Error(`The image is too big!`)
-                            )
+                            uploadError(file, new Error(`The image is too big!`))
                             continue
                         }
                         file.id = fileId++

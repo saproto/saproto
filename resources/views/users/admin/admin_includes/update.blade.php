@@ -30,7 +30,7 @@
             />
 
             @if ($user->completed_profile)
-                @include(
+                @include (
                     'components.forms.datetimepicker',
                     [
                         'name' => 'birthdate',

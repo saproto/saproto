@@ -6,11 +6,10 @@
 
     <div class="card mb-3">
         <div class="card-header bg-dark text-white">
-            @yield('page-title')
+            @yield ('page-title')
             @if ($achievement)
                 <span class="badge bg-info float-end">
-                    Obtained by
-                    {{ $achievement->currentOwners(true)->count() }} members
+                    Obtained by {{ $achievement->currentOwners(true)->count() }} members
                 </span>
             @endif
         </div>
@@ -50,38 +49,38 @@
                 >
                     <option
                         value="COMMON"
-                        @selected($achievement?->tier == 'COMMON')
+                        @selected ($achievement?->tier == 'COMMON')
                     >
                         Common
                     </option>
                     <option
                         value="UNCOMMON"
-                        @selected($achievement?->tier == 'UNCOMMON')
+                        @selected ($achievement?->tier == 'UNCOMMON')
                     >
                         Uncommon
                     </option>
                     <option
                         value="RARE"
-                        @selected($achievement?->tier == 'RARE')
+                        @selected ($achievement?->tier == 'RARE')
                     >
                         Rare
                     </option>
                     <option
                         value="EPIC"
-                        @selected($achievement?->tier == 'EPIC')
+                        @selected ($achievement?->tier == 'EPIC')
                     >
                         Epic
                     </option>
                     <option
                         value="LEGENDARY"
-                        @selected($achievement?->tier == 'LEGENDARY')
+                        @selected ($achievement?->tier == 'LEGENDARY')
                     >
                         Legendary
                     </option>
                 </select>
             </div>
 
-            @include(
+            @include (
                 'components.forms.checkbox',
                 [
                     'name' => 'is_archived',
@@ -90,7 +89,7 @@
                 ]
             )
 
-            @include(
+            @include (
                 'components.forms.checkbox',
                 [
                     'name' => 'has_page',
@@ -102,7 +101,7 @@
             <div
                 id="achieve_page_block"
                 class="d-none"
-                @if(!$achievement || !$achievement->has_page) @endif
+                @if (!$achievement || !$achievement->has_page) @endif
             >
                 <div class="form-group">
                     <label for="page_name">Achieve URL</label>
@@ -124,7 +123,7 @@
 
                 <div class="form-group">
                     <label for="content">Content</label>
-                    @include(
+                    @include (
                         'components.forms.markdownfield',
                         [
                             'name' => 'page_content',
@@ -141,19 +140,16 @@
                 Submit
             </button>
 
-            <a
-                href="{{ route('achievement::index') }}"
-                class="btn btn-default"
-            >
+            <a href="{{ route('achievement::index') }}" class="btn btn-default">
                 Cancel
             </a>
         </div>
     </div>
 </form>
 
-@push('javascript')
-    <script type="text/javascript" @cspNonce>
-        let pageBlock = document.getElementById('achieve_page_block')
+@push ('javascript')
+    <script type="text/javascript" @cspNonce
+        >let pageBlock = document.getElementById('achieve_page_block')
         document.getElementById('has_page').addEventListener('click', (e) => {
             if (e.target.checked) {
                 pageBlock.classList.remove('d-none')

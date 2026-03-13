@@ -45,7 +45,7 @@
                             <td>€{{ $wallstreetDrink->price_increase }}</td>
                             <td>
                                 @if ($wallstreetDrink->random_events_chance > 0)
-                                        1/{{ $wallstreetDrink->random_events_chance }}
+                                    1/{{ $wallstreetDrink->random_events_chance }}
                                 @endif
                             </td>
                             <td class="px-4 text-center">
@@ -59,7 +59,7 @@
 
                             <td>
                                 @if ($wallstreetDrink->isCurrent())
-                                    @include(
+                                    @include (
                                         'components.modals.confirm-modal',
                                         [
                                             'action' => route('wallstreet::close', ['id' => $wallstreetDrink->id]),
@@ -81,7 +81,7 @@
                                 >
                                     <i class="fas fa-edit me-4"></i>
                                 </a>
-                                @include(
+                                @include (
                                     'components.modals.confirm-modal',
                                     [
                                         'action' => route('wallstreet::delete', ['id' => $wallstreetDrink->id]),

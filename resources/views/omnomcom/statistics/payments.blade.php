@@ -1,36 +1,32 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Payment statistics
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center mb-3">
         <div class="col-md-3">
             <div class="card">
                 <div class="card-header bg-dark text-white">
-                    @yield('page-title')
+                    @yield ('page-title')
                 </div>
 
                 <div class="card-body">
-                    <p>
-                        Between
-                        <strong>{{ $start }}</strong>
-                        and
-                        <strong>{{ $end }}</strong>
-                        the following payments took place:
-                    </p>
+                    <p>Between
+                    <strong>{{ $start }}</strong>
+                    and
+                    <strong>{{ $end }}</strong>
+                    the following payments took place:</p>
 
                     <p>
                         <i class="fas fa-fw fa-coins me-2"></i>
-                        Cash payments:
-                        &euro;{{ number_format($total_cash, 2) }}
+                        Cash payments: &euro;{{ number_format($total_cash, 2) }}
                     </p>
 
                     <p>
                         <i class="fas fa-fw fa-credit-card me-2"></i>
-                        Card payments:
-                        &euro;{{ number_format($total_card, 2) }}
+                        Card payments: &euro;{{ number_format($total_card, 2) }}
                     </p>
                 </div>
 

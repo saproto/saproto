@@ -9,7 +9,7 @@
         enctype="multipart/form-data"
     >
         <div class="card-header bg-dark text-white">
-            @yield('page-title')
+            @yield ('page-title')
         </div>
 
         @csrf
@@ -28,7 +28,6 @@
                         />
                     </div>
                 </div>
-
                 <hr />
             @endif
 
@@ -200,7 +199,7 @@
                     </div>
                 </div>
             </div>
-            @include(
+            @include (
                 'components.forms.checkbox',
                 [
                     'name' => 'is_visible',
@@ -209,7 +208,7 @@
                 ]
             )
 
-            @include(
+            @include (
                 'components.forms.checkbox',
                 [
                     'name' => 'is_visible_when_no_stock',
@@ -218,7 +217,7 @@
                 ]
             )
 
-            @include(
+            @include (
                 'components.forms.checkbox',
                 [
                     'name' => 'is_alcoholic',
@@ -241,7 +240,7 @@
                         @foreach ($categories as $catogory)
                             <option
                                 value="{{ $catogory->id }}"
-                                @selected($product != null && $product->categories->contains($catogory))
+                                @selected ($product != null && $product->categories->contains($catogory))
                             >
                                 {{ $catogory->name }}
                             </option>
@@ -256,10 +255,9 @@
                         @foreach ($accounts as $account)
                             <option
                                 value="{{ $account?->id }}"
-                                @selected(old('account_id', $account && $product && $account->id == $product->account_id))
+                                @selected (old('account_id', $account && $product && $account->id == $product->account_id))
                             >
-                                {{ $account->name }}
-                                ({{ $account->account_number }})
+                                {{ $account->name }} ({{ $account->account_number }})
                             </option>
                         @endforeach
                     </select>
@@ -283,7 +281,7 @@
 
         <div class="card-footer clearfix">
             @if ($product)
-                @include(
+                @include (
                     'components.modals.confirm-modal',
                     [
                         'action' => route('omnomcom::products::delete', ['id' => $product->id]),

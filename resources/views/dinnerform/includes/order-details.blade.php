@@ -79,7 +79,7 @@
                     @endif
                 </div>
                 @if (! $dinnerform->event)
-                    @include(
+                    @include (
                         'components.forms.checkbox',
                         [
                             'name' => 'helper',
@@ -91,9 +91,8 @@
                         @if ($dinnerform->isHelping())
                             <div class="alert alert-info text-center">
                                 You are a helper for this event and therefore
-                                receive
-                                {{ $dinnerform->regular_discount_percentage ? 'an additional' : 'a' }}
-                                discount of
+                                receive {{ $dinnerform->regular_discount_percentage ? 'an additional' : 'a' }} discount
+                                of
                                 <strong>
                                     €{{ $dinnerform->helper_discount }}
                                 </strong>

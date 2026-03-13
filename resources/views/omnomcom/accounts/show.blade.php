@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     OmNomCom Account Administration
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-2">
             <form
@@ -32,7 +32,7 @@
                     </div>
 
                     <div class="card-body">
-                        @include(
+                        @include (
                             'components.forms.datetimepicker',
                             [
                                 'name' => 'start',
@@ -40,7 +40,7 @@
                             ]
                         )
 
-                        @include(
+                        @include (
                             'components.forms.datetimepicker',
                             [
                                 'name' => 'end',
@@ -76,14 +76,10 @@
                                 </a>
                             @endforeach
                         </li>
-
                         <hr />
-
                         {!! $products->links() !!}
                     @else
-                        <p class="card-text text-center">
-                            There are no products for this account.
-                        </p>
+                        <p class="card-text text-center">There are no products for this account.</p>
                     @endif
                 </div>
             </div>

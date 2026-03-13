@@ -3,9 +3,7 @@
         class="card-header text-bg-dark border-bottom-0 bg-dark position-relative mb-2"
     >
         <div>
-            <h3 class="ellipsis mt-4 mb-3 text-center">
-                {{ $user->name }}
-            </h3>
+            <h3 class="ellipsis mt-4 mb-3 text-center">{{ $user->name }}</h3>
 
             <div class="text-center">
                 <img
@@ -41,7 +39,7 @@
             @endif
         @endif
 
-        @can('board')
+        @can ('board')
             <p class="card-text ellipsis">
                 <i
                     class="fas fa-user-cog fa-fw text-info me-3"
@@ -80,8 +78,7 @@
             @if ($user->address_visible && $user->address != null)
                 <p class="card-text ellipsis">
                     <i class="fas fa-home fa-fw me-3" aria-hidden="true"></i>
-                    {{ $user->address->street }} {{ $user->address->number }},
-                    {{ $user->address->city }}
+                    {{ $user->address->street }} {{ $user->address->number }}, {{ $user->address->city }}
                 </p>
             @endif
         </p>
@@ -93,7 +90,6 @@
             @else
                 <i class="fas fa-user-friends fa-fw me-3"></i>
                 Member
-
                 @if (date('U', strtotime($user->member->created_at)) > 0)
                     as of
                     {{ date('F j, Y', strtotime($user->member->created_at)) }}.

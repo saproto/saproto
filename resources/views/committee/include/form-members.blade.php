@@ -58,7 +58,7 @@
 
                 <div class="row">
                     <div class="col-6">
-                        @include(
+                        @include (
                             'components.forms.datetimepicker',
                             [
                                 'format' => 'date',
@@ -68,7 +68,7 @@
                         )
                     </div>
                     <div class="col-6">
-                        @include(
+                        @include (
                             'components.forms.datetimepicker',
                             [
                                 'format' => 'date',

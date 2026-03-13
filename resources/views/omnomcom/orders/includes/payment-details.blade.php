@@ -12,13 +12,11 @@
 
         @if ($next_withdrawal > 0)
             <p class="card-text">Next withdrawal</p>
-
             <h3 class="card-title">
                 &euro; {{ number_format($next_withdrawal, 2, '.', '') }}
             </h3>
         @elseif ($next_withdrawal < 0)
             <p class="card-text">OmNomCom credit left</p>
-
             <h3 class="card-title">
                 &euro; {{ number_format(-$next_withdrawal, 2, '.', '') }}
             </h3>
@@ -64,8 +62,7 @@
                                             {{ $outstandingActivity->event->title }}
                                         </td>
                                         <td>
-                                            &euro;
-                                            {{ number_format($outstandingActivity->price, 2, '.', '') }}
+                                            &euro; {{ number_format($outstandingActivity->price, 2, '.', '') }}
                                         </td>
                                     </tr>
                                 @endforeach
@@ -95,8 +92,8 @@
     @endif
 </div>
 
-<script @cspNonce>
-    const outstanding = document.querySelector(
+<script @cspNonce
+    >const outstanding = document.querySelector(
         '[data-bs-target="#collapse-outstanding"]'
     )
     outstanding.addEventListener('click', () => {

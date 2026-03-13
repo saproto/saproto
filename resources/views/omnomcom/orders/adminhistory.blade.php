@@ -1,19 +1,19 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Orderline Administration
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row">
         <div class="col-md-3 col-md-push-9">
-            @include('omnomcom.orders.admin_includes.orderline-addone')
+            @include ('omnomcom.orders.admin_includes.orderline-addone')
 
-            @include('omnomcom.orders.admin_includes.filter')
+            @include ('omnomcom.orders.admin_includes.filter')
         </div>
 
         <div class="col-md-9 col-md-3">
-            @include('omnomcom.orders.admin_includes.history')
+            @include ('omnomcom.orders.admin_includes.history')
         </div>
     </div>
 @endsection

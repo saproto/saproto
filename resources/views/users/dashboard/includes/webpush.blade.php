@@ -8,22 +8,15 @@
     </div>
 </div>
 
-@push('javascript')
-    <script type="text/javascript" @cspNonce>
+@push ('javascript')
+    <script type="text/javascript" @cspNonce
         document.addEventListener('DOMContentLoaded', () => {
-            const subscribeButton = document.getElementById(
-                'enable-notifications'
-            )
+            const subscribeButton = document.getElementById('enable-notifications')
 
             subscribeButton.addEventListener('click', async () => {
                 // 1. Check if browser supports push
-                if (
-                    !('serviceWorker' in navigator) ||
-                    !('PushManager' in window)
-                ) {
-                    alert(
-                        'Push notifications are not supported on this browser.'
-                    )
+                if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+                    alert('Push notifications are not supported on this browser.')
                     return
                 }
 
@@ -45,11 +38,10 @@
                         '{{ config('webpush.vapid.public_key') }}'
                     )
 
-                    const subscription =
-                        await registration.pushManager.subscribe({
-                            userVisibleOnly: true,
-                            applicationServerKey: applicationServerKey,
-                        })
+                    const subscription = await registration.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: applicationServerKey,
+                    })
 
                     // 5. Send subscription to Laravel backend
                     await fetch('/api/subscriptions', {

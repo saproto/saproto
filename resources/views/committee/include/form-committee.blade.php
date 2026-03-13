@@ -55,13 +55,13 @@
                         >
                             <option
                                 value="0"
-                                @selected(! $new && ! $committee->is_society)
+                                @selected (! $new && ! $committee->is_society)
                             >
                                 Committee
                             </option>
                             <option
                                 value="1"
-                                @selected(! $new && $committee->is_society)
+                                @selected (! $new && $committee->is_society)
                             >
                                 Society
                             </option>
@@ -77,13 +77,13 @@
                         <select class="form-control" id="public" name="public">
                             <option
                                 value="0"
-                                @selected(! $new && ! $committee->public)
+                                @selected (! $new && ! $committee->public)
                             >
                                 Admin only
                             </option>
                             <option
                                 value="1"
-                                @selected(! $new && $committee->public)
+                                @selected (! $new && $committee->public)
                             >
                                 Public
                             </option>
@@ -94,7 +94,7 @@
 
             <div class="form-group mt-1">
                 <div class="input-group" id="isActiveInput">
-                    @include(
+                    @include (
                         'components.forms.checkbox',
                         [
                             'name' => 'is_active',
@@ -128,13 +128,13 @@
                         >
                             <option
                                 value="0"
-                                @selected(! $new && $committee->allow_anonymous_email)
+                                @selected (! $new && $committee->allow_anonymous_email)
                             >
                                 No
                             </option>
                             <option
                                 value="1"
-                                @selected(! $new && $committee->allow_anonymous_email)
+                                @selected (! $new && $committee->allow_anonymous_email)
                             >
                                 Yes
                             </option>
@@ -145,7 +145,7 @@
 
             <div class="form-group">
                 <label for="editor">Description</label>
-                @include(
+                @include (
                     'components.forms.markdownfield',
                     [
                         'name' => 'description',
@@ -173,14 +173,12 @@
         </div>
     </div>
 </form>
-@push('javascript')
-    <script type="text/javascript" @cspNonce>
+@push ('javascript')
+    <script type="text/javascript" @cspNonce
         // Update the is active checkbox when the committee type is changed
-        document
-            .getElementById('is_society')
-            .addEventListener('change', function () {
-                updateIsSociety(this.value === '1')
-            })
+        document.getElementById('is_society').addEventListener('change', function () {
+            updateIsSociety(this.value === '1')
+        })
 
         // Update the is active checkbox when the committee type is changed
         function updateIsSociety(isSociety) {

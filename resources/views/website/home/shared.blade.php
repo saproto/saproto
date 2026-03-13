@@ -2,13 +2,13 @@
     use App\Enums\CompanyEnum;
 @endphp
 
-@extends("website.layouts.redesign.generic")
+@extends ("website.layouts.redesign.generic")
 
-@section("page-title")
+@section ("page-title")
     Homepage
 @endsection
 
-@section("container")
+@section ("container")
     <div class="row">
         <div class="col-xl-9 col-md-6 col-sm-12">
             <div
@@ -54,11 +54,11 @@
 
                 <div class="card-body d-flex align-items-end text-start">
                     <h2 class="card-text ellipsis px-1" style="font-size: 30px">
-                        @section("greeting")
-                            
+                        @section ("greeting")
+
                         @endsection
 
-                        @yield("greeting")
+                        @yield ("greeting")
                     </h2>
                 </div>
             </div>
@@ -93,20 +93,20 @@
             @endif
 
             <div class="row justify-content-center">
-                @section("left-column")
-                    
+                @section ("left-column")
+
                 @endsection
 
-                @yield("left-column")
+                @yield ("left-column")
             </div>
         </div>
 
         <div class="col-xl-3 col-md-6 col-sm-12">
-            @section("right-column")
-                
+            @section ("right-column")
+
             @endsection
 
-            @yield("right-column")
+            @yield ("right-column")
         </div>
     </div>
 @endsection

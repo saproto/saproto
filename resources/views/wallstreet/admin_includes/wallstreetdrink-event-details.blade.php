@@ -53,7 +53,7 @@
             </div>
             <div class="form-group">
                 <label for="editor">Description</label>
-                @include(
+                @include (
                     'components.forms.markdownfield',
                     [
                         'name' => 'description',
@@ -73,7 +73,7 @@
             <button type="submit" class="btn btn-success">Submit</button>
 
             @if ($currentEvent)
-                @include(
+                @include (
                     'components.modals.confirm-modal',
                     [
                         'action' => route('wallstreet::events::delete', [

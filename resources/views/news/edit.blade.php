@@ -1,26 +1,24 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 @php
     /**@var \App\Models\Newsitem $item */
 @endphp
 
-@php($newsName = $is_weekly ? 'weekly' : 'news')
+@php ($newsName = $is_weekly ? 'weekly' : 'news')
 
-@section('page-title')
+@section ('page-title')
     @if ($new)
         Create a new {{ $newsName }}
     @else
         Edit {{ $item->title }}
     @endif
-
     @if ($is_weekly && $lastWeekly)
         <a class="badge bg-danger disabled float-end">
-            Last sent:
-            {{ Carbon::parse($lastWeekly->published_at)->diffForHumans() }}
+            Last sent: {{ Carbon::parse($lastWeekly->published_at)->diffForHumans() }}
         </a>
     @endif
 @endsection
 
-@section('container')
+@section ('container')
     <form
         method="post"
         action="@if($new) {{ route("news::store") }} @else {{ route("news::update", ['id' => $item->id]) }} @endif"
@@ -32,7 +30,7 @@
             <div class="col-md-4">
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield('page-title')
+                        @yield ('page-title')
                     </div>
 
                     <div class="card-body">
@@ -49,8 +47,7 @@
                                     required
                                 />
                             </div>
-
-                            @include(
+                            @include (
                                 'components.forms.datetimepicker',
                                 [
                                     'name' => 'published_at',
@@ -64,7 +61,7 @@
 
                         <div class="form-group">
                             <label for="editor">Content</label>
-                            @include(
+                            @include (
                                 'components.forms.markdownfield',
                                 [
                                     'name' => 'content',
@@ -79,7 +76,7 @@
 
             <div class="col-md-5">
                 <div class="row">
-                    @include('news.includes.activities')
+                    @include ('news.includes.activities')
                     @if ($is_weekly && $item?->hasMedia())
                         <div class="card mb-3">
                             <div class="card-header">Replace image</div>
@@ -130,7 +127,7 @@
 
                             <div class="card-footer">
                                 @if (! $item->published_at)
-                                    @include(
+                                    @include (
                                         'components.modals.confirm-modal',
                                         [
                                             'action' => route('news::sendWeekly', ['id' => $item->id]),
@@ -152,7 +149,7 @@
                                         ]
                                     )
                                 @else
-                                        This weekly has already been sent!
+                                    This weekly has already been sent!
                                 @endif
                             </div>
                         </div>

@@ -68,7 +68,7 @@
 @endif
 
 @if ($user->bank != null)
-    @php($hasUnpaidOrderlines = $user->hasUnpaidOrderlines())
+    @php ($hasUnpaidOrderlines = $user->hasUnpaidOrderlines())
     <div id="bank-modal-cancel" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -83,33 +83,15 @@
                 </div>
                 <div class="modal-body">
                     @if ($hasUnpaidOrderlines)
-                        <p class="text-danger">
-                            You have unpaid orderlines. You cannot revoke your
-                            authorization until you have settled all your
-                            purchases with Proto. You can await the next
-                            withdrawal, or head over to your
-                            <a href="{{ route('omnomcom::orders::index') }}">
-                                purchase history
-                            </a>
-                            to pay manually via iDeal.
-                        </p>
-
+                        <p class="text-danger">You have unpaid orderlines. You cannot revoke your authorization until you have settled all your purchases with Proto. You can await the next withdrawal, or head over to your
+                        <a href="{{ route('omnomcom::orders::index') }}"> purchase history </a>
+                        to pay manually via iDeal.</p>
                         <hr />
                     @endif
 
-                    <p>
-                        This action will cancel your current automatic
-                        withdrawal authorization. Everything bought up until now
-                        will still be withdrawn from this bank account, but no
-                        more purchases can be made using this authorization.
-                    </p>
+                    <p>This action will cancel your current automatic withdrawal authorization. Everything bought up until now will still be withdrawn from this bank account, but no more purchases can be made using this authorization.</p>
 
-                    <p>
-                        After all outstanding balance with this authorization
-                        has been paid, the authorization will be permanently
-                        deleted. If you wish to make purchases in the future,
-                        you can always add a new authorization.
-                    </p>
+                    <p>After all outstanding balance with this authorization has been paid, the authorization will be permanently deleted. If you wish to make purchases in the future, you can always add a new authorization.</p>
                 </div>
                 <form method="POST" action="{{ route('user::bank::delete') }}">
                     @csrf
@@ -118,7 +100,7 @@
                             <button
                                 type="submit"
                                 class="btn btn-danger w-50"
-                                @disabled($hasUnpaidOrderlines)
+                                @disabled ($hasUnpaidOrderlines)
                                 }}
                             >
                                 Cancel my authorization

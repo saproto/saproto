@@ -1,15 +1,15 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     OmNomCom Product Accounts
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card mb-3">
                 <div class="card-header bg-dark mb-1 text-white">
-                    @yield('page-title')
+                    @yield ('page-title')
                     <a
                         href="{{ route('omnomcom::accounts::create') }}"
                         class="badge bg-info float-end"
@@ -39,12 +39,8 @@
                                             {{ $account->name }}
                                         </a>
                                     </td>
-                                    <td>
-                                        {{ $account->account_number }}
-                                    </td>
-                                    <td>
-                                        {{ $account->products_count }}
-                                    </td>
+                                    <td>{{ $account->account_number }}</td>
+                                    <td>{{ $account->products_count }}</td>
                                     <td style="min-width: 60px">
                                         <a
                                             href="{{ route('omnomcom::accounts::edit', ['id' => $account->id]) }}"

@@ -1,15 +1,15 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Alias Management
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-7">
             <div class="card mb-3">
                 <div class="card-header bg-dark mb-1 text-white">
-                    @yield('page-title')
+                    @yield ('page-title')
                 </div>
 
                 <div class="table-responsive">
@@ -44,7 +44,6 @@
                                                 class="fas fa-trash text-danger"
                                             ></i>
                                         </a>
-
                                         @if ($destination->destination)
                                             {{ $destination->destination }}
                                         @elseif ($destination->user)
@@ -66,7 +65,6 @@
                                         @else
                                             <i>deleted user</i>
                                         @endif
-
                                         <br />
                                     @endforeach
                                 </td>

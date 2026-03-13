@@ -9,7 +9,6 @@
         @php
             /** @var Event $event */
         @endphp
-
         <form
             method="post"
             action="{{ route('event::addsignup', ['event' => $event]) }}"
@@ -18,16 +17,13 @@
 
             <div class="card-body">
                 @if (! $event->activity)
-                    <p class="card-text text-center">
-                        No sign-up details are currently configured.
-                    </p>
-
+                    <p class="card-text text-center">No sign-up details are currently configured.</p>
                     <hr />
                 @endif
 
                 <div class="row">
                     <div class="col-md-6">
-                        @include(
+                        @include (
                             'components.forms.datetimepicker',
                             [
                                 'name' => 'registration_start',
@@ -42,7 +38,7 @@
                     </div>
 
                     <div class="col-md-6">
-                        @include(
+                        @include (
                             'components.forms.datetimepicker',
                             [
                                 'name' => 'registration_end',
@@ -57,7 +53,7 @@
                     </div>
 
                     <div class="col-md-6">
-                        @include(
+                        @include (
                             'components.forms.datetimepicker',
                             [
                                 'name' => 'deregistration_end',
@@ -174,7 +170,7 @@
                     </div>
 
                     <div class="col-md-6">
-                        @include(
+                        @include (
                             'components.forms.checkbox',
                             [
                                 'name' => 'hide_participants',
@@ -214,10 +210,7 @@
         </form>
     @else
         <div class="card-body">
-            <p class="card-text text-center">
-                You must save this event before being able to add sign-up
-                details.
-            </p>
+            <p class="card-text text-center">You must save this event before being able to add sign-up details.</p>
         </div>
     @endif
 </div>

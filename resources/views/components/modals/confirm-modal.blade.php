@@ -15,7 +15,7 @@
 </a>
 
 @once
-    @push('modals')
+    @push ('modals')
         <div class="modal fade" id="confirm-modal" tabindex="-1" role="dialog">
             <div class="modal-dialog model-sm" role="document">
                 <form method="POST">
@@ -61,9 +61,9 @@
 @endonce
 
 @once
-    @push('javascript')
-        <script @cspNonce>
-            document.querySelectorAll('.confirm-modal-button').forEach((el) =>
+    @push ('javascript')
+        <script @cspNonce
+            >document.querySelectorAll('.confirm-modal-button').forEach((el) =>
                 el.addEventListener('click', (e) => {
                     const modal = document.querySelector(
                         el.getAttribute('data-bs-target')

@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     User Registration
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-3">
             <form
@@ -37,7 +37,7 @@
         <div class="col-md-9">
             <div class="card mb-3">
                 <div class="card-header bg-dark mb-1 text-white">
-                    @yield('page-title')
+                    @yield ('page-title')
                 </div>
 
                 <div class="table-responsive">
@@ -67,20 +67,14 @@
                                     </td>
                                     <td>#{{ $user->id }}</td>
                                     <td>{{ $user->name }}</td>
-                                    <td>
-                                        {{ $user->email }}
-                                    </td>
+                                    <td>{{ $user->email }}</td>
                                     <td>
                                         @if ($user->is_member)
                                             {{ $user->member->proto_username }}
                                         @endif
                                     </td>
-                                    <td>
-                                        {{ $user->utwente_username }}
-                                    </td>
-                                    <td>
-                                        {{ $user->utwente_department }}
-                                    </td>
+                                    <td>{{ $user->utwente_username }}</td>
+                                    <td>{{ $user->utwente_department }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

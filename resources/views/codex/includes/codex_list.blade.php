@@ -29,7 +29,7 @@
                         >
                             Edit
                         </a>
-                        @include(
+                        @include (
                             'components.modals.confirm-modal',
                             [
                                 'method' => 'DELETE',

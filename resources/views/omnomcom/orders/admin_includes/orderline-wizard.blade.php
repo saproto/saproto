@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     Orderline wizard
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row">
         <div class="column">
             <form
@@ -35,8 +35,7 @@
                                 >
                                     @foreach ($members as $member)
                                         <option value="{{ $member->id }}">
-                                            {{ $member->name }}
-                                            (#{{ $member->id }})
+                                            {{ $member->name }} (#{{ $member->id }})
                                         </option>
                                     @endforeach
                                 </select>
@@ -52,8 +51,7 @@
                                             value="{{ $product->id }}"
                                             data-price="{{ $product->price }}"
                                         >
-                                            {{ $product->name }}
-                                            (&euro;{{ $product->price }},
+                                            {{ $product->name }} (&euro;{{ $product->price }},
                                             #{{ $product->id }})
                                         </option>
                                     @endforeach
@@ -144,9 +142,9 @@
     </div>
 @endsection
 
-@push('javascript')
-    <script type="text/javascript" @cspNonce>
-        document
+@push ('javascript')
+    <script type="text/javascript" @cspNonce
+        >document
             .getElementById('orderline-add-row')
             .addEventListener('click', (e) => {
                 e.preventDefault()

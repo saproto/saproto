@@ -1,15 +1,14 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     Calendar
 @endsection
 
-@section('container')
-    @include('event.calendar_includes.archivebar')
-
+@section ('container')
+    @include ('event.calendar_includes.archivebar')
     <div class="row calendar justify-content-center">
         @foreach ($events as $key => $section)
-            @include(
+            @include (
                 'event.calendar_includes.rendermonth',
                 [
                     'events' => $section,

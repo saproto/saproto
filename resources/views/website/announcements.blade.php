@@ -11,7 +11,6 @@
             <?php
             $announcement->dismissForUser(\Illuminate\Support\Facades\Auth::user());
             ?>
-
             <div
                 class="modal fade"
                 id="{{ $announcement->modal_id }}"
@@ -35,9 +34,8 @@
                     </div>
                 </div>
             </div>
-
-            @push('javascript')
-                <script type="text/javascript" @cspNonce>
+            @push ('javascript')
+                <script type="text/javascript" @cspNonce
                     window.addEventListener('load', () => {
                         modals['{{ $announcement->modal_id }}'].show()
                     })

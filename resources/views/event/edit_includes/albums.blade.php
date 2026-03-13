@@ -39,15 +39,12 @@
                     <select name="album_id" class="form-control" required>
                         @foreach ($albums as $album)
                             <option value="{{ $album->id }}">
-                                {{ date('Y-m-d', $album->date_taken) }} :
-                                {{ $album->name }}
+                                {{ date('Y-m-d', $album->date_taken) }} : {{ $album->name }}
                             </option>
                         @endforeach
                     </select>
                 @else
-                    <p class="card-text">
-                        There are no albums that can be linked to this event.
-                    </p>
+                    <p class="card-text">There are no albums that can be linked to this event.</p>
                 @endif
             </div>
 

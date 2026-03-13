@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     Complete membership profile
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-4">
             <form
@@ -15,16 +15,16 @@
 
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield('page-title')
+                        @yield ('page-title')
                     </div>
 
                     <div class="card-body">
-                        @include('users.registerwizard_macro')
+                        @include ('users.registerwizard_macro')
 
                         <div class="row">
                             <div class="col-6">
                                 <label>Birthdate</label>
-                                @include(
+                                @include (
                                     'components.forms.datetimepicker',
                                     [
                                         'name' => 'birthdate',

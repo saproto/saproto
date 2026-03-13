@@ -1,16 +1,16 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     Proto's sticker tracker!
 @endsection
 
-@vite('resources/assets/js/echo.js')
-@vite('resources/assets/js/leaflet.js')
-@vite('node_modules/leaflet-geosearch/dist/geosearch.css')
-@vite('node_modules/leaflet.markercluster/dist/MarkerCluster.css')
-@vite('node_modules/leaflet/dist/leaflet.css')
+@vite ('resources/assets/js/echo.js')
+@vite ('resources/assets/js/leaflet.js')
+@vite ('node_modules/leaflet-geosearch/dist/geosearch.css')
+@vite ('node_modules/leaflet.markercluster/dist/MarkerCluster.css')
+@vite ('node_modules/leaflet/dist/leaflet.css')
 
-@section('container')
+@section ('container')
     <div class="card mt-3 mb-3">
         <div class="card-header bg-dark text-white">
             <div class="d-flex justify-content-between align-items-center">
@@ -43,14 +43,13 @@
                                     class="dropdown-item"
                                     href="{{ route('stickers.index', ['type' => $stickerType['id']]) }}"
                                 >
-                                    {{ $stickerType['title'] }}
-                                    ({{ $stickerType['count'] }})
+                                    {{ $stickerType['title'] }} ({{ $stickerType['count'] }})
                                 </a>
                             @endforeach
                         </ul>
                     </div>
                 </div>
-                @can('board')
+                @can ('board')
                     <a
                         href="{{ route('stickers.admin') }}"
                         class="btn btn-info"
@@ -62,9 +61,7 @@
             </div>
         </div>
     </div>
-
     <div id="map"></div>
-
     <div
         class="modal fade"
         id="sticker-report-modal"
@@ -128,7 +125,6 @@
             </form>
         </div>
     </div>
-
     <div
         class="modal fade"
         id="sticker-confirm-delete-modal"
@@ -183,7 +179,6 @@
             </form>
         </div>
     </div>
-
     <div
         class="modal fade"
         id="markerModal"
@@ -226,7 +221,7 @@
                                     Upload Sticker Image
                                 </label>
 
-                                @include(
+                                @include (
                                     'components.forms.checkbox',
                                     [
                                         'name' => 'today_checkbox',
@@ -262,7 +257,7 @@
                                 accept="image/jpg, image/jpeg"
                             />
 
-                            @include(
+                            @include (
                                 'components.forms.datetimepicker',
                                 [
                                     'name' => 'stick_date',
@@ -295,11 +290,11 @@
     </div>
 @endsection
 
-@push('head')
-    
+@push ('head')
+
 @endpush
 
-@push('stylesheet')
+@push ('stylesheet')
     <style rel="stylesheet">
         #map {
             height: 75%;
@@ -310,8 +305,7 @@
         .leaflet-popup-content-wrapper {
             overflow: hidden;
         }
-
-        @foreach($stickerTypes as $stickerType)
+        @foreach ($stickerTypes as $stickerType)
         .cluster-icon-{{ $stickerType['id'] }} {
             background:
                 linear-gradient(0, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
@@ -327,7 +321,6 @@
         }
         @endforeach
 
-
         .results {
             color: black;
         }
@@ -340,8 +333,8 @@
     </style>
 @endpush
 
-@push('javascript')
-    <script type="text/javascript" @cspNonce>
+@push ('javascript')
+    <script type="text/javascript" @cspNonce
         window.addEventListener('load', () => {
             window.Echo.channel(`stickers`)
                 .listen('StickerPlacedEvent', (marker) => {
@@ -386,14 +379,7 @@
 
             map.addControl(window.GeoSearch)
 
-            const markerFiles = [
-                'chip',
-                'cloud',
-                'gear',
-                'heart',
-                'light',
-                'world',
-            ]
+            const markerFiles = ['chip', 'cloud', 'gear', 'heart', 'light', 'world']
 
             const markerIcons = markerFiles.map((path) => {
                 return L.icon({
@@ -599,40 +585,30 @@
             })
 
             function removeSticker(marker) {
-                const deleteDate = document.getElementById(
-                    'sticker-delete-date'
-                )
+                const deleteDate = document.getElementById('sticker-delete-date')
                 deleteDate.textContent = marker.date
 
-                const deleteImage = document.getElementById(
-                    'sticker-delete-image'
-                )
+                const deleteImage = document.getElementById('sticker-delete-image')
                 deleteImage.src = marker.image
 
-                const deleteForm = document.getElementById(
-                    'sticker-delete-form'
+                const deleteForm = document.getElementById('sticker-delete-form')
+                deleteForm.action = '{{ route('stickers.destroy', ['sticker' => 'id']) }}'.replace(
+                    'id',
+                    marker.id
                 )
-                deleteForm.action =
-                    '{{ route('stickers.destroy', ['sticker' => 'id']) }}'.replace(
-                        'id',
-                        marker.id
-                    )
 
                 window.modals['sticker-confirm-delete-modal'].show()
             }
             const reportForm = document.getElementById('sticker-report-form')
 
             function reportSticker(marker) {
-                const reportImage = document.getElementById(
-                    'sticker-report-image'
-                )
+                const reportImage = document.getElementById('sticker-report-image')
                 reportImage.src = marker.image
 
-                reportForm.action =
-                    '{{ route('stickers.report', ['sticker' => 'id']) }}'.replace(
-                        'id',
-                        marker.id
-                    )
+                reportForm.action = '{{ route('stickers.report', ['sticker' => 'id']) }}'.replace(
+                    'id',
+                    marker.id
+                )
                 reportForm.setAttribute('data-sticker-id', marker.id)
 
                 window.modals['sticker-report-modal'].show()
@@ -745,9 +721,7 @@
                         const canvas = document.createElement('canvas')
                         canvas.width = width
                         canvas.height = height
-                        canvas
-                            .getContext('2d')
-                            .drawImage(image, 0, 0, width, height)
+                        canvas.getContext('2d').drawImage(image, 0, 0, width, height)
 
                         // Convert to Blob
                         canvas.toBlob(

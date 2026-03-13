@@ -29,8 +29,8 @@
             </div>
         @else
             <div class="m-2 text-center">
-                {{ $user->calling_name }} does not have a custom omnomcom
-                sound! Upload an
+                {{ $user->calling_name }} does not have a custom omnomcom sound!
+                Upload an
                 <b>mp3</b>
                 below.
                 <br />

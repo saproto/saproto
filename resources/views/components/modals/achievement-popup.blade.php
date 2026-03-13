@@ -18,7 +18,7 @@
 @endphp
 
 @if (isset($newAchievements) && count($newAchievements) > 0)
-    @push('modals')
+    @push ('modals')
         <div
             class="modal fade"
             id="new-achievement-modal"
@@ -32,11 +32,10 @@
             >
                 <div class="modal-content bg-dark text-white">
                     <div class="modal-body text-center">
-                        You just got
-                        {{ count($newAchievements) > 1 ? 'new achievements' : 'a new achievement' }},
+                        You just got {{ count($newAchievements) > 1 ? 'new achievements' : 'a new achievement' }},
                         check it out:
                         @foreach ($newAchievements as $newAchievement)
-                            @include('achievement.includes.achievement_include', ['achievement' => $newAchievement, 'obtained' => $newAchievement->pivot])
+                            @include ('achievement.includes.achievement_include', ['achievement' => $newAchievement, 'obtained' => $newAchievement->pivot])
                         @endforeach
 
                         <a
@@ -50,10 +49,9 @@
             </div>
         </div>
     @endpush
-
-    @push('javascript')
-        <script type="text/javascript" @cspNonce>
-            window.addEventListener('load', () => {
+    @push ('javascript')
+        <script type="text/javascript" @cspNonce
+            >window.addEventListener('load', () => {
                 modals['new-achievement-modal'].show()
             })
         </script>

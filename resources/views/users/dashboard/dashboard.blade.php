@@ -2,26 +2,26 @@
     use App\Features\notifications;
 @endphp
 
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     Dashboard for {{ $user->name }}
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row">
         <div class="col-xl-5 col-md-12">
-            @include('users.dashboard.includes.membership')
+            @include ('users.dashboard.includes.membership')
 
-            @include('users.dashboard.includes.account')
+            @include ('users.dashboard.includes.account')
 
-            @include('users.dashboard.includes.deleteaccount')
+            @include ('users.dashboard.includes.deleteaccount')
 
-            @include('users.dashboard.includes.cardinfo')
+            @include ('users.dashboard.includes.cardinfo')
         </div>
 
         <div class="col-xl-3 col-md-12">
-            @include(
+            @include (
                 'components.modals.confirm-modal',
                 [
                     'action' => route('api::user::gdpr_export'),
@@ -35,29 +35,29 @@
                 ]
             )
 
-            @include('users.dashboard.includes.profilepic')
+            @include ('users.dashboard.includes.profilepic')
 
-            @include('users.dashboard.includes.password')
+            @include ('users.dashboard.includes.password')
 
-            @include('users.dashboard.includes.allergies')
+            @include ('users.dashboard.includes.allergies')
 
-            @include('users.dashboard.includes.2fa')
+            @include ('users.dashboard.includes.2fa')
 
-            @feature(notifications::class)
-                @include('users.dashboard.includes.webpush')
+            @feature (notifications::class)
+                @include ('users.dashboard.includes.webpush')
             @endfeature
 
-            @include('users.dashboard.includes.roleinfo')
+            @include ('users.dashboard.includes.roleinfo')
         </div>
 
         <div class="col-xl-4 col-md-12">
-            @include('users.dashboard.includes.withdrawal')
+            @include ('users.dashboard.includes.withdrawal')
 
-            @include('users.dashboard.includes.maillists')
+            @include ('users.dashboard.includes.maillists')
 
-            @include('users.dashboard.includes.discord_link')
+            @include ('users.dashboard.includes.discord_link')
 
-            @include('users.dashboard.includes.personal_key')
+            @include ('users.dashboard.includes.personal_key')
         </div>
     </div>
 @endsection

@@ -1,11 +1,11 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     {{ $new ? 'Add' : 'Update' }} a withdrawal authorization for
     {{ $user->name }}
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-4">
             <form
@@ -15,22 +15,16 @@
             >
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield('page-title')
+                        @yield ('page-title')
                     </div>
 
                     <div class="card-body">
                         @if (Session::get('wizard'))
-                            @include('users.registerwizard_macro')
+                            @include ('users.registerwizard_macro')
                         @endif
 
                         @if ($user->id != Auth::id())
-                            <p>
-                                Sorry, but due to accountability issues you can
-                                only add authorizations for yourself. If
-                                {{ $user->name }} really wants to pay via
-                                automatic withdrawal, they should authorize so
-                                themselves.
-                            </p>
+                            <p>Sorry, but due to accountability issues you can only add authorizations for yourself. If {{ $user->name }} really wants to pay via automatic withdrawal, they should authorize so themselves.</p>
                         @else
                             @if (! $new)
                                 <div class="card mb-3">
@@ -50,16 +44,13 @@
 
                                         <p class="card-text text-center">
                                             <sub>
-                                                authorization issued on
-                                                {{ $user->bank->created_at }}.
+                                                authorization issued on {{ $user->bank->created_at }}.
                                                 <br />
-                                                Authorization ID:
-                                                {{ $user->bank->machtigingid }}
+                                                Authorization ID: {{ $user->bank->machtigingid }}
                                             </sub>
                                         </p>
                                     </div>
                                 </div>
-
                                 <div class="card mb-3">
                                     <div
                                         class="card-header bg-danger text-white"
@@ -68,22 +59,11 @@
                                     </div>
 
                                     <div class="card-body">
-                                        <p class="card-text">
-                                            You already have a bank
-                                            authorization active. Updating your
-                                            authorization will remove this
-                                            authorization from the system. If an
-                                            automatic withdrawal is already
-                                            being processed right now, it may
-                                            still be withdrawn using this
-                                            authorization.
-                                        </p>
+                                        <p class="card-text">You already have a bank authorization active. Updating your authorization will remove this authorization from the system. If an automatic withdrawal is already being processed right now, it may still be withdrawn using this authorization.</p>
                                     </div>
                                 </div>
-
                                 <hr />
                             @endif
-
                             @csrf
                             <div class="form-group">
                                 <label for="iban">
@@ -98,15 +78,12 @@
                                     required
                                 />
                             </div>
-
                             <p>
                                 <span id="iban-message">
                                     Please enter your IBAN above.
                                 </span>
                             </p>
-
                             <hr />
-
                             <div class="form-group">
                                 <label for="bic">Bank BIC Code</label>
                                 <input
@@ -118,21 +95,11 @@
                                     required
                                 />
                             </div>
-
                             <hr />
-
                             <p>
                                 <strong>Authorization Statement</strong>
                             </p>
-
-                            <p>
-                                You hereby legally authorize Study Association
-                                Proto until further notice to charge to your
-                                bank account any costs you incur with the
-                                association. These include but are not limited
-                                to:
-                            </p>
-
+                            <p>You hereby legally authorize Study Association Proto until further notice to charge to your bank account any costs you incur with the association. These include but are not limited to:</p>
                             <ul>
                                 <li>Orders from the OmNomCom store</li>
                                 <li>Participation in activities</li>
@@ -142,11 +109,7 @@
                                 </li>
                                 <li>Your membership fee</li>
                             </ul>
-
-                            <p>
-                                (Some of these may only applicable to members of
-                                the association.)
-                            </p>
+                            <p>(Some of these may only applicable to members of the association.)</p>
                         @endif
                     </div>
 
@@ -174,13 +137,13 @@
     </div>
 @endsection
 
-@push('javascript')
+@push ('javascript')
     <script
         type="text/javascript"
         src="https://unpkg.com/iban-to-bic@latest/dist/iban-to-bic.js"
     ></script>
-    <script type="text/javascript" @cspNonce>
-        window.addEventListener('load', () => {
+    <script type="text/javascript" @cspNonce
+        >window.addEventListener('load', () => {
             const iban = document.getElementById('iban')
             const bic_field = document.getElementById('bic')
 

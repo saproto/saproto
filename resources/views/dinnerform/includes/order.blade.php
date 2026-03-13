@@ -28,18 +28,16 @@
                     <td>€ {{ number_format($order->price, 2) }}</td>
                     @if ($dinnerform->hasDiscount())
                         <td>
-                            - €
-                            {{ number_format($order->price - $order->price_with_discount, 2) }}
+                            - € {{ number_format($order->price - $order->price_with_discount, 2) }}
                         </td>
                         <td>
-                            €
-                            {{ number_format($order->price_with_discount, 2) }}
+                            € {{ number_format($order->price_with_discount, 2) }}
                         </td>
                     @endif
 
                     @if ($dinnerform->isCurrent())
                         <td>
-                            @include(
+                            @include (
                                 'components.modals.confirm-modal',
                                 [
                                     'action' => route('dinnerform::orderline::delete', [

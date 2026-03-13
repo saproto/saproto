@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     The FishCam&trade;
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center" style="height: 75vh">
         <div class="col-12 h-100">
             <div id="fishcam-warning" class="card mb-3">
@@ -18,12 +18,7 @@
                 </div>
 
                 <div class="card-body">
-                    <p class="card-text">
-                        The fishcam stream is of very high quality, and streams
-                        with roughly 0.5 MB/s. If you have a 1 gigabyte data
-                        plan, you will use it up completely over the course of
-                        half an hour.
-                    </p>
+                    <p class="card-text">The fishcam stream is of very high quality, and streams with roughly 0.5 MB/s. If you have a 1 gigabyte data plan, you will use it up completely over the course of half an hour.</p>
                 </div>
 
                 <div class="card-footer">
@@ -48,10 +43,7 @@
                 </div>
 
                 <div class="card-body">
-                    <p class="card-text">
-                        Unfortunately the fishcam seems to be unavailable at the
-                        moment. Please let the board know and try again later!
-                    </p>
+                    <p class="card-text">Unfortunately the fishcam seems to be unavailable at the moment. Please let the board know and try again later!</p>
                 </div>
             </div>
 
@@ -69,8 +61,8 @@
     </div>
 @endsection
 
-@push('javascript')
-    <script type="text/javascript" @cspNonce>
+@push ('javascript')
+    <script type="text/javascript" @cspNonce
         const fishcam = document.getElementById('fishcam')
         const fishcamSrc = document.getElementById('fishcam-src')
         const activate = document.getElementById('fishcam-activate')

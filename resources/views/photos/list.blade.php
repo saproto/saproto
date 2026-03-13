@@ -1,12 +1,12 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     Albums
 @endsection
 
-@section('container')
+@section ('container')
     <div class="card mb-3">
-        @can('protography')
+        @can ('protography')
             <a href="{{ route('albums::admin::index') }}" class="btn btn-info">
                 <i class="fas fa-edit"></i>
                 <span class="d-none d-sm-inline">Photo admin</span>
@@ -17,7 +17,7 @@
             <div class="row">
                 @foreach ($albums as $key => $album)
                     <div class="col-lg-2 col-lg-3 col-md-4 col-sm-6">
-                        @include(
+                        @include (
                             'website.home.cards.card-bg-image',
                             [
                                 'url' => route('albums::album::list', ['album' => $album->id]),
@@ -38,9 +38,7 @@
                 @endforeach
             </div>
         </div>
-        <div class="card-footer">
-            {{ $albums->links() }}
-        </div>
+        <div class="card-footer">{{ $albums->links() }}</div>
 
         <div class="card-footer text-center">
             <i class="fas fa-shield-alt fa-fw me-3"></i>

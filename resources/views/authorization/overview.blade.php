@@ -1,15 +1,15 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Authorization Matrix
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-xl-6">
             <div class="card mb-3">
                 <div class="card-header bg-dark mb-1 text-white">
-                    @yield('page-title')
+                    @yield ('page-title')
                 </div>
 
                 <div class="card-body overflow-auto">
@@ -80,7 +80,7 @@
                                     <div class="card-body">
                                         @foreach ($role->users as $user)
                                             {{-- format-ignore-start --}}
-                                            @include(
+                                            @include (
                                                 'users.includes.usercard',
                                                 [
                                                     'user' => $user,

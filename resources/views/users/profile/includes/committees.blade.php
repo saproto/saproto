@@ -6,7 +6,7 @@
             @if (count($user->committees) > 0)
                 @foreach ($user->committees as $committee)
                     <div class="col-md-6 col-xs-12">
-                        @include(
+                        @include (
                             'committee.include.committee_block',
                             [
                                 'committee' => $committee,
@@ -28,9 +28,7 @@
                 @endforeach
             @else
                 <div class="col-12">
-                    <p class="card-text text-center">
-                        Currently not a member of a committee.
-                    </p>
+                    <p class="card-text text-center">Currently not a member of a committee.</p>
                 </div>
             @endif
         </div>
@@ -47,7 +45,7 @@
             <div class="row">
                 @foreach ($pastcommittees as $committeeparticipation)
                     <div class="col-md-6 col-xs-12">
-                        @include(
+                        @include (
                             'committee.include.committee_block',
                             [
                                 'committee' => $committeeparticipation->committee,

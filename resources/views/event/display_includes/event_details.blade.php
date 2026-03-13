@@ -24,7 +24,7 @@
             </a>
         @endif
 
-        @can('board')
+        @can ('board')
             <a
                 href="{{ route('event::edit', ['event' => $event]) }}"
                 class="btn btn-info col float-end mx-3"
@@ -53,7 +53,7 @@
     <div
         class="card-header bg-light justify-content-between d-inline-flex align-items-center"
     >
-        <h5 class="card-title">@yield('page-title')</h5>
+        <h5 class="card-title">@yield ('page-title')</h5>
 
         @if ($event->category)
             <span class="badge rounded-pill bg-info ellipsis mw-100 float-end">
@@ -150,9 +150,7 @@
         @endif
     </ul>
 
-    <div class="card-body">
-        {!! Markdown::convert($event->description) !!}
-    </div>
+    <div class="card-body">{!! Markdown::convert($event->description) !!}</div>
 </div>
 
 @if ($event->videos->count() || $event->albums->count())
@@ -164,7 +162,7 @@
         <div class="card-body">
             @if ($event->videos->count() > 0)
                 @foreach ($event->videos as $video)
-                    @include(
+                    @include (
                         'website.home.cards.card-bg-image',
                         [
                             'url' => route('video::show', ['id' => $video->id]),
@@ -181,7 +179,7 @@
 
             @if ($event->albums->count() > 0)
                 @foreach ($event->albums as $album)
-                    @include(
+                    @include (
                         'website.home.cards.card-bg-image',
                         [
                             'url' => route('albums::album::list', ['album' => $album->id]),

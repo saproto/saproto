@@ -7,7 +7,7 @@
         {!! $title !!}
 
         @if (Auth::user()->can('board') && isset($edition) && isset($edit) && count(array_filter($memberships, fn ($n) => $n->deleted_at == null)) > 0)
-            @include(
+            @include (
                 'components.modals.confirm-modal',
                 [
                     'action' => route('committee::membership::endedition', [
@@ -32,7 +32,7 @@
     >
         <div class="card-body">
             @foreach ($memberships as $i => $membership)
-                @include(
+                @include (
                     'committee.include.render-membership',
                     [
                         'membership' => $membership,

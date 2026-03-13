@@ -43,16 +43,7 @@
                 </div>
 
                 <div class="modal-body">
-                    <p>
-                        Here you can enter allergies and diets and other info.
-                        Everything you enter here will be visible to organizers
-                        of activities involving food from the moment you sign up
-                        until a week after the activity has ended. The board and
-                        website admins will always be able to view this
-                        information. Proto will do its best to take your dietary
-                        wishes and allergies into account when organsing
-                        activities.
-                    </p>
+                    <p>Here you can enter allergies and diets and other info. Everything you enter here will be visible to organizers of activities involving food from the moment you sign up until a week after the activity has ended. The board and website admins will always be able to view this information. Proto will do its best to take your dietary wishes and allergies into account when organsing activities.</p>
 
                     <p>
                         <strong>
@@ -63,8 +54,10 @@
 
                     <hr />
 
-                    <textarea class="form-control" name="diet">
-{{ $user->diet }}</textarea
+                    <textarea
+                        class="form-control"
+                        name="diet"
+                        >{{ $user->diet }}</textarea
                     >
                 </div>
 

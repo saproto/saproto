@@ -8,7 +8,6 @@
 
 @if ($event->tickets->count() > 0)
     <?php $has_unpaid_tickets = false; ?>
-
     @if ($event->hasBoughtTickets(Auth::user()))
         <div class="card mb-3">
             <div class="card-header ellipsis">
@@ -40,7 +39,6 @@
                                         </a>
                                     @else
                                         <?php $has_unpaid_tickets = true; ?>
-
                                         <a
                                             class="card-link text-danger"
                                             href="{{ $purchase->orderline->molliePayment->payment_url ?? route('omnomcom::orders::index') }}"
@@ -69,7 +67,6 @@
             @endif
         </div>
     @endif
-
     <form
         method="post"
         action="{{ route('event::buytickets', ['event' => $event]) }}"
@@ -89,21 +86,14 @@
 
             <div class="card-body">
                 @if (! Auth::check())
-                    <p class="card-text">
-                        Please
-                        <a
-                            href="{{ route('event::login', ['event' => $event]) }}"
-                        >
-                            log-in
-                        </a>
-                        to buy tickets.
-                    </p>
+                    <p class="card-text">Please
+                    <a href="{{ route('event::login', ['event' => $event]) }}"> log-in </a>
+                    to buy tickets.</p>
                 @else
                     @foreach ($event->tickets as $ticket)
                         @php
                             /** @var \App\Models\Ticket $ticket */
                         @endphp
-
                         <div
                             class="card {{ $ticket->isAvailable(Auth::user()) ? '' : 'opacity-50' }} mb-3"
                         >
@@ -117,7 +107,6 @@
                                         @php
                                             $has_prepay_tickets = true;
                                         @endphp
-
                                         <span class="badge bg-danger float-end">
                                             Pre-Paid
                                         </span>
@@ -125,17 +114,15 @@
                                         @php
                                             $only_prepaid = false;
                                         @endphp
-
                                         <span class="badge bg-info float-end">
                                             Withdrawal
                                         </span>
-
                                         @if ($ticket->has_buy_limit)
                                             <span
                                                 class="badge bg-warning float-end mx-3"
                                             >
-                                                {{ $ticket->buy_limit }} max
-                                                per user
+                                                {{ $ticket->buy_limit }} max per
+                                                user
                                             </span>
                                         @endif
                                     @endif
@@ -149,8 +136,7 @@
                                 <p class="card-text">
                                     @if ($ticket->isAvailable(Auth::user()))
                                         <span class="badge bg-info float-end">
-                                            {{ $ticket->product->stock > Config::integer('proto.maxtickets') ? Config::integer('proto.maxtickets') . '+' : $ticket->product->stock }}
-                                            available
+                                            {{ $ticket->product->stock > Config::integer('proto.maxtickets') ? Config::integer('proto.maxtickets') . '+' : $ticket->product->stock }} available
                                         </span>
                                     @endif
 
@@ -160,14 +146,14 @@
                                         For sale starting
                                         {{ date('d-m-Y H:i', $ticket->available_from) }}
                                     @elseif (! $ticket->canBeSoldTo(Auth::user()) && ! Auth::user()->is_member)
-                                        This ticket is only available to members!
+                                        This ticket is only available to
+                                        members!
                                     @elseif ($ticket->product->stock <= 0)
                                         Sold-out!
                                     @else
                                         @php
                                             $tickets_available++;
                                         @endphp
-
                                         <strong>On sale!</strong>
                                         <br />
                                         Available until
@@ -234,7 +220,7 @@
                         </button>
                         {{-- fees and only prepaid (3) --}}
                     @elseif (Config::boolean('omnomcom.mollie.use_fees') && $only_prepaid)
-                        @include('event.display_includes.mollie-modal')
+                        @include ('event.display_includes.mollie-modal')
                         <a
                             href="javascript:void();"
                             class="btn btn-primary btn-block"
@@ -256,7 +242,7 @@
                             </strong>
                             Finish purchase!
                         </button>
-                        @include('event.display_includes.mollie-modal')
+                        @include ('event.display_includes.mollie-modal')
                         <a
                             hidden
                             id="feesbutton"
@@ -272,7 +258,6 @@
             @endif
         </div>
     </form>
-
     @foreach ($event->tickets as $ticket)
         @if ($ticket->show_participants)
             <div class="card mb-3">
@@ -282,7 +267,7 @@
                     tickets
                 </div>
                 <div class="card-body">
-                    @include(
+                    @include (
                         'event.display_includes.render_participant_list',
                         [
                             'participants' => $ticket->purchases->pluck('user')->unique(),
@@ -293,10 +278,9 @@
             </div>
         @endif
     @endforeach
-
-    @push('javascript')
-        <script type="text/javascript" @cspNonce>
-            const directPayButton = document.getElementById('directpay')
+    @push ('javascript')
+        <script type="text/javascript" @cspNonce
+            >const directPayButton = document.getElementById('directpay')
             const feesButton = document.getElementById('feesbutton')
             const selectList = Array.from(
                 document.getElementsByClassName('ticket-select')

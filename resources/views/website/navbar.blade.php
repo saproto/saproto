@@ -84,7 +84,7 @@
                     @endforeach
 
                     @auth
-                        @canany(['omnomcom', 'tipcie', 'drafters'])
+                        @canany (['omnomcom', 'tipcie', 'drafters'])
                             <li class="nav-item dropdown">
                                 <a
                                     href="#"
@@ -104,13 +104,12 @@
                                                 class="dropdown-item"
                                                 href="{{ route('omnomcom::store::show', ['store' => $name]) }}"
                                             >
-                                                Open store:
-                                                {{ $store['name'] }}
+                                                Open store: {{ $store['name'] }}
                                             </a>
                                         @endif
                                     @endforeach
 
-                                    @can('omnomcom')
+                                    @can ('omnomcom')
                                         <li
                                             role="separator"
                                             class="dropdown-divider"
@@ -147,7 +146,7 @@
                                         </a>
                                     @endcan
 
-                                    @can('tipcie')
+                                    @can ('tipcie')
                                         <li
                                             role="separator"
                                             class="dropdown-divider"
@@ -172,8 +171,8 @@
                                         </a>
                                     @endcan
 
-                                    @cannot('board')
-                                        @canany(['tipcie', 'omnomcom'])
+                                    @cannot ('board')
+                                        @canany (['tipcie', 'omnomcom'])
                                             <li
                                                 role="separator"
                                                 class="dropdown-divider"
@@ -189,8 +188,7 @@
                                 </ul>
                             </li>
                         @endcanany
-
-                        @canany(['board', 'finadmin', 'alfred'])
+                        @canany (['board', 'finadmin', 'alfred'])
                             <li id="admin-nav-item" class="nav-item dropdown">
                                 <a
                                     href="#"
@@ -205,7 +203,7 @@
                                 </a>
 
                                 <ul class="dropdown-menu">
-                                    @can('board')
+                                    @can ('board')
                                         <a
                                             class="dropdown-item"
                                             href="{{ route('user::admin::index') }}"
@@ -230,7 +228,6 @@
                                         >
                                             Queries
                                         </a>
-
                                         <li
                                             role="separator"
                                             class="dropdown-divider"
@@ -247,7 +244,6 @@
                                         >
                                             ProTube Admin
                                         </a>
-
                                         <li
                                             role="separator"
                                             class="dropdown-divider"
@@ -276,7 +272,6 @@
                                         >
                                             Feedback Categories
                                         </a>
-
                                         <li
                                             role="separator"
                                             class="dropdown-divider"
@@ -314,7 +309,7 @@
                                         ></li>
                                     @endif
 
-                                    @can('closeactivities')
+                                    @can ('closeactivities')
                                         <a
                                             class="dropdown-item"
                                             href="{{ route('event::financial::list') }}"
@@ -323,7 +318,7 @@
                                         </a>
                                     @endcan
 
-                                    @can('finadmin')
+                                    @can ('finadmin')
                                         <a
                                             class="dropdown-item"
                                             href="{{ route('omnomcom::accounts::index') }}"
@@ -356,7 +351,7 @@
                                         </a>
                                     @endcan
 
-                                    @canany(['alfred', 'sysadmin'])
+                                    @canany (['alfred', 'sysadmin'])
                                         <li
                                             role="separator"
                                             class="dropdown-divider"
@@ -371,8 +366,7 @@
                                 </ul>
                             </li>
                         @endcanany
-
-                        @can('board')
+                        @can ('board')
                             <li class="nav-item dropdown">
                                 <a
                                     href="#"
@@ -459,7 +453,7 @@
                                         Photo Admin
                                     </a>
 
-                                    @can('sysadmin')
+                                    @can ('sysadmin')
                                         <li
                                             role="separator"
                                             class="dropdown-divider"
@@ -507,8 +501,7 @@
                                 </ul>
                             </li>
                         @endcanany
-
-                        @cannot('board')
+                        @cannot ('board')
                             <li class="nav-item">
                                 <a
                                     class="nav-link"
@@ -522,7 +515,6 @@
                                     @endif
                                 </a>
                             </li>
-
                             @if (Auth::user()->hasAllPermissions(['protography', 'header-image']))
                                 <li class="nav-item dropdown">
                                     <a
@@ -552,8 +544,7 @@
                                     </ul>
                                 </li>
                             @endif
-
-                            @can('protography')
+                            @can ('protography')
                                 <li class="nav-item">
                                     <a
                                         class="nav-link"
@@ -566,8 +557,7 @@
                                     </a>
                                 </li>
                             @endcan
-
-                            @can('registermembers')
+                            @can ('registermembers')
                                 <li class="nav-item">
                                     <a
                                         class="nav-link"
@@ -580,8 +570,7 @@
                                     </a>
                                 </li>
                             @endcan
-
-                            @can('senate')
+                            @can ('senate')
                                 <li class="nav-item">
                                     <a
                                         class="nav-link"
@@ -594,7 +583,6 @@
                                     </a>
                                 </li>
                             @endcan
-
                             @if (Leaderboard::isAdminAny(Auth::user()))
                                 <li class="nav-item">
                                     <a
@@ -673,7 +661,6 @@
                                         >
                                             My Profile
                                         </a>
-
                                         <a
                                             class="dropdown-item"
                                             href="{{ route('albums::liked::list') }}"

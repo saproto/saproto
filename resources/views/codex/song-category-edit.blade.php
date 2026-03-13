@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Edit Song category
 @endsection
 
-@section('container')
+@section ('container')
     <form
         action="{{ ! empty($category) ? route('codexSongCategory.update', ['codexSongCategory' => $category]) : route('codexSongCategory.store') }}"
         method="POST"

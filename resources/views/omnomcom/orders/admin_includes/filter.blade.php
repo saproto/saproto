@@ -4,7 +4,7 @@
 
         <div class="card-body">
             <div class="form-group autocomplete">
-                @include(
+                @include (
                     'components.forms.datetimepicker',
                     [
                         'not_required' => true,

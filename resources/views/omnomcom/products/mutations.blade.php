@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Stock Mutations
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-4">
             <div class="card">
@@ -48,7 +48,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                @include(
+                                @include (
                                     'components.forms.datetimepicker',
                                     [
                                         'name' => 'after',
@@ -61,7 +61,7 @@
                             </div>
 
                             <div class="col-md-12 mb-3">
-                                @include(
+                                @include (
                                     'components.forms.datetimepicker',
                                     [
                                         'name' => 'before',
@@ -75,7 +75,7 @@
                         </div>
 
                         <div class="row-md-12 mb-3">
-                            @include(
+                            @include (
                                 'components.forms.checkbox',
                                 [
                                     'name' => 'also_positive',
@@ -105,7 +105,7 @@
         <div class="col-md-7">
             <div class="card">
                 <div class="card-header bg-dark text-white">
-                    @yield('page-title')
+                    @yield ('page-title')
                 </div>
                 <div class="card-body">
                     @if (count($mutations) > 0)

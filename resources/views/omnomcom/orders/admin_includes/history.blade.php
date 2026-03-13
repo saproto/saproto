@@ -6,7 +6,7 @@
         @endif
 
         @if ($date)
-                on {{ $date->format('Y-m-d') }}
+            on {{ $date->format('Y-m-d') }}
         @endif
 
         @if (! $products->isEmpty())
@@ -28,7 +28,7 @@
                                     {{ $orderline->id }}
                                 </span>
                                 @if ($orderline->canBeDeleted())
-                                    @include(
+                                    @include (
                                         'components.modals.confirm-modal',
                                         [
                                             'action' => route('omnomcom::orders::delete', ['id' => $orderline->id]),
@@ -44,8 +44,7 @@
                                 @endif
                             </td>
                             <td class="text-end" style="min-width: 70px">
-                                &euro;
-                                {{ number_format($orderline->total_price, 2, '.', '') }}
+                                &euro; {{ number_format($orderline->total_price, 2, '.', '') }}
                             </td>
                             <td>
                                 <span class="text-muted me-2">
@@ -79,9 +78,7 @@
                                     <em class="text-muted">Anonymised</em>
                                 @endif
                             </td>
-                            <td>
-                                {!! $orderline->generateHistoryStatus() !!}
-                            </td>
+                            <td>{!! $orderline->generateHistoryStatus() !!}</td>
                             <td class="text-muted">
                                 {{ $orderline->authenticated_by }}
                             </td>
@@ -93,17 +90,12 @@
                 </tbody>
             </table>
         </div>
-
         @if (method_exists($orderlines, 'links'))
-            <div class="card-footer pb-0">
-                {!! $orderlines->links() !!}
-            </div>
+            <div class="card-footer pb-0">{!! $orderlines->links() !!}</div>
         @endif
     @else
         <div class="card-body">
-            <p class="mt-3 text-center">
-                No orderlines for this {{ $date ? 'date' : 'user' }}.
-            </p>
+            <p class="mt-3 text-center">No orderlines for this {{ $date ? 'date' : 'user' }}.</p>
         </div>
     @endif
 </div>

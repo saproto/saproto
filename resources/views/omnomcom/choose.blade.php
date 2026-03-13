@@ -1,17 +1,17 @@
-@extends('website.master')
+@extends ('website.master')
 
-@section('page-title')
+@section ('page-title')
     Choose OmNomCom Store
 @endsection
 
-@section('body')
+@section ('body')
     <div class="row justify-content-center">
         <div
             class="col-xl-3 col-lg-5 col-md-6 col-sm-10 col-xs-12 mx-3 text-center"
         >
             <div class="card mt-5 mb-3">
                 <div class="card-header bg-dark text-center text-white">
-                    @yield('page-title')
+                    @yield ('page-title')
                 </div>
 
                 <ul class="list-group list-group-flush">

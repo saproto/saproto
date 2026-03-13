@@ -1,14 +1,14 @@
-@extends('auth.template')
+@extends ('auth.template')
 
-@push('head')
+@push ('head')
     {!! NoCaptcha::renderJs() !!}
 @endpush
 
-@section('page-title')
+@section ('page-title')
     Register account
 @endsection
 
-@section('login-body')
+@section ('login-body')
     <form
         method="POST"
         action="{{ route('login::register') }}"
@@ -16,16 +16,9 @@
     >
         @csrf
 
-        <p>
-            Using this form you can register a new account on the S.A. Proto
-            website using your University account or without. You can always
-            unlink your University account later.
-        </p>
+        <p>Using this form you can register a new account on the S.A. Proto website using your University account or without. You can always unlink your University account later.</p>
 
-        <p class="fw-bold">
-            Creating and having an account on the website does not make you a
-            member of S.A. Proto and is free of charge.
-        </p>
+        <p class="fw-bold">Creating and having an account on the website does not make you a member of S.A. Proto and is free of charge.</p>
 
         <hr />
 
@@ -82,7 +75,7 @@
             Privacy policy
         </a>
 
-        @include(
+        @include (
             'components.forms.checkbox',
             [
                 'name' => 'privacy_policy_acceptance',
@@ -127,9 +120,9 @@
     </form>
 @endsection
 
-@push('javascript')
-    <script type="text/javascript" @cspNonce>
-        let additionalNameInputs = document.getElementById(
+@push ('javascript')
+    <script type="text/javascript" @cspNonce
+        >let additionalNameInputs = document.getElementById(
             'regular-account-creation'
         )
         let toggleInput = document.getElementById('create_without_ut_account')

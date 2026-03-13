@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Edit video
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-3">
             <form
@@ -16,13 +16,13 @@
 
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield('page-title')
+                        @yield ('page-title')
                     </div>
 
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6 col-sm-12">
-                                @include(
+                                @include (
                                     'components.forms.datetimepicker',
                                     [
                                         'name' => 'video_date',
@@ -49,8 +49,7 @@
                                 Currently linked to:
                                 <br />
                                 <strong>
-                                    {{ $video->event->title }}
-                                    ({{ date('d-m-Y', $video->event->start) }})
+                                    {{ $video->event->title }} ({{ date('d-m-Y', $video->event->start) }})
                                 </strong>
                             </p>
                         @endif

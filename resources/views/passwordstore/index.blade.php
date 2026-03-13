@@ -1,17 +1,17 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@push('head')
+@push ('head')
     <meta
         http-equiv="refresh"
         content="{{ Session::get('passwordstore-verify') - time() }}"
     />
 @endpush
 
-@section('page-title')
+@section ('page-title')
     Password Store
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-sm-2 col-12 mb-3">
             <a
@@ -56,7 +56,6 @@
 
                             @foreach ($passwords as $password)
                                 <?php ++$i; ?>
-
                                 @if ($password->canAccess(Auth::user()))
                                     <tr>
                                         <td class="text-end">
@@ -168,15 +167,12 @@
                     </div>
                 @else
                     <div class="card-body">
-                        <p class="card-text text-centerØ">
-                            There is nothing for you to see.
-                        </p>
+                        <p class="card-text text-centerØ">There is nothing for you to see.</p>
                     </div>
                 @endif
             </div>
         </div>
     </div>
-
     @foreach ($passwords as $password)
         @if ($password->note != null)
             <div
@@ -202,7 +198,8 @@
                         <div class="modal-body">
                             <textarea class="form-control" rows="15" readonly>
                                 {{ Crypt::decrypt($password->note) }}
-                            </textarea>
+                            </textarea
+                            >
                         </div>
                     </div>
                 </div>
@@ -211,9 +208,9 @@
     @endforeach
 @endsection
 
-@push('javascript')
-    <script type="text/javascript" @cspNonce>
-        document.querySelectorAll('.passwordmanager__copy').forEach((el) => {
+@push ('javascript')
+    <script type="text/javascript" @cspNonce
+        >document.querySelectorAll('.passwordmanager__copy').forEach((el) => {
             const copy = el.getAttribute('data-copy')
             el.addEventListener('click', () => {
                 navigator.clipboard.writeText(copy)

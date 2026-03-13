@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Wallsteet drink chart!
 @endsection
 
-@section('container')
+@section ('container')
     <div
         style="position: relative; height: 90vh; width: 95vw; margin-left: auto"
     >
@@ -12,24 +12,21 @@
     </div>
 @endsection
 
-@vite('resources/assets/js/echo.js')
+@vite ('resources/assets/js/echo.js')
 
-@push('javascript')
+@push ('javascript')
     {{-- chart.js and the date adapter --}}
     <script @cspNonce src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script
         @cspNonce
         src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"
     ></script>
-
-    <script @cspNonce>
+    <script @cspNonce
         // Initialize when page is loaded
         window.addEventListener('load', () => {
             const ctx = document.getElementById('myChart')
 
-            get(
-                `{{ route('api::wallstreet::all_prices', ['id' => $id]) }}`
-            ).then((products) => {
+            get(`{{ route('api::wallstreet::all_prices', ['id' => $id]) }}`).then((products) => {
                 var chart = new Chart(ctx, {
                     type: 'line',
                     options: {

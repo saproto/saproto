@@ -25,7 +25,7 @@
                     required
                 />
             </div>
-            @include(
+            @include (
                 'components.forms.datetimepicker',
                 [
                     'name' => 'achieved_on',

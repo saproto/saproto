@@ -1,19 +1,11 @@
-@extends('emails.template')
+@extends ('emails.template')
 
-@section('body')
+@section ('body')
     <p>Hey {{ $activity['name'] }},</p>
-
-    <p>
-        You receive this e-mail because the board signed you out for
-        <a href="{{ route('event::show', ['event' => $activity['id']]) }}">
-            {{ $activity['title'] }}
-        </a>
-        . If you believe this is a mistake, please let us know.
-    </p>
-
-    <p>
-        Kind regards,
-        <br />
-        The board of Study Association Proto
-    </p>
+    <p>You receive this e-mail because the board signed you out for
+    <a href="{{ route('event::show', ['event' => $activity['id']]) }}"> {{ $activity['title'] }} </a>
+    . If you believe this is a mistake, please let us know.</p>
+    <p>Kind regards,
+    <br />
+    The board of Study Association Proto</p>
 @endsection

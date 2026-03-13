@@ -23,8 +23,7 @@
                 </div>
                 <div class="modal-body">
                     <p>
-                        Are you sure you want to change the membership type of
-                        {{ $user->name }}?
+                        Are you sure you want to change the membership type of {{ $user->name }}?
 
                         <span class="me-1">Membership type:</span>
                         <select
@@ -34,25 +33,25 @@
                         >
                             <option>Regular member</option>
                             <option
-                                @selected($user->member->membership_type === \App\Enums\MembershipTypeEnum::HONORARY)
+                                @selected ($user->member->membership_type === \App\Enums\MembershipTypeEnum::HONORARY)
                                 value="honorary"
                             >
                                 Honorary member
                             </option>
                             <option
-                                @selected($user->member->membership_type === \App\Enums\MembershipTypeEnum::LIFELONG)
+                                @selected ($user->member->membership_type === \App\Enums\MembershipTypeEnum::LIFELONG)
                                 value="lifelong"
                             >
                                 Lifelong member
                             </option>
                             <option
-                                @selected($user->member->membership_type === \App\Enums\MembershipTypeEnum::DONOR)
+                                @selected ($user->member->membership_type === \App\Enums\MembershipTypeEnum::DONOR)
                                 value="donor"
                             >
                                 Donor
                             </option>
                             <option
-                                @selected($user->member->membership_type === \App\Enums\MembershipTypeEnum::PET)
+                                @selected ($user->member->membership_type === \App\Enums\MembershipTypeEnum::PET)
                                 value="pet"
                             >
                                 Pet member

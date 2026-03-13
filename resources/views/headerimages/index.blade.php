@@ -4,18 +4,18 @@
     /** @var LengthAwarePaginator<HeaderImage> $images */
 @endphp
 
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Header Images
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card mb-3">
                 <div class="card-header bg-dark mb-1 text-white">
-                    @yield('page-title')
+                    @yield ('page-title')
                     <a
                         class="badge bg-info float-end"
                         href="{{ route('headerimages.create') }}"
@@ -37,7 +37,7 @@
                         @foreach ($images as $image)
                             <tr>
                                 <td>
-                                    @include(
+                                    @include (
                                         'components.modals.confirm-modal',
                                         [
                                             'action' => route('headerimages.destroy', ['headerimage' => $image]),
@@ -68,9 +68,7 @@
                     </table>
                 </div>
 
-                <div class="card-footer pb-0">
-                    {{ $images->links() }}
-                </div>
+                <div class="card-footer pb-0">{{ $images->links() }}</div>
             </div>
         </div>
     </div>

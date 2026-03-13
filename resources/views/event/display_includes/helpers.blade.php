@@ -10,16 +10,14 @@
                     <strong>
                         {{ $instance->committee->name }}
                         @if (Auth::user()->can('board') || Auth::user()->committees->contains($instance->committee))
-                                ({{ $instance->users->count() }}/{{ $instance->amount }})
+                            ({{ $instance->users->count() }}/{{ $instance->amount }})
                         @endif
                     </strong>
 
                     @if ($instance->users->count() < 1)
-                        <p class="card-text">
-                            No people are currently helping.
-                        </p>
+                        <p class="card-text">No people are currently helping.</p>
                     @else
-                        @include(
+                        @include (
                             'event.display_includes.render_helper_list',
                             [
                                 'participants' => $instance->users,

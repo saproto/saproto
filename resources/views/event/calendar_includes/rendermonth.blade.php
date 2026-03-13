@@ -5,7 +5,7 @@
 
             @if (count($events) > 0)
                 @foreach ($events ?? [] as $counter => $event)
-                    @include(
+                    @include (
                         'event.display_includes.event_block',
                         [
                             'event' => $event,

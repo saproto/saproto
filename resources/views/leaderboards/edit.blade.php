@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     {{ $leaderboard == null ? 'Create new leaderboard.' : 'Edit leaderboard: ' . $leaderboard->name . '.' }}
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-5 mb-3">
             <form
@@ -16,15 +16,14 @@
 
                 <div class="card md-3">
                     <div class="card-header bg-dark text-white">
-                        @yield('page-title')
+                        @yield ('page-title')
                     </div>
 
                     <div class="card-body">
-                        @can('board')
+                        @can ('board')
                             <div class="form-group autocomplete">
                                 <label for="organisation">
-                                    Committee:
-                                    {{ $leaderboard->committee->name ?? '' }}
+                                    Committee: {{ $leaderboard->committee->name ?? '' }}
                                 </label>
                                 <input
                                     class="form-control committee-search"
@@ -35,8 +34,7 @@
                                     required
                                 />
                             </div>
-
-                            @include(
+                            @include (
                                 'components.forms.checkbox',
                                 [
                                     'name' => 'featured',
@@ -75,7 +73,7 @@
 
                         <input type="hidden" name="icon" id="icon" required />
 
-                        @include(
+                        @include (
                             'components.forms.iconpicker',
                             [
                                 'name' => 'icon',
@@ -86,7 +84,7 @@
 
                         <div class="form-group">
                             <label for="editor">Description:</label>
-                            @include(
+                            @include (
                                 'components.forms.markdownfield',
                                 [
                                     'name' => 'description',
@@ -249,27 +247,21 @@
     </div>
 @endsection
 
-@push('javascript')
-    <script type="text/javascript" @cspNonce>
-        Array.from(document.getElementsByClassName('le-points')).forEach(
-            (el) => {
-                ;['click', 'keyup'].forEach((e) =>
-                    el.addEventListener(e, (e) => {
-                        const id = el.getAttribute('data-id')
-                        const input = el.querySelector('.le-points-input')
-                        let points = input.value
-                        if (e.target.classList.contains('le-points-increase'))
-                            points++
-                        else if (
-                            e.target.classList.contains('le-points-decrease')
-                        )
-                            points--
-                        input.value = points
-                        updatePoints(id, points)
-                    })
-                )
-            }
-        )
+@push ('javascript')
+    <script type="text/javascript" @cspNonce
+        Array.from(document.getElementsByClassName('le-points')).forEach((el) => {
+            ;['click', 'keyup'].forEach((e) =>
+                el.addEventListener(e, (e) => {
+                    const id = el.getAttribute('data-id')
+                    const input = el.querySelector('.le-points-input')
+                    let points = input.value
+                    if (e.target.classList.contains('le-points-increase')) points++
+                    else if (e.target.classList.contains('le-points-decrease')) points--
+                    input.value = points
+                    updatePoints(id, points)
+                })
+            )
+        })
 
         function updatePoints(id, points) {
             post('{{ route('leaderboards::entries::update') }}', {

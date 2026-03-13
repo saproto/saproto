@@ -1,13 +1,13 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 @php
     /** @var \Illuminate\Support\Collection<\App\Models\EventCategory> $eventCategories */
 @endphp
 
-@section('page-title')
+@section ('page-title')
     Activity statistics
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row d-inline-flex justify-content-center w-100">
         <div class="col-10">
             <div class="card mb-3">
@@ -21,7 +21,7 @@
                                 Start:
                             </label>
                             <div class="col-sm-auto">
-                                @include(
+                                @include (
                                     'components.forms.datetimepicker',
                                     [
                                         'name' => 'start',
@@ -37,7 +37,7 @@
                                 End:
                             </label>
                             <div class="col-sm-auto">
-                                @include(
+                                @include (
                                     'components.forms.datetimepicker',
                                     [
                                         'name' => 'end',
@@ -78,9 +78,7 @@
                         <tbody>
                             @foreach ($eventCategories as $category)
                                 <tr>
-                                    <td>
-                                        {{ $category->name }}
-                                    </td>
+                                    <td>{{ $category->name }}</td>
                                     {{-- nr events --}}
                                     <td>{{ $category->events_count }}</td>
                                     {{-- % events --}}
@@ -130,15 +128,14 @@
     </div>
 @endsection
 
-@push('javascript')
+@push ('javascript')
     {{-- chart.js and the date adapter --}}
     <script @cspNonce src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script
         @cspNonce
         src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"
     ></script>
-
-    <script type="text/javascript" @cspNonce>
+    <script type="text/javascript" @cspNonce
         const ctx = document.getElementById('chart')
         var chart = null
         var data = {!! json_encode($events->toArray(), JSON_HEX_TAG) !!}
@@ -151,11 +148,7 @@
                 let prices = []
                 product.forEach((item) => {
                     date = new Date(item.start * 1000)
-                    date = date.setFullYear(
-                        date.getFullYear(),
-                        date.getMonth(),
-                        1
-                    )
+                    date = date.setFullYear(date.getFullYear(), date.getMonth(), 1)
                     prices.push({
                         x: date,
                         y: item.total,

@@ -2,7 +2,7 @@
     <button type="submit" class="btn btn-success float-end ms-2">
         Update event details
     </button>
-    @include(
+    @include (
         'components.modals.confirm-modal',
         [
             'action' => route('event::delete', ['event' => $event]),

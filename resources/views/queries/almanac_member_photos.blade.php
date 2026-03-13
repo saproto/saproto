@@ -3,13 +3,13 @@
     /** @var \Illuminate\Support\Collection<\App\Models\User> $users */
 @endphp
 
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Member profile pictures for the almanac
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row d-inline-flex justify-content-center w-100">
         <div class="col-10">
             <div class="card mb-3">
@@ -38,9 +38,7 @@
                             @endforeach
                         </ul>
                     </div>
-                    <div>
-                        Showing the users for {{ $year }}/{{ $year + 1 }}
-                    </div>
+                    <div>Showing the users for {{ $year }}/{{ $year + 1 }}</div>
                 </div>
 
                 <div class="card-body">

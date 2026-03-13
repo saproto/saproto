@@ -1,10 +1,10 @@
-@extends('auth.template')
+@extends ('auth.template')
 
-@section('page-title')
+@section ('page-title')
     Change Password
 @endsection
 
-@section('login-body')
+@section ('login-body')
     <form method="POST" action="{{ route('login::password::change') }}">
         @csrf
         <p>

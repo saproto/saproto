@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     ProTube Dashboard
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row">
         <div class="col-md-4">
             <div class="btn btn-block mb-3 text-center">
@@ -28,16 +28,7 @@
                 </div>
 
                 <div class="card-body">
-                    <p class="card-text">
-                        ProTube can keep your history. This means that if you
-                        play a song using ProTube, and if you are logged in to
-                        the website in that browser, it will remember you put
-                        that song in the queue. This enables us to generate a
-                        top hits list for you personally, and we have plans to
-                        also allow you to sync your own personalized Spotify
-                        playlist. None of this information is shared with other
-                        people.
-                    </p>
+                    <p class="card-text">ProTube can keep your history. This means that if you play a song using ProTube, and if you are logged in to the website in that browser, it will remember you put that song in the queue. This enables us to generate a top hits list for you personally, and we have plans to also allow you to sync your own personalized Spotify playlist. None of this information is shared with other people.</p>
 
                     <hr />
 
@@ -66,7 +57,6 @@
 
                         @if ($usercount > 0)
                             <hr />
-
                             <p class="card-text">
                                 You have put
                                 <strong>{{ $usercount }}</strong>
@@ -82,8 +72,8 @@
                                 >
                                     Clear my ProTube history.
                                 </a>
-                                <script @cspNonce>
-                                    document
+                                <script @cspNonce
+                                    >document
                                         .getElementById('clear-history')
                                         .addEventListener('click', () =>
                                             confirm('Are you sure?')
@@ -114,12 +104,10 @@
                     style="max-height: 850px; overflow-y: auto"
                 >
                     @if (count($usertop) == 0)
-                        <p class="card-text">
-                            There are no videos linked to your account.
-                        </p>
+                        <p class="card-text">There are no videos linked to your account.</p>
                     @else
                         @foreach ($usertop as $video)
-                            @include(
+                            @include (
                                 'protube.includes.song_block',
                                 [
                                     'video' => $video,
@@ -142,7 +130,7 @@
                     style="max-height: 850px; overflow-y: auto"
                 >
                     @foreach ($history as $video)
-                        @include(
+                        @include (
                             'protube.includes.song_block',
                             [
                                 'video' => $video,

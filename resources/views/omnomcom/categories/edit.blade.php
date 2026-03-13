@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     {{ $category == null ? 'Create new category.' : 'Edit category ' . $category->name . '.' }}
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-3">
             <form
@@ -16,7 +16,7 @@
 
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield('page-title')
+                        @yield ('page-title')
                     </div>
 
                     <div class="card-body">
@@ -34,7 +34,7 @@
 
                     <div class="card-footer">
                         @if ($category)
-                            @include(
+                            @include (
                                 'components.modals.confirm-modal',
                                 [
                                     'action' => route('omnomcom::categories::delete', [

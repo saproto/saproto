@@ -1,13 +1,13 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     Sign membership contract
 @endsection
 
-@push('javascript')
-    @vite('resources/assets/js/signature-pad.js')
-    <script type="text/javascript" @cspNonce>
-        // import SignaturePad from 'signature_pad'
+@push ('javascript')
+    @vite ('resources/assets/js/signature-pad.js')
+    <script type="text/javascript" @cspNonce
+        >// import SignaturePad from 'signature_pad'
         window.addEventListener('load', () => {
             const signatureAlert = document.getElementById('signature-alert')
             const canvas = document.getElementById('signature-pad')
@@ -46,16 +46,16 @@
     </script>
 @endpush
 
-@section('container')
+@section ('container')
     <div id="membership-contract" class="row justify-content-center">
         <div class="col-lg-6 col-md-7">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white">
-                    @yield('page-title')
+                    @yield ('page-title')
                 </div>
 
                 <div class="card-body">
-                    @include('users.includes.membershipform_include')
+                    @include ('users.includes.membershipform_include')
 
                     <b>Signature:</b>
                     <div class="wrapper">

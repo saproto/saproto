@@ -17,7 +17,7 @@
             @csrf
 
             <div class="card-body">
-                @include(
+                @include (
                     'components.forms.datetimepicker',
                     [
                         'name' => 'newDate',

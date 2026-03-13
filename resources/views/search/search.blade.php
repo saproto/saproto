@@ -1,21 +1,19 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     Search
     @if (($term != null) & (strlen($term) > 0))
         results for {{ $term }}
     @endif
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         @if (count($users) + count($committees) + count($pages) + count($events) + count($photoAlbums) == 0)
             <div class="col-md-4 col-sm-6 col-xs-10">
                 <div class="card">
                     <div class="card-body">
-                        <p class="card-text text-center">
-                            Your search has returned no results.
-                        </p>
+                        <p class="card-text text-center">Your search has returned no results.</p>
                     </div>
                 </div>
             </div>
@@ -30,7 +28,7 @@
                         </div>
                         <div class="card-body">
                             @foreach ($photoAlbums as $album)
-                                @include(
+                                @include (
                                     'website.home.cards.card-bg-image',
                                     [
                                         'url' => route('albums::album::list', ['album' => $album->id]),
@@ -55,7 +53,7 @@
                         </div>
                         <div class="card-body">
                             @foreach ($users as $user)
-                                @include(
+                                @include (
                                     'users.includes.usercard',
                                     [
                                         'user' => $user,
@@ -80,7 +78,7 @@
                     <div class="card-header bg-dark text-white">Committees</div>
                     <div class="card-body">
                         @foreach ($committees as $committee)
-                            @include('committee.include.committee_block', ['committee' => $committee])
+                            @include ('committee.include.committee_block', ['committee' => $committee])
                         @endforeach
                     </div>
                 </div>
@@ -93,7 +91,7 @@
                     <div class="card-header bg-dark text-white">Events</div>
                     <div class="card-body">
                         @foreach ($events as $counter => $event)
-                            @include(
+                            @include (
                                 'event.display_includes.event_block',
                                 [
                                     'event' => $event,
@@ -113,7 +111,7 @@
                     <div class="card-header bg-dark text-white">Pages</div>
                     <div class="card-body">
                         @foreach ($pages as $page)
-                            @include(
+                            @include (
                                 'website.home.cards.card-bg-image',
                                 [
                                     'url' => route('page::show', ['slug' => $page->slug]),

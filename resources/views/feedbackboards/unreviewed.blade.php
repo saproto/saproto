@@ -8,7 +8,7 @@
             <div class="row">
                 @foreach ($unreviewed as $feedback)
                     <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                        @include(
+                        @include (
                             'feedbackboards.include.feedback',
                             [
                                 'feedback' => $feedback,

@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     OmNomCom statistics
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center mb-3">
         <div class="col-md-3">
             <form method="get">
@@ -12,7 +12,7 @@
 
                 <div class="card">
                     <div class="card-header bg-dark text-white">
-                        @yield('page-title')
+                        @yield ('page-title')
                     </div>
 
                     <div class="card-body">
@@ -20,13 +20,13 @@
                             @if (isset($select_text))
                                 {!! $select_text !!}
                             @else
-                                    Select a time range to generate statistics
+                                Select a time range to generate statistics
                             @endif
                         </p>
 
                         <hr />
 
-                        @include(
+                        @include (
                             'components.forms.datetimepicker',
                             [
                                 'name' => 'start',
@@ -34,7 +34,7 @@
                             ]
                         )
 
-                        @include(
+                        @include (
                             'components.forms.datetimepicker',
                             [
                                 'name' => 'end',

@@ -2,13 +2,13 @@
     use App\Enums\CompanyEnum;
 @endphp
 
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     {{ $company == null ? 'Create new company.' : 'Edit company ' . $company->name . '.' }}
 @endsection
 
-@section('container')
+@section ('container')
     <form
         method="post"
         action="{{ $company == null ? route('companies::store') : route('companies::update', ['id' => $company->id]) }}"
@@ -20,7 +20,7 @@
             <div class="col-md-4">
                 <div class="card md-3">
                     <div class="card-header bg-dark text-white">
-                        @yield('page-title')
+                        @yield ('page-title')
                     </div>
 
                     <div class="card-body">
@@ -31,7 +31,6 @@
                                     style="max-height: 100px"
                                 />
                             </div>
-
                             <hr />
                         @endif
 
@@ -63,7 +62,7 @@
 
                         <hr />
 
-                        @include(
+                        @include (
                             'components.forms.checkbox',
                             [
                                 'name' => 'on_carreer_page',
@@ -72,7 +71,7 @@
                             ]
                         )
 
-                        @include(
+                        @include (
                             'components.forms.checkbox',
                             [
                                 'name' => 'in_logo_bar',
@@ -81,7 +80,7 @@
                             ]
                         )
 
-                        @include(
+                        @include (
                             'components.forms.checkbox',
                             [
                                 'name' => 'on_membercard',
@@ -129,7 +128,7 @@
                     <div class="card-body row">
                         <div class="col-6">
                             <label for="editor">Company excerpt</label>
-                            @include(
+                            @include (
                                 'components.forms.markdownfield',
                                 [
                                     'name' => 'excerpt',
@@ -143,7 +142,7 @@
 
                         <div class="col-6">
                             <label for="editor">Company description</label>
-                            @include(
+                            @include (
                                 'components.forms.markdownfield',
                                 [
                                     'name' => 'description',
@@ -157,7 +156,7 @@
 
                         <div class="col-6">
                             <label for="editor">Membercard excerpt</label>
-                            @include(
+                            @include (
                                 'components.forms.markdownfield',
                                 [
                                     'name' => 'membercard_excerpt',
@@ -171,7 +170,7 @@
 
                         <div class="col-6">
                             <label for="editor">Membercard description</label>
-                            @include(
+                            @include (
                                 'components.forms.markdownfield',
                                 [
                                     'name' => 'membercard_long',

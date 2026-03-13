@@ -3,7 +3,7 @@
 
     @if (count($members['editions']) > 0)
         @foreach ($members['editions'] as $edition => $memberships)
-            @include(
+            @include (
                 'committee.include.render-memberships',
                 [
                     'committee' => $committee,
@@ -17,13 +17,12 @@
                     'display' => $display,
                 ]
             )
-
             <?php $display = false; ?>
         @endforeach
     @endif
 
     @if (count($members['members']['current']) > 0)
-        @include(
+        @include (
             'committee.include.render-memberships',
             [
                 'committee' => $committee,
@@ -33,12 +32,11 @@
                 'display' => $display,
             ]
         )
-
         <?php $display = false; ?>
     @endif
 
     @if (count($members['members']['future']) > 0)
-        @include(
+        @include (
             'committee.include.render-memberships',
             [
                 'committee' => $committee,
@@ -48,12 +46,11 @@
                 'display' => $display,
             ]
         )
-
         <?php $display = false; ?>
     @endif
 
     @if (count($members['members']['past']) > 0)
-        @include(
+        @include (
             'committee.include.render-memberships',
             [
                 'committee' => $committee,
@@ -63,7 +60,6 @@
                 'display' => $display,
             ]
         )
-
         <?php $display = false; ?>
     @endif
 </div>

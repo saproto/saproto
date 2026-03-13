@@ -2,9 +2,9 @@
     use App\Enums\PageEnum;
 @endphp
 
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     @if ($new)
         Create new page
     @else
@@ -12,7 +12,7 @@
     @endif
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-6">
             <form
@@ -22,7 +22,7 @@
             >
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield('page-title')
+                        @yield ('page-title')
                     </div>
 
                     <div class="card-body">
@@ -60,7 +60,7 @@
                             </div>
                         </div>
 
-                        @include(
+                        @include (
                             'components.forms.checkbox',
                             [
                                 'name' => 'is_member_only',
@@ -69,7 +69,7 @@
                             ]
                         )
 
-                        @include(
+                        @include (
                             'components.forms.checkbox',
                             [
                                 'name' => 'show_attachments',
@@ -80,7 +80,7 @@
 
                         <div class="form-group">
                             <label for="content">Content</label>
-                            @include(
+                            @include (
                                 'components.forms.markdownfield',
                                 [
                                     'name' => 'content',
@@ -224,9 +224,9 @@
     </div>
 @endsection
 
-@push('javascript')
-    <script type="text/javascript" @cspNonce>
-        // Borrowed from https://stackoverflow.com/questions/23733455/inserting-a-new-text-at-given-cursor-position
+@push ('javascript')
+    <script type="text/javascript" @cspNonce
+        >// Borrowed from https://stackoverflow.com/questions/23733455/inserting-a-new-text-at-given-cursor-position
         function insertLineAtCursor(data) {
             const cm =
                 document.getElementsByClassName('.CodeMirror')[0].CodeMirror

@@ -1,15 +1,15 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Narrowcasting Admin
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card mb-3">
                 <div class="card-header bg-dark mb-1 text-white">
-                    @yield('page-title')
+                    @yield ('page-title')
                     <a
                         class="badge bg-info float-end"
                         href="{{ route('narrowcasting::create') }}"
@@ -98,9 +98,7 @@
                     </table>
                 </div>
 
-                <div class="card-footer pb-0">
-                    {{ $messages->links() }}
-                </div>
+                <div class="card-footer pb-0">{{ $messages->links() }}</div>
             </div>
         </div>
     </div>

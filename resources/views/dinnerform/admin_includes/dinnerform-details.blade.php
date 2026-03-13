@@ -90,7 +90,7 @@
                 <!-- Right column -->
                 <div class="col-md-6">
                     <!-- Start -->
-                    @include(
+                    @include (
                         'components.forms.datetimepicker',
                         [
                             'name' => 'start',
@@ -103,7 +103,7 @@
                     )
 
                     <!-- End -->
-                    @include(
+                    @include (
                         'components.forms.datetimepicker',
                         [
                             'name' => 'end',
@@ -148,7 +148,7 @@
 
                     <!-- Homepage -->
                     <div class="col-md-12 mt-5 mb-3">
-                        @include(
+                        @include (
                             'components.forms.checkbox',
                             [
                                 'name' => 'homepage',
@@ -164,7 +164,7 @@
             <button type="submit" class="btn btn-success">Submit</button>
 
             @if ($dinnerformCurrent)
-                @include(
+                @include (
                     'components.modals.confirm-modal',
                     [
                         'action' => route('dinnerform::delete', [

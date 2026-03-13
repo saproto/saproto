@@ -1,14 +1,14 @@
-@extends('website.layouts.redesign.generic-nonavandfooter')
+@extends ('website.layouts.redesign.generic-nonavandfooter')
 
-@section('page-title')
+@section ('page-title')
     Is Alfred There?
 @endsection
 
-@push('head')
+@push ('head')
     <meta http-equiv="refresh" content="86400" />
 @endpush
 
-@section('container')
+@section ('container')
     <div class="row text-white">
         <div class="col-md-12 text-center">
             <h1 class="mt-3 mb-3" style="font-size: 70px">Is Alfred There?</h1>
@@ -55,7 +55,7 @@
     </div>
 @endsection
 
-@push('stylesheet')
+@push ('stylesheet')
     <style rel="stylesheet">
         body {
             background-color: var(--bs-warning);
@@ -67,11 +67,10 @@
     </style>
 @endpush
 
-@push('javascript')
-    @vite('resources/assets/js/echo.js')
-    @vite('resources/assets/js/moment.js')
-
-    <script type="text/javascript" @cspNonce>
+@push ('javascript')
+    @vite ('resources/assets/js/echo.js')
+    @vite ('resources/assets/js/moment.js')
+    <script type="text/javascript" @cspNonce
         const statusElement = document.getElementById('alfred-status')
         const text = document.getElementById('alfred-text')
         const time = document.getElementById('alfred-actualtime')
@@ -168,11 +167,7 @@
             // hide the time submessage
             time.classList.add('d-none')
 
-            document.body.classList.remove(
-                'bg-success',
-                'bg-warning',
-                'bg-danger'
-            )
+            document.body.classList.remove('bg-success', 'bg-warning', 'bg-danger')
             // set the correct color corresponding to the status
             document.body.classList.add(newStatus.color)
         }

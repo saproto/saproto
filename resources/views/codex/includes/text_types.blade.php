@@ -30,8 +30,7 @@
                         >
                             <b>
                                 <i class="fas fa-sm fa-fw fa-caret-down"></i>
-                                {{ $textType->type }}
-                                ({{ $textType->texts_count }})
+                                {{ $textType->type }} ({{ $textType->texts_count }})
                             </b>
                         </span>
                         @if (! isset($edit))
@@ -42,7 +41,7 @@
                                 >
                                     Edit
                                 </a>
-                                @include(
+                                @include (
                                     'components.modals.confirm-modal',
                                     [
                                         'method' => 'DELETE',
@@ -58,10 +57,7 @@
                         @endif
                     </span>
 
-                    <div
-                        id="collapse-text{{ $textType->id }}"
-                        class="collapse"
-                    >
+                    <div id="collapse-text{{ $textType->id }}" class="collapse">
                         <div class="card-body cursor-default">
                             @foreach ($textType->texts as $text)
                                 <span
@@ -69,7 +65,7 @@
                                 >
                                     @if (isset($edit) && $edit)
                                         <div class="form-check">
-                                            @include(
+                                            @include (
                                                 'components.forms.checkbox',
                                                 [
                                                     'input_class_name' => '',
@@ -91,7 +87,7 @@
                                             >
                                                 Edit
                                             </a>
-                                            @include(
+                                            @include (
                                                 'components.modals.confirm-modal',
                                                 [
                                                     'method' => 'DELETE',

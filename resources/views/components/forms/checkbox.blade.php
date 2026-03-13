@@ -7,9 +7,9 @@
         @endif
         id="{{ $id ?? $name }}"
         name="{{ $name }}"
-        @checked(old($name, $checked ?? false))
-        @disabled($disabled ?? false)
-        @required($required ?? false)
+        @checked (old($name, $checked ?? false))
+        @disabled ($disabled ?? false)
+        @required ($required ?? false)
     />
     <label class="form-check-label" for="{{ $id ?? $name }}">
         {!! $label !!}

@@ -23,7 +23,7 @@
                             <i>{{ $media->human_readable_size }}</i>
                         </td>
                         <td>
-                            @include(
+                            @include (
                                 'components.modals.confirm-modal',
                                 [
                                     'action' => route('email::attachment::delete', [
@@ -42,9 +42,7 @@
             </table>
         @else
             <div class="card-body">
-                <p class="card-text text-center">
-                    There are no attachments to this e-mail.
-                </p>
+                <p class="card-text text-center">There are no attachments to this e-mail.</p>
             </div>
         @endif
 
@@ -66,7 +64,7 @@
                     />
                 </div>
 
-                @include(
+                @include (
                     'components.modals.confirm-modal',
                     [
                         'form' => '#add_attachment',

@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     Event Category Admin
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row">
         <div class="col-5">
             <div class="card">
@@ -30,7 +30,7 @@
                             required
                         />
 
-                        @include(
+                        @include (
                             'components.forms.checkbox',
                             [
                                 'name' => 'can_review',
@@ -54,7 +54,7 @@
                             </div>
                         </div>
 
-                        @include(
+                        @include (
                             'components.forms.checkbox',
                             [
                                 'name' => 'can_reply',
@@ -63,7 +63,7 @@
                             ]
                         )
 
-                        @include(
+                        @include (
                             'components.forms.checkbox',
                             [
                                 'name' => 'show_publisher',
@@ -117,7 +117,7 @@
                                                 class="fas fa-edit float-end ms-1 me-2 mt-1"
                                             ></i>
                                         </a>
-                                        @include(
+                                        @include (
                                             'components.modals.confirm-modal',
                                             [
                                                 'action' => route('feedback::category::delete', [
@@ -134,9 +134,7 @@
                                 </div>
                             @endforeach
                         @else
-                            <p class="text-muted mb-0 text-center">
-                                There are no feedback categories yet.
-                            </p>
+                            <p class="text-muted mb-0 text-center">There are no feedback categories yet.</p>
                         @endif
                     </div>
                 </div>
@@ -145,9 +143,9 @@
     </div>
 @endsection
 
-@push('javascript')
-    <script type="text/javascript" @cspNonce>
-        let checkbox = document.getElementById('can_review')
+@push ('javascript')
+    <script type="text/javascript" @cspNonce
+        >let checkbox = document.getElementById('can_review')
         checkbox.addEventListener('change', function () {
             if (checkbox.checked) {
                 document.getElementById('reviewer').classList.remove('d-none')

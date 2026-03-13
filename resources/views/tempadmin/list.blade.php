@@ -1,15 +1,15 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Temporary Admin Admin
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card mb-3">
                 <div class="card-header bg-dark mb-1 text-white">
-                    @yield('page-title')
+                    @yield ('page-title')
                     <a
                         href="{{ route('tempadmins.create') }}"
                         class="bg-info badge float-end"
@@ -58,7 +58,7 @@
                                     <i class="fas fa-edit fa-fw me-2"></i>
                                 </a>
 
-                                @include(
+                                @include (
                                     'components.modals.confirm-modal',
                                     [
                                         'action' => route('tempadmin::endId', ['id' => $tempadmin->id]),

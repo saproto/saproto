@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     TIPCie Order History
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-3">
             <form
@@ -31,7 +31,7 @@
 
                         <hr />
 
-                        @include(
+                        @include (
                             'components.forms.datetimepicker',
                             [
                                 'name' => 'date',
@@ -69,8 +69,7 @@
                                         {{ $product->orderlines_sum_units }}
                                     </td>
                                     <td>
-                                        &euro;
-                                        {{ number_format($product->orderlines_sum_total_price, 2) }}
+                                        &euro; {{ number_format($product->orderlines_sum_total_price, 2) }}
                                     </td>
                                 </tr>
                             @endforeach
@@ -80,8 +79,7 @@
                                 <td><strong>{{ $totalAmount }}</strong></td>
                                 <td>
                                     <strong>
-                                        &euro;
-                                        {{ number_format($totalPrice, 2) }}
+                                        &euro; {{ number_format($totalPrice, 2) }}
                                     </strong>
                                 </td>
                             </tr>
@@ -89,9 +87,7 @@
                     </table>
                 @else
                     <div class="card-body">
-                        <p class="card-text text-center">
-                            No orders for the specified date.
-                        </p>
+                        <p class="card-text text-center">No orders for the specified date.</p>
                     </div>
                 @endif
             </div>
@@ -111,8 +107,7 @@
                                 <tr>
                                     <td>{{ $pinOrder->created_at }}</td>
                                     <td>
-                                        &euro;
-                                        {{ number_format($pinOrder->total_price, 2) }}
+                                        &euro; {{ number_format($pinOrder->total_price, 2) }}
                                     </td>
                                 </tr>
                             @endforeach
@@ -120,9 +115,7 @@
                     </table>
                 @else
                     <div class="card-body">
-                        <p class="card-text text-center">
-                            No PIN orders recorded for the specified date.
-                        </p>
+                        <p class="card-text text-center">No PIN orders recorded for the specified date.</p>
                     </div>
                 @endif
             </div>

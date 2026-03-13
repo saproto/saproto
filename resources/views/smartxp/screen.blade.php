@@ -1,10 +1,10 @@
-@extends('website.master')
+@extends ('website.master')
 
-@section('page-title')
+@section ('page-title')
     Protopolis Screen v12
 @endsection
 
-@push('stylesheet')
+@push ('stylesheet')
     <style>
         html {
             width: 100vw;
@@ -68,14 +68,14 @@
     </style>
 @endpush
 
-@section('body')
+@section ('body')
     <div class="row text-black">
         {{-- narrowcasting or protube --}}
         <div class="protubecard col-9">
             @if (! empty($protube))
-                @include('smartxp.protube_iframe')
+                @include ('smartxp.protube_iframe')
             @else
-                @include('narrowcasting.display')
+                @include ('narrowcasting.display')
             @endif
         </div>
 
@@ -134,9 +134,9 @@
     </div>
 @endsection
 
-@push('javascript')
-    @vite('resources/assets/js/moment.js')
-    <script type="text/javascript" @cspNonce>
+@push ('javascript')
+    @vite ('resources/assets/js/moment.js')
+    <script type="text/javascript" @cspNonce
         function updateTimetable() {
             const timetable = document.getElementById('timetable')
             timetable.innerHTML = ''
@@ -150,17 +150,14 @@
                                 let start = moment.unix(timetableItem.start)
                                 let end = moment.unix(timetableItem.end)
                                 let time =
-                                    start.format('HH:mm') +
-                                    ' - ' +
-                                    end.format('HH:mm')
+                                    start.format('HH:mm') + ' - ' + end.format('HH:mm')
                                 let title = timetableItem.title
 
                                 let activityDiv = document.createElement('div')
                                 activityDiv.className = 'activity'
 
                                 if (timetableItem.studyShort) {
-                                    let yearSpan =
-                                        document.createElement('span')
+                                    let yearSpan = document.createElement('span')
                                     yearSpan.className = 'float-end ms-2'
                                     yearSpan.innerHTML =
                                         '<i class="fas fa-graduation-cap fa-fw me-2"></i>' +
@@ -172,8 +169,7 @@
                                     activityDiv.appendChild(yearSpan)
                                 }
 
-                                let titleStrong =
-                                    document.createElement('strong')
+                                let titleStrong = document.createElement('strong')
                                 titleStrong.innerHTML = timetableItem.type
                                 activityDiv.appendChild(titleStrong)
                                 activityDiv.innerHTML += '<br>'
@@ -188,8 +184,7 @@
                                 let locationDiv = document.createElement('div')
                                 locationDiv.className = 'w-100 h-10'
                                 locationDiv.innerHTML +=
-                                    '<i class="fas fa-clock fa-fw me-1"></i>' +
-                                    time
+                                    '<i class="fas fa-clock fa-fw me-1"></i>' + time
 
                                 let placeSpan = document.createElement('span')
                                 placeSpan.className = 'float-end'
@@ -252,8 +247,7 @@
                                     activity.image +
                                     ')'
                                 newDiv.style.backgroundSize = 'cover'
-                                newDiv.style.backgroundPosition =
-                                    'center center'
+                                newDiv.style.backgroundPosition = 'center center'
                                 newDiv.style.backgroundRepeat = 'no-repeat'
                             }
 
@@ -286,9 +280,7 @@
                             newDiv.appendChild(titleDiv)
                             newDiv.appendChild(timeDiv)
                             newDiv.appendChild(locationSpan)
-                            document
-                                .getElementById('activities')
-                                .appendChild(newDiv)
+                            document.getElementById('activities').appendChild(newDiv)
                         })
 
                         document
@@ -298,9 +290,7 @@
                                 let H3 = div.childNodes[0]
                                 if (H3.clientWidth > div.clientWidth) {
                                     H3.classList.add('scroll-title')
-                                    H3.appendChild(
-                                        H3.childNodes[0].cloneNode(true)
-                                    )
+                                    H3.appendChild(H3.childNodes[0].cloneNode(true))
                                 }
                             })
                     } else {
@@ -322,9 +312,7 @@
             get('{{ route('api::screen::timetable::protopeners') }}')
                 .then((data) => {
                     if (data.length > 0) {
-                        document.getElementById(
-                            'protopeners-timetable'
-                        ).innerHTML = ''
+                        document.getElementById('protopeners-timetable').innerHTML = ''
                         let open = false,
                             count = 0
                         data.forEach((protOpener) => {
@@ -333,14 +321,11 @@
                             let start = moment.unix(protOpener.start)
                             let end = moment.unix(protOpener.end)
                             let time =
-                                start.format('HH:mm') +
-                                ' - ' +
-                                end.format('HH:mm')
+                                start.format('HH:mm') + ' - ' + end.format('HH:mm')
 
                             let newDiv = document.createElement('div')
                             newDiv.className =
-                                'activity ' +
-                                (protOpener.current ? 'current' : '')
+                                'activity ' + (protOpener.current ? 'current' : '')
 
                             let timeDiv = document.createElement('div')
                             timeDiv.className = 'float-start h-100'
@@ -358,12 +343,8 @@
                                 'protopeners-timetable'
                             )
                             protOpenDiv.appendChild(newDiv)
-                            protOpenDiv.appendChild(
-                                document.createElement('br')
-                            )
-                            protOpenDiv.appendChild(
-                                document.createElement('hr')
-                            )
+                            protOpenDiv.appendChild(document.createElement('br'))
+                            protOpenDiv.appendChild(document.createElement('hr'))
 
                             count++
                         })
@@ -394,8 +375,7 @@
         }
 
         function updateClock() {
-            document.getElementById('clock').innerHTML =
-                moment().format('HH:mm:ss')
+            document.getElementById('clock').innerHTML = moment().format('HH:mm:ss')
         }
 
         window.addEventListener('load', () => {

@@ -2,17 +2,17 @@
     use App\Models\Event;
 @endphp
 
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
 @php
     /** @var Event $event */
 @endphp
 
-@section('page-title')
+@section ('page-title')
     Event Admin
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-4">
             <a
@@ -81,8 +81,7 @@
                                         {{ $ticket->product->name }}
                                     </strong>
                                     <span class="badge bg-primary float-end">
-                                        {{ $ticket->sold() }} sold /
-                                        {{ $ticket->product->stock }} available
+                                        {{ $ticket->sold() }} sold / {{ $ticket->product->stock }} available
                                     </span>
                                     <span class="badge bg-info float-end me-4">
                                         &euro;{{ number_format($ticket->turnover(), 2) }}
@@ -110,7 +109,7 @@
                                                             Date of Purchase
                                                         </th>
                                                         <th>Ticket Scanned</th>
-                                                        @can('board')
+                                                        @can ('board')
                                                             <th></th>
                                                         @endcan
                                                     </tr>
@@ -189,7 +188,7 @@
                                                                     {{ $purchase->scanned ? 'Unscan' : 'Scan Manually' }}
                                                                 </a>
                                                             </td>
-                                                            @can('board')
+                                                            @can ('board')
                                                                 <td
                                                                     class="dontprint"
                                                                 >
@@ -198,7 +197,7 @@
                                                                     @elseif ($purchase->orderline->isPayed())
                                                                         Paid
                                                                     @else
-                                                                        @include(
+                                                                        @include (
                                                                             'components.modals.confirm-modal',
                                                                             [
                                                                                 'action' => route('omnomcom::orders::delete', [
@@ -221,9 +220,7 @@
                                                 </tbody>
                                             </table>
                                         @else
-                                            <p class="card-text text-center">
-                                                This ticket has not sold yet.
-                                            </p>
+                                            <p class="card-text text-center">This ticket has not sold yet.</p>
                                         @endif
                                     </div>
                                 </div>
@@ -236,13 +233,11 @@
     </div>
 @endsection
 
-@push('javascript')
-    <script type="text/javascript" @cspNonce>
+@push ('javascript')
+    <script type="text/javascript" @cspNonce
         window.addEventListener('load', () => {
             const scanList = Array.from(document.getElementsByClassName('scan'))
-            const unscanList = Array.from(
-                document.getElementsByClassName('unscan')
-            )
+            const unscanList = Array.from(document.getElementsByClassName('unscan'))
             scanList.forEach((el) => setEventListener(el, false))
             unscanList.forEach((el) => setEventListener(el, true))
         })
@@ -266,9 +261,7 @@
                         link.href = '#'
                         link.setAttribute('data-id', barcode)
                         link.innerHTML = unscan ? 'Scan Manually' : 'Unscan'
-                        link.className = unscan
-                            ? 'scan dontprint'
-                            : 'unscan dontprint'
+                        link.className = unscan ? 'scan dontprint' : 'unscan dontprint'
                         parent.innerHTML = ''
                         parent.append(link)
                         setEventListener(link, !unscan)

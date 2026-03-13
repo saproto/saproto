@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     {{ $announcement == null ? 'Add announcement' : 'Edit announcement.' }}
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-4">
             <form
@@ -14,7 +14,7 @@
             >
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield('page-title')
+                        @yield ('page-title')
                     </div>
 
                     <div class="card-body">
@@ -35,7 +35,7 @@
 
                         <div class="form-group">
                             <label for="editor">Announcement:</label>
-                            @include(
+                            @include (
                                 'components.forms.markdownfield',
                                 [
                                     'name' => 'content',
@@ -45,7 +45,7 @@
                             )
                         </div>
 
-                        @include(
+                        @include (
                             'components.forms.datetimepicker',
                             [
                                 'name' => 'display_from',
@@ -56,7 +56,7 @@
                             ]
                         )
 
-                        @include(
+                        @include (
                             'components.forms.datetimepicker',
                             [
                                 'name' => 'display_till',
@@ -75,7 +75,7 @@
 
                         <div class="row">
                             <div class="col-md-4">
-                                @include(
+                                @include (
                                     'components.forms.checkbox',
                                     [
                                         'name' => 'show_only_homepage',
@@ -85,7 +85,7 @@
                                 )
                             </div>
                             <div class="col-md-4">
-                                @include(
+                                @include (
                                     'components.forms.checkbox',
                                     [
                                         'name' => 'show_as_popup',
@@ -95,7 +95,7 @@
                                 )
                             </div>
                             <div class="col-md-4">
-                                @include(
+                                @include (
                                     'components.forms.checkbox',
                                     [
                                         'name' => 'is_dismissable',
@@ -115,25 +115,25 @@
                             >
                                 <option
                                     value="0"
-                                    @selected(old('show_style', $announcement?->show_style == 0))
+                                    @selected (old('show_style', $announcement?->show_style == 0))
                                 >
                                     Primary (Green)
                                 </option>
                                 <option
                                     value="1"
-                                    @selected(old('show_style', $announcement?->show_style == 1))
+                                    @selected (old('show_style', $announcement?->show_style == 1))
                                 >
                                     Info (Blue)
                                 </option>
                                 <option
                                     value="2"
-                                    @selected(old('show_style', $announcement?->show_style == 2))
+                                    @selected (old('show_style', $announcement?->show_style == 2))
                                 >
                                     Warning (Yellow)
                                 </option>
                                 <option
                                     value="3"
-                                    @selected(old('show_style', $announcement?->show_style == 3))
+                                    @selected (old('show_style', $announcement?->show_style == 3))
                                 >
                                     Danger (Red)
                                 </option>
@@ -148,7 +148,7 @@
 
                         <div class="row">
                             <div class="col-md-4">
-                                @include(
+                                @include (
                                     'components.forms.checkbox',
                                     [
                                         'name' => 'show_guests',
@@ -158,7 +158,7 @@
                                 )
                             </div>
                             <div class="col-md-4">
-                                @include(
+                                @include (
                                     'components.forms.checkbox',
                                     [
                                         'name' => 'show_users',
@@ -168,7 +168,7 @@
                                 )
                             </div>
                             <div class="col-md-4">
-                                @include(
+                                @include (
                                     'components.forms.checkbox',
                                     [
                                         'name' => 'show_members',
@@ -185,7 +185,7 @@
 
                         <div class="row">
                             <div class="col-md-4">
-                                @include(
+                                @include (
                                     'components.forms.checkbox',
                                     [
                                         'name' => 'show_only_new',
@@ -195,7 +195,7 @@
                                 )
                             </div>
                             <div class="col-md-4">
-                                @include(
+                                @include (
                                     'components.forms.checkbox',
                                     [
                                         'name' => 'show_only_firstyear',
@@ -205,7 +205,7 @@
                                 )
                             </div>
                             <div class="col-md-4">
-                                @include(
+                                @include (
                                     'components.forms.checkbox',
                                     [
                                         'name' => 'show_only_active',

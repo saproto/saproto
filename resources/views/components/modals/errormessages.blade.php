@@ -1,5 +1,5 @@
 @if (isset($errors) && count($errors->all()) > 0)
-    @push('modals')
+    @push ('modals')
         <div class="modal fade" id="flash-modal" tabindex="-1" role="dialog">
             <div
                 class="modal-dialog modal-dialog-centered modal-lg"
@@ -19,10 +19,9 @@
             </div>
         </div>
     @endpush
-
-    @push('javascript')
-        <script type="text/javascript" @cspNonce>
-            window.addEventListener('load', () => {
+    @push ('javascript')
+        <script type="text/javascript" @cspNonce
+            >window.addEventListener('load', () => {
                 modals['flash-modal'].show()
             })
         </script>

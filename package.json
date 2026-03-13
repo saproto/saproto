@@ -85,7 +85,7 @@
         "postcss": "^8.5.8",
         "postcss-discard-comments": "^7.0.6",
         "prettier": "^3.5.3",
-        "prettier-plugin-blade": "^2.1.21",
+        "prettier-plugin-blade": "^3.0.0",
         "prettier-plugin-tailwindcss": "^0.7.1",
         "pusher-js": "^8.4.0-rc2",
         "resolve-url-loader": "^5.0.0",

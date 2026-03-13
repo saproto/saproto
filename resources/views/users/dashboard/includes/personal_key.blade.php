@@ -15,7 +15,7 @@
     </div>
 
     <div class="card-footer">
-        @include(
+        @include (
             'components.modals.confirm-modal',
             [
                 'action' => route('user::personal_key::generate'),
