@@ -462,7 +462,7 @@ Route::middleware('forcedomain')->group(function () {
         Route::post('edit/{id}', [WallstreetController::class, 'update'])->name('update');
         Route::get('delete/{id}', [WallstreetController::class, 'destroy'])->name('delete');
         Route::get('statistics/{id}', [WallstreetController::class, 'statistics'])->name('statistics');
-        route::prefix('products')->name('products::')->group(function () {
+        Route::prefix('products')->name('products::')->group(function () {
             Route::post('create/{id}', [WallstreetController::class, 'addProducts'])->name('create');
             Route::get('remove/{id}/{productId}', [WallstreetController::class, 'removeProduct'])->name('remove');
         });
