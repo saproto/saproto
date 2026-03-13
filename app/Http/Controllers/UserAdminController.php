@@ -201,7 +201,7 @@ class UserAdminController extends Controller
 
         $user->member->until = Date::parse('Last day of September')->endOfDay()->subDay()->timestamp;
         $user->member->save();
-        Mail::to($user)->queue(new MemberShipEndSet($user)->onQueue('high'));
+        Mail::to($user)->queue(new MembershipEndSet($user)->onQueue('high'));
         Session::flash('flash_message', "End date for membership of $user->name set to the end of september!");
 
         return back();

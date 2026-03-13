@@ -58,7 +58,7 @@ return [
     */
 
     'extra' => [
-        'Eloquent' => [Builder::class, \Illuminate\Database\Query\Builder::class],
+        'Eloquent' => [Builder::class, Illuminate\Database\Query\Builder::class],
         'Session' => [Store::class],
     ],
 
