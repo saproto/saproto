@@ -213,8 +213,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     protected $guarded = ['password', 'remember_token'];
 
-    protected $with = ['member'];
-
     protected $appends = ['is_member'];
 
     protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'tfa_totp_key', 'updated_at', 'diet'];
@@ -341,7 +339,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function activities(): BelongsToMany
     {
         return $this->belongsToMany(Activity::class, 'activities_users')
-            ->whereNull('activities_users.deleted_at')
             ->where('backup', false)
             ->withTimestamps();
     }
@@ -352,7 +349,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function backupActivities(): BelongsToMany
     {
         return $this->belongsToMany(Activity::class, 'activities_users')
-            ->whereNull('activities_users.deleted_at')
             ->where('backup', true)
             ->withTimestamps();
     }

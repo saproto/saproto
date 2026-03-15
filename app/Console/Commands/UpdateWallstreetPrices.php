@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Events\NewWallstreetEvent;
-use App\Events\NewWallstreetLossCalculation;
-use App\Events\NewWallstreetPrice;
+use App\Events\Wallstreet\NewWallstreetEvent;
+use App\Events\Wallstreet\NewWallstreetLossCalculation;
+use App\Events\Wallstreet\NewWallstreetPrice;
 use App\Models\OrderLine;
 use App\Models\Product;
 use App\Models\WallstreetDrink;

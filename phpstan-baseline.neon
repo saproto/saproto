@@ -23,7 +23,7 @@ parameters:
 			message: '#^Expression on left side of \?\? is not nullable\.$#'
 			identifier: nullCoalesce.expr
 			count: 1
-			path: app/Events/StickerPlacedEvent.php
+			path: app/Events/Stickers/StickerPlacedEvent.php
 
 		-
 			message: '#^PHPDoc tag @var with type Illuminate\\Database\\Eloquent\\Builder\<App\\Models\\Member\> is not subtype of native type Illuminate\\Database\\Eloquent\\Builder\<Illuminate\\Database\\Eloquent\\Model\>\.$#'

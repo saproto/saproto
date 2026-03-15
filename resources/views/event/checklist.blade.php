@@ -32,7 +32,7 @@
                             <tr>
                                 <td>
                                     <span id="present">
-                                        {{ $event->activity->getPresent() }}
+                                        {{ $event->activity->countPresent() }}
                                     </span>
                                     /{{ $event->allUsers()->count() }}
                                 </td>
