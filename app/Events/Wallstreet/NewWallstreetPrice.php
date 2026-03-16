@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Wallstreet;
 
-use App\Models\WallstreetEvent;
+use App\Models\Product;
+use App\Models\WallstreetPrice;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
@@ -10,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Override;
 
-class NewWallstreetEvent implements ShouldBroadcastNow
+class NewWallstreetPrice implements ShouldBroadcastNow
 {
     use Dispatchable;
     use InteractsWithSockets;
@@ -20,8 +21,7 @@ class NewWallstreetEvent implements ShouldBroadcastNow
      * Create a new event instance.
      */
     public function __construct(
-        public int $wallstreetDrinkId,
-        public WallstreetEvent $wallstreetEvent
+        public WallstreetPrice $wallstreetPrice
     ) {}
 
     /**
@@ -33,17 +33,21 @@ class NewWallstreetEvent implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('wallstreet-prices.'.$this->wallstreetDrinkId),
+            new PrivateChannel('wallstreet-prices.'.$this->wallstreetPrice->wallstreet_drink_id),
         ];
     }
 
     /**
-     * @return array<string, WallstreetEvent>
+     *@return array{
+     *     data: WallstreetPrice,
+     *     product: Product
+     *}
      */
     public function broadcastWith(): array
     {
         return [
-            'data' => $this->wallstreetEvent,
+            'data' => $this->wallstreetPrice,
+            'product' => $this->wallstreetPrice->product,
         ];
     }
 }

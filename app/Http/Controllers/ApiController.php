@@ -184,7 +184,6 @@ class ApiController extends Controller
                 'backup' => $activity_participation->backup,
                 'created_at' => $activity_participation->created_at,
                 'updated_at' => $activity_participation->updated_at,
-                'deleted_at' => $activity_participation->deleted_at,
             ];
         }
         /** @var Collection<int, OrderLine>|null $orderlines */

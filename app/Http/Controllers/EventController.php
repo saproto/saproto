@@ -39,6 +39,7 @@ class EventController extends Controller
 
         // if there is a category, get only the events that are in that category
         $events = Event::query()
+            ->eagerLoadEventBlock(Auth::user())
             ->orderBy('start')
             ->when($category, static function ($query) use ($category) {
                 $query->whereHas('Category', static function (Builder $q) use ($category) {
@@ -78,7 +79,9 @@ class EventController extends Controller
     {
         $activities = Activity::query()
             ->with('event')
-            ->withCount('users')
+            ->withCount(['allUsers as users_count' => function ($q) {
+                $q->where('backup', false);
+            }])
             ->where('closed', false)
             ->orderBy('registration_end')
             ->get();
@@ -218,6 +221,7 @@ class EventController extends Controller
 
         // if there is a category, get only the events that are in that category
         $eventsPerMonth = Event::query()
+            ->eagerLoadEventBlock(Auth::user())
             ->orderBy('start')
             ->unless(empty($category), static function ($query) use ($category) {
                 $query->whereHas('Category', static function (Builder $q) use ($category) {
@@ -485,6 +489,7 @@ CALSCALE:GREGORIAN
 
         $relevant_only = $user?->pref_calendar_relevant_only;
         $events = Event::query()
+            ->eagerLoadEventBlock($user)
             ->orderBy('start')
             ->where('start', '>', Date::now()->subMonths(6)->timestamp)
             ->unless($user, function ($query) {
@@ -499,7 +504,7 @@ CALSCALE:GREGORIAN
                 continue;
             }
 
-            if (! $event->force_calendar_sync && $relevant_only && ! ($event->activity?->isParticipating($user) || $event->isOrganising($user) || $event->hasBoughtTickets($user) || $event->activity?->isHelping($user))) {
+            if (! $event->force_calendar_sync && $relevant_only && ! ($event->activity?->isParticipating($user) || $event->activity?->isOnBackupList($user) || $event->isOrganising($user) || $event->hasBoughtTickets($user) || $event->activity?->isHelping($user))) {
                 continue;
             }
 
@@ -518,7 +523,6 @@ CALSCALE:GREGORIAN
             $status = null;
 
             if ($user) {
-                $userParticipation = $event->activity?->getParticipation($user);
                 if ($event->isOrganising($user)) {
                     $status = 'Organizing';
                     $info_text .= ' You are organizing this activity.';
@@ -526,10 +530,10 @@ CALSCALE:GREGORIAN
                     if ($event->activity->isHelping($user)) {
                         $status = 'Helping';
                         $info_text .= ' You are helping with this activity.';
-                    } elseif ($userParticipation?->backup) {
+                    } elseif ($event->activity->isOnBackupList($user)) {
                         $status = 'On back-up list';
                         $info_text .= ' You are on the back-up list for this activity';
-                    } elseif ($userParticipation !== null || $event->hasBoughtTickets($user)) {
+                    } elseif ($event->activity->isParticipating($user) || $event->hasBoughtTickets($user)) {
                         $status = 'Participating';
                         $info_text .= ' You are participating in this activity.';
                     }

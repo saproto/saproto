@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Database\Factories\ActivityFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
 use Override;
@@ -34,8 +36,6 @@ use Override;
  * @property Carbon|null $updated_at
  * @property string|null $comment
  * @property string|null $redirect_url
- * @property-read Collection<int, User> $allUsers
- * @property-read int|null $all_users_count
  * @property-read Collection<int, User> $backupUsers
  * @property-read int|null $backup_users_count
  * @property-read Account|null $closedAccount
@@ -107,37 +107,50 @@ class Activity extends Validatable
     /**
      * @return BelongsToMany<User, $this>
      */
-    public function users(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'activities_users')
-            ->withPivot('id', 'is_present')
-            ->whereNull('activities_users.deleted_at')
-            ->where('backup', false)
-            ->withTimestamps();
-    }
-
-    /**
-     * @return BelongsToMany<User, $this>
-     */
     public function allUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'activities_users')
-            ->withPivot('id', 'is_present')
-            ->whereNull('activities_users.deleted_at')
-            ->where('backup', false)
+            ->withPivot('id', 'is_present', 'backup')
             ->withTimestamps();
     }
 
     /**
-     * @return BelongsToMany<User, $this>
+     * @return Attribute<Collection<int, User>, never>
      */
-    public function backupUsers(): BelongsToMany
+    protected function users(): Attribute
     {
-        return $this->belongsToMany(User::class, 'activities_users')
-            ->whereNull('activities_users.deleted_at')
-            ->where('backup', true)
-            ->withPivot('id')
-            ->withTimestamps();
+        return Attribute::make(
+            get: fn () => $this->allUsers->where('pivot.backup', false),
+        );
+    }
+
+    /**
+     * @return Attribute<Collection<int, User>, never>
+     */
+    protected function backupUsers(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->allUsers->where('pivot.backup', true),
+        );
+    }
+
+    /**
+     * @return int|null how many people actually showed up
+     */
+    public function getAttendees(): ?int
+    {
+        $present = $this->countPresent();
+
+        return $present > 0 ? $present : $this->attendees;
+    }
+
+    /**
+     * @return int how many people are marked as present with the tool
+     */
+    public function countPresent(): int
+    {
+        return $this->users->where('pivot.is_present', true)
+            ->count();
     }
 
     /**
@@ -159,31 +172,19 @@ class Activity extends Validatable
     }
 
     /**
-     * @return HasMany<ActivityParticipation, $this>
-     */
-    public function participation(): HasMany
-    {
-        return $this->hasMany(ActivityParticipation::class, 'activity_id');
-    }
-
-    /**
-     * @return ActivityParticipation|null Return the ActivityParticipation for the supplied user. Returns null if users doesn't participate.
-     */
-    public function getParticipation(?User $user): ?ActivityParticipation
-    {
-        if (! $user instanceof User) {
-            return null;
-        }
-
-        return $this->participation->first(static fn ($p): bool => $p->user_id === $user->id);
-    }
-
-    /**
      * @return bool Whether the user participates
      */
     public function isParticipating(User $user): bool
     {
-        return $this->getParticipation($user) instanceof ActivityParticipation;
+        return $this->users->contains('id', $user->id);
+    }
+
+    /**
+     * @return bool Whether the user is on the backup list
+     */
+    public function isOnBackupList(User $user): bool
+    {
+        return $this->backupUsers->contains('id', $user->id);
     }
 
     /**
@@ -258,25 +259,6 @@ class Activity extends Validatable
         return $this->participants !== 0;
     }
 
-    /**
-     * @return int|null how many people actually showed up
-     */
-    public function getAttendees(): ?int
-    {
-        $present = $this->getPresent();
-
-        return $present > 0 ? $present : $this->attendees;
-    }
-
-    public function getPresent(): int
-    {
-        return ActivityParticipation::query()->where('activity_id', $this->id)
-            ->where('is_present', true)
-            ->where('backup', false)
-            ->whereNull('deleted_at')
-            ->count();
-    }
-
     #[Override]
     protected function casts(): array
     {
@@ -284,5 +266,15 @@ class Activity extends Validatable
             'closed' => 'boolean',
             'hide_participants' => 'boolean',
         ];
+    }
+
+    #[Override]
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::saved(function (Activity $activity) {
+            Cache::forget('home.events');
+        });
     }
 }
