@@ -20,6 +20,7 @@ use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Permission;
 use Role;
 
@@ -45,10 +46,20 @@ class ExportController extends Controller
                 $data = Achievement::all();
                 break;
             case 'activities':
-                $data = Activity::query()->has('event')->with('event')->get()->filter(static fn ($activity) => $activity->event->mayViewEvent($user));
-                foreach ($data as $val) {
-                    unset($val->event);
-                }
+                $data = Activity::query()
+                    ->whereHas('event', function ($q) use ($user) {
+                        $q
+                            ->where('end', '>=', Date::now()->subYear()->timestamp)
+                            ->when($user->cannot('sysadmin'), function ($q) {
+                                $q->where([
+                                    ['secret', false],
+                                    [static function ($query) {
+                                        $query->where('publication', '<', Date::tomorrow()->timestamp)
+                                            ->orWhereNull('publication');
+                                    }],
+                                ]);
+                            });
+                    })->get();
 
                 break;
             case 'committees':
@@ -69,12 +80,18 @@ class ExportController extends Controller
                 $data = Company::all();
                 break;
             case 'events':
-                if ($user->can('admin')) {
-                    $data = Event::query()->setEagerLoads([])->get();
-                } else {
-                    $data = Event::query()->setEagerLoads([])->get()
-                        ->filter(static fn (Event $event): bool => $event->mayViewEvent($user));
-                }
+                $data = Event::query()
+                    ->where('end', '>=', Date::now()->subYear()->timestamp)
+                    ->setEagerLoads([])
+                    ->when($user->cannot('sysadmin'), function ($q) {
+                        $q->where([
+                            ['secret', false],
+                            [static function ($query) {
+                                $query->where('publication', '<', Date::tomorrow()->timestamp)
+                                    ->orWhereNull('publication');
+                            }],
+                        ]);
+                    })->get();
 
                 break;
             case 'event_categories':
