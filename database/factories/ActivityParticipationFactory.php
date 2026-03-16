@@ -42,7 +42,6 @@ class ActivityParticipationFactory extends Factory
         return $date->format('Y-m-d H:i:s');
     }
 
-
     /**
      * Set backup state based on available activity spots.
      */
