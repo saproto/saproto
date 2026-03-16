@@ -23,7 +23,6 @@ class ActivityParticipationFactory extends Factory
     {
         return [
             'created_at' => fn ($attributes): string => self::createAt($attributes),
-            'deleted_at' => fn ($attributes): ?string => fake()->boolean(30) ? self::deletedAt($attributes) : null,
             'backup' => fn ($attributes): bool => self::Backup($attributes),
         ];
     }
@@ -43,20 +42,6 @@ class ActivityParticipationFactory extends Factory
         return $date->format('Y-m-d H:i:s');
     }
 
-    /**
-     * Set deleted at based on activity dates.
-     */
-    public function deletedAt(array $attributes): string
-    {
-        $activity = Activity::query()->find($attributes['activity_id']);
-
-        $start = Date::parse($attributes['created_at']);
-        $end = Date::parse($activity->event->start);
-
-        $date = fake()->dateTimeBetween($start, $end);
-
-        return $date->format('Y-m-d H:i:s');
-    }
 
     /**
      * Set backup state based on available activity spots.
