@@ -27,16 +27,21 @@ return [
     */
 
     'stores' => [
-
         'file' => [
             'driver' => 'file',
             'path' => storage_path('framework/cache/data'),
         ],
+
         'array' => [
             'driver' => 'array',
             'serialize' => false,
         ],
 
+        'redis_cluster' => [
+            'driver' => 'redis',
+            'connection' => 'redis_cluster',
+            'lock_connection' => 'session',
+        ],
     ],
 
     /*
