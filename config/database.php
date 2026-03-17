@@ -73,29 +73,11 @@ return [
    */
 
     'redis' => [
-        'client' => env('REDIS_CLIENT', 'phpredis'),
+        'client' => env('REDIS_CLIENT', 'predis'),
 
         'options' => [
-            'cluster' => env('REDIS_CLUSTER', 'redis'),
+            'cluster' => env('REDIS_CLUSTER', 'predis'),
             'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
-        ],
-
-        'default' => [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'username' => env('REDIS_USERNAME'),
-            'password' => env('REDIS_PASSWORD'),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_DB', '0'),
-        ],
-
-        'cache' => [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'username' => env('REDIS_USERNAME'),
-            'password' => env('REDIS_PASSWORD'),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_CACHE_DB', '1'),
         ],
 
         'session' => [
@@ -104,9 +86,60 @@ return [
             'username' => env('REDIS_USERNAME'),
             'password' => env('REDIS_PASSWORD'),
             'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_SESSION_DB', '2'),
+            'database' => env('REDIS_SESSION_DB', '0'),
         ],
 
+        'clusters' => [
+            'redis_cluster' => [
+                [
+                    'url' => env('REDIS_URL'),
+                    'host' => env('REDIS_HOST', '127.0.0.1'),
+                    'username' => env('REDIS_USERNAME'),
+                    'password' => env('REDIS_CLUSTER_1_PASSWORD'),
+                    'port' => env('REDIS_CLUSTER_1_PORT', '6379'),
+                    'database' => env('REDIS_DB', '1'),
+                ],
+                [
+                    'url' => env('REDIS_URL'),
+                    'host' => env('REDIS_HOST', '127.0.0.1'),
+                    'username' => env('REDIS_USERNAME'),
+                    'password' => env('REDIS_CLUSTER_2_PASSWORD'),
+                    'port' => env('REDIS_CLUSTER_2_PORT', '6379'),
+                    'database' => env('REDIS_DB', '2'),
+                ],
+                [
+                    'url' => env('REDIS_URL'),
+                    'host' => env('REDIS_HOST', '127.0.0.1'),
+                    'username' => env('REDIS_USERNAME'),
+                    'password' => env('REDIS_CLUSTER_3_PASSWORD'),
+                    'port' => env('REDIS_CLUSTER_3_PORT', '6379'),
+                    'database' => env('REDIS_DB', '3'),
+                ],
+                [
+                    'url' => env('REDIS_URL'),
+                    'host' => env('REDIS_HOST', '127.0.0.1'),
+                    'username' => env('REDIS_USERNAME'),
+                    'password' => env('REDIS_CLUSTER_4_PASSWORD'),
+                    'port' => env('REDIS_CLUSTER_4_PORT', '6379'),
+                    'database' => env('REDIS_DB', '4'),
+                ],
+                [
+                    'url' => env('REDIS_URL'),
+                    'host' => env('REDIS_HOST', '127.0.0.1'),
+                    'username' => env('REDIS_USERNAME'),
+                    'password' => env('REDIS_CLUSTER_5_PASSWORD'),
+                    'port' => env('REDIS_CLUSTER_5_PORT', '6379'),
+                    'database' => env('REDIS_DB', '5'),
+                ],
+                [
+                    'url' => env('REDIS_URL'),
+                    'host' => env('REDIS_HOST', '127.0.0.1'),
+                    'username' => env('REDIS_USERNAME'),
+                    'password' => env('REDIS_CLUSTER_6_PASSWORD'),
+                    'port' => env('REDIS_CLUSTER_6_PORT', '6379'),
+                    'database' => env('REDIS_DB', '6'),
+                ],
+            ],
+        ],
     ],
-
 ];
