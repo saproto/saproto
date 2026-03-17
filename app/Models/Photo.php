@@ -63,6 +63,7 @@ class Photo extends Model implements HasMedia
     protected $guarded = ['id'];
 
     protected $with = ['media'];
+
     #[Override]
     protected static function booted(): void
     {
