@@ -107,7 +107,8 @@ CREATE TABLE `activities_users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `activities_users_activity_user_unique` (`activity_id`,`user_id`),
   KEY `activities_users_user_id_index` (`user_id`),
-  KEY `activities_users_activity_id_index` (`activity_id`)
+  KEY `activities_users_activity_id_index` (`activity_id`),
+  KEY `activities_users_activity_id_backup_user_id_index` (`activity_id`,`backup`,`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `addresses`;
@@ -1870,3 +1871,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_02_25_102853_remov
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_02_25_112153_remove_notification_sent_from_committees_activities',200);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_03_07_130629_add_wizard_to_users',201);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_02_27_004429_drop_softdeletes_from_activities_users',202);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_03_17_160300_add_indexes_to_the_activities_users_table',203);
