@@ -91,7 +91,7 @@
         "barryvdh/laravel-ide-helper": "^3.0",
         "fakerphp/faker": "^1.13",
         "itsgoingd/clockwork": "^5.1",
-        "laravel/tinker": "^2.6",
+        "laravel/tinker": "^v3.0.0",
         "larastan/larastan": "^3.4",
         "laravel/sail": "^1.16",
         "laravel/pint": "^1.10",
