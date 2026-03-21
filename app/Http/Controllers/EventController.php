@@ -456,7 +456,7 @@ class EventController extends Controller
 
     public function icalCalendar(?string $personal_key = null): \Illuminate\Http\Response
     {
-        $user = User::query()->where('personal_key', $personal_key)->whereNotNull('personal_key')->first();
+        $user = $personal_key ? User::query()->where('personal_key', $personal_key)->whereNotNull('personal_key')->first() : null;
 
         $calendar_name = $user ? sprintf('S.A. Proto Calendar for %s', $user->calling_name) : 'S.A. Proto Calendar';
 
