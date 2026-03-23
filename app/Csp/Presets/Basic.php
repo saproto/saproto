@@ -22,7 +22,7 @@ class Basic implements Preset
             ->add(Directive::OBJECT, Keyword::NONE)
             ->add(Directive::SCRIPT, Keyword::SELF)
             ->add(Directive::STYLE, [Keyword::SELF, Keyword::UNSAFE_INLINE])
-//            ->add(Directive::FONT, Keyword::SELF)
+            ->add(Directive::FONT, [Keyword::SELF, 'data:'])
             ->addNonce(Directive::SCRIPT);
         //            ->addNonce(Directive::STYLE);
     }

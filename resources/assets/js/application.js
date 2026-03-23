@@ -34,7 +34,7 @@ formList.forEach((form) =>
     form.addEventListener('submit', preventSubmitBounce, { once: true })
 )
 
-if (document.querySelectorAll('.swiper').length) {
+// if (document.querySelectorAll('.swiper').length) {
     const [{ default: Swiper }, { Autoplay, Navigation }] = await Promise.all([
         import('swiper'),
         import('swiper/modules'),
@@ -60,7 +60,7 @@ if (document.querySelectorAll('.swiper').length) {
             },
         },
     })
-}
+// }
 
 // Enables tooltips elements
 import { Tooltip } from 'bootstrap'
