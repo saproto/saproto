@@ -2489,16 +2489,16 @@
         },
         {
             "name": "intervention/image-laravel",
-            "version": "1.5.7",
+            "version": "1.5.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Intervention/image-laravel.git",
-                "reference": "86a53a154024e8b2f52cbdeac13f6bdb1aaedfaa"
+                "reference": "78b609a3fd10da12dae03cc6a5e0a32a3e603714"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Intervention/image-laravel/zipball/86a53a154024e8b2f52cbdeac13f6bdb1aaedfaa",
-                "reference": "86a53a154024e8b2f52cbdeac13f6bdb1aaedfaa",
+                "url": "https://api.github.com/repos/Intervention/image-laravel/zipball/78b609a3fd10da12dae03cc6a5e0a32a3e603714",
+                "reference": "78b609a3fd10da12dae03cc6a5e0a32a3e603714",
                 "shasum": ""
             },
             "require": {
@@ -2553,7 +2553,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Intervention/image-laravel/issues",
-                "source": "https://github.com/Intervention/image-laravel/tree/1.5.7"
+                "source": "https://github.com/Intervention/image-laravel/tree/1.5.8"
             },
             "funding": [
                 {
@@ -2569,7 +2569,7 @@
                     "type": "ko_fi"
                 }
             ],
-            "time": "2026-02-28T06:49:50+00:00"
+            "time": "2026-03-20T16:16:10+00:00"
         },
         {
             "name": "jean85/pretty-package-versions",
