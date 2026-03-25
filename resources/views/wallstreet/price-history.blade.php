@@ -61,7 +61,7 @@
                 let id = {{ $id }}
                 //listen to a new wallstreet price
                 Echo.private(`wallstreet-prices.${id}`).listen(
-                    'NewWallstreetPrice',
+                    '.App\\Events\\Wallstreet\\NewWallstreetPrice',
                     (e) => {
                         const dataset = chart.data.datasets.find(
                             (dataset) => dataset.label === e.data.product.name

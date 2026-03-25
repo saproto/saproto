@@ -344,14 +344,20 @@
     <script type="text/javascript" @cspNonce>
         window.addEventListener('load', () => {
             window.Echo.channel(`stickers`)
-                .listen('StickerPlacedEvent', (marker) => {
-                    addMarkerToMap(marker)
-                    updateMarkerCount()
-                })
-                .listen('StickerRemovedEvent', (marker) => {
-                    removeMarkerFromMap(marker.id, marker.stickerType)
-                    updateMarkerCount()
-                })
+                .listen(
+                    '.App\\Events\\Stickers\\StickerPlacedEvent',
+                    (marker) => {
+                        addMarkerToMap(marker)
+                        updateMarkerCount()
+                    }
+                )
+                .listen(
+                    '.App\\Events\\Stickers\\StickerRemovedEvent',
+                    (marker) => {
+                        removeMarkerFromMap(marker.id, marker.stickerType)
+                        updateMarkerCount()
+                    }
+                )
                 .error((error) => {
                     console.error(error)
                     setTimeout(() => {
