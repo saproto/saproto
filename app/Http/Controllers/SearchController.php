@@ -21,7 +21,7 @@ use Illuminate\View\View;
 
 class SearchController extends Controller
 {
-    public function search(Request $request)
+    public function search(Request $request): View
     {
         $term = $request->input('query');
         $users = collect();
@@ -41,34 +41,25 @@ class SearchController extends Controller
             ->filter(function ($item) {
                 /** @var Page $item */
                 return ! $item->is_member_only || Auth::user()?->is_member;
-            }) ?? [];
+            });
 
         $committees = Committee::query()->whereFullText(['name', 'slug'], $term)
             ->get()
             ->filter(function ($item) {
                 /** @var Committee $item */
                 return $item->public || Auth::user()?->can('board');
-            }) ?? [];
+            });
 
-        $presearch_event_ids = Event::query()->whereFullText(['title'], $term)->pluck('id');
-
-        $events = collect();
-        if ($presearch_event_ids) {
-            // load the events with all the correct data to show in the event block
-
-            Event::query()
-                ->eagerLoadEventBlock(Auth::user())
-                ->orderBy('start')
-                ->whereIn('id', $presearch_event_ids)
-                ->reorder()
-                ->orderBy('start', 'desc')
-                ->get()->each(static function ($event) use ($events) {
-                    /** @var Event $event */
-                    if ($event->mayViewEvent(Auth::user())) {
-                        $events->push($event);
-                    }
-                });
-        }
+        $events = Event::query()
+            ->whereFullText(['title'], $term)
+            ->eagerLoadEventBlock(Auth::user())
+            ->orderBy('start')
+            ->reorder()
+            ->orderBy('start', 'desc')
+            ->get()->filter(static function ($event) {
+                /** @var Event $event */
+                return $event->mayViewEvent(Auth::user());
+            });
 
         $photoAlbums = PhotoAlbum::query()->whereFullText(['name'], $term)
             ->orderBy('date_taken', 'desc')
