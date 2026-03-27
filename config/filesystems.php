@@ -37,7 +37,7 @@ return [
             'report' => false,
         ],
 
-        'public' => [
+        'garage-public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
             'url' => env('APP_URL').'/storage',
@@ -53,6 +53,7 @@ return [
             'username' => env('SFTP_USERNAME'),
             'password' => env('SFTP_PASSWORD'),
             'root' => env('SFTP_ROOT', 'photo_storage'),
+            'read-only' => true,
         ],
 
         'stack_backup' => [
@@ -75,17 +76,17 @@ return [
             'throw' => true,
         ],
 
-        'garage-public' => [
-            'driver' => env('GARAGE_DRIVER', 's3'),
-            'key' => env('GARAGE_KEY'),
-            'secret' => env('GARAGE_SECRET'),
-            'region' => env('GARAGE_REGION'),
-            'bucket' => env('GARAGE_BUCKET_PUBLIC'),
-            'endpoint' => env('GARAGE_ENDPOINT'),
-            'use_path_style_endpoint' => env('GARAGE_USE_PATH_STYLE', true),
-            'throw' => true,
-            'url' => env('GARAGE_WEB_URL'),
-        ],
+//        'garage-public' => [
+//            'driver' => env('GARAGE_DRIVER', 's3'),
+//            'key' => env('GARAGE_KEY'),
+//            'secret' => env('GARAGE_SECRET'),
+//            'region' => env('GARAGE_REGION'),
+//            'bucket' => env('GARAGE_BUCKET_PUBLIC'),
+//            'endpoint' => env('GARAGE_ENDPOINT'),
+//            'use_path_style_endpoint' => env('GARAGE_USE_PATH_STYLE', true),
+//            'throw' => true,
+//            'url' => env('GARAGE_WEB_URL'),
+//        ],
     ],
     /*
      |--------------------------------------------------------------------------

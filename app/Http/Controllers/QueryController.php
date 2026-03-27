@@ -263,7 +263,7 @@ class QueryController extends Controller
         return view('queries.mostliked_photos', ['start' => $start, 'end' => $end, 'photos' => $photos]);
     }
 
-    public function almanacMemberPhotos(Request $request): View
+    public function almanacMemberPhotos(Request $request)
     {
         $availableYears = range(2014, Date::now()->subYear()->year);
         $year = $request->integer('year', Date::now()->subYear()->year);
@@ -280,6 +280,15 @@ class QueryController extends Controller
             })
             ->with('media')
             ->get();
+
+//        $export_subsidies = $utQuery->with('member.UtAccount')->get();
+        $headers = [
+            'Content-Encoding' => 'UTF-8',
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => sprintf('attachment; filename="almanac_members_%s.csv"', $year."_".($year + 1)),
+        ];
+
+        return Response::make(view('queries.export_almanac_member_photos', ['users' => $users]), 200, $headers);
 
         return view('queries.almanac_member_photos', ['year' => $year, 'availableYears' => $availableYears, 'users' => $users]);
     }

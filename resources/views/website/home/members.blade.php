@@ -12,6 +12,7 @@
 
 @section('left-column')
     <div class="col-xl-4 col-md-12">
+        {{Auth::user()->getFirstMedia('profile_picture')}}
         @include('website.home.cards.featuredevents', ['featuredEvents' => $featuredEvents])
 
         @include('website.home.cards.leaderboards')

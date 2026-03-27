@@ -256,8 +256,8 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('profile_picture')
-            ->useDisk(App::environment('local') ? 'public' : 'stack')
-            ->storeConversionsOnDisk('garage-public')
+            ->useDisk('stack')
+            ->storeConversionsOnDisk('private')
             ->useFallbackUrl(asset('images/default-avatars/other.png'))
             ->singleFile();
     }
@@ -267,8 +267,8 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         $this->addMediaConversion('preview')
             ->performOnCollections('profile_picture')
             ->nonQueued()
-            ->fit(Fit::Crop, 250, 250)
-            ->format('webp');
+            ->fit(Fit::Crop, 500, 500)
+            ->format('png');
 
         $this->addMediaConversion('thumb')
             ->performOnCollections('profile_picture')
