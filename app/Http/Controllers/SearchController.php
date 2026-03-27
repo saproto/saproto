@@ -67,7 +67,9 @@ class SearchController extends Controller
         if ($presearch_event_ids) {
             // load the events with all the correct data to show in the event block
 
-            Event::getEventBlockQuery()->whereIn('id', $presearch_event_ids)
+            Event::query()
+                ->orderBy('start')
+                ->whereIn('id', $presearch_event_ids)
                 ->reorder()
                 ->orderBy('start', 'desc')
                 ->get()->each(static function ($event) use ($events) {
@@ -86,7 +88,7 @@ class SearchController extends Controller
             ->unless(Auth::user()?->can('protography'), static function ($q) {
                 $q->where('private', false);
             })
-            ->get();
+            ->get() ?? [];
 
         return view('search.search', [
             'term' => $term,

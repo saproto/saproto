@@ -50,8 +50,8 @@ class HomeController extends Controller
             ->where('published_at', '>', Date::now()->subWeek())
             ->where('is_weekly', true)
             ->orderBy('published_at', 'desc')
-            ->first()
-        );
+            ->get()
+        )->first();
 
         $newsitems = Cache::remember('home.newsitems', Date::tomorrow(), fn () => Newsitem::query()
             ->whereNotNull('published_at')
@@ -91,7 +91,8 @@ class HomeController extends Controller
 
         $message = Cache::remember(WelcomeMessage::getCacheKey(Auth::id()), Date::tomorrow(), fn () => WelcomeMessage::query()->where('user_id', Auth::id())->first());
 
-        $upcomingQuery = Event::getEventBlockQuery()
+        $upcomingQuery = Event::query()
+            ->orderBy('start')
             ->where([
                 ['end', '>=', Date::now()->timestamp],
                 ['secret', false],

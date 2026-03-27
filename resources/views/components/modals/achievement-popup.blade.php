@@ -1,34 +1,56 @@
-@if (isset($newAchievements) && count($newAchievements) > 0)
-    <div
-        class="modal fade"
-        id="new-achievement-modal"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="newAchievementModalLabel"
-    >
-        <div
-            class="modal-dialog modal-dialog-centered modal-lg"
-            role="document"
-        >
-            <div class="modal-content bg-dark text-white">
-                <div class="modal-body text-center">
-                    You just got
-                    {{ count($newAchievements) > 1 ? 'new achievements' : 'a new achievement' }},
-                    check it out:
-                    @foreach ($newAchievements as $newAchievement)
-                        @include('achievement.includes.achievement_include', ['achievement' => $newAchievement, 'obtained' => $newAchievement->pivot])
-                    @endforeach
+@php
+    use Illuminate\Support\Facades\Auth;
+    use Illuminate\Support\Facades\Cache;
+    if (Auth::check()) {
+        $key = 'achievement-popup::user::' . Auth::id();
+        if (! Cache::has($key)) {
+            $newAchievementsQuery = Auth::user()
+                ->achievements()
+                ->where('alerted', false);
+            $newAchievements = $newAchievementsQuery->get();
+            if (count($newAchievements) > 0) {
+                $newAchievementsQuery->update(['alerted' => true]);
+            }
 
-                    <a
-                        class="btn btn-success"
-                        href="{{ route('user::profile') }}"
-                    >
-                        View all my achievements
-                    </a>
+            Cache::put($key, true, now()->addHours(6));
+        }
+    }
+@endphp
+
+@if (isset($newAchievements) && count($newAchievements) > 0)
+    @push('modals')
+        <div
+            class="modal fade"
+            id="new-achievement-modal"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="newAchievementModalLabel"
+        >
+            <div
+                class="modal-dialog modal-dialog-centered modal-lg"
+                role="document"
+            >
+                <div class="modal-content bg-dark text-white">
+                    <div class="modal-body text-center">
+                        You just got
+                        {{ count($newAchievements) > 1 ? 'new achievements' : 'a new achievement' }},
+                        check it out:
+                        @foreach ($newAchievements as $newAchievement)
+                            @include('achievement.includes.achievement_include', ['achievement' => $newAchievement, 'obtained' => $newAchievement->pivot])
+                        @endforeach
+
+                        <a
+                            class="btn btn-success"
+                            href="{{ route('user::profile') }}"
+                        >
+                            View all my achievements
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endpush
+
     @push('javascript')
         <script type="text/javascript" @cspNonce>
             window.addEventListener('load', () => {

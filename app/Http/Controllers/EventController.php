@@ -14,7 +14,6 @@ use App\Models\Product;
 use App\Models\User;
 use Exception;
 use Illuminate\Contracts\Database\Query\Builder;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -39,7 +38,8 @@ class EventController extends Controller
         $category = EventCategory::query()->find($request->input('category'));
 
         // if there is a category, get only the events that are in that category
-        $events = Event::getEventBlockQuery()
+        $events = Event::query()
+            ->orderBy('start')
             ->when($category, static function ($query) use ($category) {
                 $query->whereHas('Category', static function (Builder $q) use ($category) {
                     $q->where('id', $category->id)->where('deleted_at', null);
@@ -74,7 +74,6 @@ class EventController extends Controller
         ]);
     }
 
-    /** @return View */
     public function finindex(): \Illuminate\Contracts\View\View|Factory
     {
         $activities = Activity::query()
@@ -92,23 +91,6 @@ class EventController extends Controller
      */
     public function show(Event $event): View
     {
-        $event->load([
-            'committee',
-            'tickets.product',
-            'tickets.purchases.user.media',
-            'tickets.purchases.orderline.molliePayment',
-            'activity.users.media',
-            'activity.participation' => function ($query) {
-                $query->where('user_id', Auth::id());
-            },
-            'activity.backupUsers.media',
-            'activity.helpingCommitteeInstances.committee',
-            'activity.helpingCommitteeInstances.users.media',
-            'videos',
-            'albums',
-            'dinnerforms',
-        ]);
-
         $methods = [];
         if (Config::boolean('omnomcom.mollie.use_fees')) {
             $methods = MollieController::getPaymentMethods();
@@ -117,7 +99,6 @@ class EventController extends Controller
         return view('event.display', ['event' => $event, 'payment_methods' => $methods]);
     }
 
-    /** @return View */
     public function create(): \Illuminate\Contracts\View\View|Factory
     {
         return view('event.edit', ['event' => null]);
@@ -125,8 +106,6 @@ class EventController extends Controller
 
     /**
      * @return RedirectResponse
-     *
-     * @throws FileNotFoundException
      */
     public function store(StoreEventRequest $request)
     {
@@ -169,9 +148,6 @@ class EventController extends Controller
         return to_route('event::show', ['event' => $event]);
     }
 
-    /**
-     * @return View
-     */
     public function edit(Event $event): \Illuminate\Contracts\View\View|Factory
     {
         return view('event.edit', ['event' => $event]);
@@ -235,16 +211,14 @@ class EventController extends Controller
         return back();
     }
 
-    /**
-     * @return View
-     */
     public function archive(Request $request, int $year): \Illuminate\Contracts\View\View|Factory
     {
         /** @var EventCategory|null $category */
         $category = EventCategory::query()->find($request->input('category'));
 
         // if there is a category, get only the events that are in that category
-        $eventsPerMonth = Event::getEventBlockQuery()
+        $eventsPerMonth = Event::query()
+            ->orderBy('start')
             ->unless(empty($category), static function ($query) use ($category) {
                 $query->whereHas('Category', static function (Builder $q) use ($category) {
                     $q->where('id', $category->id)->where('deleted_at', null);
@@ -304,9 +278,6 @@ class EventController extends Controller
         return to_route('event::show', ['event' => $event]);
     }
 
-    /**
-     * @return RedirectResponse|View
-     */
     public function admin(Event $event): RedirectResponse|Factory|\Illuminate\Contracts\View\View
     {
         $event->load(['tickets.purchases.user', 'tickets.purchases.orderline.molliePayment', 'tickets.product']);
@@ -320,9 +291,6 @@ class EventController extends Controller
         return view('event.admin', ['event' => $event]);
     }
 
-    /**
-     * @return RedirectResponse|View
-     */
     public function scan(Event $event): RedirectResponse|Factory|\Illuminate\Contracts\View\View
     {
 
@@ -414,80 +382,39 @@ class EventController extends Controller
     /**
      * @return array<int, object>
      */
-    public function apiUpcomingEvents(int $limit, Request $request): array
+    public function apiUpcomingEvents(Request $request, ?int $limit = 4): array
     {
-        $user = Auth::user() ?? null;
-        $noFutureLimit = $request->boolean('no_future_limit');
+        $limit = min($limit, 100);
         /** @var Collection<int, Event> $events */
-        $events = Event::getEventBlockQuery()
-            ->where('end', '>', Date::today()->timestamp)
-            ->unless($noFutureLimit, static function ($query) {
-                $query->where('start', '<', Date::now()->addMonth()->timestamp);
-            })
-            ->whereNull('publication')
+        $events = Event::query()
             ->orderBy('start')
-            ->with('activity.users.media')
-            ->with('activity.backupUsers')
-            ->with('committee.users')
-            ->with('tickets')
-            ->take($limit)
+            ->where('end', '>', Date::today()->timestamp)
+            ->where('start', '<', Date::now()->addMonth()->timestamp)
+            ->where([
+                [static function ($query) {
+                    $query->where('publication', '<', Date::now()->timestamp)
+                        ->orWhereNull('publication');
+                }],
+            ])
+            ->where('secret', false)
+            ->orderBy('start')
+            ->when($limit, function ($query) use ($limit) {
+                $query->limit($limit);
+            })
             ->get();
 
         $data = [];
 
         foreach ($events as $event) {
-            if ($event->secret && ($user == null || $event->activity == null || (
-                ! $event->activity->isParticipating($user) &&
-                ! $event->activity->isHelping($user) &&
-                ! $event->isOrganising($user)
-            ))) {
-                continue;
-            }
-
-            $userParticipation = $event->activity?->getParticipation($user);
-
-            $participants = ($user?->is_member && $event->activity ? $event->activity->users->map(static fn ($item) => (object) [
-                'name' => $item->name,
-                'photo' => $item->getFirstMediaUrl('profile_picture', 'thumb'),
-            ]) : null);
-            $backupParticipants = ($user?->is_member && $event->activity ? $event->activity->backupUsers->map(static fn ($item) => (object) [
-                'name' => $item->name,
-                'photo' => $item->getFirstMediaUrl('profile_picture', 'thumb'),
-            ]) : null);
             $data[] = (object) [
                 'id' => $event->id,
                 'title' => $event->title,
                 'image' => ($event->getFirstMediaUrl('header', 'card')),
                 'description' => $event->description,
                 'start' => $event->start,
-                'organizing_committee' => ($event->committee ? [
-                    'id' => $event->committee->id,
-                    'name' => $event->committee->name,
-                ] : null),
-                'registration_start' => $event->activity?->registration_start,
-                'registration_end' => $event->activity?->registration_end,
-                'deregistration_end' => $event->activity?->deregistration_end,
-                'total_places' => $event->activity?->participants,
-                'available_places' => $event->activity?->freeSpots(),
-                'is_full' => $event->activity?->isFull(),
                 'end' => $event->end,
-                'location' => $event->location,
-                'current' => $event->current(),
                 'over' => $event->over(),
-                'has_signup' => $event->activity !== null,
-                'price' => $event->activity?->price,
-                'no_show_fee' => $event->activity?->no_show_fee,
-                'user_signedup' => $user && $userParticipation !== null,
-                'user_signedup_backup' => $user && $userParticipation?->backup,
-                'user_signedup_id' => $userParticipation?->id,
-                'can_signup' => ($user && $event->activity?->canSubscribe()),
-                'can_signup_backup' => ($user && $event->activity?->canSubscribeBackup()),
-                'can_signout' => ($user && $event->activity?->canUnsubscribe()),
-                'tickets' => ($user && $event->tickets->count() > 0 ? $event->tickets->pluck('purchases')->flatten()->filter(fn ($purchase): bool => $purchase->user_id === Auth::id())->pluck('api_attributes') : null),
-                'participants' => $participants,
-                'is_helping' => ($user && $event->activity ? $event->activity->isHelping($user) : null),
-                'is_organizing' => ($user && $event->committee ? $event->committee->isMember($user) : null),
-                'backupParticipants' => $backupParticipants,
+                'location' => $event->location,
             ];
         }
 
@@ -497,7 +424,7 @@ class EventController extends Controller
     public function setReminder(Request $request): RedirectResponse
     {
         $user = Auth::user();
-        $hours = floatval($request->get('hours'));
+        $hours = floatval($request->input('hours'));
 
         if ($request->has('delete') || $hours <= 0) {
             $user->setCalendarAlarm(null);
@@ -557,7 +484,8 @@ CALSCALE:GREGORIAN
         $reminder = $user?->pref_calendar_alarm;
 
         $relevant_only = $user?->pref_calendar_relevant_only;
-        $events = Event::getEventBlockQuery($user)
+        $events = Event::query()
+            ->orderBy('start')
             ->where('start', '>', Date::now()->subMonths(6)->timestamp)
             ->unless($user, function ($query) {
                 $query->where('secret', false);
@@ -701,7 +629,7 @@ CALSCALE:GREGORIAN
             ]);
             $newActivity->save();
 
-            foreach ($event->activity->helpingCommitteeInstances as $helpingCommittee) {
+            foreach ($event->activity->helpingCommittees as $helpingCommittee) {
                 HelpingCommittee::query()->create([
                     'activity_id' => $newActivity->id,
                     'committee_id' => $helpingCommittee->committee_id,

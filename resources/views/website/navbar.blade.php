@@ -1,5 +1,15 @@
 @php
     use App\Models\Leaderboard;
+    use App\Models\MenuItem;
+    use Illuminate\Support\Facades\Cache;
+
+    $menuItems = Cache::rememberForever(
+        'website.navbar',
+        static fn () => MenuItem::query()
+            ->whereNull('parent')
+            ->orderBy('order')
+            ->get(),
+    );
 @endphp
 
 <header>

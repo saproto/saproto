@@ -1,14 +1,16 @@
 @php
     $leaderboard = Cache::rememberForever(
         'leaderboard.leaderboard',
-        fn () => App\Models\Leaderboard::where('featured', true)
+        fn () => App\Models\Leaderboard::query()
+            ->orderBy('created_at', 'desc')
+            ->where('featured', true)
             ->with([
                 'entries' => function ($q) {
                     $q->orderBy('points', 'DESC')->limit(5);
                 },
             ])
-            ->first(),
-    );
+            ->get(),
+    )->first();
 @endphp
 
 @if ($leaderboard)

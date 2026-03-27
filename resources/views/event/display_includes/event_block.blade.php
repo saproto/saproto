@@ -72,15 +72,16 @@
                         title="You are participating!"
                     ></i>
                 @endif
-                @if (Auth::check() && $event->activity->isHelping(Auth::user()))
-                    <i
-                        class="fas fa-life-ring fa-fw text-danger"
-                        aria-hidden="true"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="You are helping!"
-                    ></i>
-                @endif
+            @endif
+
+            @if (Auth::check() && $event->activity?->isHelping(Auth::user()))
+                <i
+                    class="fas fa-life-ring fa-fw text-danger"
+                    aria-hidden="true"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="You are helping!"
+                ></i>
             @endif
 
             {{-- Ticket --}}

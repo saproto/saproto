@@ -61,7 +61,7 @@
         @yield('opengraph')
     </head>
 
-    <body class="template-{{ $viewName }}">
+    <body>
         @yield('body')
 
         @if (! App::isDownForMaintenance())

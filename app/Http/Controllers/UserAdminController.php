@@ -7,7 +7,6 @@ use App\Http\Requests\MP3Request;
 use App\Mail\MembershipEnded;
 use App\Mail\MembershipEndSet;
 use App\Mail\MembershipStarted;
-use App\Models\HashMapItem;
 use App\Models\Member;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -160,10 +159,8 @@ class UserAdminController extends Controller
 
         EmailListController::autoSubscribeToLists('autoSubscribeMember', $user);
 
-        HashMapItem::query()->create([
-            'key' => 'wizard',
-            'subkey' => $user->id,
-            'value' => 1,
+        $user->update([
+            'wizard' => true,
         ]);
 
         // Disabled because ProTube is down.

@@ -19,7 +19,6 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Str;
 use Override;
@@ -202,41 +201,6 @@ class Event extends Model implements HasMedia
         return ! $this->secret && (! $this->publication || $this->isPublished());
     }
 
-    /**
-     * @return Builder<Event>
-     */
-    public static function getEventBlockQuery(?User $user = null): Builder
-    {
-        if (! $user instanceof User) {
-            $user = Auth::user();
-        }
-
-        return Event::query()
-            ->orderBy('start')
-            ->with('media')
-            ->with('activity', static function ($e) use ($user) {
-                $e
-                    ->with(['participation' => function ($q) use ($user) {
-                        $q->where('user_id', $user?->id);
-                    }])
-                    ->withCount([
-                        'users',
-                    ]);
-            })
-            ->with('committee', static function ($q) use ($user) {
-                $q->with(['users' => function ($q) use ($user) {
-                    $q->where('user_id', $user?->id);
-                }]);
-            })
-            ->with(['tickets' => function ($q) use ($user) {
-                $q->with('purchases', static function ($q) use ($user) {
-                    $q->where('user_id', $user?->id);
-                })->whereHas('purchases', static function ($q) use ($user) {
-                    $q->where('user_id', $user?->id);
-                });
-            }]);
-    }
-
     public function isPublished(): bool
     {
         return $this->publication < Date::now()->timestamp;
@@ -390,13 +354,12 @@ class Event extends Model implements HasMedia
         }
 
         if ($this->activity) {
-            $users = $users->merge($this->activity->allUsers->sort(static function ($a, $b): int {
-                return (int) isset($a->pivot->committees_activities_id);
-                // prefer helper participation registration
-            })->unique());
+            $users = $users
+                ->merge($this->activity->allUsers)
+                ->merge($this->activity->helpingCommittees->flatMap(static fn (HelpingCommittee $c) => $c->users));
         }
 
-        return $users->sort(static fn ($a, $b): int => strcmp($a->name, $b->name));
+        return $users->unique('id')->sort(static fn ($a, $b): int => strcmp($a->name, $b->name));
     }
 
     // recounts the unique users on an event to make the fetching of the event_block way faster
@@ -410,7 +373,9 @@ class Event extends Model implements HasMedia
         }
 
         if ($this->activity) {
-            $allUserIds = $allUserIds->merge($this->activity->users->pluck('id'));
+            $allUserIds = $allUserIds
+                ->merge($this->activity->users->pluck('id'))
+                ->merge($this->activity->helpingCommittees->flatMap(static fn (HelpingCommittee $c) => $c->users)->pluck('id'));
         }
 
         $this->unique_users_count = $allUserIds->unique()->count();
