@@ -30,10 +30,10 @@ class SearchController extends Controller
             if (Auth::user()->can('board')) {
                 $terms = ['name', 'calling_name', 'email', 'utwente_username'];
             }
-            $users = User::whereFullText($terms, $term)
+            $users = User::query()->whereFullText($terms, $term)
                 ->with('media')
                 ->get()
-                ->filter(fn($user) => $user->is_member);
+                ->filter(fn ($user) => $user->is_member);
         }
 
         $pages = Page::query()->whereFullText(['slug', 'title', 'content'], $term)
@@ -43,7 +43,7 @@ class SearchController extends Controller
                 return ! $item->is_member_only || Auth::user()?->is_member;
             }) ?? [];
 
-        $committees =   Committee::query()->whereFullText(['name', 'slug'], $term)
+        $committees = Committee::query()->whereFullText(['name', 'slug'], $term)
             ->get()
             ->filter(function ($item) {
                 /** @var Committee $item */
