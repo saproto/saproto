@@ -246,7 +246,7 @@ return [
         MarkdownServiceProvider::class,
         HashidsServiceProvider::class,
         ServiceProvider::class,
-        \SocialiteProviders\Manager\ServiceProvider::class,
+        SocialiteProviders\Manager\ServiceProvider::class,
     ],
 
     /*

@@ -68,6 +68,7 @@ class SearchController extends Controller
             // load the events with all the correct data to show in the event block
 
             Event::query()
+                ->eagerLoadEventBlock(Auth::user())
                 ->orderBy('start')
                 ->whereIn('id', $presearch_event_ids)
                 ->reorder()

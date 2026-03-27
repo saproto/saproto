@@ -30,7 +30,7 @@ jobs:
         with:
           php-version: ${{ env.PHP_VERSION }}
 
-      - uses: ramsey/composer-install@v3
+      - uses: ramsey/composer-install@v4
         with:
           composer-options: "--ignore-platform-reqs --optimize-autoloader --prefer-dist --no-dev"
 

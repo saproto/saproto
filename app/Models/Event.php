@@ -19,6 +19,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Str;
 use Override;
@@ -71,6 +72,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static Builder<static>|Event newQuery()
  * @method static Builder<static>|Event onlyTrashed()
  * @method static Builder<static>|Event query()
+ * @method static Builder<static>|Event eagerloadEventBlock($user = null)
  * @method static Builder<static>|Event whereCategoryId($value)
  * @method static Builder<static>|Event whereCommitteeId($value)
  * @method static Builder<static>|Event whereCreatedAt($value)
@@ -185,6 +187,32 @@ class Event extends Model implements HasMedia
         return $this->belongsTo(Committee::class);
     }
 
+    /** @param Builder<$this> $query
+     * @return Builder<$this>
+     */
+    protected function scopeEagerloadEventBlock(Builder $query, ?User $user): Builder
+    {
+        $userId = $user->id ?? null;
+
+        return $query
+            ->with('media')
+            ->with('activity.helpingCommittees.users', function ($q) use ($userId) {
+                $q->where('users.id', $userId);
+            })
+            ->with('activity', function ($q) use ($userId) {
+                $q
+                    ->with('allUsers', function ($q) use ($userId) {
+                        $q->where('users.id', $userId);
+                    })
+                    ->withCount(['allUsers as users_count' => function ($q) {
+                        $q->where('backup', false);
+                    }]);
+            })
+            ->with('tickets.purchases', function ($q) use ($userId) {
+                $q->where('ticket_purchases.user_id', $userId);
+            });
+    }
+
     public function mayViewEvent(?User $user): bool
     {
         // board may always view events
@@ -193,7 +221,7 @@ class Event extends Model implements HasMedia
         }
 
         // only show secret events if the user is participating, helping or organising
-        if ($this->secret && ($user instanceof User && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isHelping($user) || $this->isOrganising($user)))) {
+        if ($this->secret && ($user instanceof User && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isOnBackupList($user) || $this->activity->isHelping($user) || $this->isOrganising($user)))) {
             return true;
         }
 
@@ -420,6 +448,10 @@ class Event extends Model implements HasMedia
     protected static function boot(): void
     {
         parent::boot();
+
+        static::saved(function (Event $event) {
+            Cache::forget('home.events');
+        });
 
         self::updating(static function ($event) {
             $event->update_sequence++;

@@ -148,7 +148,7 @@
                 time.innerHTML = `That would be ${date.format('DD-MM-Y HH:mm')}.`
                 time.classList.remove('d-none')
                 statusElement.setAttribute('data-countdown-start', date.unix())
-                window.timerList.forEach((timer) => {
+                window.timerList?.forEach((timer) => {
                     timer.start()
                 })
             }
@@ -156,7 +156,7 @@
 
         const setNewStatus = (newStatus) => {
             // stop all timers
-            window.timerList.forEach((timer) => {
+            window.timerList?.forEach((timer) => {
                 timer.stop()
             })
             // set the big status text

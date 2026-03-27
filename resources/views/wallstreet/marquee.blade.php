@@ -374,7 +374,7 @@
                 const a = new Audio('{{ $sound_path }}')
                 //listen to a new wallstreet event
                 window.Echo.private(`wallstreet-prices.${id}`).listen(
-                    'NewWallstreetEvent',
+                    '.App\\Events\\Wallstreet\\NewWallstreetEvent',
                     (e) => {
                         const event = e.data
                         a.play().catch(() => {
@@ -398,7 +398,7 @@
 
                 const lossDiv = document.getElementById('current_loss')
                 Echo.private(`wallstreet-prices.${id}`).listen(
-                    'NewWallstreetLossCalculation',
+                    '.App\\Events\\Wallstreet\\NewWallstreetLossCalculation',
                     (e) => {
                         lossDiv.innerHTML = '€ ' + e.data.toFixed(2)
                     }
@@ -406,7 +406,7 @@
 
                 //listen to a new wallstreet price
                 Echo.private(`wallstreet-prices.${id}`).listen(
-                    'NewWallstreetPrice',
+                    '.App\\Events\\Wallstreet\\NewWallstreetPrice',
                     (e) => {
                         let cards = swiper.el.querySelectorAll(
                             `#${e.data.product.name.replace(/[^a-zA-Z0-9]+/g, '')}`

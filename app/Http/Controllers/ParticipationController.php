@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\Events\UserSignedOutEvent;
+use App\Events\Events\UserSignedupEvent;
 use App\Mail\ActivityMovedFromBackup;
 use App\Mail\ActivitySubscribedTo;
 use App\Mail\ActivityUnsubscribedFrom;
@@ -30,7 +32,7 @@ class ParticipationController extends Controller
 
         $data = ['activity_id' => $event->activity->id, 'user_id' => Auth::user()->id];
 
-        abort_if($event->activity->isParticipating(Auth::user()), 403, 'You are already subscribed for '.$event->title.'.');
+        abort_if($event->activity->isParticipating(Auth::user()) || $event->activity->isOnBackupList(Auth::user()), 403, 'You are already subscribed for '.$event->title.'.');
         abort_unless($event->activity->canSubscribeBackup(), 403, 'You cannot subscribe for '.$event->title.' at this time.');
 
         if ($event->activity->isFull() || ! $event->activity->canSubscribe()) {
@@ -40,7 +42,10 @@ class ParticipationController extends Controller
             Session::flash('flash_message', 'You claimed a spot for '.$event->title.'.');
         }
 
-        ActivityParticipation::query()->create($data);
+        $participation = ActivityParticipation::query()->create($data);
+
+        event(new UserSignedupEvent($event, Auth::user(), $participation->backup ?? false));
+
         $event->updateUniqueUsersCount();
 
         if ($event->activity->redirect_url) {
@@ -60,9 +65,11 @@ class ParticipationController extends Controller
         $data = ['activity_id' => $event->activity->id, 'user_id' => $user->id];
 
         abort_unless($user->is_member, 403, $user->name.' is not a member of the association and therefore can not be subscribed for '.$event->title.'.');
-        abort_if($event->activity->isParticipating($user), 403, $user->name.' is already subscribed for '.$event->title.'.');
+        abort_if($event->activity->isParticipating($user) || $event->activity->isOnBackupList($user), 403, $user->name.' is already subscribed for '.$event->title.'.');
 
         $participation = ActivityParticipation::query()->create($data);
+
+        event(new UserSignedupEvent($event, $user, $participation->backup ?? false));
 
         $event->updateUniqueUsersCount();
 
@@ -76,25 +83,27 @@ class ParticipationController extends Controller
     /**
      * @throws Exception
      */
-    public function destroy(ActivityParticipation $participation): RedirectResponse
+    public function destroy(Event $event, User $user): RedirectResponse
     {
-        $participation->load(['activity', 'activity.event', 'user']);
 
-        abort_unless($participation->user->id == Auth::id() || Auth::user()->can('board'), 403, 'You are not allowed to unsubscribe this user from this event.');
+        abort_unless($user->id == Auth::id() || Auth::user()->can('board'), 403, 'You are not allowed to unsubscribe this user from this event.');
 
-        abort_if($participation->activity->closed, 403, 'This activity is closed, you cannot change participation anymore.');
+        abort_if($event->activity->closed, 403, 'This activity is closed, you cannot change participation anymore.');
 
-        abort_unless($participation->backup || $participation->activity->canUnsubscribe() || Auth::user()->can('board'), 403, 'You cannot unsubscribe for this event at this time.');
+        abort_unless($event->activity->isOnBackupList($user) || $event->activity->canUnsubscribe() || Auth::user()->can('board'), 403, 'You cannot unsubscribe for this event at this time.');
 
-        if ($participation->user->id !== Auth::id()) {
-            Mail::to($participation->user)->queue(new ActivityUnsubscribedFrom($participation)->onQueue('high'));
+        $participation = ActivityParticipation::query()->where('activity_id', $event->activity->id)->where('user_id', $user->id)->firstOrFail();
+        if ($user->id !== Auth::id()) {
+            Mail::to($user)->queue(new ActivityUnsubscribedFrom($participation)->onQueue('high'));
         }
 
         $participation->delete();
 
+        event(new UserSignedOutEvent($event, $user));
+
         Session::flash('flash_message', $participation->user->name.' is not attending '.$participation->activity->event->title.' anymore.');
 
-        if (! $participation->backup && $participation->activity->users()->count() < $participation->activity->participants) {
+        if (! $participation->backup && $participation->activity->users->count() < $participation->activity->participants) {
             self::transferOneBackupUser($participation->activity);
         }
 
@@ -112,12 +121,12 @@ class ParticipationController extends Controller
 
         $participation->update(['is_present' => ! $participation->is_present]);
 
-        return new JsonResponse($participation->activity->getPresent());
+        return new JsonResponse($participation->activity->countPresent());
     }
 
     public static function processBackupQueue(Activity $activity): void
     {
-        while ($activity->backupUsers()->count() > 0 && $activity->users()->count() < $activity->participants) {
+        while ($activity->allUsers()->where('backup', true)->count() > 0 && $activity->allUsers()->where('backup', false)->count() < $activity->participants) {
             self::transferOneBackupUser($activity);
         }
     }
@@ -135,6 +144,8 @@ class ParticipationController extends Controller
         }
 
         $backup_participation->update(['backup' => false]);
+
+        event(new UserSignedupEvent($activity->event, $backup_participation->user, backup: false));
 
         $backup_participation->activity->event->updateUniqueUsersCount();
 

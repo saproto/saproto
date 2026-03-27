@@ -291,7 +291,7 @@
                             console.log(data)
                             //listen to a new wallstreet price and update the prices accordingly
                             Echo.private(`wallstreet-prices.${data.id}`).listen(
-                                'NewWallstreetPrice',
+                                '.App\\Events\\Wallstreet\\NewWallstreetPrice',
                                 (e) => {
                                     console.log(e)
                                     updatePrice(e.product.id, e.data.price)

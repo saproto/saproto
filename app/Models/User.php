@@ -182,9 +182,9 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static Builder<static>|User withoutRole($roles, $guard = null)
  * @method static Builder<static>|User withoutTrashed()
  *
- * @property-read Collection<int, \App\Models\Activity> $activities
+ * @property-read Collection<int, Activity> $activities
  * @property-read int|null $activities_count
- * @property-read Collection<int, \App\Models\Activity> $backupActivities
+ * @property-read Collection<int, Activity> $backupActivities
  * @property-read int|null $backup_activities_count
  * @property-read MediaCollection<int, Media> $media
  * @property-read int|null $media_count
@@ -212,8 +212,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     protected $table = 'users';
 
     protected $guarded = ['password', 'remember_token'];
-
-    protected $with = ['member'];
 
     protected $appends = ['is_member'];
 
@@ -341,7 +339,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function activities(): BelongsToMany
     {
         return $this->belongsToMany(Activity::class, 'activities_users')
-            ->whereNull('activities_users.deleted_at')
             ->where('backup', false)
             ->withTimestamps();
     }
@@ -352,7 +349,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function backupActivities(): BelongsToMany
     {
         return $this->belongsToMany(Activity::class, 'activities_users')
-            ->whereNull('activities_users.deleted_at')
             ->where('backup', true)
             ->withTimestamps();
     }

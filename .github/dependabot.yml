@@ -8,10 +8,9 @@ updates:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
     groups:
-      composer-prod:
-        dependency-type: "production"
-      composer-dev:
-        dependency-type: "development"
+      composer:
+        patterns:
+          - "*"
 
   - package-ecosystem: "npm"
     directory: "/"
@@ -21,10 +20,9 @@ updates:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
     groups:
-      npm-prod:
-        dependency-type: "production"
-      npm-dev:
-        dependency-type: "development"
+      npm:
+        patterns:
+          - "*"
 
   - package-ecosystem: "github-actions"
     directory: ".github/workflows"

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Override;
 
 /**
  * Helping Committee Model.
@@ -72,5 +74,15 @@ class HelpingCommittee extends Validatable
     {
         return $this
             ->belongsToMany(User::class, 'activities_helpers', 'committees_activities_id', 'user_id');
+    }
+
+    #[Override]
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::saved(function (HelpingCommittee $helpingCommittee) {
+            Cache::forget('home.events');
+        });
     }
 }

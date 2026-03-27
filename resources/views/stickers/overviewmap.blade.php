@@ -45,9 +45,12 @@
     <script type="text/javascript" @cspNonce>
         window.addEventListener('load', () => {
             window.Echo.channel(`stickers`)
-                .listen('StickerPlacedEvent', (marker) => {
-                    addMarkerToMap(marker)
-                })
+                .listen(
+                    '.App\\Events\\Stickers\\StickerPlacedEvent',
+                    (marker) => {
+                        addMarkerToMap(marker)
+                    }
+                )
                 .error((error) => {
                     console.error(error)
                     setTimeout(() => {

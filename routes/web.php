@@ -462,7 +462,7 @@ Route::middleware('forcedomain')->group(function () {
         Route::post('edit/{id}', [WallstreetController::class, 'update'])->name('update');
         Route::get('delete/{id}', [WallstreetController::class, 'destroy'])->name('delete');
         Route::get('statistics/{id}', [WallstreetController::class, 'statistics'])->name('statistics');
-        route::prefix('products')->name('products::')->group(function () {
+        Route::prefix('products')->name('products::')->group(function () {
             Route::post('create/{id}', [WallstreetController::class, 'addProducts'])->name('create');
             Route::get('remove/{id}/{productId}', [WallstreetController::class, 'removeProduct'])->name('remove');
         });
@@ -533,7 +533,7 @@ Route::middleware('forcedomain')->group(function () {
 
         // Manage participation
         Route::get('{event}/participate', [ParticipationController::class, 'create'])->middleware(['member'])->name('addparticipation');
-        Route::get('unparticipate/{participation}', [ParticipationController::class, 'destroy'])->name('deleteparticipation');
+        Route::get('{event}/unparticipate/{user}', [ParticipationController::class, 'destroy'])->name('deleteparticipation');
 
         // Participate for someone else (Board only)
         Route::post('{event}/participatefor', [ParticipationController::class, 'createFor'])->middleware(['permission:board'])->name('addparticipationfor');

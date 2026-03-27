@@ -65,7 +65,6 @@
         "spatie/laravel-permission": "^7",
         "spipu/html2pdf": "^5.2",
         "vinkla/hashids": "^13.0.0",
-        "willvincent/feeds": "^2.4",
         "setasign/tfpdf": "^1.33",
         "inertiajs/inertia-laravel": "^2.0",
         "spatie/laravel-data": "^4.15",
@@ -85,13 +84,14 @@
         "laravel/wayfinder": "^0.1.12",
         "laravel-notification-channels/webpush": "^10.4",
         "laravel/pennant": "^1.18",
-        "league/flysystem-aws-s3-v3": "^3.0"
+        "league/flysystem-aws-s3-v3": "^3.0",
+        "predis/predis": "^3.4"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.0",
         "fakerphp/faker": "^1.13",
         "itsgoingd/clockwork": "^5.1",
-        "laravel/tinker": "^2.6",
+        "laravel/tinker": "^v3.0.0",
         "larastan/larastan": "^3.4",
         "laravel/sail": "^1.16",
         "laravel/pint": "^1.10",

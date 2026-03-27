@@ -34,33 +34,30 @@ formList.forEach((form) =>
     form.addEventListener('submit', preventSubmitBounce, { once: true })
 )
 
-if (document.querySelectorAll('.swiper').length) {
-    const [{ default: Swiper }, { Autoplay, Navigation }] = await Promise.all([
-        import('swiper'),
-        import('swiper/modules'),
-        import('swiper/css'),
-        import('swiper/css/autoplay'),
-        import('swiper/css/navigation'),
-    ])
-    window.swiper = new Swiper('.swiper', {
-        modules: [Autoplay, Navigation],
-        loop: config.company_count > 2,
-        slidesPerView: config.company_count > 1 ? 2 : 1,
-        spaceBetween: 10,
-        watchOverflow: false,
-        autoplay: {
-            delay: 3000,
-            disableOnInteraction: false,
+const [{ default: Swiper }, { Autoplay, Navigation }] = await Promise.all([
+    import('swiper'),
+    import('swiper/modules'),
+    import('swiper/css'),
+    import('swiper/css/autoplay'),
+    import('swiper/css/navigation'),
+])
+window.swiper = new Swiper('.swiper', {
+    modules: [Autoplay, Navigation],
+    loop: config.company_count > 2,
+    slidesPerView: config.company_count > 1 ? 2 : 1,
+    spaceBetween: 10,
+    watchOverflow: false,
+    autoplay: {
+        delay: 3000,
+        disableOnInteraction: false,
+    },
+    breakpoints: {
+        1200: {
+            slidesPerView: config.company_count > 4 ? 4 : config.company_count,
+            spaceBetween: 50,
         },
-        breakpoints: {
-            1200: {
-                slidesPerView:
-                    config.company_count > 4 ? 4 : config.company_count,
-                spaceBetween: 50,
-            },
-        },
-    })
-}
+    },
+})
 
 // Enables tooltips elements
 import { Tooltip } from 'bootstrap'

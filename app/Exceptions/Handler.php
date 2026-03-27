@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\ValidationException;
 use Laravel\Passport\Exceptions\OAuthServerException;
@@ -104,7 +106,16 @@ class Handler extends ExceptionHandler
     {
         if (! view()->exists("errors.{$e->getStatusCode()}")) {
 
-            $maySeeError = App::environment('local') || (Auth::check() && Auth::user()->can('finadmin'));
+            $maySeeError = false;
+
+            if (Auth::check()) {
+                $finadminIds = Cache::remember('errors.finadmins', now()->addDay(), fn () => User::query()->permission('finadmin')->pluck('id'));
+                $maySeeError = $finadminIds->contains(Auth::id());
+            }
+
+            if (App::environment('local')) {
+                $maySeeError = true;
+            }
 
             return response()->view('errors.default', ['exception' => $e, 'hide_message' => ! $maySeeError], 500, $e->getHeaders());
         }
