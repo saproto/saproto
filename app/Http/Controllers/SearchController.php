@@ -21,47 +21,36 @@ use Illuminate\View\View;
 
 class SearchController extends Controller
 {
-    public function search(Request $request): View
+    public function search(Request $request)
     {
         $term = $request->input('query');
-
         $users = collect();
         if (Auth::user()?->is_member) {
-            $users = $this->getGenericSearchQuery(
-                User::class,
-                $term,
-                Auth::user()->can('board') ? ['id', 'name', 'calling_name', 'utwente_username', 'email'] : ['id', 'name', 'calling_name', 'email']
-            )?->with('media')->get()->filter(function ($item) {
-                /** @var User $item */
-                return $item->is_member;
-            }) ?? [];
+            $terms = ['name', 'calling_name', 'email'];
+            if (Auth::user()->can('board')) {
+                $terms = ['name', 'calling_name', 'email', 'utwente_username'];
+            }
+            $users = User::whereFullText($terms, $term)
+                ->with('media')
+                ->get()
+                ->filter(fn($user) => $user->is_member);
         }
 
-        $pages = $this->getGenericSearchQuery(
-            Page::class,
-            $term,
-            ['slug', 'title', 'content']
-        )?->get()
+        $pages = Page::query()->whereFullText(['slug', 'title', 'content'], $term)
+            ->get()
             ->filter(function ($item) {
                 /** @var Page $item */
                 return ! $item->is_member_only || Auth::user()?->is_member;
             }) ?? [];
 
-        $committees = $this->getGenericSearchQuery(
-            Committee::class,
-            $term,
-            ['id', 'name', 'slug']
-        )?->get()
+        $committees =   Committee::query()->whereFullText(['name', 'slug'], $term)
+            ->get()
             ->filter(function ($item) {
                 /** @var Committee $item */
                 return $item->public || Auth::user()?->can('board');
             }) ?? [];
 
-        $presearch_event_ids = $this->getGenericSearchQuery(
-            Event::class,
-            $term,
-            ['id', 'title']
-        )?->pluck('id');
+        $presearch_event_ids = Event::query()->whereFullText(['title'], $term)->pluck('id');
 
         $events = collect();
         if ($presearch_event_ids) {
@@ -81,15 +70,12 @@ class SearchController extends Controller
                 });
         }
 
-        $photoAlbums = $this->getGenericSearchQuery(
-            PhotoAlbum::class,
-            $term,
-            ['id', 'name']
-        )?->orderBy('date_taken', 'desc')
+        $photoAlbums = PhotoAlbum::query()->whereFullText(['name'], $term)
+            ->orderBy('date_taken', 'desc')
             ->unless(Auth::user()?->can('protography'), static function ($q) {
                 $q->where('private', false);
             })
-            ->get() ?? [];
+            ->get();
 
         return view('search.search', [
             'term' => $term,

@@ -24,7 +24,7 @@
         @if (count($photoAlbums) + count($users) > 0)
             <div class="col-md-3">
                 @if (count($photoAlbums) > 0)
-                    <div class="card">
+                    <div class="card mb-3">
                         <div class="card-header bg-dark text-white">
                             Photo Albums
                         </div>
@@ -49,7 +49,7 @@
                 @endif
 
                 @if (count($users) > 0)
-                    <div class="card">
+                    <div class="card mb-3">
                         <div class="card-header bg-dark text-white">
                             Proto members
                         </div>
@@ -76,7 +76,7 @@
 
         @if (count($committees) > 0)
             <div class="col-md-3">
-                <div class="card">
+                <div class="card mb-3">
                     <div class="card-header bg-dark text-white">Committees</div>
                     <div class="card-body">
                         @foreach ($committees as $committee)
@@ -89,7 +89,7 @@
 
         @if (count($events) > 0)
             <div class="col-md-3">
-                <div class="card">
+                <div class="card mb-3">
                     <div class="card-header bg-dark text-white">Events</div>
                     <div class="card-body">
                         @foreach ($events as $counter => $event)
@@ -109,7 +109,7 @@
 
         @if (count($pages) > 0)
             <div class="col-md-3">
-                <div class="card">
+                <div class="card mb-3">
                     <div class="card-header bg-dark text-white">Pages</div>
                     <div class="card-body">
                         @foreach ($pages as $page)
