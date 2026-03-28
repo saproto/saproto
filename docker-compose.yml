@@ -25,7 +25,7 @@ services:
         depends_on:
             - mariadb
             - mailpit
-            - soketi
+            - sockudo
             - redis
             - garage
     mariadb:
@@ -70,10 +70,10 @@ services:
             - sail
         depends_on:
             - mariadb
-    soketi:
+    sockudo:
         image: 'sockudo/sockudo:latest'
         environment:
-            DEBUG: '${SOKETI_DEBUG:-1}'
+            DEBUG: '${SOCKUDO_DEBUG:-1}'
             SOCKUDO_DEFAULT_APP_ID: '${PUSHER_APP_ID}'
             SOCKUDO_DEFAULT_APP_KEY: '${PUSHER_APP_KEY}'
             SOCKUDO_DEFAULT_APP_SECRET: '${PUSHER_APP_SECRET}'
