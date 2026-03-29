@@ -13,10 +13,9 @@ window.Echo = new Echo({
     wsPort: import.meta.env.VITE_PUSHER_PORT,
     wssPort: import.meta.env.VITE_PUSHER_PORT,
     forceTLS: false,
-    encrypted: true,
-    disableStats: true,
     enabledTransports: ['ws', 'wss'],
-    cluster: 'eu',
+    cluster: 'mt1',
+    authEndpoint: '/broadcasting/auth',
 })
 if (import.meta.env.DEV) {
     Pusher.log = (msg) => {

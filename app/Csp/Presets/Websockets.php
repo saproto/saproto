@@ -12,17 +12,17 @@ class Websockets implements Preset
     public function configure(Policy $policy): void
     {
         $policy->add(Directive::CONNECT, [
-            'https://soketi.haveyoutriedturningitoffandonagain.nl:*',
-            'ws://soketi.haveyoutriedturningitoffandonagain.nl:*',
-            'wss://soketi.haveyoutriedturningitoffandonagain.nl:*',
+            'https://sockudo.haveyoutriedturningitoffandonagain.nl:*',
+            'ws://sockudo.haveyoutriedturningitoffandonagain.nl:*',
+            'wss://sockudo.haveyoutriedturningitoffandonagain.nl:*',
             'ws://localhost:3000',
         ]);
 
         if (App::environment('local')) {
             $policy->add(Directive::CONNECT,
                 [
-                    'wss://soketi:6001',
-                    'ws://soketi:6001',
+                    'wss://sockudo:6001',
+                    'ws://sockudo:6001',
                     'ws://localhost:*',
                     'http://localhost:*',
                     'ws://127.0.0.1:*',

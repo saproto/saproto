@@ -38,6 +38,7 @@ return [
                 'scheme' => env('PUSHER_SCHEME', 'http'),
                 'encrypted' => true,
                 'useTLS' => env('PUSHER_SCHEME') === 'https',
+                'cluster' => env('PUSHER_APP_CLUSTER', 'mt1'),
             ],
         ],
 
