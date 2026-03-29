@@ -28,6 +28,7 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^7.2.0",
+        "@inertiajs/vite": "^3.0.0",
         "@popperjs/core": "^2.11.4",
         "@radix-icons/vue": "^1.0.0",
         "@sentry/browser": "^10.43.0",
@@ -60,7 +61,7 @@
     },
     "devDependencies": {
         "@eslint/js": "^10.0.1",
-        "@inertiajs/vue3": "^2.3.18",
+        "@inertiajs/vue3": "^3.0.0",
         "@laravel/vite-plugin-wayfinder": "^0.1.7",
         "@rushstack/eslint-patch": "^1.12.0",
         "@sentry/vite-plugin": "^5.1.1",

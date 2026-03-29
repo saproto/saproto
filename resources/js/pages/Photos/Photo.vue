@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { usePage, Head, router } from '@inertiajs/vue3'
+import { usePage, Head, router, useHttp } from '@inertiajs/vue3'
 import { computed, reactive, onMounted, ref } from 'vue'
 import { Button } from '@/components/ui/button'
 import {
@@ -13,7 +13,7 @@ import {
 } from 'lucide-vue-next'
 import PhotoAlbumData = App.Data.PhotoAlbumData
 import AuthUserData = App.Data.AuthUserData
-import axios from 'axios'
+
 import { Toaster } from '@/components/ui/sonner'
 import 'vue-sonner/style.css'
 import { toast } from 'vue-sonner'
@@ -25,6 +25,10 @@ import {
     toggleLike,
 } from '@/actions/App/Http/Controllers/PhotoAlbumController'
 import { loginIndex } from '@/actions/App/Http/Controllers/AuthController'
+
+const http = useHttp({
+    query: '',
+})
 
 const page = usePage()
 
@@ -100,14 +104,13 @@ const handleLikeClick = (index: number) => {
         window.location.href = loginIndex.url()
     }
     const photo = photoList.value[index]
-    axios
-        .post(toggleLike.url(photo.id))
-        .then((response) => {
-            photo.liked_by_me = response.data.liked_by_me as boolean
-            photo.likes_count = response.data.likes_count as number
+    http.post(toggleLike.url(photo.id), {
+        onSuccess: (response: any) => {
+            photo.liked_by_me = response.liked_by_me as boolean
+            photo.likes_count = response.likes_count as number
             isLiking = false
-        })
-        .catch(() => {
+        },
+        onError: () => {
             toast('Something went wrong liking the photo', {
                 description: 'Try again later',
                 action: {
@@ -116,7 +119,8 @@ const handleLikeClick = (index: number) => {
                 },
             })
             isLiking = false
-        })
+        },
+    })
 }
 
 let isDownloading = false

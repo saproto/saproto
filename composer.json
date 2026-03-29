@@ -66,7 +66,7 @@
         "spipu/html2pdf": "^5.2",
         "vinkla/hashids": "^13.0.0",
         "setasign/tfpdf": "^1.33",
-        "inertiajs/inertia-laravel": "^2.0",
+        "inertiajs/inertia-laravel": "^3.0",
         "spatie/laravel-data": "^4.15",
         "spatie/laravel-typescript-transformer": "^2.5",
         "spatie/enum": "^3.13",
