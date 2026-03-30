@@ -1,255 +1,172 @@
+<script setup lang="ts">
+import { Clock, Heart, House, Mail, Phone, Shield } from 'lucide-vue-next';
+import { YouTubeIcon, InspireIcon, InstagramIcon } from 'vue3-simple-icons'
+</script>
+
 <template>
-  <footer
-    class="py-4 mt-4 leading-6 text-white bg-zinc-800"
-    style="border-spacing: 0px; list-style: outside;"
-  >
-    <div
-      class="px-3 mx-auto w-full text-white"
-      style="border-spacing: 0px; list-style: outside;"
-    >
-      <div
-        class="flex flex-wrap -mx-3 mt-0"
-        style="border-spacing: 0px; list-style: outside;"
-      >
-        <div
-          class="flex-none px-3 mt-0 w-5/12 max-w-full sm:w-1/2 sm:flex-none md:w-1/4 md:flex-none"
-          style="border-spacing: 0px; list-style: outside;"
-        >
-          <strong
-            class=""
-            style="font-weight: bolder; border-spacing: 0px; list-style: outside;"
-          >
-            <span
-              class="inline-block w-5 not-italic font-black leading-none text-center"
-              style="font-feature-settings: normal; font-synthesis: none; font-variant: normal; text-rendering: auto; content: normal; border-spacing: 0px; list-style: outside;"
+  <footer class="py-4 mt-4 leading-6 text-white bg-proto-dark">
+    <div class="px-3 mx-auto sm:max-w-xl md:max-w-4xl lg:max-w-6xl 2xl:max-w-7xl">
+      <div class="flex flex-row">
+        <div class="grow px-3 mt-0">
+          <span class="text-center flex">
+            <House
+              class="w-5"
             />
-          &nbsp;&nbsp;
-            <a
-              class="font-bold cursor-pointer"
-              href="https://www.saproto.nl/"
-              style="text-decoration: underline; border-spacing: 0px; list-style: outside;"
-            >
-              <span
-                class=""
-                style="border-spacing: 0px; list-style: outside;"
-              >S.A. Proto</span>
-            </a>
-          </strong>
-          <br
-            class=""
-            style="border-spacing: 0px; list-style: outside;"
-          >
-          <span
-            class=""
-            style="border-spacing: 0px; list-style: outside;"
-          >
-            <span
-              class=""
-              style="border-spacing: 0px; list-style: outside;"
-            >Zilverling A230</span>
-            <br
-              class=""
-              style="border-spacing: 0px; list-style: outside;"
-            >
-            <span
-              class=""
-              style="border-spacing: 0px; list-style: outside;"
-            >Drienerlolaan 5</span>
-            <br
-              class=""
-              style="border-spacing: 0px; list-style: outside;"
-            >
-            <span
-              class=""
-              style="border-spacing: 0px; list-style: outside;"
-            >7522NB</span>
-            <span
-              class=""
-              style="border-spacing: 0px; list-style: outside;"
-            >Enschede</span>
-            <br
-              class=""
-              style="border-spacing: 0px; list-style: outside;"
-            >
+            <strong>
+              &nbsp;&nbsp;
+              <a
+                class="font-bold underline"
+                href="https://www.saproto.nl/"
+              >
+                <span>S.A. Proto</span>
+              </a>
+            </strong>
+          </span>
+          <span>
+            <span>Zilverling A230</span>
+            <br>
+            <span>Drienerlolaan 5</span>
+            <br>
+            <span>7522NB</span>
+            <span>Enschede</span>
+            <br>
           </span>
         </div>
 
-        <div
-          class="flex-none px-3 mt-0 w-7/12 max-w-full sm:w-1/2 sm:flex-none md:w-1/3 md:flex-none lg:w-1/4 lg:flex-none"
-          style="border-spacing: 0px; list-style: outside;"
-        >
-          <br
-            class=""
-            style="border-spacing: 0px; list-style: outside;"
-          >
-          <span
-            class="inline-block w-5 not-italic font-black leading-none text-center"
-            style="font-feature-settings: normal; font-synthesis: none; font-variant: normal; text-rendering: auto; content: normal; border-spacing: 0px; list-style: outside;"
-          />
-          &nbsp;&nbsp;Monday &amp; Friday 08:30-16:00
-          <br
-            class=""
-            style="border-spacing: 0px; list-style: outside;"
-          >
-          <span
-            class="inline-block w-5 not-italic font-black leading-none text-center"
-            style="font-feature-settings: normal; font-synthesis: none; font-variant: normal; text-rendering: auto; content: normal; border-spacing: 0px; list-style: outside;"
-          />
-          &nbsp;&nbsp;Tuesday-Thursday, 08:30-17:30
-          <br
-            class=""
-            style="border-spacing: 0px; list-style: outside;"
-          >
-          <span
-            class="inline-block w-5 not-italic font-black leading-none text-center"
-            style="font-feature-settings: normal; font-synthesis: none; font-variant: normal; text-rendering: auto; content: normal; border-spacing: 0px; list-style: outside;"
-          />
-        &nbsp;&nbsp;
-          <a
-            class="cursor-pointer"
-            href="tel:+31534894423"
-            style="text-decoration: underline; border-spacing: 0px; list-style: outside;"
-          >
-            +31 (0)53 489 4423
-          </a>
-          <br
-            class=""
-            style="border-spacing: 0px; list-style: outside;"
-          >
-          <span
-            class="inline-block w-5 not-italic font-black leading-none text-center"
-            style="font-feature-settings: normal; font-synthesis: none; font-variant: normal; text-rendering: auto; content: normal; border-spacing: 0px; list-style: outside;"
-          />
-        &nbsp;&nbsp;
-          <a
-            class="cursor-pointer"
-            href="mailto:board@proto.utwente.nl"
-            style="text-decoration: underline; border-spacing: 0px; list-style: outside;"
-          >
-            board@proto.utwente.nl
-          </a>
+        <div class="grow px-3 mt-0">
+          <br>
+          <span class="text-center flex">
+            <Clock
+              class="w-4.5 text-proto-dark"
+              fill="white"
+              color="currentColor"
+            />
+            &nbsp;&nbsp;Monday &amp; Friday 08:30-16:00
+          </span>
+          <span class="text-center flex">
+            <Clock
+              class="w-4.5 text-proto-dark"
+              fill="white"
+              color="currentColor"
+            />
+            &nbsp;&nbsp;Tuesday-Thursday, 08:30-17:30
+          </span>
+          <span class="text-center flex text-white">
+            <Phone
+              class="w-4.5"
+              fill="white"
+            />
+            &nbsp;&nbsp;
+            <a
+              class="underline"
+              href="tel:+31534894423"
+            >
+              +31 (0)53 489 4423
+            </a>
+          </span>
+          <span class="text-center flex text-white">
+            <Mail
+              class="w-4.5"
+            />
+            &nbsp;&nbsp;
+            <a
+              class="underline"
+              href="mailto:board@proto.utwente.nl"
+            >
+              board@proto.utwente.nl
+            </a>
+          </span>
         </div>
 
-        <div
-          class="hidden flex-none px-3 mt-0 w-1/4 max-w-full text-right lg:block"
-          style="border-spacing: 0px; list-style: outside;"
-        >
-          <br
-            class=""
-            style="border-spacing: 0px; list-style: outside;"
-          >
+        <div class="hidden grow px-3 mt-0 text-right lg:block">
+          <br>
           <a
-            class="cursor-pointer"
+            class="underline"
             href="https://www.youtube.com/channel/UCdH2x3ObOrmLdm2OOGDBslw"
             target="_blank"
-            style="text-decoration: underline; border-spacing: 0px; list-style: outside;"
           >
             YouTube&nbsp;&nbsp;
-            <i
-              class="inline-block w-5 not-italic font-normal leading-none text-center"
-              aria-hidden="true"
-              style="font-feature-settings: normal; font-synthesis: none; font-variant: normal; text-rendering: auto; content: normal; border-spacing: 0px; list-style: outside;"
+            <YouTubeIcon
+              class="inline-block w-5"
+              size="17"
+              style="fill: white"
             />
           </a>
-          <br
-            class=""
-            style="border-spacing: 0px; list-style: outside;"
-          >
+          <br>
           <a
-            class="cursor-pointer"
+            class="underline"
             href="https://www.linkedin.com/company/s-a-proto/"
             target="_blank"
-            style="text-decoration: underline; border-spacing: 0px; list-style: outside;"
           >
             LinkedIn&nbsp;&nbsp;
-            <i
-              class="inline-block w-5 not-italic font-normal leading-none text-center"
-              aria-hidden="true"
-              style="font-feature-settings: normal; font-synthesis: none; font-variant: normal; text-rendering: auto; content: normal; border-spacing: 0px; list-style: outside;"
+            <InspireIcon
+              class="inline-block w-5"
+              size="16"
+              style="fill: white"
             />
           </a>
-          <br
-            class=""
-            style="border-spacing: 0px; list-style: outside;"
-          >
+          <br>
           <a
-            class="cursor-pointer"
+            class="underline"
             href="https://www.instagram.com/s.a.proto/"
             target="_blank"
-            style="text-decoration: underline; border-spacing: 0px; list-style: outside;"
           >
             Instagram&nbsp;&nbsp;
-            <i
-              class="inline-block w-5 not-italic font-normal leading-none text-center"
-              aria-hidden="true"
-              style="font-feature-settings: normal; font-synthesis: none; font-variant: normal; text-rendering: auto; content: normal; border-spacing: 0px; list-style: outside;"
+            <InstagramIcon
+              class="inline-block w-5"
+              size="16"
+              style="fill: white"
             />
           </a>
-          <br
-            class=""
-            style="border-spacing: 0px; list-style: outside;"
-          >
+          <br>
           <a
-            class="cursor-pointer"
+            class="underline"
             href="https://www.proto.utwente.nl/page/privacy"
             target="_blank"
-            style="text-decoration: underline; border-spacing: 0px; list-style: outside;"
           >
             Privacy Policy&nbsp;&nbsp;
-            <i
-              class="inline-block w-5 not-italic font-black leading-none text-center"
-              aria-hidden="true"
-              style="font-feature-settings: normal; font-synthesis: none; font-variant: normal; text-rendering: auto; border-spacing: 0px; list-style: outside;"
+            <Shield
+              class="inline-block w-5"
+              fill="white"
             />
           </a>
-          <br
-            class=""
-            style="border-spacing: 0px; list-style: outside;"
-          >
+          <br>
         </div>
 
         <div
-          class="hidden shrink-0 px-3 mt-0 w-full max-w-full text-right md:block md:w-5/12 md:flex-none lg:w-1/4 lg:flex-none"
-          style="border-spacing: 0px; list-style: outside;"
+          class="hidden shrink-0 px-3 mt-0 text-right md:block"
         >
           <img
-            height="130px"
-            width="234.7px"
             src="https://www.proto.utwente.nl/images/logo/inverse.png"
             alt="inverse proto logo"
-            class="max-w-full align-middle"
-            style="border-spacing: 0px; list-style: outside;"
+            class="max-w-full align-middle h-32"
           >
         </div>
       </div>
 
       <p
         class="mt-4 mb-2 text-center"
-        style="border-spacing: 0px; list-style: outside;"
       >
         <sub
           class="relative text-xs align-baseline"
-          style="line-height: 0px; bottom: -0.25em; border-spacing: 0px; list-style: outside;"
         >
           © 2026 S.A. Proto. All rights reserved.
           <span
             class="sm:hidden"
-            style="border-spacing: 0px; line-height: 0px; list-style: outside;"
           >
             Please familiarize yourself with our
             <a
               href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf"
               target="_blank"
-              class="cursor-pointer"
-              style="text-decoration: underline; border-spacing: 0px; line-height: 0px; list-style: outside;"
+              class="underline"
             >
               privacy policy
             </a>
             and
             <a
               href="https://wiki.proto.utwente.nl/ict/responsible-disclosure"
-              class="cursor-pointer"
-              style="text-decoration: underline; border-spacing: 0px; line-height: 0px; list-style: outside;"
+              target="_blank"
+              class="underline"
             >
               responsible disclosure policy
             </a>
@@ -259,8 +176,7 @@
           <a
             href="https://github.com/saproto/saproto"
             target="_blank"
-            class="cursor-pointer"
-            style="text-decoration: underline; border-spacing: 0px; line-height: 0px; list-style: outside;"
+            class="underline"
           >
             GitHub
           </a>
@@ -270,16 +186,15 @@
             style="border-spacing: 0px; line-height: 0px; list-style: outside;"
           >
           This website has been created with
-          <i
-            class="inline-block w-4 not-italic font-black leading-none text-lime-500"
-            style="font-feature-settings: normal; font-synthesis: none; font-variant: normal; text-rendering: auto; content: normal; border-spacing: 0px; list-style: outside;"
+          <Heart
+            class="inline-block w-4 text-proto-primary"
+            fill="currentColor"
           />
           by the folks of the
           <a
             href="https://haveyoutriedturningitoffandonagain.nl"
             target="_blank"
-            class="cursor-pointer"
-            style="text-decoration: underline; border-spacing: 0px; line-height: 0px; list-style: outside;"
+            class="underline"
           >
             Have You Tried Turning It Off And On Again committee
           </a>

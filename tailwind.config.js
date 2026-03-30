@@ -1,7 +1,7 @@
-const animate = require("tailwindcss-animate")
+import animate from "tailwindcss-animate"
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   darkMode: ["class"],
   safelist: ["dark"],
   prefix: "",
@@ -23,6 +23,17 @@ module.exports = {
   	},
   	extend: {
   		colors: {
+  			proto: {
+  				primary: 'var(--color-brand-primary)',
+  				secondary: 'var(--color-brand-secondary)',
+  				success: 'var(--color-brand-success)',
+  				warning: 'var(--color-brand-warning)',
+  				danger: 'var(--color-brand-danger)',
+  				omnomcom: 'var(--color-brand-omnomcom)',
+  				dark: 'var(--color-brand-dark)',
+  				light: 'var(--color-brand-light)',
+  				gold: 'var(--color-brand-gold)',
+  			},
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
@@ -122,5 +133,5 @@ module.exports = {
   		}
   	}
   },
-  plugins: [animate, require("tailwindcss-animate")],
+  plugins: [animate],
 }
