@@ -16,12 +16,12 @@ withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-  <AppShell class="flex-col">
-    <!-- <AppHeader :breadcrumbs="breadcrumbs" /> -->
-    <Test />
-    <AppContent>
-      <slot />
-    </AppContent>
-    <Footer />
-  </AppShell>
+    <AppShell class="flex-col">
+        <!-- <AppHeader :breadcrumbs="breadcrumbs" /> -->
+        <Test />
+        <AppContent>
+            <slot />
+        </AppContent>
+        <Footer />
+    </AppShell>
 </template>
