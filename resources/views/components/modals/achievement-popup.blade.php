@@ -50,12 +50,4 @@
             </div>
         </div>
     @endpush
-
-    @push('javascript')
-        <script type="text/javascript" @cspNonce>
-            window.addEventListener('load', () => {
-                modals['new-achievement-modal'].show()
-            })
-        </script>
-    @endpush
 @endif

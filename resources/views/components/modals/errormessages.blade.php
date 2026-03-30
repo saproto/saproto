@@ -19,12 +19,4 @@
             </div>
         </div>
     @endpush
-
-    @push('javascript')
-        <script type="text/javascript" @cspNonce>
-            window.addEventListener('load', () => {
-                modals['flash-modal'].show()
-            })
-        </script>
-    @endpush
 @endif
