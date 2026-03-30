@@ -91,6 +91,9 @@ let modalList = Array.from(document.getElementsByClassName('modal'))
 if (modalList.length) {
     modalList.forEach((el) => {
         window.modals[el.id] = Modal.getOrCreateInstance(el)
+        if (el.id === 'flash-modal' || el.id === 'new-achievement-modal') {
+            window.modals[el.id].show()
+        }
     })
 }
 
