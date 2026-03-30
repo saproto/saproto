@@ -134,12 +134,12 @@ import { YouTubeIcon, InspireIcon, InstagramIcon } from 'vue3-simple-icons'
         </div>
 
         <div
-          class="hidden shrink-0 px-3 mt-0 text-right md:block"
+          class="hidden shrink-0 lg:grow content-center px-3 mt-0 text-right md:block"
         >
           <img
             src="https://www.proto.utwente.nl/images/logo/inverse.png"
             alt="inverse proto logo"
-            class="max-w-full align-middle h-32"
+            class="mx-auto h-32"
           >
         </div>
       </div>
@@ -181,10 +181,7 @@ import { YouTubeIcon, InspireIcon, InstagramIcon } from 'vue3-simple-icons'
             GitHub
           </a>
           .
-          <br
-            class=""
-            style="border-spacing: 0px; line-height: 0px; list-style: outside;"
-          >
+          <br>
           This website has been created with
           <Heart
             class="inline-block w-4 text-proto-primary"
