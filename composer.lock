@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "05387d63ac67fc6665128a868a3c9753",
+    "content-hash": "93cf93c55f6550bf4e799b30a402d963",
     "packages": [
         {
             "name": "abcaeffchen/sepa-utilities",
@@ -4804,32 +4804,32 @@
         },
         {
             "name": "mollie/laravel-mollie",
-            "version": "v4.0.2",
+            "version": "v4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mollie/laravel-mollie.git",
-                "reference": "d23d7ae4b8183c0f24c0366895ecfd5bc29c267d"
+                "reference": "c5488a364f60deea52ca5040faedb0806347795b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mollie/laravel-mollie/zipball/d23d7ae4b8183c0f24c0366895ecfd5bc29c267d",
-                "reference": "d23d7ae4b8183c0f24c0366895ecfd5bc29c267d",
+                "url": "https://api.github.com/repos/mollie/laravel-mollie/zipball/c5488a364f60deea52ca5040faedb0806347795b",
+                "reference": "c5488a364f60deea52ca5040faedb0806347795b",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "illuminate/support": "^11.0|^12.0",
+                "illuminate/support": "^11.0|^12.0|^13.0",
                 "laravel/prompts": "^0.3.7",
-                "mollie/mollie-api-php": "^3.6",
+                "mollie/mollie-api-php": "^3.9",
                 "php": "^8.2"
             },
             "require-dev": {
-                "graham-campbell/testbench": "^6.2",
                 "larastan/larastan": "^3.8",
                 "laravel/pint": "^1.25",
                 "laravel/socialite": "^5.23",
+                "orchestra/testbench": "^9.0|^10.0|^11.0",
                 "phpstan/phpstan": "^2.1",
-                "phpunit/phpunit": "^11.0"
+                "phpunit/phpunit": "^11.0|^12.0"
             },
             "suggest": {
                 "laravel/socialite": "Use Mollie Connect (OAuth) to authenticate via Laravel Socialite with the Mollie API. This is needed for some endpoints."
@@ -4896,9 +4896,9 @@
             ],
             "support": {
                 "issues": "https://github.com/mollie/laravel-mollie/issues",
-                "source": "https://github.com/mollie/laravel-mollie/tree/v4.0.2"
+                "source": "https://github.com/mollie/laravel-mollie/tree/v4.1.0"
             },
-            "time": "2026-01-15T11:20:40+00:00"
+            "time": "2026-03-22T16:33:14+00:00"
         },
         {
             "name": "mollie/mollie-api-php",
@@ -7478,16 +7478,16 @@
         },
         {
             "name": "sentry/sentry",
-            "version": "4.23.1",
+            "version": "4.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/getsentry/sentry-php.git",
-                "reference": "eccf30d8abcf55189a1dc0eb3d946a61d42fb4df"
+                "reference": "5055cc792f630a427fdf9dcccd88faa94b50fd30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getsentry/sentry-php/zipball/eccf30d8abcf55189a1dc0eb3d946a61d42fb4df",
-                "reference": "eccf30d8abcf55189a1dc0eb3d946a61d42fb4df",
+                "url": "https://api.github.com/repos/getsentry/sentry-php/zipball/5055cc792f630a427fdf9dcccd88faa94b50fd30",
+                "reference": "5055cc792f630a427fdf9dcccd88faa94b50fd30",
                 "shasum": ""
             },
             "require": {
@@ -7555,7 +7555,7 @@
             ],
             "support": {
                 "issues": "https://github.com/getsentry/sentry-php/issues",
-                "source": "https://github.com/getsentry/sentry-php/tree/4.23.1"
+                "source": "https://github.com/getsentry/sentry-php/tree/4.24.0"
             },
             "funding": [
                 {
@@ -7567,7 +7567,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2026-03-27T18:26:46+00:00"
+            "time": "2026-04-01T14:34:34+00:00"
         },
         {
             "name": "sentry/sentry-laravel",
