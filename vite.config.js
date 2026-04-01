@@ -40,6 +40,7 @@ export default defineConfig({
                 '/node_modules/leaflet.markercluster/dist/MarkerCluster.css',
                 '/node_modules/leaflet/dist/leaflet.css',
             ],
+            assets: ['resources/assets/images/**'],
             refresh: true,
         }),
         wayfinder({
@@ -73,8 +74,14 @@ export default defineConfig({
         sourcemap: 'hidden',
         rollupOptions: {
             output: {
-                manualChunks: {
-                    bootstrap: ['bootstrap', '@popperjs/core'],
+                manualChunks(id) {
+                    if (
+                        id.includes('node_modules') &&
+                        (id.includes('bootstrap') ||
+                            id.includes('@popperjs/core'))
+                    ) {
+                        return 'bootstrap'
+                    }
                 },
             },
         },
