@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\PhotoEnum;
 use Database\Factories\PhotoFactory;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -51,16 +53,14 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin Model
  */
+#[Guarded(['id'])]
+#[Table(table: 'photos')]
 class Photo extends Model implements HasMedia
 {
     /** @use HasFactory<PhotoFactory>*/
     use HasFactory;
 
     use InteractsWithMedia;
-
-    protected $table = 'photos';
-
-    protected $guarded = ['id'];
 
     protected $with = ['media'];
 

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Database\Factories\StorageEntryFactory;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -37,14 +39,12 @@ use Override;
  *
  * @mixin Model
  */
+#[Guarded(['id'])]
+#[Table(table: 'files')]
 class StorageEntry extends Model
 {
     /** @use HasFactory<StorageEntryFactory>*/
     use HasFactory;
-
-    protected $table = 'files';
-
-    protected $guarded = ['id'];
 
     /**
      * **IMPORTANT!** IF YOU ADD ANY RELATION TO A FILE IN ANOTHER MODEL, DON'T FORGET TO UPDATE THIS.

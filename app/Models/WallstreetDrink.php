@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -41,12 +43,10 @@ use Illuminate\Support\Facades\Date;
  *
  * @mixin \Eloquent
  */
+#[Fillable(['end_time', 'start_time', 'name', 'minimum_price', 'price_increase', 'price_decrease'])]
+#[Table(table: 'wallstreet_drink')]
 class WallstreetDrink extends Model
 {
-    protected $table = 'wallstreet_drink';
-
-    protected $fillable = ['end_time', 'start_time', 'name', 'minimum_price', 'price_increase', 'price_decrease'];
-
     public function isCurrent(): bool
     {
         return $this->start_time <= Date::now()->timestamp && $this->end_time >= Date::now()->timestamp;

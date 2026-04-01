@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Database\Factories\CommitteeMembershipFactory;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -43,18 +46,15 @@ use Override;
  *
  * @mixin Model
  */
+#[Guarded(['id'])]
+#[Hidden(['id', 'committee_id', 'user_id'])]
+#[Table(table: 'committees_users')]
 class CommitteeMembership extends Model
 {
     /** @use HasFactory<CommitteeMembershipFactory>*/
     use HasFactory;
 
     use SoftDeletes;
-
-    protected $table = 'committees_users';
-
-    protected $guarded = ['id'];
-
-    protected $hidden = ['id', 'committee_id', 'user_id'];
 
     /**
      * @return BelongsTo<User, $this>

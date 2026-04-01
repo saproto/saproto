@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\MembershipTypeEnum;
 use Database\Factories\MemberFactory;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -64,6 +66,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin Model
  */
+#[Guarded(['id', 'user_id'])]
+#[Table(table: 'members')]
 class Member extends Model implements HasMedia
 {
     /** @use HasFactory<MemberFactory>*/
@@ -71,10 +75,6 @@ class Member extends Model implements HasMedia
 
     use InteractsWithMedia;
     use SoftDeletes;
-
-    protected $table = 'members';
-
-    protected $guarded = ['id', 'user_id'];
 
     #[Override]
     protected function casts(): array

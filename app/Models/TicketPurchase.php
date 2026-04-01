@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -39,12 +41,10 @@ use Override;
  *
  * @mixin \Eloquent
  */
+#[Guarded(['id'])]
+#[Table(table: 'ticket_purchases')]
 class TicketPurchase extends Model
 {
-    protected $table = 'ticket_purchases';
-
-    protected $guarded = ['id'];
-
     /**
      * @return BelongsTo<Ticket, $this>
      */

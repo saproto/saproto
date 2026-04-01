@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Database\Factories\AchievementOwnershipFactory;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -37,16 +40,13 @@ use Override;
  *
  * @mixin Model
  */
+#[Guarded(['id'])]
+#[Hidden(['user_id'])]
+#[Table(table: 'achievements_users')]
 class AchievementOwnership extends Model
 {
     /** @use HasFactory<AchievementOwnershipFactory>*/
     use HasFactory;
-
-    protected $table = 'achievements_users';
-
-    protected $guarded = ['id'];
-
-    protected $hidden = ['user_id'];
 
     /** @var array|string[] */
     protected array $rules = [

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -35,10 +36,9 @@ use Override;
  *
  * @mixin \Eloquent
  */
+#[Table(table: 'wallstreet_drink_events')]
 class WallstreetEvent extends Model
 {
-    protected $table = 'wallstreet_drink_events';
-
     /**
      * @return BelongsToMany<Product, $this>
      */

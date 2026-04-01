@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\CommitteeEnum;
 use Database\Factories\CommitteeFactory;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -59,16 +61,14 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin Model
  */
+#[Guarded(['id'])]
+#[Table(table: 'committees')]
 class Committee extends Model implements HasMedia
 {
     /** @use HasFactory<CommitteeFactory>*/
     use HasFactory;
 
     use InteractsWithMedia;
-
-    protected $table = 'committees';
-
-    protected $guarded = ['id'];
 
     protected $with = ['media'];
 

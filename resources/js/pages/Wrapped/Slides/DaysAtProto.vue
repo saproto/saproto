@@ -30,34 +30,36 @@ function isActive(month: number, day: number) {
 }
 </script>
 <template>
-    <div class="slide">
-        <h1>
-            This past year you used the OmNomCom
-            <span class="header-text"
-                ><span class="dynamic">{{ stats.amount }}</span> days</span
-            >
-        </h1>
-        <div class="calendar-container">
-            <div v-for="month in 12" :key="month" style="width: 100%">
-                <i>
-                    {{ months[month - 1][0] }}
-                </i>
-                <div class="calendar">
-                    <div class="calendar-grid">
-                        <div
-                            v-for="day in 31"
-                            :key="day"
-                            class="day"
-                            :class="[
-                                isActive(month, day) ? 'active' : '',
-                                months[month - 1][1] >= day ? 'inactive' : '',
-                            ]"
-                        />
-                    </div>
-                </div>
-            </div>
+  <div class="slide">
+    <h1>
+      This past year you used the OmNomCom
+      <span class="header-text"><span class="dynamic">{{ stats.amount }}</span> days</span>
+    </h1>
+    <div class="calendar-container">
+      <div
+        v-for="month in 12"
+        :key="month"
+        style="width: 100%"
+      >
+        <i>
+          {{ months[month - 1][0] }}
+        </i>
+        <div class="calendar">
+          <div class="calendar-grid">
+            <div
+              v-for="day in 31"
+              :key="day"
+              class="day"
+              :class="[
+                isActive(month, day) ? 'active' : '',
+                months[month - 1][1] >= day ? 'inactive' : '',
+              ]"
+            />
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <style scoped>

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\MembershipTypeEnum;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -47,12 +49,10 @@ use Override;
  *
  * @mixin Model
  */
+#[Guarded(['id'])]
+#[Table(table: 'achievement')]
 class Achievement extends Model
 {
-    protected $table = 'achievement';
-
-    protected $guarded = ['id'];
-
     /**
      * @return BelongsToMany<User, $this>
      */

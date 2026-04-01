@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Exception;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -33,12 +35,10 @@ use Illuminate\Support\Carbon;
  *
  * @mixin \Eloquent
  */
+#[Guarded(['id'])]
+#[Table(table: 'qrauth_requests')]
 class QrAuthRequest extends Model
 {
-    protected $table = 'qrauth_requests';
-
-    protected $guarded = ['id'];
-
     public function isApproved(): bool
     {
         return $this->approved_at !== null;

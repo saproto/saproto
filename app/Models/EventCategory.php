@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Database\Factories\EventCategoryFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -33,14 +35,12 @@ use Illuminate\Support\Carbon;
  *
  * @mixin Model
  */
+#[Fillable(['name', 'icon'])]
+#[Table(table: 'event_categories')]
 class EventCategory extends Model
 {
     /** @use HasFactory<EventCategoryFactory>*/
     use HasFactory;
-
-    protected $table = 'event_categories';
-
-    protected $fillable = ['name', 'icon'];
 
     /**
      * @return HasMany<Event, $this>

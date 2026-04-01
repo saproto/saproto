@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Appends;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -45,14 +48,11 @@ use Override;
  *
  * @mixin Model
  */
+#[Appends(['withdrawal_id'])]
+#[Guarded(['id'])]
+#[Table(table: 'withdrawals')]
 class Withdrawal extends Model
 {
-    protected $table = 'withdrawals';
-
-    protected $guarded = ['id'];
-
-    protected $appends = ['withdrawal_id'];
-
     #[Override]
     protected function casts(): array
     {

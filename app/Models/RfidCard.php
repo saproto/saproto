@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,12 +32,10 @@ use Illuminate\Support\Carbon;
  *
  * @mixin \Eloquent
  */
+#[Guarded(['id'])]
+#[Table(table: 'rfid')]
 class RfidCard extends Model
 {
-    protected $table = 'rfid';
-
-    protected $guarded = ['id'];
-
     /**
      * @return BelongsTo<User, $this> */
     public function user(): BelongsTo

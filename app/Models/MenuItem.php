@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Exception;
+use Illuminate\Database\Eloquent\Attributes\Appends;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -45,15 +48,12 @@ use Override;
  *
  * @mixin Model
  */
+#[Appends(['parsed_url'])]
+#[Guarded(['id'])]
+#[Table(table: 'menuitems')]
 class MenuItem extends Model
 {
-    protected $table = 'menuitems';
-
-    protected $guarded = ['id'];
-
     protected $with = ['page', 'children'];
-
-    protected $appends = ['parsed_url'];
 
     /**
      * @return BelongsTo<Page, $this>

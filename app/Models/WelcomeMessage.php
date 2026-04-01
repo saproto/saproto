@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Database\Factories\WelcomeMessageFactory;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -33,14 +35,12 @@ use Override;
  *
  * @mixin \Eloquent
  */
+#[Guarded(['id'])]
+#[Table(table: 'user_welcome')]
 class WelcomeMessage extends Model
 {
     /** @use HasFactory<WelcomeMessageFactory>*/
     use HasFactory;
-
-    protected $table = 'user_welcome';
-
-    protected $guarded = ['id'];
 
     /**
      * @return BelongsTo<User, $this> */

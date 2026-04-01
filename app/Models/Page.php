@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\PageEnum;
 use Database\Factories\PageFactory;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -51,16 +53,14 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin Model
  */
+#[Guarded(['id'])]
+#[Table(table: 'pages')]
 class Page extends Model implements HasMedia
 {
     /** @use HasFactory<PageFactory>*/
     use HasFactory;
 
     use InteractsWithMedia;
-
-    protected $table = 'pages';
-
-    protected $guarded = ['id'];
 
     protected $with = ['media'];
 

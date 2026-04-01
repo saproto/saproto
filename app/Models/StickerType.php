@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\StickerTypeEnum;
 use Database\Factories\StickerTypeFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -13,6 +14,9 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
+#[Fillable([
+    'title',
+])]
 class StickerType extends Model implements HasMedia
 {
     /** @use HasFactory<StickerTypeFactory>*/
@@ -21,10 +25,6 @@ class StickerType extends Model implements HasMedia
     use InteractsWithMedia;
 
     protected $with = ['media'];
-
-    protected $fillable = [
-        'title',
-    ];
 
     public function registerMediaCollections(): void
     {

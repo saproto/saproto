@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -38,12 +40,10 @@ use Spatie\Permission\Models\Permission;
  *
  * @mixin Model
  */
+#[Guarded(['id'])]
+#[Table(table: 'passwordstore')]
 class PasswordEntry extends Model
 {
-    protected $table = 'passwordstore';
-
-    protected $guarded = ['id'];
-
     /**
      * @return BelongsTo<Permission, $this> */
     public function permission(): BelongsTo

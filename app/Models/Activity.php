@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Database\Factories\ActivityFactory;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -70,14 +72,12 @@ use Override;
  *
  * @mixin Model
  */
+#[Guarded(['id'])]
+#[Table(table: 'activities')]
 class Activity extends Validatable
 {
     /** @use HasFactory<ActivityFactory>*/
     use HasFactory;
-
-    protected $table = 'activities';
-
-    protected $guarded = ['id'];
 
     /** @var array|string[] */
     protected array $rules = [

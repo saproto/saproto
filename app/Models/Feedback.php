@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Database\Factories\FeedbackFactory;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -51,16 +53,14 @@ use Override;
  *
  * @mixin \Eloquent
  */
+#[Guarded(['id'])]
+#[Table(table: 'feedback')]
 class Feedback extends Model
 {
     /** @use HasFactory<FeedbackFactory>*/
     use HasFactory;
 
     use SoftDeletes;
-
-    protected $table = 'feedback';
-
-    protected $guarded = ['id'];
 
     protected $with = ['user', 'category'];
 

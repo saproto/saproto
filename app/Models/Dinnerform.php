@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Database\Factories\DinnerformFactory;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -60,16 +63,13 @@ use Override;
  *
  * @mixin Model
  */
+#[Guarded(['id'])]
+#[Hidden(['created_at', 'updated_at'])]
+#[Table(table: 'dinnerforms')]
 class Dinnerform extends Model
 {
     /** @use HasFactory<DinnerformFactory>*/
     use HasFactory;
-
-    protected $table = 'dinnerforms';
-
-    protected $guarded = ['id'];
-
-    protected $hidden = ['created_at', 'updated_at'];
 
     protected $casts = [
         'closed' => 'boolean',

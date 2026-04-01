@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\NarrowcastingEnum;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -42,12 +44,10 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin Model
  */
+#[Guarded(['id'])]
+#[Table(table: 'narrowcasting')]
 class NarrowcastingItem extends Model implements HasMedia
 {
-    protected $table = 'narrowcasting';
-
-    protected $guarded = ['id'];
-
     protected $with = ['media'];
 
     use InteractsWithMedia;

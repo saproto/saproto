@@ -14,86 +14,86 @@ const breadcrumbs: BreadcrumbItem[] = [
 </script>
 
 <template>
-    <Head title="Dashboard" />
+  <Head title="Dashboard" />
 
-    <AppLayout :breadcrumbs="breadcrumbs">
+  <AppLayout :breadcrumbs="breadcrumbs">
+    <div
+      class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4"
+    >
+      <div class="grid auto-rows-min gap-4 md:grid-cols-3">
         <div
-            class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4"
+          class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
         >
-            <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-                <div
-                    class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
-                >
-                    hallo
-                </div>
-                <div
-                    class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
-                >
-                    hallo
-                </div>
-                <div
-                    class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
-                >
-                    hallo
-                </div>
-            </div>
-            <div
-                class="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 rounded-xl border md:min-h-min"
-            >
-                hallo
-            </div>
+          hallo
         </div>
         <div
-            class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4"
+          class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
         >
-            <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-                <div
-                    class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
-                >
-                    hallo
-                </div>
-                <div
-                    class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
-                >
-                    hallo
-                </div>
-                <div
-                    class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
-                >
-                    hallo
-                </div>
-            </div>
-            <div
-                class="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 rounded-xl border md:min-h-min"
-            >
-                hallo
-            </div>
+          hallo
         </div>
         <div
-            class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4"
+          class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
         >
-            <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-                <div
-                    class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
-                >
-                    hallo
-                </div>
-                <div
-                    class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
-                >
-                    hallo
-                </div>
-                <div
-                    class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
-                >
-                    hallo
-                </div>
-            </div>
-            <div
-                class="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 rounded-xl border md:min-h-min"
-            >
-                hallo
-            </div>
+          hallo
         </div>
-    </AppLayout>
+      </div>
+      <div
+        class="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 rounded-xl border md:min-h-min"
+      >
+        hallo
+      </div>
+    </div>
+    <div
+      class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4"
+    >
+      <div class="grid auto-rows-min gap-4 md:grid-cols-3">
+        <div
+          class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
+        >
+          hallo
+        </div>
+        <div
+          class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
+        >
+          hallo
+        </div>
+        <div
+          class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
+        >
+          hallo
+        </div>
+      </div>
+      <div
+        class="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 rounded-xl border md:min-h-min"
+      >
+        hallo
+      </div>
+    </div>
+    <div
+      class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4"
+    >
+      <div class="grid auto-rows-min gap-4 md:grid-cols-3">
+        <div
+          class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
+        >
+          hallo
+        </div>
+        <div
+          class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
+        >
+          hallo
+        </div>
+        <div
+          class="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border"
+        >
+          hallo
+        </div>
+      </div>
+      <div
+        class="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 rounded-xl border md:min-h-min"
+      >
+        hallo
+      </div>
+    </div>
+  </AppLayout>
 </template>

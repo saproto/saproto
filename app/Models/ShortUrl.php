@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -30,9 +32,6 @@ use Illuminate\Support\Carbon;
  *
  * @mixin Model
  */
-class ShortUrl extends Model
-{
-    protected $table = 'short_url';
-
-    protected $guarded = ['id'];
-}
+#[Guarded(['id'])]
+#[Table(table: 'short_url')]
+class ShortUrl extends Model {}

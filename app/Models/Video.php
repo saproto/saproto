@@ -4,6 +4,8 @@ namespace App\Models;
 
 use DateInterval;
 use Exception;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -42,12 +44,10 @@ use Override;
  *
  * @mixin Model
  */
+#[Guarded(['id'])]
+#[Table(table: 'videos')]
 class Video extends Model
 {
-    protected $table = 'videos';
-
-    protected $guarded = ['id'];
-
     public $timestamps = false;
 
     /**

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -45,12 +47,10 @@ use Override;
  *
  * @mixin Model
  */
+#[Guarded(['id'])]
+#[Table(table: 'tickets')]
 class Ticket extends Model
 {
-    protected $table = 'tickets';
-
-    protected $guarded = ['id'];
-
     public $timestamps = false;
 
     /**

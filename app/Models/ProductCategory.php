@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -37,13 +39,11 @@ use Override;
  *
  * @mixin \Eloquent
  */
+#[Guarded(['id'])]
+#[Table(table: 'product_categories')]
 class ProductCategory extends Model
 {
     use SoftDeletes;
-
-    protected $table = 'product_categories';
-
-    protected $guarded = ['id'];
 
     /**
      * @return BelongsToMany<Product, $this>
