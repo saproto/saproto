@@ -8,20 +8,20 @@ const props = defineProps<{
 const stats = props.data.protube
 </script>
 <template>
-  <div class="slide">
-    <h1>Your favourite song is....</h1>
-    <div
-      style="
+    <div class="slide">
+        <h1>Your favourite song is....</h1>
+        <div
+            style="
                 position: relative;
                 width: 100%;
                 aspect-ratio: 16 / 9;
                 overflow: hidden;
             "
-      class="youtube"
-    >
-      <img
-        :src="stats.user.videos[0].thumbnail_url"
-        style="
+            class="youtube"
+        >
+            <img
+                :src="stats.user.videos[0].thumbnail_url"
+                style="
                     position: absolute;
                     top: 0;
                     left: 0;
@@ -30,9 +30,9 @@ const stats = props.data.protube
                     object-fit: cover;
                     z-index: 1;
                 "
-      >
-      <h2
-        style="
+            />
+            <h2
+                style="
                     position: absolute;
                     bottom: 0;
                     left: 0;
@@ -40,13 +40,13 @@ const stats = props.data.protube
                     height: 100%;
                     z-index: 1;
                 "
-      >
-        {{ stats.user.videos[0].video_title }}
-      </h2>
+            >
+                {{ stats.user.videos[0].video_title }}
+            </h2>
 
-      <iframe
-        :src="`https://www.youtube.com/embed/${stats.user.videos[0].video_id}?autoplay=1`"
-        style="
+            <iframe
+                :src="`https://www.youtube.com/embed/${stats.user.videos[0].video_id}?autoplay=1`"
+                style="
                     position: absolute;
                     top: 0;
                     left: 0;
@@ -55,30 +55,28 @@ const stats = props.data.protube
                     border: 0;
                     z-index: 2;
                 "
-      />
-    </div>
+            />
+        </div>
 
-    <h2 class="bottom">
-      which you have played
-      <span class="dynamic total">{{
-        stats.user.videos[0].played_count
-      }}</span>
-      times!
-    </h2>
+        <h2 class="bottom">
+            which you have played
+            <span class="dynamic total">{{
+                stats.user.videos[0].played_count
+            }}</span>
+            times!
+        </h2>
 
-    <h2 class="bottom">
-      To complete your top 5 this year:
-    </h2>
-    <div
-      v-for="(video, idx) in stats.user.videos.slice(1, 5)"
-      :key="video.video_id"
-      :style="`animation-delay:${noAnimation ? -6 : idx * 0.8}s`"
-      class="youtube-video"
-    >
-      <img :src="video.thumbnail_url">
-      <span style="width: 19rem">
-        <span
-          style="
+        <h2 class="bottom">To complete your top 5 this year:</h2>
+        <div
+            v-for="(video, idx) in stats.user.videos.slice(1, 5)"
+            :key="video.video_id"
+            :style="`animation-delay:${noAnimation ? -6 : idx * 0.8}s`"
+            class="youtube-video"
+        >
+            <img :src="video.thumbnail_url" />
+            <span style="width: 19rem">
+                <span
+                    style="
                         overflow: hidden;
                         white-space: nowrap;
                         text-overflow: ellipsis;
@@ -86,14 +84,14 @@ const stats = props.data.protube
                         display: inline-block;
                         margin-top: 0.2rem;
                     "
-        >
-          {{ video.video_title }}
-        </span>
-        <br>
-        Played {{ video.played_count }} times
-      </span>
+                >
+                    {{ video.video_title }}
+                </span>
+                <br />
+                Played {{ video.played_count }} times
+            </span>
+        </div>
     </div>
-  </div>
 </template>
 
 <style scoped>

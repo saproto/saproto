@@ -7,52 +7,51 @@ const props = defineProps<{
 const stats = props.data.mostBought
 </script>
 <template>
-  <div class="slide">
-    <h1>Your most loved product:</h1>
-    <div style="height: 8rem; display: flex; justify-content: center">
-      <div class="product-card pulse">
-        <img :src="stats.items[0][0]['image_url']">
-        <h1>{{ stats.items[0][0]['name'] }}</h1>
-      </div>
-    </div>
-    <h1>
-      You bought a total of
-      <span class="dynamic">{{ stats.items[0][1] }}</span>!
-    </h1>
-    <h2 v-if="stats.percentile === 0">
-      You're the <span class="dynamic">top</span> buyer of this product!
-    </h2>
-    <h2 v-else>
-      That puts you in the top
-      <span class="dynamic">{{ stats.percentile }}%</span> of buyers.
-    </h2>
-    <br>
-    <h2>Your other favourite products were:</h2>
-    <br>
-    <div class="product-list">
-      <div
-        v-for="(item, index) in stats.items.slice(1, 5)"
-        :key="index"
-        class="product-line"
-      >
-        <div style="font-size: 1.2em">
-          {{ index + 2 }}.
+    <div class="slide">
+        <h1>Your most loved product:</h1>
+        <div style="height: 8rem; display: flex; justify-content: center">
+            <div class="product-card pulse">
+                <img :src="stats.items[0][0]['image_url']" />
+                <h1>{{ stats.items[0][0]['name'] }}</h1>
+            </div>
         </div>
-        <div class="product-card">
-          <img
-            v-if="item[0]['image_url']"
-            :src="item[0]['image_url']"
-          >
-          <div class="textbox">
-            <h2>{{ item[0]['name'] }}</h2>
-            <h2 style="text-overflow: unset; overflow: unset">
-              {{ item[1] }}
-            </h2>
-          </div>
+        <h1>
+            You bought a total of
+            <span class="dynamic">{{ stats.items[0][1] }}</span
+            >!
+        </h1>
+        <h2 v-if="stats.percentile === 0">
+            You're the <span class="dynamic">top</span> buyer of this product!
+        </h2>
+        <h2 v-else>
+            That puts you in the top
+            <span class="dynamic">{{ stats.percentile }}%</span> of buyers.
+        </h2>
+        <br />
+        <h2>Your other favourite products were:</h2>
+        <br />
+        <div class="product-list">
+            <div
+                v-for="(item, index) in stats.items.slice(1, 5)"
+                :key="index"
+                class="product-line"
+            >
+                <div style="font-size: 1.2em">{{ index + 2 }}.</div>
+                <div class="product-card">
+                    <img
+                        v-if="item[0]['image_url']"
+                        :src="item[0]['image_url']"
+                    />
+                    <div class="textbox">
+                        <h2>{{ item[0]['name'] }}</h2>
+                        <h2 style="text-overflow: unset; overflow: unset">
+                            {{ item[1] }}
+                        </h2>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </template>
 
 <style scoped>

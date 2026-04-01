@@ -8,44 +8,38 @@ const props = defineProps<{
 const stats = props.data.willToLives
 </script>
 <template>
-  <div class="slide">
-    <div class="card">
-      <h1>This year you needed</h1>
-      <h1 class="color-text">
-        <span class="dynamic">{{ stats.amount }}</span> will to lives.
-      </h1>
-      <h2>
-        That places you in the top
-        <span class="dynamic color-text">{{ stats.percentile }}%</span>
-      </h2>
+    <div class="slide">
+        <div class="card">
+            <h1>This year you needed</h1>
+            <h1 class="color-text">
+                <span class="dynamic">{{ stats.amount }}</span> will to lives.
+            </h1>
+            <h2>
+                That places you in the top
+                <span class="dynamic color-text">{{ stats.percentile }}%</span>
+            </h2>
 
-      <h2 v-if="stats.percentile > 80">
-        Must have been a great year.
-      </h2>
-      <h2 v-else-if="stats.percentile > 50">
-        Must have been an average year.
-      </h2>
-      <h2 v-else-if="stats.percentile > 30">
-        Must have been an rough year.
-      </h2>
-      <h2 v-else-if="stats.percentile > 10">
-        Are you okay?
-      </h2>
-      <h2 v-else>
-        At least next year can't get any worse.
-      </h2>
+            <h2 v-if="stats.percentile > 80">Must have been a great year.</h2>
+            <h2 v-else-if="stats.percentile > 50">
+                Must have been an average year.
+            </h2>
+            <h2 v-else-if="stats.percentile > 30">
+                Must have been an rough year.
+            </h2>
+            <h2 v-else-if="stats.percentile > 10">Are you okay?</h2>
+            <h2 v-else>At least next year can't get any worse.</h2>
+        </div>
+        <div class="container">
+            <div
+                class="grayscale"
+                :style="`background-image: url(${props.data.images.unicornBw})`"
+            />
+            <div
+                class="color"
+                :style="`background-image: url(${props.data.images.unicorn}); animation-iteration-count: ${stats.percentage}; animation-duration: ${4 / stats.percentage}s`"
+            />
+        </div>
     </div>
-    <div class="container">
-      <div
-        class="grayscale"
-        :style="`background-image: url(${props.data.images.unicornBw})`"
-      />
-      <div
-        class="color"
-        :style="`background-image: url(${props.data.images.unicorn}); animation-iteration-count: ${stats.percentage}; animation-duration: ${4 / stats.percentage}s`"
-      />
-    </div>
-  </div>
 </template>
 
 <style scoped>
