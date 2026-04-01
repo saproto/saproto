@@ -33,5 +33,5 @@ use Illuminate\Support\Carbon;
  * @mixin Model
  */
 #[Guarded(['id'])]
-#[Table(table: 'short_url')]
+#[Table(name: 'short_url')]
 class ShortUrl extends Model {}

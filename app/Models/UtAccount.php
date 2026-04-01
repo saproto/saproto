@@ -48,7 +48,7 @@ use Override;
     'surname',
     'found',
 ])]
-#[Table(table: 'ut_accounts')]
+#[Table(name: 'ut_accounts')]
 class UtAccount extends Model
 {
     #[Override]

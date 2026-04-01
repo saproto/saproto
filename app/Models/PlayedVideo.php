@@ -43,7 +43,7 @@ use Illuminate\Support\Carbon;
  * @mixin \Eloquent
  */
 #[Guarded(['id'])]
-#[Table(table: 'playedvideos')]
+#[Table(name: 'playedvideos')]
 class PlayedVideo extends Model
 {
     /**

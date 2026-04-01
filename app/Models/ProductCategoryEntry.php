@@ -32,7 +32,7 @@ use Illuminate\Support\Carbon;
  * @mixin \Eloquent
  */
 #[Guarded(['id'])]
-#[Table(table: 'products_categories')]
+#[Table(name: 'products_categories')]
 class ProductCategoryEntry extends Model
 {
     /** @var array|string[] */

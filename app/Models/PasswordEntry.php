@@ -41,7 +41,7 @@ use Spatie\Permission\Models\Permission;
  * @mixin Model
  */
 #[Guarded(['id'])]
-#[Table(table: 'passwordstore')]
+#[Table(name: 'passwordstore')]
 class PasswordEntry extends Model
 {
     /**

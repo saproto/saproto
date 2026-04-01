@@ -45,7 +45,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @mixin Model
  */
 #[Guarded(['id'])]
-#[Table(table: 'narrowcasting')]
+#[Table(name: 'narrowcasting')]
 class NarrowcastingItem extends Model implements HasMedia
 {
     protected $with = ['media'];

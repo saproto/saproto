@@ -36,7 +36,7 @@ use Override;
  * @mixin \Eloquent
  */
 #[Guarded(['id'])]
-#[Table(table: 'user_welcome')]
+#[Table(name: 'user_welcome')]
 class WelcomeMessage extends Model
 {
     /** @use HasFactory<WelcomeMessageFactory>*/

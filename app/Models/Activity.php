@@ -73,7 +73,7 @@ use Override;
  * @mixin Model
  */
 #[Guarded(['id'])]
-#[Table(table: 'activities')]
+#[Table(name: 'activities')]
 class Activity extends Validatable
 {
     /** @use HasFactory<ActivityFactory>*/

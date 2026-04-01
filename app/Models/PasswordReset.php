@@ -24,7 +24,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  *
  * @mixin Model
  */
-#[Table(table: 'password_resets')]
+#[Table(name: 'password_resets')]
 class PasswordReset extends Model
 {
     protected $guarded = [];

@@ -50,7 +50,7 @@ use Override;
  */
 #[Appends(['parsed_url'])]
 #[Guarded(['id'])]
-#[Table(table: 'menuitems')]
+#[Table(name: 'menuitems')]
 class MenuItem extends Model
 {
     protected $with = ['page', 'children'];

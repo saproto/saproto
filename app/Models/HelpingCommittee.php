@@ -41,7 +41,7 @@ use Override;
  * @mixin Model
  */
 #[Guarded(['id'])]
-#[Table(table: 'committees_activities')]
+#[Table(name: 'committees_activities')]
 class HelpingCommittee extends Validatable
 {
     /** @var array|string[] */

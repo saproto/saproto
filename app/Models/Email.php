@@ -83,7 +83,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @mixin Model
  */
 #[Guarded(['id'])]
-#[Table(table: 'emails')]
+#[Table(name: 'emails')]
 class Email extends Model implements HasMedia
 {
     /** @use HasFactory<EmailFactory>*/

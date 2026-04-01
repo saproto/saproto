@@ -31,7 +31,7 @@ use Illuminate\Support\Carbon;
  * @mixin \Eloquent
  */
 #[Guarded(['id'])]
-#[Table(table: 'photo_likes')]
+#[Table(name: 'photo_likes')]
 class PhotoLikes extends Model
 {
     /**

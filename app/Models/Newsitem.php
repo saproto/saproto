@@ -66,7 +66,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @mixin Model
  */
 #[Guarded(['id'])]
-#[Table(table: 'newsitems')]
+#[Table(name: 'newsitems')]
 class Newsitem extends Model implements HasMedia
 {
     /** @use HasFactory<NewsitemFactory>*/

@@ -35,7 +35,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @mixin Model
  */
 #[Guarded(['id'])]
-#[Table(table: 'soundboard_sounds')]
+#[Table(name: 'soundboard_sounds')]
 class SoundboardSound extends Model implements HasMedia
 {
     public $timestamps = false;

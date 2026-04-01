@@ -35,7 +35,7 @@ use Illuminate\Support\Carbon;
  * @mixin Model
  */
 #[Guarded(['id'])]
-#[Table(table: 'feedback_votes')]
+#[Table(name: 'feedback_votes')]
 class FeedbackVote extends Model
 {
     /**

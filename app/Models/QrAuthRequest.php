@@ -36,7 +36,7 @@ use Illuminate\Support\Carbon;
  * @mixin \Eloquent
  */
 #[Guarded(['id'])]
-#[Table(table: 'qrauth_requests')]
+#[Table(name: 'qrauth_requests')]
 class QrAuthRequest extends Model
 {
     public function isApproved(): bool

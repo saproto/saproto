@@ -36,7 +36,7 @@ use Override;
  *
  * @mixin \Eloquent
  */
-#[Table(table: 'wallstreet_drink_events')]
+#[Table(name: 'wallstreet_drink_events')]
 class WallstreetEvent extends Model
 {
     /**

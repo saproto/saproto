@@ -44,7 +44,7 @@ use Override;
  * @mixin Model
  */
 #[Guarded(['id'])]
-#[Table(table: 'feedback_categories')]
+#[Table(name: 'feedback_categories')]
 class FeedbackCategory extends Model
 {
     /**

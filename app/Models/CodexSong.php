@@ -43,7 +43,7 @@ use Override;
  *
  * @mixin \Eloquent
  */
-#[Table(table: 'codex_songs')]
+#[Table(name: 'codex_songs')]
 class CodexSong extends Model
 {
     /** @use HasFactory<CodexSongFactory>*/

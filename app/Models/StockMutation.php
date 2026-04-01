@@ -38,7 +38,7 @@ use Illuminate\Support\Carbon;
  * @mixin Model
  */
 #[Fillable(['before', 'after', 'is_bulk'])]
-#[Table(table: 'stock_mutations')]
+#[Table(name: 'stock_mutations')]
 class StockMutation extends Model
 {
     /**

@@ -38,7 +38,7 @@ use Illuminate\Support\Carbon;
  *
  * @mixin \Eloquent
  */
-#[Table(table: 'codex_codices')]
+#[Table(name: 'codex_codices')]
 class Codex extends Model
 {
     /** @use HasFactory<CodexFactory>*/

@@ -106,7 +106,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 #[Appends(['is_future', 'formatted_date'])]
 #[Guarded(['id'])]
 #[Hidden(['created_at', 'updated_at', 'secret', 'deleted_at', 'update_sequence'])]
-#[Table(table: 'events')]
+#[Table(name: 'events')]
 class Event extends Model implements HasMedia
 {
     /** @use HasFactory<EventFactory>*/

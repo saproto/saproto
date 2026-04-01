@@ -45,7 +45,7 @@ use Override;
  * @mixin Model
  */
 #[Guarded(['id'])]
-#[Table(table: 'videos')]
+#[Table(name: 'videos')]
 class Video extends Model
 {
     public $timestamps = false;

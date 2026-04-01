@@ -61,7 +61,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @mixin Model
  */
 #[Guarded(['id'])]
-#[Table(table: 'companies')]
+#[Table(name: 'companies')]
 class Company extends Model implements HasMedia
 {
     use InteractsWithMedia;

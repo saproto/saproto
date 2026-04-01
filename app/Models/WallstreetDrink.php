@@ -44,7 +44,7 @@ use Illuminate\Support\Facades\Date;
  * @mixin \Eloquent
  */
 #[Fillable(['end_time', 'start_time', 'name', 'minimum_price', 'price_increase', 'price_decrease'])]
-#[Table(table: 'wallstreet_drink')]
+#[Table(name: 'wallstreet_drink')]
 class WallstreetDrink extends Model
 {
     public function isCurrent(): bool

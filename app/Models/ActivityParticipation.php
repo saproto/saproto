@@ -44,7 +44,7 @@ use Illuminate\Support\Carbon;
  * @mixin \Eloquent
  */
 #[Guarded(['id'])]
-#[Table(table: 'activities_users')]
+#[Table(name: 'activities_users')]
 class ActivityParticipation extends Model
 {
     /** @use HasFactory<ActivityParticipationFactory>*/

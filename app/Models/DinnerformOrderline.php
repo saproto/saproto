@@ -47,7 +47,7 @@ use RoundingMode;
  * @mixin \Eloquent
  */
 #[Guarded(['id'])]
-#[Table(table: 'dinnerform_orderline')]
+#[Table(name: 'dinnerform_orderline')]
 class DinnerformOrderline extends Model
 {
     /** @use HasFactory<DinnerformOrderlineFactory>*/

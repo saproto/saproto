@@ -35,7 +35,7 @@ use stdClass;
  * @mixin Model
  */
 #[Guarded(['id'])]
-#[Table(table: 'accounts')]
+#[Table(name: 'accounts')]
 class Account extends Model
 {
     /**

@@ -33,7 +33,7 @@ use Override;
  *
  * @mixin Model
  */
-#[Table(table: 'codex_text_types')]
+#[Table(name: 'codex_text_types')]
 class CodexTextType extends Model
 {
     /** @use HasFactory<CodexTextTypeFactory>*/

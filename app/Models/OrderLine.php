@@ -65,7 +65,7 @@ use Override;
  * @mixin Model
  */
 #[Guarded(['id'])]
-#[Table(table: 'orderlines')]
+#[Table(name: 'orderlines')]
 class OrderLine extends Model
 {
     /** @use HasFactory<OrderLineFactory>*/

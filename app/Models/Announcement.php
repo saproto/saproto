@@ -64,7 +64,7 @@ use Override;
  * @mixin \Eloquent
  */
 #[Guarded(['id'])]
-#[Table(table: 'announcements')]
+#[Table(name: 'announcements')]
 class Announcement extends Model
 {
     /**

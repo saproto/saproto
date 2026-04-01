@@ -54,7 +54,7 @@ use Override;
  * @mixin \Eloquent
  */
 #[Guarded(['id'])]
-#[Table(table: 'feedback')]
+#[Table(name: 'feedback')]
 class Feedback extends Model
 {
     /** @use HasFactory<FeedbackFactory>*/

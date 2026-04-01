@@ -202,7 +202,7 @@ use Spatie\Permission\Traits\HasRoles;
 #[Appends(['is_member'])]
 #[Guarded(['password', 'remember_token'])]
 #[Hidden(['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'tfa_totp_key', 'updated_at', 'diet'])]
-#[Table(table: 'users')]
+#[Table(name: 'users')]
 class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract, HasMedia, OAuthenticatable
 {
     use CanResetPassword;

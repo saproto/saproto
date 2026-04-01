@@ -42,7 +42,7 @@ use Override;
  */
 #[Guarded(['id'])]
 #[Hidden(['user_id'])]
-#[Table(table: 'achievements_users')]
+#[Table(name: 'achievements_users')]
 class AchievementOwnership extends Model
 {
     /** @use HasFactory<AchievementOwnershipFactory>*/

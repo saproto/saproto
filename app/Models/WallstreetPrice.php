@@ -36,7 +36,7 @@ use Illuminate\Support\Carbon;
  * @mixin \Eloquent
  */
 #[Fillable(['wallstreet_drink_id', 'product_id', 'price', 'diff'])]
-#[Table(table: 'wallstreet_drink_prices')]
+#[Table(name: 'wallstreet_drink_prices')]
 class WallstreetPrice extends Model
 {
     protected $with = ['drink', 'product'];

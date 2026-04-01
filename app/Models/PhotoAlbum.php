@@ -54,7 +54,7 @@ use Override;
  * @mixin Model
  */
 #[Guarded(['id'])]
-#[Table(table: 'photo_albums')]
+#[Table(name: 'photo_albums')]
 class PhotoAlbum extends Model
 {
     /** @use HasFactory<PhotoAlbumFactory>*/

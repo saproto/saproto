@@ -36,7 +36,7 @@ use Illuminate\Support\Carbon;
  * @mixin Model
  */
 #[Fillable(['name', 'icon'])]
-#[Table(table: 'event_categories')]
+#[Table(name: 'event_categories')]
 class EventCategory extends Model
 {
     /** @use HasFactory<EventCategoryFactory>*/

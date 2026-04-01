@@ -40,7 +40,7 @@ use Override;
  * @mixin \Eloquent
  */
 #[Guarded(['id'])]
-#[Table(table: 'product_categories')]
+#[Table(name: 'product_categories')]
 class ProductCategory extends Model
 {
     use SoftDeletes;

@@ -34,7 +34,7 @@ use Illuminate\Support\Carbon;
  * @mixin Model
  */
 #[Guarded(['id'])]
-#[Table(table: 'leaderboards_entries')]
+#[Table(name: 'leaderboards_entries')]
 class LeaderboardEntry extends Model
 {
     /**

@@ -36,7 +36,7 @@ use Illuminate\Support\Facades\Config;
  * @mixin \Eloquent
  */
 #[Guarded(['id'])]
-#[Table(table: 'alias')]
+#[Table(name: 'alias')]
 class Alias extends Model
 {
     /**

@@ -38,7 +38,7 @@ use Illuminate\Support\Carbon;
  * @mixin \Eloquent
  */
 #[Guarded(['id'])]
-#[Table(table: 'bankaccounts')]
+#[Table(name: 'bankaccounts')]
 class Bank extends Model
 {
     /** @use HasFactory<BankFactory>*/

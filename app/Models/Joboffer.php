@@ -35,7 +35,7 @@ use Illuminate\Support\Carbon;
  * @mixin Model
  */
 #[Guarded(['id'])]
-#[Table(table: 'joboffers')]
+#[Table(name: 'joboffers')]
 class Joboffer extends Model
 {
     /**

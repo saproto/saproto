@@ -36,7 +36,7 @@ use Illuminate\Support\Carbon;
  * @mixin Model
  */
 #[Guarded(['id'])]
-#[Table(table: 'tempadmins')]
+#[Table(name: 'tempadmins')]
 class Tempadmin extends Model
 {
     /**

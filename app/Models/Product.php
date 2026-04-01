@@ -80,7 +80,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 #[Guarded(['id'])]
 #[Hidden(['created_at', 'updated_at'])]
-#[Table(table: 'products')]
+#[Table(name: 'products')]
 class Product extends Model implements HasMedia
 {
     use InteractsWithMedia;

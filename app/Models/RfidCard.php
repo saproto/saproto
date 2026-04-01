@@ -33,7 +33,7 @@ use Illuminate\Support\Carbon;
  * @mixin \Eloquent
  */
 #[Guarded(['id'])]
-#[Table(table: 'rfid')]
+#[Table(name: 'rfid')]
 class RfidCard extends Model
 {
     /**

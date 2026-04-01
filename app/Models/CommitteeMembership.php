@@ -48,7 +48,7 @@ use Override;
  */
 #[Guarded(['id'])]
 #[Hidden(['id', 'committee_id', 'user_id'])]
-#[Table(table: 'committees_users')]
+#[Table(name: 'committees_users')]
 class CommitteeMembership extends Model
 {
     /** @use HasFactory<CommitteeMembershipFactory>*/

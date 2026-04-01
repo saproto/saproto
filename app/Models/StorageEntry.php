@@ -40,7 +40,7 @@ use Override;
  * @mixin Model
  */
 #[Guarded(['id'])]
-#[Table(table: 'files')]
+#[Table(name: 'files')]
 class StorageEntry extends Model
 {
     /** @use HasFactory<StorageEntryFactory>*/

@@ -50,7 +50,7 @@ use Override;
  */
 #[Appends(['withdrawal_id'])]
 #[Guarded(['id'])]
-#[Table(table: 'withdrawals')]
+#[Table(name: 'withdrawals')]
 class Withdrawal extends Model
 {
     #[Override]

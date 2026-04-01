@@ -46,7 +46,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @mixin Model
  */
 #[Guarded(['id'])]
-#[Table(table: 'headerimages')]
+#[Table(name: 'headerimages')]
 class HeaderImage extends Model implements HasMedia
 {
     /** @use HasFactory<HeaderImageFactory>*/

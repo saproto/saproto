@@ -33,7 +33,7 @@ use Illuminate\Support\Carbon;
  * @mixin Model
  */
 #[Guarded(['id'])]
-#[Table(table: 'accounts')]
+#[Table(name: 'accounts')]
 class FinancialAccount extends Model
 {
     /**

@@ -65,7 +65,7 @@ use Override;
  */
 #[Guarded(['id'])]
 #[Hidden(['created_at', 'updated_at'])]
-#[Table(table: 'dinnerforms')]
+#[Table(name: 'dinnerforms')]
 class Dinnerform extends Model
 {
     /** @use HasFactory<DinnerformFactory>*/

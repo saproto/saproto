@@ -31,7 +31,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @mixin \Eloquent
  */
 #[Guarded(['id'])]
-#[Table(table: 'withdrawals_failed')]
+#[Table(name: 'withdrawals_failed')]
 class FailedWithdrawal extends Model
 {
     public $timestamps = false;

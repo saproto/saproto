@@ -46,7 +46,7 @@ use Mollie\Api\Resources\Payment;
  * @mixin Model
  */
 #[Guarded(['id'])]
-#[Table(table: 'mollie_transactions')]
+#[Table(name: 'mollie_transactions')]
 class MollieTransaction extends Model
 {
     /**

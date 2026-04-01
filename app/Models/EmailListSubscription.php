@@ -33,7 +33,7 @@ use Illuminate\Support\Carbon;
  * @mixin Model
  */
 #[Guarded(['id'])]
-#[Table(table: 'users_mailinglists')]
+#[Table(name: 'users_mailinglists')]
 class EmailListSubscription extends Model
 {
     /**

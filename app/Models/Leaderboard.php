@@ -45,7 +45,7 @@ use Override;
  * @mixin Model
  */
 #[Guarded(['id'])]
-#[Table(table: 'leaderboards')]
+#[Table(name: 'leaderboards')]
 class Leaderboard extends Model
 {
     /**

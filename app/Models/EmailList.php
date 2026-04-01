@@ -33,7 +33,7 @@ use Illuminate\Support\Facades\Crypt;
  * @mixin Model
  */
 #[Guarded(['id'])]
-#[Table(table: 'mailinglists')]
+#[Table(name: 'mailinglists')]
 class EmailList extends Model
 {
     public $timestamps = false;

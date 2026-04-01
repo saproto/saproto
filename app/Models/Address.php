@@ -43,7 +43,7 @@ use Illuminate\Support\Carbon;
  */
 #[Guarded(['id'])]
 #[Hidden(['id'])]
-#[Table(table: 'addresses')]
+#[Table(name: 'addresses')]
 class Address extends Validatable
 {
     /** @use HasFactory<AddressFactory>*/

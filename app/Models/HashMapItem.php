@@ -29,7 +29,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin Model
  */
-#[Table(table: 'hashmap')]
+#[Table(name: 'hashmap')]
 class HashMapItem extends Model
 {
     /** @use HasFactory<HashMapItemFactory>*/
