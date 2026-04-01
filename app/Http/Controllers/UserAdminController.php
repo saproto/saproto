@@ -33,11 +33,11 @@ class UserAdminController extends Controller
 
         $userQuery = User::withTrashed()->with('tempadmin');
         $users = match ($filter) {
-            'pending' => $userQuery->whereHas('member', static function ($q) {
+            'pending' => $userQuery->whereHas('member', static function (\Illuminate\Contracts\Database\Query\Builder $q) {
                 /** @param Builder<Member> $q */
                 $q->whereMembershipType(MembershipTypeEnum::PENDING)->where('deleted_at', '=', null);
             }),
-            'members' => $userQuery->whereHas('member', static function ($q) {
+            'members' => $userQuery->whereHas('member', static function (\Illuminate\Contracts\Database\Query\Builder $q) {
                 $q->whereNot('membership_type', MembershipTypeEnum::PENDING)->where('deleted_at', '=', null);
             }),
             'users' => $userQuery->doesntHave('member'),
@@ -45,7 +45,7 @@ class UserAdminController extends Controller
         };
 
         if ($search) {
-            $users = $users->where(static function ($q) use ($search) {
+            $users = $users->where(static function (\Illuminate\Contracts\Database\Query\Builder $q) use ($search) {
                 $q->whereLike('name', "%{$search}%")
                     ->orWhereLike('calling_name', "%{$search}%")
                     ->orWhereLike('email', "%{$search}%")
