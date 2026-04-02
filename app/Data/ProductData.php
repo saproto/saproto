@@ -6,7 +6,6 @@ use App\Enums\ProductEnum;
 use App\Models\Product;
 use Spatie\LaravelData\Data;
 
-/** @typescript */
 class ProductData extends Data
 {
     public function __construct(

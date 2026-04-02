@@ -6,7 +6,6 @@ use Illuminate\Support\Collection;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Data;
 
-/** @typescript */
 class ProductCategoryData extends Data
 {
     public function __construct(

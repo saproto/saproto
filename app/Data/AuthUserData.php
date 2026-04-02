@@ -5,7 +5,6 @@ namespace App\Data;
 use App\Models\User;
 use Spatie\LaravelData\Data;
 
-/** @typescript */
 class AuthUserData extends Data
 {
     public function __construct(
