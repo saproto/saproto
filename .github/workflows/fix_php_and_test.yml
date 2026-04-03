@@ -9,8 +9,6 @@ jobs:
   pest:
     name: 🐘 Pest Tests
     runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/playwright:v1.58.2-noble
     services:
       mysql:
         image: mariadb:10.6
@@ -26,18 +24,13 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-#      - name: Install MariaDB Client
-#        run: |
-#          apt-get update
-#          apt-get install -y mariadb-client
-#
-#      - name: Verify MariaDB connection
-#        env:
-#          PORT: ${{ job.services.mysql.ports['3306'] }}
-#        run: |
-#          while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
-#            sleep 1
-#          done
+      - name: Verify MariaDB connection
+        env:
+          PORT: ${{ job.services.mysql.ports['3306'] }}
+        run: |
+          while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
+            sleep 1
+          done
 
       - name: 🔍 Read .env
         run: (grep -E 'PHP_VERSION' .env.prod >> $GITHUB_ENV && cp .env.ci .env)
@@ -93,22 +86,22 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
 
-#      - name: Cache Playwright
-#        uses: actions/cache@v5
-#        id: playwright-cache
-#        with:
-#          path: |
-#            ~/.cache/ms-playwright
-#          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
-#          restore-keys: |
-#            ${{ runner.os }}-playwright-
+      - name: Cache Playwright
+        uses: actions/cache@v5
+        id: playwright-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
 
       - name: 📥 Install front-end dependencies
         run: npm ci --ignore-scripts
 
-#      - name: Install playwright deps
-#        run: npx playwright install --with-deps chromium
-#        if: steps.playwright-cache.outputs.cache-hit != 'true'
+      - name: Install playwright deps
+        run: npx playwright install chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
 
       - uses: dorny/paths-filter@v4
         id: changes
@@ -147,10 +140,10 @@ jobs:
         env:
           DB_CONNECTION: mysql
           DB_DATABASE: testing
-          DB_PORT: 3306
+          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
           DB_USERNAME: root
           DB_PASSWORD: secret
-          DB_HOST: mysql
+          DB_HOST: 127.0.0.1
         run: |
           php artisan key:generate
           php artisan migrate
