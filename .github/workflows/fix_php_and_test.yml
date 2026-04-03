@@ -88,7 +88,6 @@ jobs:
 
       - name: Cache Playwright
         uses: actions/cache@v5
-        id: playwright-cache
         with:
           path: |
             ~/.cache/ms-playwright
@@ -100,8 +99,7 @@ jobs:
         run: npm ci --ignore-scripts
 
       - name: Install playwright deps
-        run: npx playwright install --with-deps chromium
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install chromium
 
       - uses: dorny/paths-filter@v4
         id: changes
