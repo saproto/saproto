@@ -26,18 +26,18 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Install MariaDB Client
-        run: |
-          apt-get update
-          apt-get install -y mariadb-client
-
-      - name: Verify MariaDB connection
-        env:
-          PORT: ${{ job.services.mysql.ports['3306'] }}
-        run: |
-          while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
-            sleep 1
-          done
+#      - name: Install MariaDB Client
+#        run: |
+#          apt-get update
+#          apt-get install -y mariadb-client
+#
+#      - name: Verify MariaDB connection
+#        env:
+#          PORT: ${{ job.services.mysql.ports['3306'] }}
+#        run: |
+#          while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
+#            sleep 1
+#          done
 
       - name: 🔍 Read .env
         run: (grep -E 'PHP_VERSION' .env.prod >> $GITHUB_ENV && cp .env.ci .env)
