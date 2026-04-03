@@ -27,6 +27,11 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
+      - name: Install MariaDB Client
+        run: |
+          apt-get update
+          apt-get install -y mariadb-client
+
       - name: Verify MariaDB connection
         env:
           PORT: ${{ job.services.mysql.ports['3306'] }}
