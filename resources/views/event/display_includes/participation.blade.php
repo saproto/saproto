@@ -63,14 +63,16 @@
                 </a>
             @endif
 
-            @if ($event->activity->isParticipating(Auth::user()) && $event->activity->canUnsubscribe())
-                <a
-                    class="list-group-item bg-danger text-white"
-                    href="{{ route('event::deleteparticipation', ['event' => $event, 'user' => Auth::user()]) }}"
-                >
-                    Sign me out.
-                    <i class="fas fa-frown-o" aria-hidden="true"></i>
-                </a>
+            @if ($event->activity->isParticipating(Auth::user()))
+                @if($event->activity->canUnsubscribe())
+                    <a
+                        class="list-group-item bg-danger text-white"
+                        href="{{ route('event::deleteparticipation', ['event' => $event, 'user' => Auth::user()]) }}"
+                    >
+                        Sign me out.
+                        <i class="fas fa-frown-o" aria-hidden="true"></i>
+                    </a>
+                @endif
             @elseif ($event->activity->isOnBackupList(Auth::user()))
                 <a
                     class="list-group-item bg-danger text-white"
@@ -78,8 +80,7 @@
                 >
                     Sign me out of the back-up list.
                 </a>
-            @else
-                @if ($event->activity->canSubscribeBackup())
+            @elseif($event->activity->canSubscribeBackup())
                     <a
                         class="list-group-item bg-{{ $event->activity->isFull() || ! $event->activity->canSubscribe() ? 'warning' : 'success' }} text-white"
                         href="{{ route('event::addparticipation', ['event' => $event]) }}"
@@ -107,7 +108,6 @@
                             </i>
                         @endif
                     </a>
-                @endif
             @endif
 
             @if ($event->activity->canSubscribe())
