@@ -59,7 +59,7 @@ jobs:
       - run: mkdir -p .tmp/rector
 
       - name: Run rector
-        run: vendor/bin/rector --ansi --parallel
+        run: vendor/bin/rector --ansi
 
       - name: Cache Pint
         uses: actions/cache@v5
