@@ -64,7 +64,7 @@
             @endif
 
             @if ($event->activity->isParticipating(Auth::user()))
-                @if($event->activity->canUnsubscribe())
+                @if ($event->activity->canUnsubscribe())
                     <a
                         class="list-group-item bg-danger text-white"
                         href="{{ route('event::deleteparticipation', ['event' => $event, 'user' => Auth::user()]) }}"
@@ -80,34 +80,34 @@
                 >
                     Sign me out of the back-up list.
                 </a>
-            @elseif($event->activity->canSubscribeBackup())
-                    <a
-                        class="list-group-item bg-{{ $event->activity->isFull() || ! $event->activity->canSubscribe() ? 'warning' : 'success' }} text-white"
-                        href="{{ route('event::addparticipation', ['event' => $event]) }}"
-                    >
-                        <strong>
-                            @if ($event->activity->isFull() || ! $event->activity->canSubscribe())
-                                {{ $event->activity->isFull() ? 'Full!' : 'Closed!' }}
-                                Put me on the back-up list.
-                            @else
-                                    Sign me up!
-                            @endif
-                            |
-
-                            @if ($event->activity->price > 0)
-                                &euro;{{ number_format($event->activity->price, 2, '.', ',') }}
-                            @else
-                                    Free!
-                            @endif
-                        </strong>
-                        <br />
-                        @if ($event->activity->redirect_url)
-                            <i>
-                                Note: Signing up will redirect you to an
-                                external page!
-                            </i>
+            @elseif ($event->activity->canSubscribeBackup())
+                <a
+                    class="list-group-item bg-{{ $event->activity->isFull() || ! $event->activity->canSubscribe() ? 'warning' : 'success' }} text-white"
+                    href="{{ route('event::addparticipation', ['event' => $event]) }}"
+                >
+                    <strong>
+                        @if ($event->activity->isFull() || ! $event->activity->canSubscribe())
+                            {{ $event->activity->isFull() ? 'Full!' : 'Closed!' }}
+                            Put me on the back-up list.
+                        @else
+                                Sign me up!
                         @endif
-                    </a>
+                        |
+
+                        @if ($event->activity->price > 0)
+                            &euro;{{ number_format($event->activity->price, 2, '.', ',') }}
+                        @else
+                                Free!
+                        @endif
+                    </strong>
+                    <br />
+                    @if ($event->activity->redirect_url)
+                        <i>
+                            Note: Signing up will redirect you to an external
+                            page!
+                        </i>
+                    @endif
+                </a>
             @endif
 
             @if ($event->activity->canSubscribe())
