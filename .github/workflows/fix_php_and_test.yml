@@ -9,6 +9,13 @@ jobs:
   pest:
     name: 🐘 Pest Tests
     runs-on: ubuntu-latest
+    env:
+      DB_CONNECTION: mysql
+      DB_DATABASE: testing
+      DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+      DB_USERNAME: root
+      DB_PASSWORD: secret
+      DB_HOST: 127.0.0.1
     services:
       mysql:
         image: mariadb:10.6
@@ -24,20 +31,16 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - name: 🔍 Read .env
-        run: |
-          grep -E 'PHP_VERSION' .env.prod >> $GITHUB_ENV
-          cp .env.ci .env
-          echo "DB_PORT=${{ job.services.mysql.ports['3306'] }}" >> .env
-          cat .env >> $GITHUB_ENV
-
       - name: Verify MariaDB connection
         env:
-          PORT: ${{ env.DB_PORT }}
+          PORT: ${{ env.DB_PORT}}
         run: |
           while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
             sleep 1
           done
+
+      - name: 🔍 Read .env
+        run: (grep -E 'PHP_VERSION' .env.prod >> $GITHUB_ENV && cp .env.ci .env)
 
       - name: 🖱️ Setup PHP v${{ env.PHP_VERSION }}
         uses: shivammathur/setup-php@v2
