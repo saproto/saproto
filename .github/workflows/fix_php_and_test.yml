@@ -9,12 +9,18 @@ jobs:
   pest:
     name: 🐘 Pest Tests
     runs-on: ubuntu-latest
+    env:
+      DB_CONNECTION: mysql
+      DB_DATABASE: testing
+      DB_USERNAME: root
+      DB_PASSWORD: secret
+      DB_HOST: 127.0.0.1
     services:
       mysql:
         image: mariadb:10.6
         env:
-          MYSQL_ROOT_PASSWORD: secret
-          MYSQL_DATABASE: testing
+          MYSQL_ROOT_PASSWORD: ${{ env.DB_PASSWORD }}
+          MYSQL_DATABASE:  ${{ env.DB_DATABASE }}
         ports:
           - 3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -24,9 +30,12 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
+      - name: Set DB Port
+        run: echo "DB_PORT=${{ job.services.mysql.ports['3306'] }}" >> $GITHUB_ENV
+
       - name: Verify MariaDB connection
         env:
-          PORT: ${{ job.services.mysql.ports['3306'] }}
+          PORT: ${{ env.DB_PORT }}
         run: |
           while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
             sleep 1
@@ -41,11 +50,24 @@ jobs:
           php-version: ${{ env.PHP_VERSION }}
           coverage: xdebug
 
+      - uses: dorny/paths-filter@v4
+        id: changes
+        with:
+          filters: |
+            resources:
+              - 'resources/**'
+            migrations:
+              - 'database/migrations/**'
+            types:
+                - 'app/Data/**'
+                - 'app/Enums/**'
+
       - uses: ramsey/composer-install@v4
         with:
           composer-options: "--ignore-platform-reqs --optimize-autoloader --prefer-dist"
 
       - run: php artisan typescript:transform
+        if: steps.changes.outputs.types == 'true'
 
       - run: php artisan wayfinder:generate --with-form
 
@@ -53,7 +75,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: .tmp/rector
-          key: ${{ runner.os }}-rector-${{ github.run_id }}-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-rector-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-rector-
 
       - run: mkdir -p .tmp/rector
@@ -88,7 +110,6 @@ jobs:
 
       - name: Cache Playwright
         uses: actions/cache@v5
-        id: playwright-cache
         with:
           path: |
             ~/.cache/ms-playwright
@@ -100,15 +121,7 @@ jobs:
         run: npm ci --ignore-scripts
 
       - name: Install playwright deps
-        run: npx playwright install --with-deps chromium
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-
-      - uses: dorny/paths-filter@v4
-        id: changes
-        with:
-          filters: |
-            resources:
-              - 'resources/**'
+        run: npx playwright install chromium
 
       - name: lint with eslint
         if: steps.changes.outputs.resources == 'true'
@@ -119,6 +132,7 @@ jobs:
         run: npx prettier --write resources/
 
       - name: Commit changes
+        if: steps.changes.outputs.resources == 'true'
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: Automatic linting (Prettier and eslint)
@@ -137,21 +151,18 @@ jobs:
       - run: mkdir -p .tmp/phpunit.cache
 
       - name: 🐘 Run Pest tests
-        env:
-          DB_CONNECTION: mysql
-          DB_DATABASE: testing
-          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
-          DB_USERNAME: root
-          DB_PASSWORD: secret
-          DB_HOST: 127.0.0.1
         run: |
           php artisan key:generate
           php artisan migrate
           php artisan passport:keys
-          php artisan schema:dump
           vendor/bin/pest --ci --parallel
 
+      - name: Dump SQL schema
+        if: steps.changes.outputs.migrations == 'true'
+        run: php artisan schema:dump
+
       - name: Commit changes (schema dump)
+        if: steps.changes.outputs.migrations == 'true'
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: Changed sql schema (artisan dump)
@@ -205,4 +216,3 @@ jobs:
 
       - name: 🧠 Run PHPStan static analysis
         run: vendor/bin/phpstan analyse
-
