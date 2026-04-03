@@ -12,7 +12,6 @@ jobs:
     env:
       DB_CONNECTION: mysql
       DB_DATABASE: testing
-      DB_PORT: ${{ job.services.mysql.ports['3306'] }}
       DB_USERNAME: root
       DB_PASSWORD: secret
       DB_HOST: 127.0.0.1
@@ -31,9 +30,12 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
+      - name: Set DB Port
+        run: echo "DB_PORT=${{ job.services.mysql.ports['3306'] }}" >> $GITHUB_ENV
+
       - name: Verify MariaDB connection
         env:
-          PORT: ${{ env.DB_PORT}}
+          PORT: ${{ env.DB_PORT }}
         run: |
           while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
             sleep 1
