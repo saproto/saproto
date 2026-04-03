@@ -50,11 +50,24 @@ jobs:
           php-version: ${{ env.PHP_VERSION }}
           coverage: xdebug
 
+      - uses: dorny/paths-filter@v4
+        id: changes
+        with:
+          filters: |
+            resources:
+              - 'resources/**'
+            migrations:
+              - 'database/migrations/**'
+            types:
+                - 'app/Data/**'
+                - 'app/Enums/**'
+
       - uses: ramsey/composer-install@v4
         with:
           composer-options: "--ignore-platform-reqs --optimize-autoloader --prefer-dist"
 
       - run: php artisan typescript:transform
+        if: steps.changes.outputs.types == 'true'
 
       - run: php artisan wayfinder:generate --with-form
 
@@ -109,15 +122,6 @@ jobs:
 
       - name: Install playwright deps
         run: npx playwright install chromium
-
-      - uses: dorny/paths-filter@v4
-        id: changes
-        with:
-          filters: |
-            resources:
-              - 'resources/**'
-            migrations:
-              - 'database/migrations/**'
 
       - name: lint with eslint
         if: steps.changes.outputs.resources == 'true'
