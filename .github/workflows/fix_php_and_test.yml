@@ -107,6 +107,8 @@ jobs:
           filters: |
             resources:
               - 'resources/**'
+            migrations:
+              - 'database/migrations/**'
 
       - name: lint with eslint
         if: steps.changes.outputs.resources == 'true'
@@ -117,6 +119,7 @@ jobs:
         run: npx prettier --write resources/
 
       - name: Commit changes
+        if: steps.changes.outputs.resources == 'true'
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: Automatic linting (Prettier and eslint)
@@ -146,10 +149,14 @@ jobs:
           php artisan key:generate
           php artisan migrate
           php artisan passport:keys
-          php artisan schema:dump
           vendor/bin/pest --ci --parallel
 
+      - name: Dump SQL schema
+        if: steps.changes.outputs.migrations == 'true'
+        run: php artisan schema:dump
+
       - name: Commit changes (schema dump)
+        if: steps.changes.outputs.migrations == 'true'
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: Changed sql schema (artisan dump)
@@ -203,4 +210,3 @@ jobs:
 
       - name: 🧠 Run PHPStan static analysis
         run: vendor/bin/phpstan analyse
-
