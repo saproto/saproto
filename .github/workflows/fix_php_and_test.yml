@@ -13,8 +13,8 @@ jobs:
       mysql:
         image: mariadb:10.6
         env:
-          MYSQL_ROOT_PASSWORD: secret
-          MYSQL_DATABASE: testing
+          MYSQL_ROOT_PASSWORD: ${{ env.DB_PASSWORD }}
+          MYSQL_DATABASE:  ${{ env.DB_DATABASE }}
         ports:
           - 3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -24,16 +24,20 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
+      - name: 🔍 Read .env
+        run: |
+          grep -E 'PHP_VERSION' .env.prod >> $GITHUB_ENV
+          cp .env.ci .env
+          echo "DB_PORT=${{ job.services.mysql.ports['3306'] }}" >> .env
+          cat .env >> $GITHUB_ENV
+
       - name: Verify MariaDB connection
         env:
-          PORT: ${{ job.services.mysql.ports['3306'] }}
+          PORT: ${{ env.DB_PORT }}
         run: |
           while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
             sleep 1
           done
-
-      - name: 🔍 Read .env
-        run: (grep -E 'PHP_VERSION' .env.prod >> $GITHUB_ENV && cp .env.ci .env)
 
       - name: 🖱️ Setup PHP v${{ env.PHP_VERSION }}
         uses: shivammathur/setup-php@v2
@@ -138,13 +142,6 @@ jobs:
       - run: mkdir -p .tmp/phpunit.cache
 
       - name: 🐘 Run Pest tests
-        env:
-          DB_CONNECTION: mysql
-          DB_DATABASE: testing
-          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
-          DB_USERNAME: root
-          DB_PASSWORD: secret
-          DB_HOST: 127.0.0.1
         run: |
           php artisan key:generate
           php artisan migrate
