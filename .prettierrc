@@ -3,6 +3,7 @@
     "tabWidth": 4,
     "semi": false,
     "singleQuote": true,
+    "endOfLine": "lf",
     "plugins": ["prettier-plugin-blade", "prettier-plugin-tailwindcss"],
     "overrides": [
         {
@@ -11,7 +12,9 @@
             ],
             "options": {
                 "parser": "blade",
-                "bladePhpFormatting": "off"
+                "bladePhpFormatting": "off",
+                "htmlWhitespaceSensitivity": "ignore",
+                "singleQuote": false
             }
         }
     ]
