@@ -150,6 +150,10 @@ jobs:
 
       - run: mkdir -p .tmp/phpunit.cache
 
+      - name: Install MariaDB client
+        run: |
+          sudo apt-get install -y mariadb-client
+
       - name: 🐘 Run Pest tests
         run: |
           php artisan key:generate
