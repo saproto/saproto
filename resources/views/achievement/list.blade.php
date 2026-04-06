@@ -1,15 +1,15 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Achievement Administration
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-end">
         <div class="col">
             <div class="card mb-3">
                 <div class="card-header bg-dark mb-1 text-white">
-                    @yield('page-title')
+                    @yield ('page-title')
                     <a
                         href="{{ route('achievement::create') }}"
                         class="badge bg-info float-end"
@@ -44,7 +44,7 @@
                                         ></i>
                                     </div>
                                 @else
-                                        No icon available
+                                    No icon available
                                 @endif
                             </td>
                             <td>{{ $achievement->name }}</td>
@@ -76,7 +76,7 @@
         </div>
 
         <div class="col-md-auto">
-            @include('achievement.admin_includes.awards-addone')
+            @include ('achievement.admin_includes.awards-addone')
         </div>
     </div>
 @endsection

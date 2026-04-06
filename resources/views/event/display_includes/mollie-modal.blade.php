@@ -48,7 +48,7 @@
                     class="row justify-content-around btn-group-toggle mb-2"
                     data-bs-toggle="buttons"
                 >
-                    @include(
+                    @include (
                         'omnomcom.mollie.list-all-payment-methods',
                         [
                             'methods' => $payment_methods,

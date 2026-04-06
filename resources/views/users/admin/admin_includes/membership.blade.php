@@ -16,7 +16,7 @@
 
             @if ($user->is_member)
                 @if (! $user->member->until)
-                    @include(
+                    @include (
                         'components.modals.confirm-modal',
                         [
                             'action' => route('user::member::endinseptember', ['id' => $user->id]),
@@ -26,7 +26,7 @@
                             'message' => "Are you sure you want to end the membership of $user->name at the end of September?",
                         ]
                     )
-                    @include(
+                    @include (
                         'components.modals.confirm-modal',
                         [
                             'action' => route('user::member::remove', ['id' => $user->id]),
@@ -52,7 +52,7 @@
                         Preview membership card
                     </a>
                 @else
-                    @include(
+                    @include (
                         'components.modals.confirm-modal',
                         [
                             'action' => route('user::member::removeend', ['id' => $user->id]),
@@ -64,7 +64,7 @@
                     )
                 @endif
 
-                @include(
+                @include (
                     'components.modals.confirm-modal',
                     [
                         'action' => route('membercard::print', ['id' => $user->id]),
@@ -76,14 +76,12 @@
                             ($user->member->card_printed_on ?? 'Never printed before'),
                     ]
                 )
-
                 <a
                     class="list-group-item"
                     href="{{ route('user::admin::toggle_primary_somewhere_else', ['id' => $user->id]) }}"
                 >
-                    Is
-                    {!! $user->member->is_primary_at_another_association ? '' : '<strong>not</strong>' !!}
-                    a primary member at another association.
+                    Is {!! $user->member->is_primary_at_another_association ? '' : '<strong>not</strong>' !!} a
+                    primary member at another association.
                 </a>
             @else
                 <li class="list-group-item">Not a member</li>
@@ -142,7 +140,7 @@
                                         Pet
                                         <i class="fas fa-paw"></i>
                                     @else
-                                            Regular
+                                        Regular
                                     @endif
                                 </td>
                                 <td class="text-center">
@@ -211,7 +209,7 @@
                                                     aria-hidden="true"
                                                 ></i>
                                             </a>
-                                            @include(
+                                            @include (
                                                 'components.modals.confirm-modal',
                                                 [
                                                     'action' => route('memberform::delete', [
@@ -269,7 +267,7 @@
                                                     aria-hidden="true"
                                                 ></i>
                                             </a>
-                                            @include(
+                                            @include (
                                                 'components.modals.confirm-modal',
                                                 [
                                                     'action' => route('memberform::delete', [

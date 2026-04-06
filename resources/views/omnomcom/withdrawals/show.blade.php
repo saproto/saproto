@@ -1,14 +1,13 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     @php
         /** @var \App\Models\Withdrawal $withdrawal */
     @endphp
-
     Withdrawal of {{ date('d-m-Y', strtotime($withdrawal->date)) }}
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-3">
             <a
@@ -27,7 +26,7 @@
 
                 <div class="card mb-3">
                     <div class="card-header bg-dark mb-2 text-white">
-                        @yield('page-title')
+                        @yield ('page-title')
                     </div>
 
                     <table class="table-sm table-borderless ms-3 table">
@@ -64,7 +63,7 @@
                     </table>
 
                     <div class="card-body">
-                        @include(
+                        @include (
                             'components.forms.datetimepicker',
                             [
                                 'name' => 'date',
@@ -89,7 +88,7 @@
                         </a>
 
                         @if (! $withdrawal->closed)
-                            @include(
+                            @include (
                                 'components.modals.confirm-modal',
                                 [
                                     'action' => route('omnomcom::withdrawal::email', [
@@ -105,8 +104,7 @@
                                     'confirm' => 'Send',
                                 ]
                             )
-
-                            @include(
+                            @include (
                                 'components.modals.confirm-modal',
                                 [
                                     'action' => route('omnomcom::withdrawal::close', [
@@ -120,8 +118,7 @@
                                     'confirm' => 'Close',
                                 ]
                             )
-
-                            @include(
+                            @include (
                                 'components.modals.confirm-modal',
                                 [
                                     'action' => route('omnomcom::withdrawal::delete', [
@@ -169,12 +166,11 @@
                                 <td>{{ $data->user->id }}</td>
                                 <td>{{ $data->user->name }}</td>
                                 @if (! $withdrawal->closed)
-                                    @isset($data->user->bank)
+                                    @isset ($data->user->bank)
                                         <td>
                                             {{ iban_to_obfuscated_format($data->user->bank->iban) }}
                                             <span class="text-muted">
-                                                /
-                                                {{ iban_to_obfuscated_format($data->user->bank->bic) }}
+                                                / {{ iban_to_obfuscated_format($data->user->bank->bic) }}
                                             </span>
                                         </td>
                                         <td>
@@ -199,7 +195,7 @@
                                     <td>
                                         @if ($withdrawal->failedWithdrawals->contains('user_id', $data->user->id))
                                             Failed
-                                            @include(
+                                            @include (
                                                 'components.modals.confirm-modal',
                                                 [
                                                     'action' => route('omnomcom::orders::delete', [
@@ -221,10 +217,8 @@
                                             >
                                                 Remove
                                             </a>
-
                                             |
-
-                                            @include(
+                                            @include (
                                                 'components.modals.confirm-modal',
                                                 [
                                                     'action' => route('omnomcom::withdrawal::markfailed', [
@@ -240,10 +234,8 @@
                                                     'classes' => 'fw-bold underline-on-hover text-white',
                                                 ]
                                             )
-
                                             |
-
-                                            @include(
+                                            @include (
                                                 'components.modals.confirm-modal',
                                                 [
                                                     'action' => route('omnomcom::withdrawal::markloss', [

@@ -1,15 +1,15 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Short URL Service
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card mb-3">
                 <div class="card-header bg-dark mb-1 text-white">
-                    @yield('page-title')
+                    @yield ('page-title')
                     <a
                         class="badge bg-info float-end"
                         href="{{ route('short_urls.create') }}"
@@ -34,7 +34,7 @@
                         @foreach ($urls as $url)
                             <tr>
                                 <td class="ps-2">
-                                    @include(
+                                    @include (
                                         'components.modals.confirm-modal',
                                         [
                                             'action' => route('short_urls.destroy', ['short_url' => $url]),
@@ -65,9 +65,7 @@
                                     </span>
                                     <strong>/{{ $url->url }}</strong>
                                 </td>
-                                <td>
-                                    {{ $url->clicks }}
-                                </td>
+                                <td>{{ $url->clicks }}</td>
                                 <td class="text-center">
                                     <button
                                         data-bs-toggle="popover"
@@ -97,15 +95,13 @@
                     </table>
                 </div>
 
-                <div class="card-footer pb-0">
-                    {{ $urls->links() }}
-                </div>
+                <div class="card-footer pb-0">{{ $urls->links() }}</div>
             </div>
         </div>
     </div>
 @endsection
 
-@push('javascript')
+@push ('javascript')
     <script type="text/javascript" @cspNonce>
         document.querySelectorAll('.qr-button').forEach((el) =>
             el.addEventListener('click', (e) => {
@@ -117,42 +113,42 @@
 
                 modal.querySelector('#qr-modal-url').src =
                     `{{ route('short_urls.qr_code', ['id' => '_id']) }}`.replace(
-                        '_id',
-                        id
-                    )
-            })
-        )
-
-        document
-            .querySelector('#qr-modal-copy')
-            .addEventListener('click', (e) => {
-                const image = document.getElementById('qr-modal-url')
-                const canvas = document.createElement('canvas')
-                const margin = 10 //the margin of the QR code in the image in percentage
-                const scale = 10
-                canvas.width = image.width * scale
-                canvas.height = image.height * scale
-                const ctx = canvas.getContext('2d')
-                ctx.fillStyle = 'white'
-                ctx.fillRect(0, 0, canvas.width, canvas.height)
-                ctx.drawImage(
-                    image,
-                    (image.width * (margin / 100) * scale) / 2,
-                    (image.height * (margin / 100) * scale) / 2,
-                    (1 - margin / 100) * image.width * scale,
-                    (1 - margin / 100) * image.height * scale
+                                '_id',
+                                id
+                            )
+                    })
                 )
-                canvas.toBlob((blob) => {
-                    navigator.clipboard.write([
-                        new ClipboardItem({ 'image/png': blob }),
-                    ])
-                }, 'image/png')
-            })
+
+                document
+                    .querySelector('#qr-modal-copy')
+                    .addEventListener('click', (e) => {
+                        const image = document.getElementById('qr-modal-url')
+                        const canvas = document.createElement('canvas')
+                        const margin = 10 //the margin of the QR code in the image in percentage
+                        const scale = 10
+                        canvas.width = image.width * scale
+                        canvas.height = image.height * scale
+                        const ctx = canvas.getContext('2d')
+                        ctx.fillStyle = 'white'
+                        ctx.fillRect(0, 0, canvas.width, canvas.height)
+                        ctx.drawImage(
+                            image,
+                            (image.width * (margin / 100) * scale) / 2,
+                            (image.height * (margin / 100) * scale) / 2,
+                            (1 - margin / 100) * image.width * scale,
+                            (1 - margin / 100) * image.height * scale
+                        )
+                        canvas.toBlob((blob) => {
+                            navigator.clipboard.write([
+                                new ClipboardItem({ 'image/png': blob }),
+                            ])
+                        }, 'image/png')
+                    })
     </script>
 @endpush
 
 @once
-    @push('modals')
+    @push ('modals')
         <div class="modal fade" id="qr-modal" tabindex="-1" role="dialog">
             <div class="modal-dialog model-sm" role="document">
                 <form>

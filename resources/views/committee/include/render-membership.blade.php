@@ -1,4 +1,4 @@
-@include(
+@include (
     'users.includes.usercard',
     [
         'user' => $membership->user,

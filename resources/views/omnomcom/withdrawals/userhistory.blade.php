@@ -1,13 +1,13 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Personal Overview for the {{ date('d-m-Y', strtotime($withdrawal->date)) }}
     Withdrawal
     <br />
     Withdrawal status: {{ $withdrawal->closed ? 'Closed' : 'Paid' }}
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-lg-6 col-md-10 col-sm-12">
             <div class="card bg-dark mb-3 text-white">
@@ -23,20 +23,17 @@
                     @endif
 
                     <p class="card-text text-center">
-                        Withdrawal total:
-                        &euro;{{ number_format($withdrawal->totalForUser(Auth::user()), 2, '.', ',') }}
+                        Withdrawal total: &euro;{{ number_format($withdrawal->totalForUser(Auth::user()), 2, '.', ',') }}
                     </p>
                 </div>
             </div>
 
             @if (count($orderlines) > 0)
-                @include('omnomcom.orders.includes.history')
+                @include ('omnomcom.orders.includes.history')
             @else
                 <div class="card mb-3">
                     <div class="card-body">
-                        <p class="card-text text-center">
-                            You are not included in this withdrawal.
-                        </p>
+                        <p class="card-text text-center">You are not included in this withdrawal.</p>
                     </div>
                 </div>
             @endif

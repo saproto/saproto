@@ -1,4 +1,4 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 @php
     use App\Enums\PhotoEnum;
     /**
@@ -9,11 +9,11 @@
     $title = ($album?->name ?? 'My liked photos') . ' ' . date('M j, Y', $album?->date_taken ?? time());
 @endphp
 
-@section('page-title')
+@section ('page-title')
     {{ $title }}
 @endsection
 
-@section('container')
+@section ('container')
     @if ($album?->event)
         <a
             class="btn btn-info btn-block mb-3"
@@ -23,7 +23,6 @@
             click here for more info.
         </a>
     @endif
-
     <div class="card mb-3">
         <div class="card-header bg-dark text-end text-white">
             <a
@@ -33,7 +32,7 @@
                 <i class="fas fa-list"></i>
                 <span class="d-none d-sm-inline">Album overview</span>
             </a>
-            @can('protography')
+            @can ('protography')
                 @if ($album)
                     <a
                         href="{{ route('albums::admin::edit', ['id' => $album->id]) }}"
@@ -45,16 +44,14 @@
                 @endif
             @endcan
 
-            <div class="fw-bold m-1 p-1">
-                {{ $title }}
-            </div>
+            <div class="fw-bold m-1 p-1">{{ $title }}</div>
         </div>
 
         <div class="card-body">
             <div class="row">
                 @foreach ($photos as $photo)
                     <div class="col-lg-2 col-lg-3 col-md-4 col-sm-6">
-                        @include(
+                        @include (
                             'website.home.cards.card-bg-image',
                             [
                                 'id' => sprintf('photo_%s', $photo->id),
@@ -79,9 +76,7 @@
                 @endforeach
             </div>
         </div>
-        <div class="card-footer">
-            {{ $photos->links() }}
-        </div>
+        <div class="card-footer">{{ $photos->links() }}</div>
 
         <div class="card-footer text-center">
             <i class="fas fa-shield-alt fa-fw me-3"></i>
@@ -93,6 +88,5 @@
             </a>
         </div>
     </div>
-
     &nbsp;
 @endsection

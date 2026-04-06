@@ -1,14 +1,7 @@
 <div class="card mb-3">
     <div class="card-header bg-dark text-white">E-mail preferences</div>
     <div class="card-body">
-        <p class="card-text">
-            We offer a number of e-mail lists you can subscribe to to receive
-            information related to you. We chose this approach so that you can
-            finely tune what information is relevant for you. You can always
-            unsubscribe from an e-mail list below, or by following the link at
-            the bottom of an e-mail. Please note that you cannot unsubscribe for
-            some e-mails.
-        </p>
+        <p class="card-text">We offer a number of e-mail lists you can subscribe to to receive information related to you. We chose this approach so that you can finely tune what information is relevant for you. You can always unsubscribe from an e-mail list below, or by following the link at the bottom of an e-mail. Please note that you cannot unsubscribe for some e-mails.</p>
 
         <p class="card-text">
             <em>Click on a list for more info.</em>

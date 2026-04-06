@@ -5,7 +5,6 @@
 <div id="product-nav" class="col-10">
     @foreach ($categories as $category)
         <?php $products_in_category = []; ?>
-
         <div
             class="category-view {{ $category == $categories[0] ? '' : 'inactive' }}"
             data-id="{{ $category->id }}"
@@ -20,7 +19,6 @@
                         $products_in_category[] = $product->id;
                     }
                     ?>
-
                     <div
                         class="product {{ $product->stock <= 0 ? 'nostock' : '' }} col-xl-4 col-xxl-3 col-6"
                         data-id="{{ $product->id }}"

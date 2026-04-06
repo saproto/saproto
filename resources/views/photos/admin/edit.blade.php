@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
-        Edit {{ $album->name }} ({{ date('M j, Y', $album->date_taken) }})
+@section ('page-title')
+    Edit {{ $album->name }} ({{ date('M j, Y', $album->date_taken) }})
 @endsection
 
-@section('container')
+@section ('container')
     @if ($album->event)
         <a
             class="btn btn-info btn-block mb-3"
@@ -14,11 +14,10 @@
             here to go to the event.
         </a>
     @endif
-
     <div class="row">
         <div class="col-lg-3">
             @if ($album->published)
-                @can('publishalbums')
+                @can ('publishalbums')
                     <a
                         class="btn btn-warning btn-block mb-3 text-white"
                         href="{{ route('albums::admin::unpublish', ['id' => $album->id]) }}"
@@ -36,7 +35,7 @@
                     </span>
                 @endcan
             @else
-                @can('publishalbums')
+                @can ('publishalbums')
                     @if ($album->thumbPhoto)
                         <a
                             class="btn btn-danger btn-block mb-3 text-white"
@@ -75,7 +74,6 @@
                     <div class="card-header bg-dark text-center text-white">
                         Edit album
                     </div>
-
                     <form method="post">
                         {{ csrf_field() }}
                         <div class="card-body">
@@ -90,7 +88,7 @@
                                     value="{{ $album->name }}"
                                 />
                             </div>
-                            @include(
+                            @include (
                                 'components.forms.datetimepicker',
                                 [
                                     'name' => 'date',
@@ -100,8 +98,7 @@
                                 ]
                             )
                             <p class="mt-2">
-                                Private album:
-                                {{ $album->private ? '✅' : '❌' }}
+                                Private album: {{ $album->private ? '✅' : '❌' }}
                             </p>
                         </div>
 
@@ -125,7 +122,6 @@
                     <div class="card-header bg-dark text-center text-white">
                         Edit album
                     </div>
-
                     <div class="card-body">
                         <b>Album name:</b>
                         {{ $album->name }}
@@ -270,8 +266,7 @@
                     {{ csrf_field() }}
 
                     <div class="card-header bg-dark text-center text-white">
-                        {{ $album->name }}
-                        ({{ date('M j, Y', $album->date_taken) }})
+                        {{ $album->name }} ({{ date('M j, Y', $album->date_taken) }})
                     </div>
 
                     <div class="card-body">
@@ -373,7 +368,7 @@
                             class="row shift-select"
                         >
                             @foreach ($album->items as $photo)
-                                @include('photos.includes.selectablephoto', ['photo' => $photo])
+                                @include ('photos.includes.selectablephoto', ['photo' => $photo])
                             @endforeach
                         </div>
                     </div>
@@ -383,156 +378,156 @@
     </div>
 @endsection
 
-@push('javascript')
-    @vite('resources/assets/js/exifreader.js')
+@push ('javascript')
+    @vite ('resources/assets/js/exifreader.js')
     <script async type="text/javascript" @cspNonce>
         const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
         window.addEventListener('load', () => {
             let fileSizeLimit = '{{ $fileSizeLimit }}B'
-            let fileId = 1
-            let uploadRunning = false
-            let dropArea = document.getElementById('droparea')
+                    let fileId = 1
+                    let uploadRunning = false
+                    let dropArea = document.getElementById('droparea')
 
-            document
-                .getElementById('published-modal')
-                .addEventListener('show.bs.modal', (e) => {
-                    const footer = document.querySelector(
-                        '#published-modal .modal-footer'
-                    )
-                    const btn = e.relatedTarget.cloneNode(true)
-                    btn.type = 'submit'
-                    footer.replaceChild(btn, footer.lastChild)
-                })
+                    document
+                        .getElementById('published-modal')
+                        .addEventListener('show.bs.modal', (e) => {
+                            const footer = document.querySelector(
+                                '#published-modal .modal-footer'
+                            )
+                            const btn = e.relatedTarget.cloneNode(true)
+                            btn.type = 'submit'
+                            footer.replaceChild(btn, footer.lastChild)
+                        })
 
-            if (
-                dropArea &&
-                window.File &&
-                window.FileReader &&
-                window.FileList &&
-                window.Blob
-            ) {
-                dropArea.addEventListener('dragenter', (e) => {
-                    e.stopPropagation()
-                    e.preventDefault()
-                    dropArea.classList.remove('opacity-25')
-                    e.dataTransfer.dropEffect = 'move'
-                })
-                dropArea.addEventListener('dragleave', (e) => {
-                    e.stopPropagation()
-                    e.preventDefault()
-                    dropArea.classList.add('opacity-25')
-                })
+                    if (
+                        dropArea &&
+                        window.File &&
+                        window.FileReader &&
+                        window.FileList &&
+                        window.Blob
+                    ) {
+                        dropArea.addEventListener('dragenter', (e) => {
+                            e.stopPropagation()
+                            e.preventDefault()
+                            dropArea.classList.remove('opacity-25')
+                            e.dataTransfer.dropEffect = 'move'
+                        })
+                        dropArea.addEventListener('dragleave', (e) => {
+                            e.stopPropagation()
+                            e.preventDefault()
+                            dropArea.classList.add('opacity-25')
+                        })
 
-                dropArea.addEventListener('dragover', (e) => {
-                    e.stopPropagation()
-                    e.preventDefault()
-                })
-                window.addEventListener('drop', dropFiles)
-            }
+                        dropArea.addEventListener('dragover', (e) => {
+                            e.stopPropagation()
+                            e.preventDefault()
+                        })
+                        window.addEventListener('drop', dropFiles)
+                    }
 
-            async function dropFiles(e) {
-                e.stopPropagation()
-                e.preventDefault()
-                dropArea.classList.add('opacity-25')
+                    async function dropFiles(e) {
+                        e.stopPropagation()
+                        e.preventDefault()
+                        dropArea.classList.add('opacity-25')
 
-                toggleRunning()
+                        toggleRunning()
 
-                const files = e.dataTransfer.files
-                if (files.length) {
-                    let fileQueue = []
+                        const files = e.dataTransfer.files
+                        if (files.length) {
+                            let fileQueue = []
 
-                    for (const file of files) {
-                        const acceptedType = [
-                            'image/png',
-                            'image/jpg',
-                            'image/jpeg',
-                        ].includes(file.type)
-                        if (!acceptedType) {
-                            uploadError(
-                                file,
-                                new Error(
-                                    `File type is not supported: ${file.type}`
+                            for (const file of files) {
+                                const acceptedType = [
+                                    'image/png',
+                                    'image/jpg',
+                                    'image/jpeg',
+                                ].includes(file.type)
+                                if (!acceptedType) {
+                                    uploadError(
+                                        file,
+                                        new Error(
+                                            `File type is not supported: ${file.type}`
+                                        )
+                                    )
+                                    continue
+                                }
+                                const underSizeLimit = file.size <= MAX_FILE_SIZE
+                                if (!underSizeLimit) {
+                                    uploadError(
+                                        file,
+                                        new Error(`The image is too big!`)
+                                    )
+                                    continue
+                                }
+                                file.id = fileId++
+                                const loadedFile = await readFile(file)
+                                fileQueue.push(loadedFile)
+                            }
+
+                            await uploadFiles(fileQueue)
+                            toggleRunning()
+                        }
+                    }
+
+                    function readFile(file) {
+                        return new Promise((resolve, reject) => {
+                            const fr = new FileReader()
+                            fr.onload = () => resolve(file)
+                            fr.onerror = reject
+                            fr.readAsDataURL(file)
+                        })
+                    }
+
+                    async function uploadFiles(fileQueue) {
+                        while (fileQueue.length) {
+                            const file = fileQueue.shift()
+
+                            const formData = new FormData()
+                            formData.append('file', file)
+
+                            const tags = await window.ExifReader.load(file)
+                            const imageDate = tags['DateTimeOriginal']?.description
+                            if (imageDate) {
+                                formData.append('date', imageDate)
+                            }
+
+                            try {
+                                const response = await post(
+                                    '{{ route('albums::admin::upload', ['id' => $album->id], false) }}',
+                                    formData,
+                                    { parse: false }
                                 )
-                            )
-                            continue
+                                const text = await response.text()
+
+                                const node = document.getElementById('photo-view')
+                                node.innerHTML = text + node.innerHTML
+                            } catch (err) {
+                                let errText
+                                switch (err.status) {
+                                    case 413:
+                                        errText = `Uploaded photo was bigger than limit of ${fileSizeLimit}.`
+                                        break
+                                    default:
+                                        errText = `Error ${err.status}: ${err.statusText}`
+                                        break
+                                }
+                                console.error(errText, err)
+                                uploadError(file, errText)
+                            }
                         }
-                        const underSizeLimit = file.size <= MAX_FILE_SIZE
-                        if (!underSizeLimit) {
-                            uploadError(
-                                file,
-                                new Error(`The image is too big!`)
-                            )
-                            continue
-                        }
-                        file.id = fileId++
-                        const loadedFile = await readFile(file)
-                        fileQueue.push(loadedFile)
                     }
 
-                    await uploadFiles(fileQueue)
-                    toggleRunning()
-                }
-            }
+                    function toggleRunning() {
+                        uploadRunning = !uploadRunning
+                        const loader = document.getElementById('droparea-loader')
+                        loader.classList.toggle('d-none')
+                    }
 
-            function readFile(file) {
-                return new Promise((resolve, reject) => {
-                    const fr = new FileReader()
-                    fr.onload = () => resolve(file)
-                    fr.onerror = reject
-                    fr.readAsDataURL(file)
+                    function uploadError(file, err) {
+                        document.getElementById('error-bar').classList.remove('d-none')
+                        document.querySelector('#error-bar ul').innerHTML +=
+                            `<li> ${file.name} <small><i>${err}</i></small> </li>`
+                    }
                 })
-            }
-
-            async function uploadFiles(fileQueue) {
-                while (fileQueue.length) {
-                    const file = fileQueue.shift()
-
-                    const formData = new FormData()
-                    formData.append('file', file)
-
-                    const tags = await window.ExifReader.load(file)
-                    const imageDate = tags['DateTimeOriginal']?.description
-                    if (imageDate) {
-                        formData.append('date', imageDate)
-                    }
-
-                    try {
-                        const response = await post(
-                            '{{ route('albums::admin::upload', ['id' => $album->id], false) }}',
-                            formData,
-                            { parse: false }
-                        )
-                        const text = await response.text()
-
-                        const node = document.getElementById('photo-view')
-                        node.innerHTML = text + node.innerHTML
-                    } catch (err) {
-                        let errText
-                        switch (err.status) {
-                            case 413:
-                                errText = `Uploaded photo was bigger than limit of ${fileSizeLimit}.`
-                                break
-                            default:
-                                errText = `Error ${err.status}: ${err.statusText}`
-                                break
-                        }
-                        console.error(errText, err)
-                        uploadError(file, errText)
-                    }
-                }
-            }
-
-            function toggleRunning() {
-                uploadRunning = !uploadRunning
-                const loader = document.getElementById('droparea-loader')
-                loader.classList.toggle('d-none')
-            }
-
-            function uploadError(file, err) {
-                document.getElementById('error-bar').classList.remove('d-none')
-                document.querySelector('#error-bar ul').innerHTML +=
-                    `<li> ${file.name} <small><i>${err}</i></small> </li>`
-            }
-        })
     </script>
 @endpush

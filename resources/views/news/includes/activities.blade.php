@@ -14,14 +14,14 @@
             </thead>
 
             @foreach ($upcomingEvents as $event)
-                @php($checked = in_array($event->id, $events))
+                @php ($checked = in_array($event->id, $events))
                 <tr class="{{ $checked ? '' : 'opacity-50' }}">
                     <td>{{ $event->title }}</td>
                     <td>
                         {{ $event->generateTimespanText('l j F, H:i', 'H:i', '-') }}
                     </td>
                     <td>
-                        @include(
+                        @include (
                             'components.forms.checkbox',
                             [
                                 'name' => 'event[]',
@@ -52,10 +52,7 @@
         </table>
     @else
         <div class="card-body">
-            <p class="card-text text-center">
-                There are no upcoming events. Seriously. Go fix that
-                {{ Auth::user()->calling_name }}.
-            </p>
+            <p class="card-text text-center">There are no upcoming events. Seriously. Go fix that {{ Auth::user()->calling_name }}.</p>
         </div>
     @endif
 </div>

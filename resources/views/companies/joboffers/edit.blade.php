@@ -1,10 +1,10 @@
-@extends("website.layouts.redesign.dashboard")
+@extends ("website.layouts.redesign.dashboard")
 
-@section("page-title")
+@section ("page-title")
     {{ $joboffer == null ? "Create new job offer." : "Edit job offer " . $joboffer->title . "." }}
 @endsection
 
-@section("container")
+@section ("container")
     <form
         method="post"
         action="{{ $joboffer == null ? route("joboffers::store") : route("joboffers::update", ["id" => $joboffer->id]) }}"
@@ -16,7 +16,7 @@
             <div class="col-md-4">
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield("page-title")
+                        @yield ("page-title")
                     </div>
 
                     <div class="card-body">
@@ -30,7 +30,7 @@
                             >
                                 <option
                                     value=""
-                                    @if($joboffer == null) selected @endif
+                                    @if ($joboffer == null) selected @endif
                                     disabled
                                 >
                                     Select a company...
@@ -38,7 +38,7 @@
                                 @foreach ($companies as $company)
                                     <option
                                         value="{{ $company->id }}"
-                                        @if($joboffer?->company->id == $company->id) selected @endif
+                                        @if ($joboffer?->company->id == $company->id) selected @endif
                                     >
                                         {{ $company->name }}
                                     </option>
@@ -78,13 +78,13 @@
                                 </option>
                                 <option
                                     value="description"
-                                    @if($joboffer?->description != null) selected @endif
+                                    @if ($joboffer?->description != null) selected @endif
                                 >
                                     Description
                                 </option>
                                 <option
                                     value="url"
-                                    @if($joboffer?->redirect_url != null) selected @endif
+                                    @if ($joboffer?->redirect_url != null) selected @endif
                                 >
                                     Redirect URL
                                 </option>
@@ -96,7 +96,7 @@
                             class="form-group"
                         >
                             <label for="editor-description">Description</label>
-                            @include(
+                            @include (
                                 "components.forms.markdownfield",
                                 [
                                     "name" => "description",
@@ -148,42 +148,42 @@
     </form>
 @endsection
 
-@push("javascript")
+@push ("javascript")
     <script @cspNonce>
-        const typeUrl = document.getElementById('information_type_url')
-        const redirectUrl = document.getElementById('redirect_url')
+        const typeUrl = document.getElementById("information_type_url")
+        const redirectUrl = document.getElementById("redirect_url")
         const typeDescription = document.getElementById(
-            'information_type_description'
+            "information_type_description"
         )
         const typeSelector = document.getElementById(
-            'information_type_selector'
+            "information_type_selector"
         )
-        const easymde = window.easyMDEFields['markdownfield-description']
+        const easymde = window.easyMDEFields["markdownfield-description"]
 
         updateInformationDisplay()
-        typeSelector.addEventListener('change', updateInformationDisplay)
+        typeSelector.addEventListener("change", updateInformationDisplay)
 
         function updateInformationDisplay() {
             switch (typeSelector.value) {
-                case 'description':
-                    typeDescription.classList.remove('d-none')
-                    typeUrl.classList.add('d-none')
-                    redirectUrl.value = ''
+                case "description":
+                    typeDescription.classList.remove("d-none")
+                    typeUrl.classList.add("d-none")
+                    redirectUrl.value = ""
                     redirectUrl.required = false
                     break
-                case 'url':
-                    typeDescription.classList.add('d-none')
-                    typeUrl.classList.remove('d-none')
+                case "url":
+                    typeDescription.classList.add("d-none")
+                    typeUrl.classList.remove("d-none")
                     redirectUrl.required = true
-                    easymde.value('')
+                    easymde.value("")
                     break
                 default:
-                    typeUrl.classList.add('d-none')
-                    typeUrl.querySelector('input').value = ''
-                    typeDescription.classList.add('d-none')
-                    typeDescription.querySelectorAll('input').value = ''
+                    typeUrl.classList.add("d-none")
+                    typeUrl.querySelector("input").value = ""
+                    typeDescription.classList.add("d-none")
+                    typeDescription.querySelectorAll("input").value = ""
                     typeSelector.required = true
-                    easymde.value('')
+                    easymde.value("")
                     break
             }
         }

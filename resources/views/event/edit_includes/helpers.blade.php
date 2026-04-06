@@ -46,16 +46,13 @@
 
             @if ($event->activity->helpingCommittees->count() > 0)
                 <hr />
-
                 @foreach ($event->activity->helpingCommittees as $committee)
                     <p>
                         <strong>{{ $committee->committee->name }}</strong>
                         <br />
-                        Helps with
-                        {{ $committee->users->count() }}
-                        people. {{ $committee->amount }} are needed.
+                        Helps with {{ $committee->users->count() }} people. {{ $committee->amount }} are
+                        needed.
                     </p>
-
                     <form
                         method="post"
                         action="{{ route('event::help::update', ['helpingCommittee' => $committee]) }}"
@@ -100,7 +97,6 @@
                             </div>
                         </div>
                     </form>
-
                     <hr />
                 @endforeach
             @endif

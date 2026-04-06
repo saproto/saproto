@@ -6,7 +6,7 @@
 
         <div class="card-body">
             @foreach ($user->achievements as $key => $achievement)
-                @include(
+                @include (
                     'achievement.includes.achievement_include',
                     [
                         'achievement' => $achievement,

@@ -15,7 +15,7 @@
             </div>
 
             <div class="col">
-                @include(
+                @include (
                     'components.forms.checkbox',
                     [
                         'name' => 'search_description',
@@ -23,7 +23,7 @@
                         'checked' => $description ?? true,
                     ]
                 )
-                @include(
+                @include (
                     'components.forms.checkbox',
                     [
                         'name' => 'search_subject',
@@ -31,7 +31,7 @@
                         'checked' => $subject ?? false,
                     ]
                 )
-                @include(
+                @include (
                     'components.forms.checkbox',
                     [
                         'name' => 'search_body',

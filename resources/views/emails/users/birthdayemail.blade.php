@@ -1,8 +1,7 @@
-@extends('emails.template')
+@extends ('emails.template')
 
-@section('body')
+@section ('body')
     <p>Hi {{ $user->calling_name }},</p>
-
     <p>
         Happy birthday! Because we are so excited it is the day you were born,
         you can get a free cookie! Just hop by the Protopolis and ask a board
@@ -13,6 +12,5 @@
             src="{{ asset('images/emails/birthday.jpg') }}"
         />
     </p>
-
     <p>Have a great day, Board {{ Config::string('proto.boardnumber') }}</p>
 @endsection

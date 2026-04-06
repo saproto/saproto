@@ -3,7 +3,7 @@
     $name = isset($override_committee_name) && $override_committee_name ? $override_committee_name : $committee->name;
 @endphp
 
-@include(
+@include (
     'website.home.cards.card-bg-image',
     [
         'url' =>

@@ -1,26 +1,25 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     {{ $event->title }}
 @endsection
 
-@section('og-description')
+@section ('og-description')
     From {{ $event->generateTimespanText('l j F Y, H:i', 'H:i', 'till') }} @
     {{ $event->location }}.
-
     {{ $event->description }}
 @endsection
 
 @if ($event->getFirstMediaUrl('header', 'card') !== '')
-    @section('og-image')
+    @section ('og-image')
         {{ $event->getFirstMediaUrl('header', 'card') }}
     @endsection
 @endif
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-4">
-            @include(
+            @include (
                 'event.display_includes.event_details',
                 [
                     'event' => $event,
@@ -30,7 +29,7 @@
 
         @if (Auth::check() && ($event->activity?->withParticipants() || $event->tickets->count() > 0))
             <div class="col-md-4">
-                @include(
+                @include (
                     'event.display_includes.tickets',
                     [
                         'event' => $event,
@@ -38,7 +37,7 @@
                     ]
                 )
 
-                @include(
+                @include (
                     'event.display_includes.participation',
                     [
                         'event' => $event,
@@ -51,7 +50,7 @@
             <div class="col-md-4">
                 @if ($event->activity?->helpingCommittees->count() && Auth::user()?->is_member)
                     <div class="card mb-3">
-                        @include(
+                        @include (
                             'event.display_includes.helpers',
                             [
                                 'event' => $event,
@@ -68,7 +67,7 @@
                         </div>
                         <div class="card-body">
                             @foreach ($event->dinnerforms as $dinnerform)
-                                @include('dinnerform.includes.dinnerform-block', ['dinnerform' => $dinnerform])
+                                @include ('dinnerform.includes.dinnerform-block', ['dinnerform' => $dinnerform])
                             @endforeach
                         </div>
                     </div>

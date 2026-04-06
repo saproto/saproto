@@ -27,7 +27,7 @@
                                 %{{ $wallstreetEvent->percentage }}
                             </td>
                             <td>
-                                @include(
+                                @include (
                                     'components.forms.checkbox',
                                     [
                                         'name' => 'show_only_active',
@@ -44,7 +44,7 @@
                                 >
                                     <i class="fas fa-edit me-4"></i>
                                 </a>
-                                @include(
+                                @include (
                                     'components.modals.confirm-modal',
                                     [
                                         'action' => route('wallstreet::events::delete', [
@@ -69,7 +69,7 @@
     @endif
 </div>
 
-@push('javascript')
+@push ('javascript')
     <script type="text/javascript" @cspNonce>
         var checkboxes = document.querySelectorAll('input[type=checkbox]')
         checkboxes.forEach((checkbox) => {
@@ -79,17 +79,17 @@
                 //send the request
                 get(
                     '{{ urldecode(route('api::wallstreet::toggle_event')) }}',
-                    { id: event.target.value }
-                ).then((response) => {
-                    if (response.id != null) {
-                        event.target.checked = response.active
-                        event.target.disabled = false
-                    } else {
-                        event.target.checked = !event.target.checked
-                        event.target.disabled = false
-                    }
+                            { id: event.target.value }
+                        ).then((response) => {
+                            if (response.id != null) {
+                                event.target.checked = response.active
+                                event.target.disabled = false
+                            } else {
+                                event.target.checked = !event.target.checked
+                                event.target.disabled = false
+                            }
+                        })
+                    })
                 })
-            })
-        })
     </script>
 @endpush

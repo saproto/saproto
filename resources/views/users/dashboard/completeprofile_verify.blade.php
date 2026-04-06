@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     Complete membership profile
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-4">
             <form
@@ -13,11 +13,11 @@
             >
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield('page-title')
+                        @yield ('page-title')
                     </div>
 
                     <div class="card-body">
-                        @include('users.registerwizard_macro')
+                        @include ('users.registerwizard_macro')
 
                         @csrf
 
@@ -33,26 +33,17 @@
                             value="{{ $userdata['birthdate'] }}"
                         />
 
-                        <p class="text-center">
-                            Please check that you've entered the information
-                            below correctly.
-                        </p>
+                        <p class="text-center">Please check that you've entered the information below correctly.</p>
 
                         <hr />
 
-                        <p class="text-center">
-                            My date of birth is
-                            <strong>
-                                {{ date('F j, Y', strtotime($userdata['birthdate'])) }}
-                            </strong>
-                            ({{ $age }} years).
-                        </p>
+                        <p class="text-center">My date of birth is
+                        <strong>{{ date('F j, Y', strtotime($userdata['birthdate'])) }}</strong>
+                        ({{ $age }} years).</p>
 
                         <p class="text-center">
                             My phone number is
-                            <strong>
-                                {{ $userdata['phone'] }}
-                            </strong>
+                            <strong>{{ $userdata['phone'] }}</strong>
                         </p>
                     </div>
 

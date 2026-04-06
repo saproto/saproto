@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     Edit Dinnerform Orderline
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-6">
             <form
@@ -15,9 +15,8 @@
 
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        Edit order by {{ $dinnerformOrderline->user->name }}
-                        for dinnerform at
-                        {{ $dinnerformOrderline->dinnerform->restaurant }}
+                        Edit order by {{ $dinnerformOrderline->user->name }} for
+                        dinnerform at {{ $dinnerformOrderline->dinnerform->restaurant }}
                     </div>
 
                     <div class="card-body">
@@ -45,7 +44,7 @@
                                 required
                             />
                         </div>
-                        @include(
+                        @include (
                             'components.forms.checkbox',
                             [
                                 'name' => 'helper',

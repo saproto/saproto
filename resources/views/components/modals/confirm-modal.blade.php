@@ -15,7 +15,7 @@
 </a>
 
 @once
-    @push('modals')
+    @push ('modals')
         <div class="modal fade" id="confirm-modal" tabindex="-1" role="dialog">
             <div class="modal-dialog model-sm" role="document">
                 <form method="POST">
@@ -61,30 +61,30 @@
 @endonce
 
 @once
-    @push('javascript')
+    @push ('javascript')
         <script @cspNonce>
-            document.querySelectorAll('.confirm-modal-button').forEach((el) =>
-                el.addEventListener('click', (e) => {
+            document.querySelectorAll(".confirm-modal-button").forEach((el) =>
+                el.addEventListener("click", (e) => {
                     const modal = document.querySelector(
-                        el.getAttribute('data-bs-target')
+                        el.getAttribute("data-bs-target")
                     )
-                    modal.querySelector('.modal-title').innerHTML =
-                        el.getAttribute('data-confirm-title')
+                    modal.querySelector(".modal-title").innerHTML =
+                        el.getAttribute("data-confirm-title")
 
-                    modal.querySelector('#submit-button').classList =
-                        el.getAttribute('data-confirm-btn-variant')
+                    modal.querySelector("#submit-button").classList =
+                        el.getAttribute("data-confirm-btn-variant")
 
-                    modal.querySelector('#confirm-form-method').value =
-                        el.getAttribute('data-form-method')
+                    modal.querySelector("#confirm-form-method").value =
+                        el.getAttribute("data-form-method")
 
-                    modal.querySelector('.modal-body').innerHTML =
-                        el.getAttribute('data-confirm-message')
-                    modal.querySelector('.confirm-button').innerHTML =
-                        el.getAttribute('data-confirm-btn-text')
+                    modal.querySelector(".modal-body").innerHTML =
+                        el.getAttribute("data-confirm-message")
+                    modal.querySelector(".confirm-button").innerHTML =
+                        el.getAttribute("data-confirm-btn-text")
 
-                    const form = el.getAttribute('data-form')
+                    const form = el.getAttribute("data-form")
                     if (form) {
-                        modal.querySelector('.confirm-button').onclick = (
+                        modal.querySelector(".confirm-button").onclick = (
                             e
                         ) => {
                             e.preventDefault()
@@ -93,8 +93,8 @@
                     } else {
                         e.preventDefault()
                         e.stopPropagation()
-                        modal.querySelector('form').action = el.getAttribute(
-                            'data-confirm-action'
+                        modal.querySelector("form").action = el.getAttribute(
+                            "data-confirm-action"
                         )
                     }
                 })

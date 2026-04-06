@@ -1,16 +1,15 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     Archive for {{ $year }}
 @endsection
 
-@section('container')
-    @include('event.calendar_includes.archivebar')
-
+@section ('container')
+    @include ('event.calendar_includes.archivebar')
     <div class="row justify-content-center">
         @foreach ($eventsPerMonth as $monthNumber => $events)
             @if (date('F Y', strtotime($year . '-' . $monthNumber . '-25')) < date('U') || count($events) > 0)
-                @include(
+                @include (
                     'event.calendar_includes.rendermonth',
                     [
                         'events' => $events,

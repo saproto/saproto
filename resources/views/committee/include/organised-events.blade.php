@@ -6,7 +6,7 @@
             <div class="row">
                 @foreach ($upcomingEvents as $event)
                     <div class="col-6">
-                        @include(
+                        @include (
                             'event.display_includes.event_block',
                             [
                                 'event' => $event,
@@ -27,7 +27,7 @@
             <div class="row">
                 @foreach ($pastEvents as $event)
                     <div class="col-6">
-                        @include(
+                        @include (
                             'event.display_includes.event_block',
                             [
                                 'event' => $event,
@@ -51,7 +51,7 @@
             <div class="row">
                 @foreach ($pastHelpedEvents as $key => $event)
                     <div class="col-6">
-                        @include(
+                        @include (
                             'event.display_includes.event_block',
                             [
                                 'event' => $event,

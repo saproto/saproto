@@ -3,9 +3,9 @@
     use Illuminate\Support\Collection;
 @endphp
 
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Sticker admin
 @endsection
 
@@ -13,12 +13,12 @@
     /** @var Collection<Sticker>$reported */
 @endphp
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card mb-3">
                 <div class="card-header bg-dark mb-1 text-white">
-                    @yield('page-title')
+                    @yield ('page-title')
                 </div>
 
                 <div class="table-responsive">
@@ -43,15 +43,9 @@
                                 <td>
                                     {{ $sticker->reporter->name ?? 'Unknown' }}
                                 </td>
-                                <td>
-                                    {{ $sticker->city }}
-                                </td>
-                                <td>
-                                    {{ $sticker->country }}
-                                </td>
-                                <td>
-                                    {{ $sticker->report_reason }}
-                                </td>
+                                <td>{{ $sticker->city }}</td>
+                                <td>{{ $sticker->country }}</td>
+                                <td>{{ $sticker->report_reason }}</td>
                                 <td>
                                     <img
                                         src="{{ $sticker->getImageUrl() }}"
@@ -60,7 +54,7 @@
                                 </td>
                                 <td>
                                     <div class="mb-1">
-                                        @include(
+                                        @include (
                                             'components.modals.confirm-modal',
                                             [
                                                 'method' => 'POST',
@@ -76,7 +70,7 @@
                                         )
                                     </div>
 
-                                    @include(
+                                    @include (
                                         'components.modals.confirm-modal',
                                         [
                                             'action' => route('stickers.destroy', ['sticker' => $sticker]),
@@ -151,7 +145,7 @@
                                         <button
                                             class="btn btn-warning badge m-1"
                                             type="submit"
-                                            @disabled($stickerType->id === 1)
+                                            @disabled ($stickerType->id === 1)
                                         >
                                             Update
                                         </button>

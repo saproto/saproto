@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Dinnerform Admin
 @endsection
 
-@section('container')
+@section ('container')
     <div class="card col-lg-8 ms-auto me-auto mb-3">
         <div class="card-header bg-dark mb-1 text-white">
             <span>
@@ -21,7 +21,7 @@
                 Return to overview
             </a>
             @if ($dinnerform->isCurrent())
-                @include(
+                @include (
                     'components.modals.confirm-modal',
                     [
                         'action' => route('dinnerform::close', ['id' => $dinnerform->id]),
@@ -33,7 +33,7 @@
                     ]
                 )
             @elseif (! $dinnerform->closed && Auth::user()->can('finadmin'))
-                @include(
+                @include (
                     'components.modals.confirm-modal',
                     [
                         'action' => route('dinnerform::process', ['id' => $dinnerform->id]),
@@ -74,9 +74,7 @@
                         <td>
                             €{{ number_format($dinnerform->helper_discount, 2) }}
                         </td>
-                        <td>
-                            {{ $dinnerform->regular_discount_percentage }}%
-                        </td>
+                        <td>{{ $dinnerform->regular_discount_percentage }}%</td>
                         <td>
                             €{{ number_format($dinnerform->totalAmount(), 2) }}
                         </td>
@@ -107,9 +105,7 @@
                                 <td class="text-muted">
                                     #{{ $order->user->id }}
                                 </td>
-                                <td>
-                                    {{ $order->user->name }}
-                                </td>
+                                <td>{{ $order->user->name }}</td>
                                 <td>
                                     @if ($order->helper)
                                         <i
@@ -130,7 +126,7 @@
                                         >
                                             <i class="fas fa-edit me-2"></i>
                                         </a>
-                                        @include(
+                                        @include (
                                             'components.modals.confirm-modal',
                                             [
                                                 'action' => route('dinnerform::orderline::delete', [

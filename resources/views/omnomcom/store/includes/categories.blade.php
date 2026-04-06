@@ -38,9 +38,9 @@
     </nav>
 </div>
 
-@push('javascript')
+@push ('javascript')
     <script @cspNonce>
-        document.getElementById('reload-button').onclick = () =>
+        document.getElementById("reload-button").onclick = () =>
             window.location.reload()
     </script>
 @endpush

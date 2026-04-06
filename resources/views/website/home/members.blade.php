@@ -1,20 +1,20 @@
-@extends('website.home.shared')
+@extends ('website.home.shared')
 
-@section('greeting')
+@section ('greeting')
     <strong>Hi {{ Auth::user()->calling_name }},</strong>
     <br />
     @if ($message != null)
         {!! $message->message !!}
     @else
-            Nice to see you back!
+        Nice to see you back!
     @endif
 @endsection
 
-@section('left-column')
+@section ('left-column')
     <div class="col-xl-4 col-md-12">
-        @include('website.home.cards.featuredevents', ['featuredEvents' => $featuredEvents])
+        @include ('website.home.cards.featuredevents', ['featuredEvents' => $featuredEvents])
 
-        @include('website.home.cards.leaderboards')
+        @include ('website.home.cards.leaderboards')
 
         @if (count($birthdays) > 0)
             <div class="card mb-3">
@@ -24,9 +24,8 @@
                 </div>
                 <div class="card-body">
                     @foreach ($birthdays as $key => $user)
-                        @php($emojies = ['🎉', '🎈', '🎂', '🎊'])
-
-                        @include(
+                        @php ($emojies = ['🎉', '🎈', '🎂', '🎊'])
+                        @include (
                             'users.includes.usercard',
                             [
                                 'user' => $user,
@@ -41,11 +40,9 @@
             </div>
         @endif
     </div>
-
     <div class="col-xl-4 col-md-12">
-        @include('website.home.cards.upcomingevents', ['events' => $upcomingEvents])
+        @include ('website.home.cards.upcomingevents', ['events' => $upcomingEvents])
     </div>
-
     <div class="col-xl-4 col-md-12">
         @if (count($dinnerforms) > 0)
             <div class="card mb-3">
@@ -55,7 +52,7 @@
                 </div>
                 <div class="card-body">
                     @foreach ($dinnerforms as $dinnerform)
-                        @include('dinnerform.includes.dinnerform-block', ['dinnerform' => $dinnerform])
+                        @include ('dinnerform.includes.dinnerform-block', ['dinnerform' => $dinnerform])
                     @endforeach
                 </div>
             </div>
@@ -93,9 +90,7 @@
                     </a>
                 </div>
             @else
-                <p class="card-text ms-4 mt-4 mb-4 text-left">
-                    Weekly update is coming soon...
-                </p>
+                <p class="card-text ms-4 mt-4 mb-4 text-left">Weekly update is coming soon...</p>
             @endif
         </div>
 
@@ -107,7 +102,7 @@
                 </div>
                 <div class="card-body">
                     @foreach ($videos as $video)
-                        @include(
+                        @include (
                             'videos.includes.video_block',
                             [
                                 'video' => $video,
@@ -121,11 +116,9 @@
     </div>
 @endsection
 
-@section('right-column')
-    @include('website.home.cards.recentalbums', ['albums' => $albums])
-
+@section ('right-column')
+    @include ('website.home.cards.recentalbums', ['albums' => $albums])
     @parent
-
     <div class="card mb-3">
         <div class="card-header bg-dark text-white">
             <i class="fas fa-newspaper fa-fw me-2"></i>
@@ -135,7 +128,7 @@
             @if (count($newsitems) > 0)
                 @foreach ($newsitems as $index => $newsitem)
                     <div style="max-height: 300px">
-                        @include(
+                        @include (
                             'website.home.cards.card-bg-image',
                             [
                                 'height' => $newsitem->is_weekly ? 80 : 120,
@@ -157,22 +150,12 @@
                     </div>
                 @endforeach
             @else
-                <p class="card-text ms-1 mt-3 mb-4 text-left">
-                    No recent news. It's
-                    <a
-                        href="https://en.wikipedia.org/wiki/Silly_season"
-                        target="_blank"
-                    >
-                        cucumber time
-                    </a>
-                    . 😴
-                </p>
+                <p class="card-text ms-1 mt-3 mb-4 text-left">No recent news. It's
+                <a href="https://en.wikipedia.org/wiki/Silly_season" target="_blank">cucumber time</a>
+                . 😴</p>
             @endif
 
-            <a
-                href="{{ route('news::index') }}"
-                class="btn btn-info btn-block"
-            >
+            <a href="{{ route('news::index') }}" class="btn btn-info btn-block">
                 View older news
             </a>
         </div>

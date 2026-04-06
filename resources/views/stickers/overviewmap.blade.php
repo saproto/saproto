@@ -1,14 +1,14 @@
-@extends('website.layouts.redesign.generic-nonavandfooter')
+@extends ('website.layouts.redesign.generic-nonavandfooter')
 
-@section('page-title')
+@section ('page-title')
     Proto's sticker tracker!
 @endsection
 
-@vite('resources/assets/js/echo.js')
-@vite('resources/assets/js/leaflet.js')
-@vite('node_modules/leaflet/dist/leaflet.css')
+@vite ('resources/assets/js/echo.js')
+@vite ('resources/assets/js/leaflet.js')
+@vite ('node_modules/leaflet/dist/leaflet.css')
 
-@section('container')
+@section ('container')
     <div class="card mt-3 mb-3">
         <div class="card-header bg-dark text-white">
             <div class="d-flex justify-content-between">
@@ -21,11 +21,10 @@
             </div>
         </div>
     </div>
-
     <div id="map" class="mb-3"></div>
 @endsection
 
-@push('stylesheet')
+@push ('stylesheet')
     <style rel="stylesheet">
         main#nonavandfooter {
             border: 0px;
@@ -41,7 +40,7 @@
     </style>
 @endpush
 
-@push('javascript')
+@push ('javascript')
     <script type="text/javascript" @cspNonce>
         window.addEventListener('load', () => {
             window.Echo.channel(`stickers`)
@@ -85,8 +84,7 @@
             let stickerAmount = document.getElementById('sticker-amount')
 
             var markerCount = 0
-            const placedMarkers = {!! json_encode($stickers) !!}
-
+            const placedMarkers ={!! json_encode($stickers) !!}
             placedMarkers.forEach((marker) => {
                 addMarkerToMap(marker)
             })

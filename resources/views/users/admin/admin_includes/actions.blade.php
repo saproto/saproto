@@ -77,8 +77,8 @@
                 </a>
             @endif
 
-            @isset($user->tfa_totp_key)
-                @include(
+            @isset ($user->tfa_totp_key)
+                @include (
                     'components.modals.confirm-modal',
                     [
                         'action' => route('user::2fa::admindelete', ['id' => $user->id]),
@@ -102,17 +102,15 @@
                 class="list-group-item"
                 href="{{ route('user::admin::toggle_studied_create', ['id' => $user->id]) }}"
             >
-                Has
-                {!! $user->did_study_create ? '' : '<strong>not</strong>' !!}
-                studied CreaTe.
+                Has {!! $user->did_study_create ? '' : '<strong>not</strong>' !!} studied
+                CreaTe.
             </a>
             <a
                 class="list-group-item"
                 href="{{ route('user::admin::toggle_studied_itech', ['id' => $user->id]) }}"
             >
-                Has
-                {!! $user->did_study_itech ? '' : '<strong>not</strong>' !!}
-                studied ITech.
+                Has {!! $user->did_study_itech ? '' : '<strong>not</strong>' !!} studied
+                ITech.
             </a>
         </ul>
     </div>

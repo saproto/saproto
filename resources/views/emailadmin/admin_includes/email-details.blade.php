@@ -12,7 +12,7 @@
 
     <div class="card mb-3">
         <div class="card-header bg-dark text-white">
-            @yield('page-title')
+            @yield ('page-title')
         </div>
 
         <div class="card-body">
@@ -86,7 +86,7 @@
 
             <div class="form-group">
                 <label for="editor">E-mail</label>
-                @include(
+                @include (
                     'components.forms.markdownfield',
                     [
                         'name' => 'body',
@@ -101,7 +101,7 @@
                     <div class="form-group">
                         <label>Recipients:</label>
 
-                        @include(
+                        @include (
                             'components.forms.checkbox',
                             [
                                 'type' => 'radio',
@@ -114,7 +114,7 @@
                             ]
                         )
 
-                        @include(
+                        @include (
                             'components.forms.checkbox',
                             [
                                 'type' => 'radio',
@@ -127,7 +127,7 @@
                             ]
                         )
 
-                        @include(
+                        @include (
                             'components.forms.checkbox',
                             [
                                 'type' => 'radio',
@@ -140,7 +140,7 @@
                             ]
                         )
 
-                        @include(
+                        @include (
                             'components.forms.checkbox',
                             [
                                 'type' => 'radio',
@@ -155,16 +155,13 @@
 
                         @if ($email?->to_event)
                             <strong>Current selection</strong>
-
                             <ul class="list-group">
                                 @foreach ($email->events as $event)
                                     <li class="list-group-item">
-                                        {{ $event->title }}
-                                        ({{ $event->formatted_date->simple }})
+                                        {{ $event->title }} ({{ $event->formatted_date->simple }})
                                     </li>
                                 @endforeach
                             </ul>
-
                             <strong>Replace selection</strong>
                         @endif
 
@@ -174,7 +171,7 @@
                                     class="form-control event-search"
                                     id="eventSelect"
                                     name="eventSelect[]"
-                                    @disabled(! $email?->to_event)
+                                    @disabled (! $email?->to_event)
                                     multiple
                                 />
                             </div>
@@ -184,7 +181,7 @@
                             class="form-group {{ $email?->to_event ?: 'd-none' }} mt-1 mb-2"
                             id="backupDiv"
                         >
-                            @include(
+                            @include (
                                 'components.forms.checkbox',
                                 [
                                     'name' => 'toBackup',
@@ -199,7 +196,7 @@
                             </em>
                         </div>
 
-                        @include(
+                        @include (
                             'components.forms.checkbox',
                             [
                                 'type' => 'radio',
@@ -221,14 +218,14 @@
                             @foreach (EmailList::all() as $list)
                                 <option
                                     value="{{ $list->id }}"
-                                    @selected($email?->hasRecipientList($list))
+                                    @selected ($email?->hasRecipientList($list))
                                 >
                                     {{ $list->name }}
                                 </option>
                             @endforeach
                         </select>
 
-                        @include(
+                        @include (
                             'components.forms.checkbox',
                             [
                                 'type' => 'radio',
@@ -249,7 +246,7 @@
                         >
                             @foreach (Withdrawal::query()->orderByDesc('id')->get() as $withdrawal)
                                 <option
-                                    @selected($email?->withdrawals->filter(fn ($item) => $item->id === $withdrawal->id)->isNotEmpty())
+                                    @selected ($email?->withdrawals->filter(fn ($item) => $item->id === $withdrawal->id)->isNotEmpty())
                                     value="{{ $withdrawal->id }}"
                                 >
                                     {{ $withdrawal->id }}
@@ -260,7 +257,7 @@
                 </div>
 
                 <div class="col-md-6">
-                    @include(
+                    @include (
                         'components.forms.datetimepicker',
                         [
                             'name' => 'time',
@@ -286,15 +283,15 @@
     </div>
 </form>
 
-@push('javascript')
+@push ('javascript')
     <script type="text/javascript" @cspNonce>
-        const eventSelect = document.getElementById('eventSelect')
-        const listSelect = document.getElementById('listSelect')
-        const withdrawalSelect = document.getElementById('withdrawalSelect')
+        const eventSelect = document.getElementById("eventSelect")
+        const listSelect = document.getElementById("listSelect")
+        const withdrawalSelect = document.getElementById("withdrawalSelect")
         const destinationSelectList = Array.from(
-            document.getElementsByName('destinationType')
+            document.getElementsByName("destinationType")
         )
-        const backupToggle = document.getElementById('backupDiv')
+        const backupToggle = document.getElementById("backupDiv")
         const toggleList = {
             event: [false, true, false, true],
             members: [true, true, true, true],
@@ -305,13 +302,13 @@
         }
 
         destinationSelectList.forEach((el) => {
-            el.addEventListener('click', (e) => {
+            el.addEventListener("click", (e) => {
                 const toggle = toggleList[el.value]
                 eventSelect.disabled = toggle[0]
                 listSelect.disabled = toggle[1]
 
-                if (toggle[2]) backupToggle.classList.add('d-none')
-                else backupToggle.classList.remove('d-none')
+                if (toggle[2]) backupToggle.classList.add("d-none")
+                else backupToggle.classList.remove("d-none")
 
                 withdrawalSelect.disabled = toggle[3]
             })

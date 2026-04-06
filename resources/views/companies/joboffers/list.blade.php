@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     Interesting job offers
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row row-eq-height">
         @if (count($companies) > 0)
             @foreach ($companies as $key => $company)
@@ -44,10 +44,7 @@
                                 Visit website
                             </a>
 
-                            <p class="card-text mt-3">
-                                This company is currently looking to fill these
-                                positions:
-                            </p>
+                            <p class="card-text mt-3">This company is currently looking to fill these positions:</p>
 
                             <ul class="list-group">
                                 @foreach ($company->joboffers as $joboffer)

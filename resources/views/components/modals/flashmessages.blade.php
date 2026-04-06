@@ -1,5 +1,5 @@
 @if (Session::has('flash_message'))
-    @push('modals')
+    @push ('modals')
         <div class="modal fade" id="flash-modal" tabindex="-1" role="dialog">
             <div
                 class="modal-dialog modal-dialog-centered modal-lg"

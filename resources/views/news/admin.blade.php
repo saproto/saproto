@@ -1,15 +1,15 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     News Admin
 @endsection
 
-@section('container')
+@section ('container')
     <div id="news-admin" class="row justify-content-center">
         <div class="col-md-6">
             <div class="card mb-3">
                 <div class="card-header bg-dark mb-1 text-white">
-                    @yield('page-title')
+                    @yield ('page-title')
                     <a
                         href="{{ route('news::create', ['is_weekly' => true]) }}"
                         class="badge bg-warning float-end ms-3"
@@ -64,7 +64,7 @@
                                         <i class="fas fa-edit me-2"></i>
                                     </a>
 
-                                    @include(
+                                    @include (
                                         'components.modals.confirm-modal',
                                         [
                                             'action' => route('news::delete', ['id' => $newsitem->id]),
@@ -80,9 +80,7 @@
                     </table>
                 </div>
 
-                <div class="card-footer pb-0">
-                    {!! $newsitems->links() !!}
-                </div>
+                <div class="card-footer pb-0">{!! $newsitems->links() !!}</div>
             </div>
         </div>
     </div>

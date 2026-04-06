@@ -1,15 +1,15 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Change committee membership: {{ $membership->user->name }} @ The
     {{ $membership->committee->name }}
 @endsection
 
-@section('panel-title')
-    
+@section ('panel-title')
+
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-4 col-sm-8 col-xs-12">
             <form
@@ -21,11 +21,11 @@
 
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield('page-title')
+                        @yield ('page-title')
                     </div>
 
                     <div class="card-body">
-                        @include(
+                        @include (
                             'committee.include.render-membership',
                             [
                                 'membership' => $membership,
@@ -58,7 +58,7 @@
 
                         <div class="row">
                             <div class="col-6">
-                                @include(
+                                @include (
                                     'components.forms.datetimepicker',
                                     [
                                         'name' => 'start',
@@ -68,7 +68,7 @@
                                 )
                             </div>
                             <div class="col-6">
-                                @include(
+                                @include (
                                     'components.forms.datetimepicker',
                                     [
                                         'name' => 'end',

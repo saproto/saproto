@@ -1,17 +1,17 @@
-@extends('website.master')
+@extends ('website.master')
 
-@section('body')
+@section ('body')
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-5 col-12 text-center">
                 <div class="card mt-5 mb-3">
                     <div class="card-header bg-dark text-center text-white">
                         S.A. Proto |
-                        @yield('page-title')
+                        @yield ('page-title')
                     </div>
 
                     <div class="card-body text-center">
-                        @yield('login-body')
+                        @yield ('login-body')
                     </div>
 
                     <a

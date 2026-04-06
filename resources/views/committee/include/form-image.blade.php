@@ -12,7 +12,6 @@
                 src="{!! $committee->getImageUrl() !!}"
                 width="100%"
             />
-
             <div class="card-header bg-dark text-white">Replace image</div>
         @else
             <div class="card-header bg-dark text-white">Set image</div>

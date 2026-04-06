@@ -14,8 +14,7 @@
                         (Account
                         {{ $event->activity->closedAccount->account_number }} ,
                         {{ $event->activity->closedAccount->name }})
-                    @else
-                            (Unknown account.)
+                    @else (Unknown account.)
                     @endif
                 </li>
             @endif
@@ -45,7 +44,7 @@
                     @if ($event->activity->price > 0)
                         &euro;{{ number_format($event->activity->price, 2, '.', ',') }}
                     @else
-                            &euro;0,-
+                        &euro;0,-
                     @endif
                 </strong>
             </li>
@@ -58,8 +57,7 @@
                     data-bs-target="#noshow-modal"
                 >
                     <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
-                    &nbsp;&nbsp;Not showing up can cost you
-                    &euro;{{ number_format($event->activity->no_show_fee + $event->activity->price, 2, '.', ',') }}
+                    &nbsp;&nbsp;Not showing up can cost you &euro;{{ number_format($event->activity->no_show_fee + $event->activity->price, 2, '.', ',') }}
                 </a>
             @endif
 
@@ -90,14 +88,14 @@
                             {{ $event->activity->isFull() ? 'Full!' : 'Closed!' }}
                             Put me on the back-up list.
                         @else
-                                Sign me up!
+                            Sign me up!
                         @endif
                         |
 
                         @if ($event->activity->price > 0)
                             &euro;{{ number_format($event->activity->price, 2, '.', ',') }}
                         @else
-                                Free!
+                            Free!
                         @endif
                     </strong>
                     <br />
@@ -142,10 +140,9 @@
             </p>
         </div>
     </div>
-
     <div
         id="signupContainer"
-        @class([
+        @class ([
             'mb-3',
             'card',
             'd-none' =>
@@ -153,9 +150,7 @@
         ])
     >
         <div class="card-header bg-dark text-center text-white">
-            <span id="users-count">
-                {{ $event->activity->users->count() }}
-            </span>
+            <span id="users-count">{{ $event->activity->users->count() }}</span>
             participants
         </div>
 
@@ -168,7 +163,7 @@
 
         @if (! $event->activity->hide_participants || $event->isEventAdmin(Auth::user()) || Auth::user()->can('board') || Auth::user()->can('finadmin'))
             <div class="card-body">
-                @include(
+                @include (
                     'event.display_includes.render_participant_list',
                     [
                         'participants' => $event->activity->users,
@@ -213,7 +208,7 @@
     </div>
     <div
         id="backupContainer"
-        @class(['card', 'd-none' => $event->activity->backupUsers->count() == 0])
+        @class (['card', 'd-none' => $event->activity->backupUsers->count() == 0])
     >
         <div class="card-header bg-dark text-center text-white">
             <span id="backup-count">
@@ -233,7 +228,7 @@
 
         @if (! $event->activity->hide_participants || $event->isEventAdmin(Auth::user()) || Auth::user()->can('board') || Auth::user()->can('finadmin'))
             <div class="card-body">
-                @include(
+                @include (
                     'event.display_includes.render_participant_list',
                     [
                         'participants' => $event->activity->backupUsers,
@@ -255,23 +250,13 @@
                 you are a member.
 
                 @if (! Auth::check())
-                    <p class="card-text">
-                        Please
-                        <a
-                            href="{{ route('event::login', ['event' => $event]) }}"
-                        >
-                            log-in
-                        </a>
-                        if you are already a member.
-                    </p>
+                    <p class="card-text">Please
+                    <a href="{{ route('event::login', ['event' => $event]) }}">log-in</a>
+                    if you are already a member.</p>
                 @elseif (! Auth::user()->is_member)
-                    <p class="card-text">
-                        Please
-                        <a href="{{ route('becomeamember') }}">
-                            become a member
-                        </a>
-                        to sign-up for this activity.
-                    </p>
+                    <p class="card-text">Please
+                    <a href="{{ route('becomeamember') }}">become a member</a>
+                    to sign-up for this activity.</p>
                 @endif
             </p>
         </div>
@@ -291,69 +276,50 @@
                 ></button>
             </div>
             <div class="modal-body">
-                <p>
-                    For some activities Proto, or another party, sponsors part
-                    of the participation fee or other costs associated with an
-                    activity. As an example, for a barbecue a sponsor may pay
-                    for the food.
-                </p>
+                <p>For some activities Proto, or another party, sponsors part of the participation fee or other costs associated with an activity. As an example, for a barbecue a sponsor may pay for the food.</p>
 
-                <p>
-                    For these kinds of activities a
-                    <i>no show fee</i>
-                    may be enacted, which compensates for the fact that money
-                    has been spent for people who do not show up. This means
-                    that if you sign up, but don't show up for the activity, the
-                    <i>no show fee</i>
-                    may be charged to you. This may even be the case for free
-                    activities.
-                </p>
+                <p>For these kinds of activities a
+                <i>no show fee</i>
+                may be enacted, which compensates for the fact that money has been spent for people who do not show up. This means that if you sign up, but don't show up for the activity, the
+                <i>no show fee</i>
+                may be charged to you. This may even be the case for free activities.</p>
             </div>
         </div>
     </div>
 </div>
 
-@push('javascript')
-    @vite('resources/assets/js/echo.js')
+@push ('javascript')
+    @vite ('resources/assets/js/echo.js')
     <script type="text/javascript" @cspNonce>
-        ;{{-- format-ignore-start --}}
-        let id = @json($event->id);
+        {{-- format-ignore-start --}}
+        let id = @json ($event->id)
         {{-- format-ignore-end --}}
 
-        const template = document.querySelector('#template_users')
-        const template_backup_users = document.querySelector(
-            '#template_backup_users'
-        )
-        const backup_count = document.querySelector('#backup-count')
-        const users_count = document.querySelector('#users-count')
-        const signupContainer = document.querySelector('#signupContainer')
-        const backupContainer = document.querySelector('#backupContainer')
-        window.addEventListener('load', () => {
+        const template = document.querySelector("#template_users")
+        const template_backup_users = document.querySelector("#template_backup_users")
+        const backup_count = document.querySelector("#backup-count")
+        const users_count = document.querySelector("#users-count")
+        const signupContainer = document.querySelector("#signupContainer")
+        const backupContainer = document.querySelector("#backupContainer")
+        window.addEventListener("load", () => {
             const addUser = (user, local_template) => {
                 const clone = document.importNode(local_template.content, true)
-                clone.querySelector('.participant-profile-link').href =
+                clone.querySelector(".participant-profile-link").href =
                     user.user_profile_link
 
-                const removeLink = clone.querySelector(
-                    '.participant-remove-link'
-                )
+                const removeLink = clone.querySelector(".participant-remove-link")
                 if (removeLink) {
                     removeLink.href = user.user_remove_link
                 }
 
-                clone.querySelector('.participant-avatar').src =
-                    user.user_avatar
-                clone.querySelector('.participant-name').innerHTML =
-                    user.user_name
-                clone.querySelector('.participant-id').dataset.userId =
-                    user.user_id
+                clone.querySelector(".participant-avatar").src = user.user_avatar
+                clone.querySelector(".participant-name").innerHTML = user.user_name
+                clone.querySelector(".participant-id").dataset.userId = user.user_id
                 local_template.parentNode.appendChild(clone)
             }
 
             const removeUser = (user_id) => {
-                const element = document.querySelector(
-                    `[data-user-id="${user_id}"]`
-                )
+                const element = document.querySelector(`[data-user-id="${user_id}"]`)
                 if (element) {
                     element.remove()
                 }
@@ -361,9 +327,7 @@
 
             const recountUsers = (template, counter) => {
                 const count =
-                    template?.parentNode.querySelectorAll(
-                        '.participant-id'
-                    ).length
+                    template?.parentNode.querySelectorAll(".participant-id").length
                 if (count) {
                     counter.innerHTML = count
                 } else {
@@ -372,19 +336,19 @@
             }
 
             Echo.private(`events.${id}`)
-                .listen('.App\\Events\\Events\\UserSignedupEvent', (e) => {
+                .listen(".App\\Events\\Events\\UserSignedupEvent", (e) => {
                     removeUser(e.user_id)
                     if (e.backup) {
-                        backupContainer.classList.remove('d-none')
+                        backupContainer.classList.remove("d-none")
                         addUser(e, template_backup_users)
                     } else {
-                        signupContainer.classList.remove('d-none')
+                        signupContainer.classList.remove("d-none")
                         addUser(e, template)
                     }
                     recountUsers(template_backup_users, backup_count)
                     recountUsers(template, users_count)
                 })
-                .listen('.App\\Events\\Events\\UserSignedOutEvent', (e) => {
+                .listen(".App\\Events\\Events\\UserSignedOutEvent", (e) => {
                     removeUser(e.user_id)
                     recountUsers(template, users_count)
                     recountUsers(template_backup_users, backup_count)

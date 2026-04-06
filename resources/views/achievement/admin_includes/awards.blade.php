@@ -20,9 +20,7 @@
                 </div>
             @endforeach
         @else
-            <p class="card-text text-center">
-                Nobody obtained this achievement yet
-            </p>
+            <p class="card-text text-center">Nobody obtained this achievement yet</p>
         @endif
     </div>
 
@@ -38,7 +36,7 @@
                 <input class="form-control user-search" name="user-id" />
             </div>
 
-            @include(
+            @include (
                 'components.forms.datetimepicker',
                 [
                     'name' => 'achieved_on',
@@ -66,7 +64,7 @@
 
             <hr />
 
-            @include(
+            @include (
                 'components.modals.confirm-modal',
                 [
                     'action' => route('achievement::takeAll', ['id' => $achievement->id]),

@@ -1,15 +1,15 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     {{ $title }}
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-4">
             <div class="card mb-3">
                 <div class="card-header bg-dark mb-1 text-white">
-                    @yield('page-title')
+                    @yield ('page-title')
                 </div>
 
                 <table class="table-hover table-sm table">
@@ -32,7 +32,6 @@
                                     2,
                                 );
                             @endphp
-
                             <tr
                                 class="cursor-pointer"
                                 data-bs-toggle="collapse"
@@ -45,7 +44,6 @@
                                 <td></td>
                                 <td>&euro; {{ $accountTotal }}</td>
                             </tr>
-
                             @foreach ($dates as $date => $products)
                                 <tr
                                     class="collapse-{{ $account_id }} collapse cursor-pointer"
@@ -56,8 +54,7 @@
                                     <td>{{ $date }}</td>
                                     <td></td>
                                     <td>
-                                        &euro;
-                                        {{ number_format($products->sum('total'), 2) }}
+                                        &euro; {{ number_format($products->sum('total'), 2) }}
                                     </td>
                                 </tr>
                                 @foreach ($products as $product)
@@ -92,21 +89,21 @@
     </div>
 @endsection
 
-@push('javascript')
+@push ('javascript')
     <script type="text/javascript" @cspNonce>
-        window.addEventListener('load', () => {
+        window.addEventListener("load", () => {
             const dayList = Array.from(
-                document.getElementsByClassName('collapse')
+                document.getElementsByClassName("collapse")
             )
             dayList.forEach((day) => {
-                day.addEventListener('hide.bs.collapse', () => {
+                day.addEventListener("hide.bs.collapse", () => {
                     const children = [
                         ...document.getElementsByClassName(
-                            day.getAttribute('data-bs-target')?.slice(1)
+                            day.getAttribute("data-bs-target")?.slice(1)
                         ),
                     ]
                     children.forEach((child) => {
-                        child.classList.remove('show')
+                        child.classList.remove("show")
                     })
                 })
             })

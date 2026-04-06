@@ -75,9 +75,7 @@
                 <tbody>
                     <tr>
                         <th>Name</th>
-                        <td>
-                            {{ $user->name }} ({{{ $user->calling_name }}})
-                        </td>
+                        <td>{{ $user->name }} ({{{ $user->calling_name }}})</td>
                     </tr>
 
                     @if ($user->did_study_create || $user->did_study_itech)
@@ -116,7 +114,7 @@
                             <td>
                                 {{ date('F j, Y', strtotime($user->birthdate)) }}
                                 @if ($user->is_member)
-                                    @include(
+                                    @include (
                                         'components.forms.checkbox',
                                         [
                                             'name' => 'show_birthday',
@@ -158,7 +156,6 @@
                             @if ($user->address)
                                 {{ $user->address->street }}
                                 {{ $user->address->number }}
-
                                 @if ($user->is_member)
                                     <a
                                         class="badge rounded-pill bg-primary float-end"
@@ -204,7 +201,7 @@
                                         @if ($user->address_visible)
                                             Hide from members.
                                         @else
-                                                Make visible to members.
+                                            Make visible to members.
                                         @endif
                                     </a>
                                 </p>
@@ -229,7 +226,7 @@
                                     name="phone"
                                     value="{{ $user->phone }}"
                                 />
-                                @include(
+                                @include (
                                     'components.forms.checkbox',
                                     [
                                         'name' => 'phone_visible',
@@ -237,7 +234,7 @@
                                         'label' => 'Show to members',
                                     ]
                                 )
-                                @include(
+                                @include (
                                     'components.forms.checkbox',
                                     [
                                         'name' => 'receive_sms',
@@ -268,7 +265,7 @@
                         <th>OmNomCom</th>
                         <td>
                             @if ($user->is_member)
-                                @include(
+                                @include (
                                     'components.forms.checkbox',
                                     [
                                         'name' => 'show_omnomcom_total',
@@ -282,8 +279,7 @@
                                     This feature was requested by members who
                                     want to be aware of how much they spend.
                                 </small>
-
-                                @include(
+                                @include (
                                     'components.forms.checkbox',
                                     [
                                         'name' => 'show_omnomcom_calories',
@@ -298,8 +294,7 @@
                                     want to be aware of how much calories they
                                     eat.
                                 </small>
-
-                                @include(
+                                @include (
                                     'components.forms.checkbox',
                                     [
                                         'name' => 'disable_omnomcom',
@@ -327,7 +322,7 @@
                                 </small>
                             @endif
 
-                            @include(
+                            @include (
                                 'components.forms.checkbox',
                                 [
                                     'name' => 'keep_omnomcom_history',
@@ -357,7 +352,7 @@
                                 @foreach (Config::array('proto.themes') as $i => $name)
                                     <option
                                         value="{{ $i }}"
-                                        @selected($user->theme == $i)
+                                        @selected ($user->theme == $i)
                                     >
                                         {{ ucwords($name) }}
                                     </option>
@@ -375,8 +370,8 @@
                                         type="button"
                                         class="btn btn-warning"
                                     >
-                                        {{ Cookie::get('disable-december') === 'disabled' ? 'enable' : 'disable' }}
-                                        december theme
+                                        {{ Cookie::get('disable-december') === 'disabled' ? 'enable' : 'disable' }} december
+                                        theme
                                     </button>
                                 </a>
                             @endif
@@ -387,7 +382,7 @@
                         <tr>
                             <th>Privacy</th>
                             <td>
-                                @include(
+                                @include (
                                     'components.forms.checkbox',
                                     [
                                         'name' => 'show_achievements',
@@ -404,7 +399,7 @@
                                     Only members can see your achievements.
                                 </small>
 
-                                @include(
+                                @include (
                                     'components.forms.checkbox',
                                     [
                                         'name' => 'profile_in_almanac',

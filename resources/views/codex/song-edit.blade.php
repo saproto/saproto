@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Edit Song
 @endsection
 
-@section('container')
+@section ('container')
     <form
         action="{{ ! empty($song) ? route('codexSong.update', ['codexSong' => $song]) : route('codexSong.store') }}"
         method="POST"
@@ -78,7 +78,7 @@
                             {{-- Lyrics } --}}
                             <label for="lyrics">Lyrics:</label>
                             <div class="form-group mb-3">
-                                @include(
+                                @include (
                                     'components.forms.markdownfield',
                                     [
                                         'name' => 'lyrics',

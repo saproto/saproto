@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     User Administration
 @endsection
 
-@section('container')
+@section ('container')
     <div id="user-admin" class="row justify-content-center">
         <div class="col-md-3">
             <form method="get" action="{{ route('user::admin::index') }}">
@@ -31,7 +31,7 @@
                                     name="filter"
                                     id="users"
                                     value="users"
-                                    @if($filter == 'users') checked @endif
+                                    @if ($filter == 'users') checked @endif
                                 />
                                 <label class="form-check-label" for="users">
                                     Users
@@ -44,7 +44,7 @@
                                     name="filter"
                                     id="members"
                                     value="members"
-                                    @if($filter == 'members') checked @endif
+                                    @if ($filter == 'members') checked @endif
                                 />
                                 <label class="form-check-label" for="members">
                                     Members
@@ -57,7 +57,7 @@
                                     name="filter"
                                     id="pending"
                                     value="pending"
-                                    @if($filter == 'pending') checked @endif
+                                    @if ($filter == 'pending') checked @endif
                                 />
                                 <label class="form-check-label" for="pending">
                                     Pending
@@ -70,7 +70,7 @@
                                     id="all"
                                     name="filter"
                                     value=""
-                                    @if($filter == null) checked @endif
+                                    @if ($filter == null) checked @endif
                                 />
                                 <label class="form-check-label" for="all">
                                     All
@@ -89,7 +89,7 @@
         <div class="col-md-9">
             <div class="card mb-3">
                 <div class="card-header bg-dark mb-1 text-white">
-                    @yield('page-title')
+                    @yield ('page-title')
                 </div>
 
                 <div class="table-responsive">
@@ -131,7 +131,6 @@
                                                     aria-hidden="true"
                                                 ></i>
                                             </a>
-
                                             @if ($user->is_member)
                                                 <a
                                                     href="{{ route('user::profile', ['id' => $user->getPublicId()]) }}"
@@ -163,7 +162,6 @@
                                                     aria-hidden="true"
                                                 ></i>
                                             </a>
-
                                             @if ($user->isTempadmin())
                                                 <a
                                                     href="{{ route('tempadmin::end', ['id' => $user->id]) }}"
@@ -210,7 +208,7 @@
                                                 <strong>Member</strong>
                                             @endif
                                         @else
-                                                User
+                                            User
                                         @endif
                                     </td>
                                     <td class="proto-email">

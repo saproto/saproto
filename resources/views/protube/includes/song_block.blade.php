@@ -15,19 +15,15 @@
 
             @if (! isset($hide_played))
                 <br />
-
                 <span class="text-muted">
                     <em>
-                        Played
-                        {{ $played_count ?? $video->played_count }}
-                        times.
+                        Played {{ $played_count ?? $video->played_count }} times.
                     </em>
                 </span>
             @endif
 
             @if (isset($show_text))
                 <br />
-
                 <span class="text-muted">
                     <em>{{ $show_text }}</em>
                 </span>

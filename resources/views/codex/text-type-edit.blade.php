@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Edit Text Type
 @endsection
 
-@section('container')
+@section ('container')
     <form
         action="{{ ! empty($textType) ? route('codexTextType.update', ['codexTextType' => $textType]) : route('codexTextType.store') }}"
         method="POST"

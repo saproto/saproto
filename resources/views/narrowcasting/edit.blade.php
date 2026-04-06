@@ -2,13 +2,13 @@
     use App\Enums\NarrowcastingEnum;
 @endphp
 
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     {{ $item == null ? 'Create new campaign.' : 'Edit campaign ' . $item->name . '.' }}
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-4">
             <div class="card mb-3">
@@ -20,7 +20,7 @@
                     @csrf
 
                     <div class="card-header bg-dark text-white">
-                        @yield('page-title')
+                        @yield ('page-title')
                     </div>
 
                     <div class="card-body">
@@ -37,7 +37,7 @@
                             />
                         </div>
 
-                        @include(
+                        @include (
                             'components.forms.datetimepicker',
                             [
                                 'name' => 'campaign_start',
@@ -46,7 +46,7 @@
                             ]
                         )
 
-                        @include(
+                        @include (
                             'components.forms.datetimepicker',
                             [
                                 'name' => 'campaign_end',
@@ -90,7 +90,6 @@
 
                             @if ($item?->youtube_id)
                                 <label>Current video:</label>
-
                                 <div class="row">
                                     <iframe
                                         height="300"
@@ -111,7 +110,6 @@
                                         Upload an image
                                     </label>
                                 </div>
-
                                 <p>
                                     <sup>
                                         <strong>Images should be</strong>

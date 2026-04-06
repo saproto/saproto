@@ -42,10 +42,7 @@
                 @endforeach
             </div>
         @else
-            <p class="card-text text-center">
-                You have no cards linked to your account. You can link cards at
-                the OmNomCom.
-            </p>
+            <p class="card-text text-center">You have no cards linked to your account. You can link cards at the OmNomCom.</p>
         @endif
     </div>
 </div>

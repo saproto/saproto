@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     Photo Admin
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row">
         <div class="col-lg-3">
             <div class="card mb-3">
@@ -59,7 +59,7 @@
                                 class="form-control"
                             />
                         </div>
-                        @include(
+                        @include (
                             'components.forms.datetimepicker',
                             [
                                 'name' => 'date',
@@ -68,7 +68,7 @@
                             ]
                         )
                         <div class="d-inline-flex align-content-center mt-2">
-                            @include(
+                            @include (
                                 'components.forms.checkbox',
                                 [
                                     'name' => 'private',
@@ -107,7 +107,7 @@
                     <div class="row">
                         @foreach ($unpublished as $album)
                             <div class="col-lg-2 col-lg-3 col-md-4 col-sm-6">
-                                @include(
+                                @include (
                                     'website.home.cards.card-bg-image',
                                     [
                                         'url' => route('albums::admin::edit', ['id' => $album->id]),
@@ -140,7 +140,7 @@
                     <div class="row">
                         @foreach ($published as $album)
                             <div class="col-lg-2 col-lg-3 col-md-4 col-sm-6">
-                                @include(
+                                @include (
                                     'website.home.cards.card-bg-image',
                                     [
                                         'url' => route('albums::admin::edit', ['id' => $album->id]),

@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     Achievement Overview
 @endsection
 
-@section('container')
+@section ('container')
     <div id="achievement-accordion">
         @foreach (['common' => $common, 'uncommon' => $uncommon, 'rare' => $rare, 'epic' => $epic, 'legendary' => $legendary] as $tier => $achievements)
             <div
@@ -38,7 +38,7 @@
                         @if (count($achievements) > 0)
                             @foreach ($achievements as $achievement)
                                 <div class="col-xl-4 col-md-6 col-sm-12">
-                                    @include(
+                                    @include (
                                         'achievement.includes.achievement_include',
                                         [
                                             'achievement' => $achievement,

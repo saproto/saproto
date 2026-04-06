@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     UTwente Address Book Search
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-xl-3 col-lg-12">
             <form method="post" action="{{ route('search::ldap::post') }}">
@@ -43,9 +43,7 @@
 
                     <div class="card-body">
                         @if (count($data) <= 0)
-                            <p class="card-text text-center">
-                                Your search returned no results.
-                            </p>
+                            <p class="card-text text-center">Your search returned no results.</p>
                         @else
                             <div class="row">
                                 @foreach ($data as $result)
@@ -60,10 +58,7 @@
                                                     <i
                                                         class="fas fa-id-badge fa-fw"
                                                     ></i>
-                                                    {{ $result['givenname'] ?? null }}
-                                                    {{ $result['middlename'] ?? null }}
-                                                    {{ $result['sn'] ?? null }},
-                                                    {{ $result['initials'] ?? null }}
+                                                    {{ $result['givenname'] ?? null }} {{ $result['middlename'] ?? null }} {{ $result['sn'] ?? null }}, {{ $result['initials'] ?? null }}
                                                     <br />
 
                                                     <i

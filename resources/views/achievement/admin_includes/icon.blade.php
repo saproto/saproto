@@ -9,7 +9,7 @@
         <div class="card-header bg-dark text-white">Set the icon</div>
 
         <div class="card-body">
-            @include(
+            @include (
                 'components.forms.iconpicker',
                 [
                     'name' => 'fa_icon',

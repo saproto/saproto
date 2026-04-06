@@ -1,9 +1,9 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 @php
     /** @var \App\Models\Event $event */
 @endphp
 
-@section('page-title')
+@section ('page-title')
     Participant checklist for {{ $event->title }}
     <a
         href="{{ route('event::show', ['event' => $event]) }}"
@@ -13,12 +13,12 @@
     </a>
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-8 col-sm-10 col-xs-12">
             <div class="card">
                 <div class="card-header bg-dark text-white">
-                    @yield('page-title')
+                    @yield ('page-title')
                 </div>
 
                 <div class="card-body">
@@ -61,7 +61,6 @@
                                 @php
                                     $participation = $user->pivot;
                                 @endphp
-
                                 <tr>
                                     <td>
                                         @if ($participation)
@@ -81,10 +80,10 @@
                                                     Helper
                                                 </span>
                                             @else
-                                                    Participant
+                                                Participant
                                             @endif
                                         @else
-                                                Ticket
+                                            Ticket
                                         @endif
                                     </td>
 
@@ -110,7 +109,9 @@
                                         @endif
                                     </td>
 
-                                    <td>{{ $user->is_member ? '✅' : '❌' }}</td>
+                                    <td>
+                                        {{ $user->is_member ? '✅' : '❌' }}
+                                    </td>
 
                                     @if ($event->shouldShowDietInfo())
                                         <td>
@@ -129,7 +130,7 @@
     </div>
 @endsection
 
-@push('javascript')
+@push ('javascript')
     <script type="text/javascript" @cspNonce>
         present = document.getElementById('present')
 
@@ -137,17 +138,17 @@
             el.onclick = () => {
                 get(
                     '{{ route('event::togglepresence', ['participation' => 'id']) }}'.replace(
-                        'id',
-                        el.getAttribute('data-id')
-                    )
-                ).then((data) => {
-                    el.classList.toggle('bg-success')
-                    el.classList.toggle('bg-danger')
-                    el.innerHTML =
-                        el.innerHTML === 'Present' ? 'Absent' : 'Present'
-                    present.innerHTML = data
+                                'id',
+                                el.getAttribute('data-id')
+                            )
+                        ).then((data) => {
+                            el.classList.toggle('bg-success')
+                            el.classList.toggle('bg-danger')
+                            el.innerHTML =
+                                el.innerHTML === 'Present' ? 'Absent' : 'Present'
+                            present.innerHTML = data
+                        })
+                    }
                 })
-            }
-        })
     </script>
 @endpush

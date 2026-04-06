@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     Orderline wizard
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row">
         <div class="column">
             <form
@@ -35,8 +35,7 @@
                                 >
                                     @foreach ($members as $member)
                                         <option value="{{ $member->id }}">
-                                            {{ $member->name }}
-                                            (#{{ $member->id }})
+                                            {{ $member->name }} (#{{ $member->id }})
                                         </option>
                                     @endforeach
                                 </select>
@@ -52,8 +51,7 @@
                                             value="{{ $product->id }}"
                                             data-price="{{ $product->price }}"
                                         >
-                                            {{ $product->name }}
-                                            (&euro;{{ $product->price }},
+                                            {{ $product->name }} (&euro;{{ $product->price }},
                                             #{{ $product->id }})
                                         </option>
                                     @endforeach
@@ -144,21 +142,21 @@
     </div>
 @endsection
 
-@push('javascript')
+@push ('javascript')
     <script type="text/javascript" @cspNonce>
         document
-            .getElementById('orderline-add-row')
-            .addEventListener('click', (e) => {
+            .getElementById("orderline-add-row")
+            .addEventListener("click", (e) => {
                 e.preventDefault()
 
                 const prevRow = Array.from(
-                    document.getElementsByClassName('orderline-row')
+                    document.getElementsByClassName("orderline-row")
                 ).pop()
                 const newRow = prevRow.cloneNode(true)
-                document.getElementById('orderline-rows').append(newRow)
+                document.getElementById("orderline-rows").append(newRow)
 
-                const deleteBtn = newRow.querySelector('.orderline-delete-row')
-                deleteBtn.addEventListener('click', (e) => {
+                const deleteBtn = newRow.querySelector(".orderline-delete-row")
+                deleteBtn.addEventListener("click", (e) => {
                     newRow.remove()
                     calculateTotalPrice()
                 })
@@ -168,32 +166,32 @@
             })
 
         document
-            .getElementById('orderline-modal')
-            .addEventListener('change', () => {
+            .getElementById("orderline-modal")
+            .addEventListener("change", () => {
                 calculateTotalPrice()
             })
 
         function calculateTotalPrice() {
             const rows = Array.from(
-                document.getElementsByClassName('orderline-row')
+                document.getElementsByClassName("orderline-row")
             )
             const totalPrice = rows.reduce((total, el) => {
                 let currentPrice
                 const product = el.querySelector(
-                    '.orderline-product option:checked'
+                    ".orderline-product option:checked"
                 )
-                const productPrice = el.querySelector('.orderline-price')
-                const units = el.querySelector('.orderline-units').value
-                if (productPrice.value === '')
-                    currentPrice = product.getAttribute('data-price')
+                const productPrice = el.querySelector(".orderline-price")
+                const units = el.querySelector(".orderline-units").value
+                if (productPrice.value === "")
+                    currentPrice = product.getAttribute("data-price")
                 else currentPrice = productPrice.value
                 return total + currentPrice * units
             }, 0)
-            document.getElementById('total-price').innerHTML =
-                '&euro; ' + totalPrice.toFixed(2)
+            document.getElementById("total-price").innerHTML =
+                "&euro; " + totalPrice.toFixed(2)
         }
 
-        window.addEventListener('load', () => {
+        window.addEventListener("load", () => {
             calculateTotalPrice()
         })
     </script>

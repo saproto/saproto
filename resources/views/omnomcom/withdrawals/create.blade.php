@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Generate new withdrawal
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="row-md-4">
             <form
@@ -15,7 +15,7 @@
 
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield('page-title')
+                        @yield ('page-title')
                     </div>
 
                     <div class="card-body">
@@ -30,8 +30,8 @@
                             </strong>
                             .
 
-                            @php($wd = Carbon::createFromFormat('Y-m-d', date('Y-m-25')))
-                            @include(
+                            @php ($wd = Carbon::createFromFormat('Y-m-d', date('Y-m-25')))
+                            @include (
                                 'components.forms.datetimepicker',
                                 [
                                     'name' => 'date',

@@ -11,7 +11,6 @@
                 @php
                     /** @var Withdrawal $withdrawal */
                 @endphp
-
                 <div class="list-group-item d-flex justify-content-between">
                     <div>
                         <a
@@ -51,7 +50,6 @@
                         @php
                             $status = App\Models\MollieTransaction::translateStatus($transaction->translatedStatus());
                         @endphp
-
                         <a
                             href="{{ route('omnomcom::mollie::status', ['id' => $transaction->id]) }}"
                         >

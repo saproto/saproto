@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Videos Admin
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-2">
             <form method="post" action="{{ route('video::admin::create') }}">
@@ -53,7 +53,7 @@
         <div class="col-md-8">
             <div class="card mb-3">
                 <div class="card-header bg-dark mb-1 text-white">
-                    @yield('page-title')
+                    @yield ('page-title')
                 </div>
 
                 <div class="table-responsive">
@@ -101,7 +101,7 @@
                                     >
                                         <i class="fas fa-edit me-2"></i>
                                     </a>
-                                    @include(
+                                    @include (
                                         'components.modals.confirm-modal',
                                         [
                                             'action' => route('video::admin::delete', ['id' => $video->id]),

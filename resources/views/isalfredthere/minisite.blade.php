@@ -1,14 +1,14 @@
-@extends('website.layouts.redesign.generic-nonavandfooter')
+@extends ('website.layouts.redesign.generic-nonavandfooter')
 
-@section('page-title')
+@section ('page-title')
     Is Alfred There?
 @endsection
 
-@push('head')
+@push ('head')
     <meta http-equiv="refresh" content="86400" />
 @endpush
 
-@section('container')
+@section ('container')
     <div class="row text-white">
         <div class="col-md-12 text-center">
             <h1 class="mt-3 mb-3" style="font-size: 70px">Is Alfred There?</h1>
@@ -55,7 +55,7 @@
     </div>
 @endsection
 
-@push('stylesheet')
+@push ('stylesheet')
     <style rel="stylesheet">
         body {
             background-color: var(--bs-warning);
@@ -67,10 +67,9 @@
     </style>
 @endpush
 
-@push('javascript')
-    @vite('resources/assets/js/echo.js')
-    @vite('resources/assets/js/moment.js')
-
+@push ('javascript')
+    @vite ('resources/assets/js/echo.js')
+    @vite ('resources/assets/js/moment.js')
     <script type="text/javascript" @cspNonce>
         const statusElement = document.getElementById('alfred-status')
         const text = document.getElementById('alfred-text')
@@ -111,70 +110,70 @@
         window.addEventListener('load', () => {
             updateStatus({
                 status: '{{ $status }}',
-                text: '{{ $text }}',
-                unix: '{{ $unix }}',
-            })
+                        text: '{{ $text }}',
+                        unix: '{{ $unix }}',
+                    })
 
-            window.Echo.channel(`isalfredthere`)
-                .listen('IsAlfredThereEvent', (status) => {
-                    updateStatus(status)
+                    window.Echo.channel(`isalfredthere`)
+                        .listen('IsAlfredThereEvent', (status) => {
+                            updateStatus(status)
+                        })
+                        .error((error) => {
+                            console.error(error)
+                            setTimeout(() => {
+                                window.location.reload()
+                            }, 10000)
+                        })
                 })
-                .error((error) => {
-                    console.error(error)
-                    setTimeout(() => {
-                        window.location.reload()
-                    }, 10000)
-                })
-        })
 
-        const updateStatus = (status) => {
-            if (status.text?.length > 0) {
-                text.innerHTML = '"'.concat(status.text ?? '', '"')
-            } else {
-                text.innerHTML = ''
-            }
+                const updateStatus = (status) => {
+                    if (status.text?.length > 0) {
+                        text.innerHTML = '"'.concat(status.text ?? '', '"')
+                    } else {
+                        text.innerHTML = ''
+                    }
 
-            // hide all smileys
-            Object.keys(statuses).forEach((key) => {
-                statuses[key].htmlElement.classList.add('d-none')
-            })
+                    // hide all smileys
+                    Object.keys(statuses).forEach((key) => {
+                        statuses[key].htmlElement.classList.add('d-none')
+                    })
 
-            // set the new status
-            setNewStatus(statuses[status.status])
+                    // set the new status
+                    setNewStatus(statuses[status.status])
 
-            // set the time submessage and start the timer if Alfred is away
-            if (status.status === 'away') {
-                const date = new window.moment(status.unix)
-                time.innerHTML = `That would be ${date.format('DD-MM-Y HH:mm')}.`
-                time.classList.remove('d-none')
-                statusElement.setAttribute('data-countdown-start', date.unix())
-                window.timerList?.forEach((timer) => {
-                    timer.start()
-                })
-            }
-        }
+                    // set the time submessage and start the timer if Alfred is away
+                    if (status.status === 'away') {
+                        const date = new window.moment(status.unix)
+                        time.innerHTML = `That would be ${date.format('DD-MM-Y HH:mm')}.`
+                        time.classList.remove('d-none')
+                        statusElement.setAttribute('data-countdown-start', date.unix())
+                        window.timerList?.forEach((timer) => {
+                            timer.start()
+                        })
+                    }
+                }
 
-        const setNewStatus = (newStatus) => {
-            // stop all timers
-            window.timerList?.forEach((timer) => {
-                timer.stop()
-            })
-            // set the big status text
-            statusElement.innerHTML = newStatus.text
+                const setNewStatus = (newStatus) => {
+                    // stop all timers
+                    window.timerList?.forEach((timer) => {
+                        timer.stop()
+                    })
+                    // set the big status text
+                    statusElement.innerHTML = newStatus.text
 
-            //reveal the correct smiley
-            newStatus.htmlElement.classList.remove('d-none')
+                    //reveal the correct smiley
+                    newStatus.htmlElement.classList.remove('d-none')
 
-            // hide the time submessage
-            time.classList.add('d-none')
+                    // hide the time submessage
+                    time.classList.add('d-none')
 
-            document.body.classList.remove(
-                'bg-success',
-                'bg-warning',
-                'bg-danger'
-            )
-            // set the correct color corresponding to the status
-            document.body.classList.add(newStatus.color)
-        }
+                    document.body.classList.remove(
+                        'bg-success',
+                        'bg-warning',
+                        'bg-danger'
+                    )
+                    // set the correct color corresponding to the status
+                    document.body.classList.add(newStatus.color)
+                }
     </script>
 @endpush

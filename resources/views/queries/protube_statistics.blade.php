@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     ProTube statistics
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row d-inline-flex justify-content-center w-100">
         <div class="col-10">
             <div class="card mb-3">
@@ -18,7 +18,7 @@
                                 Start:
                             </label>
                             <div class="col-sm-auto">
-                                @include(
+                                @include (
                                     'components.forms.datetimepicker',
                                     [
                                         'name' => 'start',
@@ -34,7 +34,7 @@
                                 End:
                             </label>
                             <div class="col-sm-auto">
-                                @include(
+                                @include (
                                     'components.forms.datetimepicker',
                                     [
                                         'name' => 'end',
@@ -99,9 +99,7 @@
                                 <td class="hidden-sm hidden-xs">
                                     {{ $topUser->user?->name }}
                                 </td>
-                                <td>
-                                    {{ $topUser->played_count }}
-                                </td>
+                                <td>{{ $topUser->played_count }}</td>
                             </tr>
                         @endforeach
                     </table>
@@ -124,9 +122,7 @@
                                 <td class="hidden-sm hidden-xs">
                                     {{ $topVideo->video_title }}
                                 </td>
-                                <td>
-                                    {{ $topVideo->played_count }}
-                                </td>
+                                <td>{{ $topVideo->played_count }}</td>
                             </tr>
                         @endforeach
                     </table>

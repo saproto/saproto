@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Wallsteet drink chart!
 @endsection
 
-@section('container')
+@section ('container')
     <div
         style="position: relative; height: 90vh; width: 95vw; margin-left: auto"
     >
@@ -12,16 +12,15 @@
     </div>
 @endsection
 
-@vite('resources/assets/js/echo.js')
+@vite ('resources/assets/js/echo.js')
 
-@push('javascript')
+@push ('javascript')
     {{-- chart.js and the date adapter --}}
     <script @cspNonce src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script
         @cspNonce
         src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"
     ></script>
-
     <script @cspNonce>
         // Initialize when page is loaded
         window.addEventListener('load', () => {
@@ -29,37 +28,36 @@
 
             get(
                 `{{ route('api::wallstreet::all_prices', ['id' => $id]) }}`
-            ).then((products) => {
-                var chart = new Chart(ctx, {
-                    type: 'line',
-                    options: {
-                        maintainAspectRatio: false,
-                        spanGaps: true,
-                        scales: {
-                            x: {
-                                type: 'time',
-                                parsing: false,
+                    ).then((products) => {
+                        var chart = new Chart(ctx, {
+                            type: 'line',
+                            options: {
+                                maintainAspectRatio: false,
+                                spanGaps: true,
+                                scales: {
+                                    x: {
+                                        type: 'time',
+                                        parsing: false,
+                                    },
+                                },
+                                responsive: true,
                             },
-                        },
-                        responsive: true,
-                    },
-                    data: {
-                        datasets: products.map((product) => {
-                            return {
-                                label: product.name,
-                                data: product.wallstreet_prices.map((price) => {
+                            data: {
+                                datasets: products.map((product) => {
                                     return {
-                                        x: Date.parse(price.created_at),
-                                        y: price.price,
+                                        label: product.name,
+                                        data: product.wallstreet_prices.map((price) => {
+                                            return {
+                                                x: Date.parse(price.created_at),
+                                                y: price.price,
+                                            }
+                                        }),
                                     }
                                 }),
-                            }
-                        }),
-                    },
-                })
+                            },
+                        })
 
-                let id = {{ $id }}
-                //listen to a new wallstreet price
+                        let id ={{ $id }}        //listen to a new wallstreet price
                 Echo.private(`wallstreet-prices.${id}`).listen(
                     '.App\\Events\\Wallstreet\\NewWallstreetPrice',
                     (e) => {

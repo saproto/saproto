@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     Event Category Admin
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row">
         <div class="col-5">
             <div class="card">
@@ -34,7 +34,7 @@
                             required
                         />
 
-                        @include(
+                        @include (
                             'components.forms.iconpicker',
                             [
                                 'name' => 'icon',
@@ -64,7 +64,7 @@
                 <div class="card-header">Categories</div>
                 <div class="card-body">
                     <div class="row justify-content-center">
-                        @php($categories = \App\Models\EventCategory::all())
+                        @php ($categories = \App\Models\EventCategory::all())
                         @if (count($categories) > 0)
                             @foreach ($categories as $category)
                                 <div class="row col-5 m-1">
@@ -87,7 +87,7 @@
                                             ></i>
                                         </a>
 
-                                        @include(
+                                        @include (
                                             'components.modals.confirm-modal',
                                             [
                                                 'action' => route('event::categories.destroy', [
@@ -105,9 +105,7 @@
                                 </div>
                             @endforeach
                         @else
-                            <p class="text-muted mb-0 text-center">
-                                There are no event categories yet.
-                            </p>
+                            <p class="text-muted mb-0 text-center">There are no event categories yet.</p>
                         @endif
                     </div>
                 </div>

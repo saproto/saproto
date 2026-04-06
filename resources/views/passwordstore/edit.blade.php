@@ -1,18 +1,18 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@push('head')
+@push ('head')
     <meta
         http-equiv="refresh"
         content="{{ Session::get('passwordstore-verify') - time() }}"
     />
 @endpush
 
-@section('page-title')
+@section ('page-title')
     {{ $password ? 'Edit' : 'Add' }}
     {{ $type == 'password' ? 'Password' : 'Secure Note' }}
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-4">
             <form
@@ -23,7 +23,7 @@
 
                 <div class="card">
                     <div class="card-header bg-dark text-white">
-                        @yield('page-title')
+                        @yield ('page-title')
                     </div>
 
                     <div class="card-body">
@@ -42,10 +42,10 @@
                             required
                         >
                             @foreach (Permission::all() as $permission)
-                                @can($permission->name)
+                                @can ($permission->name)
                                     <option
                                         value="{{ $permission->id }}"
-                                        @selected($password && $permission->id == $password->permission_id)
+                                        @selected ($password && $permission->id == $password->permission_id)
                                     >
                                         {{ $permission->display_name }}
                                     </option>
@@ -55,7 +55,6 @@
 
                         @if ($type == 'password')
                             <input type="hidden" name="type" value="password" />
-
                             <label>Username:</label>
                             <input
                                 class="form-control mb-3"
@@ -63,7 +62,6 @@
                                 name="username"
                                 value="{{ $password ? Crypt::decrypt($password->username) : '' }}"
                             />
-
                             <label>Password:</label>
                             <input
                                 class="form-control mb-3"
@@ -71,7 +69,6 @@
                                 name="password"
                                 value="{{ $password ? Crypt::decrypt($password->password) : '' }}"
                             />
-
                             <label>Website URI:</label>
                             <input
                                 class="form-control mb-3"
@@ -79,7 +76,6 @@
                                 name="url"
                                 value="{{ $password->url ?? '' }}"
                             />
-
                             <label>Comment:</label>
                         @else
                             <input type="hidden" name="type" value="note" />
@@ -90,8 +86,7 @@
                             name="note"
                             rows="10"
                             placeholder="The content."
-                        >
-{{ $password?->note ? Crypt::decrypt($password->note) : '' }}</textarea
+                            >{{ $password?->note ? Crypt::decrypt($password->note) : '' }}</textarea
                         >
                     </div>
 

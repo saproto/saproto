@@ -2,19 +2,18 @@
     use App\Enums\NewsEnum;
 @endphp
 
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     {{ $newsitem->title }}
 @endsection
 
-@section('container')
+@section ('container')
     @if ($preview)
         <div class="alert alert-info" role="alert">
             You are currently previewing an unpublished news item.
         </div>
     @endif
-
     <div class="row">
         <div class="{{ count($events) > 0 ? 'col-8' : '' }}">
             <div class="card mb-3">
@@ -27,7 +26,7 @@
                 @endif
 
                 <div class="card-body">
-                    <h5 class="card-title">@yield('page-title')</h5>
+                    <h5 class="card-title">@yield ('page-title')</h5>
 
                     <footer class="blockquote-footer">
                         Published
@@ -42,9 +41,7 @@
                         </a>
                     </footer>
 
-                    <p class="card-text">
-                        {!! $parsedContent !!}
-                    </p>
+                    <p class="card-text">{!! $parsedContent !!}</p>
                 </div>
             </div>
         </div>
@@ -58,7 +55,7 @@
                     </div>
                     <div class="card-body">
                         @foreach ($events as $counter => $event)
-                            @include(
+                            @include (
                                 'event.display_includes.event_block',
                                 [
                                     'event' => $event,

@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     {{ $account == null ? 'Create new account.' : 'Edit account ' . $account->account_number . '.' }}
 @endsection
 
-@section('container')
+@section ('container')
     <form
         method="post"
         action="{{ $account == null ? route('omnomcom::accounts::store') : route('omnomcom::accounts::update', ['id' => $account->id]) }}"
@@ -16,7 +16,7 @@
             <div class="col-md-3">
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield('page-title')
+                        @yield ('page-title')
                     </div>
 
                     <div class="card-body">

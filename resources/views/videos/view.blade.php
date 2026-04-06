@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     {{ $video->title }}
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-8 col-sm-10 col-xs-12">
             <div class="card mb-3">
@@ -22,8 +22,7 @@
                         target="_blank"
                     >
                         <i class="fab fa-youtube me-2" aria-hidden="true"></i>
-                        {{ $video->youtube_title }} by
-                        {{ $video->youtube_user_name }}
+                        {{ $video->youtube_title }} by {{ $video->youtube_user_name }}
                     </a>
 
                     @if ($video->event)

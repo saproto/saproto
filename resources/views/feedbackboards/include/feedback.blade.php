@@ -26,7 +26,7 @@
         @endif
 
         @if ((Auth::user()->id == $feedback->user?->id && ! $feedback->reply) || (Auth::user()->can('board') && $feedback->deleted_at))
-            @include(
+            @include (
                 'components.modals.confirm-modal',
                 [
                     'action' => route('feedback::delete', ['id' => $feedback->id]),
@@ -40,7 +40,7 @@
             )
         @endif
 
-        @can('board')
+        @can ('board')
             @if (! $feedback->deleted_at)
                 <a
                     href="{{ route('feedback::archive', ['id' => $feedback->id]) }}"
@@ -101,8 +101,7 @@
                         name="reply"
                         placeholder="A reply to this {{ strtolower(str_singular($feedback->category->title)) }}."
                         required
-                    >
-{{ $feedback->reply ?? '' }}</textarea
+                        >{{ $feedback->reply ?? '' }}</textarea
                     >
                     <div class="btn-group w-100">
                         <button
@@ -150,31 +149,31 @@
     </div>
 </div>
 
-@push('javascript')
+@push ('javascript')
     @if ($controls)
         <script type="text/javascript" @cspNonce>
             document
                 .querySelectorAll('.toggle-navbar-{{ $feedback->id }}')
-                .forEach((element) => {
-                    element.addEventListener('click', () => {
-                        const enabled = document
-                            .getElementById(
-                                'feedback__{{ $feedback->id }}__collapse'
-                            )
-                            .classList.toggle('show')
-                        if (enabled) {
-                            document
-                                .getElementById(
-                                    'feedback__{{ $feedback->id }}__reply'
-                                )
-                                .focus()
-                        } else {
-                            document.getElementById(
-                                'feedback__{{ $feedback->id }}__reply'
-                            ).value = ''
-                        }
-                    })
-                })
+                            .forEach((element) => {
+                                element.addEventListener('click', () => {
+                                    const enabled = document
+                                        .getElementById(
+                                            'feedback__{{ $feedback->id }}__collapse'
+                                        )
+                                        .classList.toggle('show')
+                                    if (enabled) {
+                                        document
+                                            .getElementById(
+                                                'feedback__{{ $feedback->id }}__reply'
+                                            )
+                                            .focus()
+                                    } else {
+                                        document.getElementById(
+                                            'feedback__{{ $feedback->id }}__reply'
+                                        ).value = ''
+                                    }
+                                })
+                            })
         </script>
     @endif
 @endpush

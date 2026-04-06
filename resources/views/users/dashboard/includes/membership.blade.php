@@ -11,7 +11,7 @@
                                 @if (date('U', strtotime($user->member->created_at)) > 0)
                                     {{ date('F j, Y', strtotime($user->member->created_at)) }}
                                 @else
-                                        Before we kept track
+                                    Before we kept track
                                 @endif
                             </td>
                         </tr>
@@ -25,7 +25,6 @@
                                 </td>
                             </tr>
                         @endif
-
                         <tr>
                             <th>Proto username</th>
                             <td>{{ $user->member->proto_username }}</td>
@@ -53,7 +52,6 @@
                                 </td>
                             </tr>
                         @endif
-
                         <tr>
                             <th>Membership type</th>
                             @php
@@ -63,8 +61,7 @@
 
                             @if ($memberOrderline)
                                 <td>
-                                    {{ ucfirst($memberType) }}
-                                    member
+                                    {{ ucfirst($memberType) }} member
                                     <br />
                                     <sup class="text-muted">
                                         {{ '€ ' . $memberOrderline->total_price . ' was paid on ' . date('F j, Y', strtotime($memberOrderline->created_at)) }}
@@ -125,14 +122,12 @@
                                 </td>
                             </tr>
                         @endif
-
                         <tr>
                             <th>Current Membership</th>
 
                             @if ($user->member->membershipForm)
                                 <td>
-                                    Since
-                                    {{ strtotime($user->member->created_at) > 0 ? date('d-m-Y', strtotime($user->member->created_at)) : 'forever' }}
+                                    Since {{ strtotime($user->member->created_at) > 0 ? date('d-m-Y', strtotime($user->member->created_at)) : 'forever' }}
                                     <br />
                                     <a
                                         href="{{ route('memberform::download::signed', ['id' => $user->member->membership_form_id]) }}"
@@ -144,8 +139,7 @@
                                 </td>
                             @else
                                 <td>
-                                    Since
-                                    {{ strtotime($user->member->created_at) > 0 ? date('d-m-Y', strtotime($user->member->created_at)) : 'forever' }}
+                                    Since {{ strtotime($user->member->created_at) > 0 ? date('d-m-Y', strtotime($user->member->created_at)) : 'forever' }}
                                     <br />
                                     <span class="badge rounded-pill bg-warning">
                                         No digital membership form
@@ -162,9 +156,7 @@
                             @foreach ($memberships['previous'] as $membership)
                                 @if ($membership->membershipForm)
                                     <td>
-                                        {{ strtotime($membership->created_at) > 0 ? date('d-m-Y', strtotime($membership->created_at)) : 'forever' }}
-                                        -
-                                        {{ date('d-m-Y', strtotime($membership->deleted_at)) }}
+                                        {{ strtotime($membership->created_at) > 0 ? date('d-m-Y', strtotime($membership->created_at)) : 'forever' }} - {{ date('d-m-Y', strtotime($membership->deleted_at)) }}
                                         <br />
                                         <a
                                             href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}"
@@ -176,9 +168,7 @@
                                     </td>
                                 @else
                                     <td>
-                                        {{ strtotime($membership->created_at) > 0 ? date('d-m-Y', strtotime($membership->created_at)) : 'forever' }}
-                                        -
-                                        {{ date('d-m-Y', strtotime($membership->deleted_at)) }}
+                                        {{ strtotime($membership->created_at) > 0 ? date('d-m-Y', strtotime($membership->created_at)) : 'forever' }} - {{ date('d-m-Y', strtotime($membership->deleted_at)) }}
                                         <br />
                                         <span
                                             class="badge rounded-pill bg-warning"
@@ -200,8 +190,7 @@
                             @foreach ($memberships['pending'] as $membership)
                                 @if ($membership->membershipForm)
                                     <td>
-                                        Since
-                                        {{ strtotime($membership->created_at) > 0 ? date('d-m-Y', strtotime($membership->created_at)) : 'forever' }}
+                                        Since {{ strtotime($membership->created_at) > 0 ? date('d-m-Y', strtotime($membership->created_at)) : 'forever' }}
                                         <br />
                                         <a
                                             href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}"
@@ -213,8 +202,7 @@
                                     </td>
                                 @else
                                     <td>
-                                        Since
-                                        {{ strtotime($membership->created_at) > 0 ? date('d-m-Y', strtotime($membership->created_at)) : 'forever' }}
+                                        Since {{ strtotime($membership->created_at) > 0 ? date('d-m-Y', strtotime($membership->created_at)) : 'forever' }}
                                         <br />
                                         <span
                                             class="badge rounded-pill bg-warning"

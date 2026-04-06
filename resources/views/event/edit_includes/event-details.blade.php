@@ -9,7 +9,7 @@
         <div class="card-header bg-dark text-white">
             <div class="fw-bold d-inline-block m-1 p-1">Event details</div>
 
-            @include('event.edit_includes.buttonbar')
+            @include ('event.edit_includes.buttonbar')
         </div>
 
         <div class="card-body">
@@ -66,7 +66,7 @@
 
                         <!-- Start -->
                         <div class="col-md-6 mb-3">
-                            @include(
+                            @include (
                                 'components.forms.datetimepicker',
                                 [
                                     'name' => 'start',
@@ -82,7 +82,7 @@
 
                         <!-- End -->
                         <div class="col-md-6 mb-3">
-                            @include(
+                            @include (
                                 'components.forms.datetimepicker',
                                 [
                                     'name' => 'end',
@@ -107,13 +107,13 @@
                             >
                                 <option
                                     value="1"
-                                    @selected(old('secret') === 1 || ($event != null && $event->secret))
+                                    @selected (old('secret') === 1 || ($event != null && $event->secret))
                                 >
                                     Secret
                                 </option>
                                 <option
                                     value="0"
-                                    @selected(old('secret') === 0 || ($event != null && ! $event->secret))
+                                    @selected (old('secret') === 0 || ($event != null && ! $event->secret))
                                 >
                                     Public
                                 </option>
@@ -122,7 +122,7 @@
 
                         <!-- Publication -->
                         <div class="col-md-6 mb-3">
-                            @include(
+                            @include (
                                 'components.forms.datetimepicker',
                                 [
                                     'name' => 'publication',
@@ -166,7 +166,7 @@
                         </div>
 
                         <!-- Category -->
-                        @php($categories = \App\Models\EventCategory::all())
+                        @php ($categories = \App\Models\EventCategory::all())
                         @if (count($categories) > 0)
                             <div class="col-md-6 mb-3">
                                 <label for="category">Event category:</label>
@@ -176,14 +176,14 @@
                                     class="form-control"
                                 >
                                     <option
-                                        @selected($event && ! $event->category)
+                                        @selected ($event && ! $event->category)
                                     >
                                         Uncategorized
                                     </option>
                                     @foreach ($categories as $category)
                                         <option
                                             value="{{ $category->id }}"
-                                            @selected($event?->category_id == $category->id)
+                                            @selected ($event?->category_id == $category->id)
                                         >
                                             {{ $category->name }}
                                         </option>
@@ -194,7 +194,7 @@
 
                         <!-- External -->
                         <div class="col-md-6 mb-3">
-                            @include(
+                            @include (
                                 'components.forms.checkbox',
                                 [
                                     'name' => 'is_external',
@@ -206,7 +206,7 @@
 
                         <!-- Food -->
                         <div class="col-md-6 mb-3">
-                            @include(
+                            @include (
                                 'components.forms.checkbox',
                                 [
                                     'name' => 'involves_food',
@@ -218,7 +218,7 @@
 
                         <!-- Force Calendar -->
                         <div class="col-md-6 mb-3">
-                            @include(
+                            @include (
                                 'components.forms.checkbox',
                                 [
                                     'name' => 'force_calendar_sync',
@@ -231,7 +231,7 @@
 
                         <!-- Feature -->
                         <div class="col-md-6 mb-3">
-                            @include(
+                            @include (
                                 'components.forms.checkbox',
                                 [
                                     'name' => 'is_featured',
@@ -244,7 +244,6 @@
 
                     @if ($event?->hasMedia('header'))
                         <hr />
-
                         <h5>Current image:</h5>
                         <img
                             src="{!! $event->getFirstMediaUrl('header', 'card') !!}"
@@ -256,7 +255,7 @@
                 <div class="col-md-5">
                     <div class="form-group">
                         <label for="editor">Description</label>
-                        @include(
+                        @include (
                             'components.forms.markdownfield',
                             [
                                 'name' => 'description',
@@ -274,7 +273,7 @@
 
                     <div class="form-group">
                         <label for="editor-summary">Summary</label>
-                        @include(
+                        @include (
                             'components.forms.markdownfield',
                             [
                                 'name' => 'summary',
@@ -291,7 +290,7 @@
         </div>
 
         <div class="card-footer">
-            @include('event.edit_includes.buttonbar')
+            @include ('event.edit_includes.buttonbar')
         </div>
     </div>
 </form>

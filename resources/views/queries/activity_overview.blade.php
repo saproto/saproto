@@ -1,19 +1,19 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 @php
     /** @var \Illuminate\Support\Collection<\App\Models\Event> $events */
 @endphp
 
-@section('page-title')
+@section ('page-title')
     Activity Overview between {{ date('Y-m-d', $start) }} and
     {{ date('Y-m-d', $end) }}
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white">
-                    @yield('page-title')
+                    @yield ('page-title')
                 </div>
 
                 <div class="card-body">
@@ -26,7 +26,7 @@
                                 Start:
                             </label>
                             <div class="col-sm-auto">
-                                @include(
+                                @include (
                                     'components.forms.datetimepicker',
                                     [
                                         'name' => 'start',
@@ -42,7 +42,7 @@
                                 End:
                             </label>
                             <div class="col-sm-auto mb-3">
-                                @include(
+                                @include (
                                     'components.forms.datetimepicker',
                                     [
                                         'name' => 'end',
@@ -91,7 +91,7 @@
                                     @if ($event->category)
                                         {{ $event->category->name }}
                                     @else
-                                            Not set
+                                        Not set
                                     @endif
                                 </td>
 

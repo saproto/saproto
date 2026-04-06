@@ -1,10 +1,10 @@
-@extends('emails.template')
+@extends ('emails.template')
 
-@section('page-title')
+@section ('page-title')
     Weekly newsletter
 @endsection
 
-@section('body')
+@section ('body')
     @if ($image_url)
         <img
             src="{{ $image_url }}"
@@ -12,7 +12,6 @@
             alt="featured newsitem image"
         />
     @endif
-
     <p>
         Hey {{ $user->calling_name }},
 
@@ -43,9 +42,7 @@
                                 <strong>{{ $event->title }}</strong>
                                 @ {{ $event->location }}
                                 <br />
-                                {{ date('l d F, H:i', $event->start) }}
-                                -
-                                {{ $event->end - $event->start >= 3600 * 24 ? date('l d F, H:i', $event->end) : date('H:i', $event->end) }}
+                                {{ date('l d F, H:i', $event->start) }} - {{ $event->end - $event->start >= 3600 * 24 ? date('l d F, H:i', $event->end) : date('H:i', $event->end) }}
                             </p>
 
                             <p>
@@ -107,16 +104,10 @@
                     </tr>
                 </table>
             @endforeach
-
             <p>&nbsp;</p>
-
-            <p>
-                If anything about the activities is not clear, please let me
-                know!
-            </p>
+            <p>If anything about the activities is not clear, please let me know!</p>
         @endif
     </p>
-
     <p>
         Kind regards,
         <br />
@@ -124,11 +115,8 @@
         <br />
         <em>Officer of Internal Affairs</em>
     </p>
-
     <p>&nbsp;</p>
-
     <p>---</p>
-
     <p>
         <sup style="line-height: 1.5">
             You receive this e-mail because you subscribed to the weekly

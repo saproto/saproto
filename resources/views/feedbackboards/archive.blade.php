@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.generic')
+@extends ('website.layouts.redesign.generic')
 
-@section('page-title')
+@section ('page-title')
     {{ $category->title }} Board Archive
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row">
         <div class="col-12">
             <div class="card mx-4 mb-3">
@@ -27,7 +27,7 @@
                         <div class="row">
                             @foreach ($data as $key => $entry)
                                 <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                                    @include(
+                                    @include (
                                         'feedbackboards.include.feedback',
                                         [
                                             'feedback' => $entry,
@@ -38,16 +38,12 @@
                             @endforeach
                         </div>
                     @else
-                        <p class="text-muted mt-3 text-center">
-                            No archived {{ $category->title }}.
-                        </p>
+                        <p class="text-muted mt-3 text-center">No archived {{ $category->title }}.</p>
                     @endif
                 </div>
 
                 @if ($data->links() != '')
-                    <div class="card-footer">
-                        {{ $data->links() }}
-                    </div>
+                    <div class="card-footer">{{ $data->links() }}</div>
                 @endif
             </div>
         </div>

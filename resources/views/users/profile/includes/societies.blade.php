@@ -6,7 +6,7 @@
             @if (count($user->societies) > 0)
                 @foreach ($user->societies as $society)
                     <div class="col-md-6 col-xs-12">
-                        @include(
+                        @include (
                             'committee.include.committee_block',
                             [
                                 'committee' => $society,
@@ -26,9 +26,7 @@
                 @endforeach
             @else
                 <div class="col-12">
-                    <p class="card-text text-center">
-                        Currently not a member of a society.
-                    </p>
+                    <p class="card-text text-center">Currently not a member of a society.</p>
                 </div>
             @endif
         </div>
@@ -45,7 +43,7 @@
             <div class="row">
                 @foreach ($pastsocieties as $societyparticipations)
                     <div class="col-md-6 col-xs-12">
-                        @include(
+                        @include (
                             'committee.include.committee_block',
                             [
                                 'committee' => $societyparticipations->committee,

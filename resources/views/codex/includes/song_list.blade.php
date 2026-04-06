@@ -31,8 +31,7 @@
                         >
                             <b>
                                 <i class="fas fa-sm fa-fw fa-caret-down"></i>
-                                {{ $songCategory->name }}
-                                ({{ $songCategory->songs_count }})
+                                {{ $songCategory->name }} ({{ $songCategory->songs_count }})
                             </b>
                         </span>
                         @if (! isset($edit))
@@ -43,7 +42,7 @@
                                 >
                                     Edit
                                 </a>
-                                @include(
+                                @include (
                                     'components.modals.confirm-modal',
                                     [
                                         'method' => 'DELETE',
@@ -70,7 +69,7 @@
                                 >
                                     @if (isset($edit) && $edit)
                                         <div class="form-check">
-                                            @include(
+                                            @include (
                                                 'components.forms.checkbox',
                                                 [
                                                     'input_class_name' => '',
@@ -92,7 +91,7 @@
                                             >
                                                 Edit
                                             </a>
-                                            @include(
+                                            @include (
                                                 'components.modals.confirm-modal',
                                                 [
                                                     'method' => 'DELETE',

@@ -1,6 +1,6 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     IsAlfredThere.nl
 @endsection
 
@@ -9,7 +9,7 @@
     use Illuminate\Support\Carbon;
 @endphp
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-4">
             <form
@@ -20,7 +20,7 @@
 
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield('page-title')
+                        @yield ('page-title')
                     </div>
 
                     <div class="card-body where_is_alfred">
@@ -31,9 +31,10 @@
                                 You'll be back at
                                 {{ Carbon::parse($unix)->format('Y-m-d H:i') }}.
                             @elseif ($status == IsAlfredThereEnum::JUR->value)
-                                You do not seem to be Alfred. Do you happen to feel like a Jur today?
+                                You do not seem to be Alfred. Do you happen to
+                                feel like a Jur today?
                             @else
-                                    Your whereabouts are currently not known.
+                                Your whereabouts are currently not known.
                             @endif
                         </p>
 
@@ -126,7 +127,7 @@
                             </label>
                         </div>
 
-                        @include(
+                        @include (
                             'components.forms.datetimepicker',
                             [
                                 'name' => 'back',
@@ -167,7 +168,6 @@
             </form>
         </div>
     </div>
-
     <script type="text/javascript" @cspNonce>
         const dateSelect = document.getElementById('datetimepicker-back-form')
         const dateBack = document.getElementById('datetimepicker-back')
@@ -181,23 +181,23 @@
                 if (
                     el.checked &&
                     el.value === '{{ IsAlfredThereEnum::AWAY }}'
-                ) {
-                    dateSelect.classList.remove('d-none')
-                    alfredText.classList.remove('d-none')
-                    alfredText.querySelector('input').placeholder =
-                        'Additional message'
-                    dateBack.required = true
-                } else if (el.checked && el.value === 'text') {
-                    alfredText.classList.remove('d-none')
-                    dateSelect.classList.add('d-none')
-                    alfredText.querySelector('input').placeholder = 'Message!'
-                    alfredText.required = true
-                } else {
-                    dateSelect.classList.add('d-none')
-                    alfredText.classList.add('d-none')
-                    dateBack.required = false
-                }
-            })
-        })
+                        ) {
+                            dateSelect.classList.remove('d-none')
+                            alfredText.classList.remove('d-none')
+                            alfredText.querySelector('input').placeholder =
+                                'Additional message'
+                            dateBack.required = true
+                        } else if (el.checked && el.value === 'text') {
+                            alfredText.classList.remove('d-none')
+                            dateSelect.classList.add('d-none')
+                            alfredText.querySelector('input').placeholder = 'Message!'
+                            alfredText.required = true
+                        } else {
+                            dateSelect.classList.add('d-none')
+                            alfredText.classList.add('d-none')
+                            dateBack.required = false
+                        }
+                    })
+                })
     </script>
 @endsection

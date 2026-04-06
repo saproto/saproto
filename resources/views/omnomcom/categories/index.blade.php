@@ -1,15 +1,15 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     OmNomCom Product Category Administration
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row justify-content-center">
         <div class="col-lg-6">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white">
-                    @yield('page-title')
+                    @yield ('page-title')
                     <a
                         href="{{ route('omnomcom::categories::create') }}"
                         class="badge bg-success float-end"
@@ -26,12 +26,9 @@
                                     <td class="text-end">
                                         {{ $category->id }}
                                     </td>
+                                    <td>{{ $category->name }}</td>
                                     <td>
-                                        {{ $category->name }}
-                                    </td>
-                                    <td>
-                                        {{ $category->products_count }}
-                                        products
+                                        {{ $category->products_count }} products
                                     </td>
                                     <td>
                                         <a
@@ -39,7 +36,7 @@
                                         >
                                             <i class="fas fa-edit me-2"></i>
                                         </a>
-                                        @include(
+                                        @include (
                                             'components.modals.confirm-modal',
                                             [
                                                 'action' => route('omnomcom::categories::delete', [

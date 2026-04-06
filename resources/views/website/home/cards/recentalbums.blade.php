@@ -5,7 +5,7 @@
     </div>
     <div class="card-body">
         @foreach ($albums as $album)
-            @include(
+            @include (
                 'website.home.cards.card-bg-image',
                 [
                     'url' => route('albums::album::list', ['album' => $album->id]),

@@ -1,10 +1,10 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     OmNomCom Product Administration
 @endsection
 
-@section('container')
+@section ('container')
     <div class="row">
         <div class="col-md-3">
             <div class="card mb-3">
@@ -89,10 +89,7 @@
                     Manual stock modifications
                 </div>
                 <div class="card-body">
-                    <p class="card-text">
-                        See every manual modification of the Omnomcom stock and
-                        create reports.
-                    </p>
+                    <p class="card-text">See every manual modification of the Omnomcom stock and create reports.</p>
                 </div>
 
                 <div class="card-footer">
@@ -153,7 +150,7 @@
                                             >
                                                 <i class="fas fa-edit me-2"></i>
                                             </a>
-                                            @include(
+                                            @include (
                                                 'components.modals.confirm-modal',
                                                 [
                                                     'action' => route('omnomcom::products::delete', ['id' => $product->id]),
@@ -169,7 +166,6 @@
                             </tbody>
                         </table>
                     </div>
-
                     @if (method_exists($products, 'links'))
                         <div class="card-footer pb-0">
                             {!! $products->links() !!}
@@ -177,9 +173,7 @@
                     @endif
                 @else
                     <div class="card-body">
-                        <p class="card-text text-center">
-                            There are no products matching your query.
-                        </p>
+                        <p class="card-text text-center">There are no products matching your query.</p>
                     </div>
                 @endif
             </div>

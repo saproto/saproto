@@ -40,7 +40,7 @@
                 </span>
             </button>
 
-            @can('board')
+            @can ('board')
                 <a
                     href="{{ route('event::create') }}"
                     class="btn btn-info rounded-end"
@@ -52,7 +52,7 @@
                 </a>
             @endcan
 
-            @php($categories = Cache::remember(
+            @php ($categories = Cache::remember(
                 'archivebar.event_categories',
                 \Illuminate\Support\Facades\Date::tomorrow(),
                 function () {
@@ -78,13 +78,13 @@
                             name="category"
                             class="form-control"
                         >
-                            <option value="" @selected(! $cur_category)>
+                            <option value="" @selected (! $cur_category)>
                                 All
                             </option>
                             @foreach ($categories as $category)
                                 <option
                                     value="{{ $category->id }}"
-                                    @selected($cur_category?->id == $category->id)
+                                    @selected ($cur_category?->id == $category->id)
                                 >
                                     {{ $category->name }}
                                 </option>
@@ -125,8 +125,8 @@
                     />
                     <script @cspNonce>
                         document
-                            .getElementById('ical-url')
-                            .addEventListener('click', (e) => {
+                            .getElementById("ical-url")
+                            .addEventListener("click", (e) => {
                                 e.target.focus()
                                 e.target.select()
                             })
@@ -147,14 +147,13 @@
 
                 @if (Auth::check())
                     <hr />
-
                     <p class="text-center">
                         @if (Auth::user()->getCalendarRelevantSetting())
                             <strong>
                                 Your are currently only syncing relevant events.
                             </strong>
                         @else
-                                You are currently syncing all events.
+                            You are currently syncing all events.
                         @endif
 
                         <a
@@ -165,7 +164,7 @@
                             @if (Auth::user()->getCalendarRelevantSetting())
                                 Sync all my events.
                             @else
-                                    Sync only relevant events.
+                                Sync only relevant events.
                             @endif
                         </a>
 
@@ -174,9 +173,7 @@
                             organize or help with.
                         </sub>
                     </p>
-
                     <hr />
-
                     <p class="text-center">
                         <sub>
                             @if (Auth::user()->getCalendarAlarm())
@@ -191,7 +188,6 @@
                             @endif
                         </sub>
                     </p>
-
                     <form
                         method="post"
                         action="{{ route('event::set_reminder') }}"
@@ -238,7 +234,6 @@
                             @endif
                         </div>
                     </form>
-
                     <p class="text-center">
                         <sub>
                             Reminders are not supported in Google Calendar.

@@ -1,14 +1,13 @@
-@extends('website.layouts.redesign.dashboard')
+@extends ('website.layouts.redesign.dashboard')
 
-@section('page-title')
+@section ('page-title')
     Edit Text
 @endsection
 
-@section('container')
+@section ('container')
     @php
         /** @var \App\Models\CodexText $text */
     @endphp
-
     <form
         action="{{ ! empty($text) ? route('codexText.update', ['codexText' => $text]) : route('codexText.store') }}"
         method="POST"
@@ -55,7 +54,7 @@
 
                             <label for="text">Text:</label>
                             <div class="form-group mb-3">
-                                @include(
+                                @include (
                                     'components.forms.markdownfield',
                                     [
                                         'name' => 'text',
