@@ -459,9 +459,8 @@ class EventController extends Controller
         $user = $personal_key ? User::query()->where('personal_key', $personal_key)->whereNotNull('personal_key')->first() : null;
 
         if (! $user) {
-            if (Cache::has('ical-calendar')) {
-                $calendar_wrapped = Cache::get('ical-calendar');
-
+            $calendar_wrapped = Cache::get('ical-calendar');
+            if ($calendar_wrapped) {
                 return Response::make($calendar_wrapped)
                     ->header('Content-Type', 'text/calendar; charset=utf-8')
                     ->header('Content-Disposition', 'attachment; filename="protocalendar.ics"');
