@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Database\Factories\CodexSongFactory;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -42,12 +43,11 @@ use Override;
  *
  * @mixin \Eloquent
  */
+#[Table(name: 'codex_songs')]
 class CodexSong extends Model
 {
     /** @use HasFactory<CodexSongFactory>*/
     use HasFactory;
-
-    protected $table = 'codex_songs';
 
     // belongs to one category on category_id in codex_songs
     /**

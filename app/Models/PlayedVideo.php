@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -40,12 +42,10 @@ use Illuminate\Support\Carbon;
  *
  * @mixin \Eloquent
  */
+#[Guarded(['id'])]
+#[Table(name: 'playedvideos')]
 class PlayedVideo extends Model
 {
-    protected $table = 'playedvideos';
-
-    protected $guarded = ['id'];
-
     /**
      * @return BelongsTo<User, $this>
      */

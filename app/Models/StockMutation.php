@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -35,12 +37,10 @@ use Illuminate\Support\Carbon;
  *
  * @mixin Model
  */
+#[Fillable(['before', 'after', 'is_bulk'])]
+#[Table(name: 'stock_mutations')]
 class StockMutation extends Model
 {
-    protected $table = 'stock_mutations';
-
-    protected $fillable = ['before', 'after', 'is_bulk'];
-
     /**
      * @return BelongsTo<Product, $this>
      */

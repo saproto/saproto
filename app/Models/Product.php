@@ -4,6 +4,9 @@ namespace App\Models;
 
 use App\Enums\ProductEnum;
 use App\Http\Controllers\WallstreetController;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -75,6 +78,9 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin \Eloquent
  */
+#[Guarded(['id'])]
+#[Hidden(['created_at', 'updated_at'])]
+#[Table(name: 'products')]
 class Product extends Model implements HasMedia
 {
     use InteractsWithMedia;
@@ -99,12 +105,6 @@ class Product extends Model implements HasMedia
             ->fit(Fit::Max, 400)
             ->format('webp');
     }
-
-    protected $table = 'products';
-
-    protected $guarded = ['id'];
-
-    protected $hidden = ['created_at', 'updated_at'];
 
     /**
      * @return BelongsTo<FinancialAccount, $this>

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Exception;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -43,12 +45,10 @@ use Mollie\Api\Resources\Payment;
  *
  * @mixin Model
  */
+#[Guarded(['id'])]
+#[Table(name: 'mollie_transactions')]
 class MollieTransaction extends Model
 {
-    protected $table = 'mollie_transactions';
-
-    protected $guarded = ['id'];
-
     /**
      * @return BelongsTo<User, $this>
      */

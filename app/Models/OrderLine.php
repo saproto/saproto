@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Database\Factories\OrderLineFactory;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -62,14 +64,12 @@ use Override;
  *
  * @mixin Model
  */
+#[Guarded(['id'])]
+#[Table(name: 'orderlines')]
 class OrderLine extends Model
 {
     /** @use HasFactory<OrderLineFactory>*/
     use HasFactory;
-
-    protected $table = 'orderlines';
-
-    protected $guarded = ['id'];
 
     #[Override]
     protected function casts(): array

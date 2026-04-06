@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Database\Factories\ActivityParticipationFactory;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -41,14 +43,12 @@ use Illuminate\Support\Carbon;
  *
  * @mixin \Eloquent
  */
+#[Guarded(['id'])]
+#[Table(name: 'activities_users')]
 class ActivityParticipation extends Model
 {
     /** @use HasFactory<ActivityParticipationFactory>*/
     use HasFactory;
-
-    protected $table = 'activities_users';
-
-    protected $guarded = ['id'];
 
     protected $casts = [
         'backup' => 'boolean',

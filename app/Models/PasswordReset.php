@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -23,10 +24,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  *
  * @mixin Model
  */
+#[Table(name: 'password_resets')]
 class PasswordReset extends Model
 {
-    protected $table = 'password_resets';
-
     protected $guarded = [];
 
     public $timestamps = false;

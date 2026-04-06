@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Database\Factories\CodexTextTypeFactory;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -32,12 +33,11 @@ use Override;
  *
  * @mixin Model
  */
+#[Table(name: 'codex_text_types')]
 class CodexTextType extends Model
 {
     /** @use HasFactory<CodexTextTypeFactory>*/
     use HasFactory;
-
-    protected $table = 'codex_text_types';
 
     /**
      * @return HasMany<CodexText, $this>
