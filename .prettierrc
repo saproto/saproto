@@ -11,11 +11,7 @@
             ],
             "options": {
                 "parser": "blade",
-                "bladePhpFormatting": "off",
-                "bladeDirectiveArgSpacing": "none",
-                "bladeBlankLinesAroundDirectives": "preserve",
-                "bladeDirectiveCase": "preserve",
-                "bladeEchoSpacing": "preserve"
+                "bladePhpFormatting": "off"
             }
         }
     ]
