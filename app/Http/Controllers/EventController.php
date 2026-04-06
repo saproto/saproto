@@ -458,8 +458,8 @@ class EventController extends Controller
     {
         $user = $personal_key ? User::query()->where('personal_key', $personal_key)->whereNotNull('personal_key')->first() : null;
 
-        if(!$user){
-            if(Cache::has('ical-calendar')){
+        if (! $user) {
+            if (Cache::has('ical-calendar')) {
                 $calendar_wrapped = Cache::get('ical-calendar');
 
                 return Response::make($calendar_wrapped)
@@ -591,9 +591,10 @@ CALSCALE:GREGORIAN
 
             $calendar_wrapped .= wordwrap($line, 75, "\r\n ", true)."\r\n";
         }
-        if(!$user) {
+        if (! $user) {
             Cache::put('ical-calendar', $calendar_wrapped, Date::now()->addMinutes(30));
         }
+
         return Response::make($calendar_wrapped)
             ->header('Content-Type', 'text/calendar; charset=utf-8')
             ->header('Content-Disposition', 'attachment; filename="protocalendar.ics"');
