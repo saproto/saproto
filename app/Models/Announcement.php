@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -61,12 +63,10 @@ use Override;
  *
  * @mixin \Eloquent
  */
+#[Guarded(['id'])]
+#[Table(name: 'announcements')]
 class Announcement extends Model
 {
-    protected $table = 'announcements';
-
-    protected $guarded = ['id'];
-
     /**
      * @return Attribute<string, never>
      */

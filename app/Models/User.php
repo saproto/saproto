@@ -13,6 +13,10 @@ use Exception;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Database\Eloquent\Attributes\Appends;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -195,6 +199,10 @@ use Spatie\Permission\Traits\HasRoles;
  *
  * @mixin Eloquent
  */
+#[Appends(['is_member'])]
+#[Guarded(['password', 'remember_token'])]
+#[Hidden(['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'tfa_totp_key', 'updated_at', 'diet'])]
+#[Table(name: 'users')]
 class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract, HasMedia, OAuthenticatable
 {
     use CanResetPassword;
@@ -208,14 +216,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     use HasRoles;
     use InteractsWithMedia;
     use SoftDeletes;
-
-    protected $table = 'users';
-
-    protected $guarded = ['password', 'remember_token'];
-
-    protected $appends = ['is_member'];
-
-    protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'tfa_totp_key', 'updated_at', 'diet'];
 
     public function getPublicId(): ?string
     {

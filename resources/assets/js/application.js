@@ -10,8 +10,6 @@ Sentry.init({
     tracePropagationTargets: ['localhost', /^https:\/\/proto\.utwente\.nl/],
 })
 
-import.meta.glob(['../images/**'])
-
 // Vendors
 
 import './utilities'

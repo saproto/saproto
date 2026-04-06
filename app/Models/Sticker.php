@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\StickerEnum;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -52,11 +53,10 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin Model
  */
+#[Fillable(['lat', 'lng', 'city', 'country', 'country_code', 'reporter_id', 'report_reason', 'user_id', 'created_at'])]
 class Sticker extends Model implements HasMedia
 {
     use InteractsWithMedia;
-
-    protected $fillable = ['lat', 'lng', 'city', 'country', 'country_code', 'reporter_id', 'report_reason', 'user_id', 'created_at'];
 
     public function registerMediaCollections(): void
     {

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Database\Factories\DinnerformOrderlineFactory;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -44,14 +46,12 @@ use RoundingMode;
  *
  * @mixin \Eloquent
  */
+#[Guarded(['id'])]
+#[Table(name: 'dinnerform_orderline')]
 class DinnerformOrderline extends Model
 {
     /** @use HasFactory<DinnerformOrderlineFactory>*/
     use HasFactory;
-
-    protected $table = 'dinnerform_orderline';
-
-    protected $guarded = ['id'];
 
     /**
      * @return BelongsTo<User, $this>

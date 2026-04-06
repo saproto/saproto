@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -33,12 +35,10 @@ use Illuminate\Support\Facades\Config;
  *
  * @mixin \Eloquent
  */
+#[Guarded(['id'])]
+#[Table(name: 'alias')]
 class Alias extends Model
 {
-    protected $table = 'alias';
-
-    protected $guarded = ['id'];
-
     /**
      * @return BelongsTo<User, $this>
      */

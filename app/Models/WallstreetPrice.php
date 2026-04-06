@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -33,12 +35,10 @@ use Illuminate\Support\Carbon;
  *
  * @mixin \Eloquent
  */
+#[Fillable(['wallstreet_drink_id', 'product_id', 'price', 'diff'])]
+#[Table(name: 'wallstreet_drink_prices')]
 class WallstreetPrice extends Model
 {
-    protected $table = 'wallstreet_drink_prices';
-
-    protected $fillable = ['wallstreet_drink_id', 'product_id', 'price', 'diff'];
-
     protected $with = ['drink', 'product'];
 
     /**

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\NewsEnum;
 use Database\Factories\NewsitemFactory;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -63,6 +65,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin Model
  */
+#[Guarded(['id'])]
+#[Table(name: 'newsitems')]
 class Newsitem extends Model implements HasMedia
 {
     /** @use HasFactory<NewsitemFactory>*/
@@ -70,10 +74,6 @@ class Newsitem extends Model implements HasMedia
 
     use InteractsWithMedia;
     use SoftDeletes;
-
-    protected $table = 'newsitems';
-
-    protected $guarded = ['id'];
 
     protected $with = ['media'];
 

@@ -5,6 +5,10 @@ namespace App\Models;
 use Carbon\CarbonImmutable;
 use Database\Factories\EventFactory;
 use Hashids;
+use Illuminate\Database\Eloquent\Attributes\Appends;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -99,6 +103,10 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin Model
  */
+#[Appends(['is_future', 'formatted_date'])]
+#[Guarded(['id'])]
+#[Hidden(['created_at', 'updated_at', 'secret', 'deleted_at', 'update_sequence'])]
+#[Table(name: 'events')]
 class Event extends Model implements HasMedia
 {
     /** @use HasFactory<EventFactory>*/
@@ -107,15 +115,7 @@ class Event extends Model implements HasMedia
     use InteractsWithMedia;
     use SoftDeletes;
 
-    protected $table = 'events';
-
-    protected $guarded = ['id'];
-
-    protected $hidden = ['created_at', 'updated_at', 'secret', 'deleted_at', 'update_sequence'];
-
     protected $with = ['category'];
-
-    protected $appends = ['is_future', 'formatted_date'];
 
     #[Override]
     protected function casts(): array

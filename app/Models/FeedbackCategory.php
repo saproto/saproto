@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -41,12 +43,10 @@ use Override;
  *
  * @mixin Model
  */
+#[Guarded(['id'])]
+#[Table(name: 'feedback_categories')]
 class FeedbackCategory extends Model
 {
-    protected $table = 'feedback_categories';
-
-    protected $guarded = ['id'];
-
     /**
      * @return HasMany<Feedback, $this>
      */

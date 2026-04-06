@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -30,12 +32,10 @@ use Illuminate\Support\Carbon;
  *
  * @mixin Model
  */
+#[Guarded(['id'])]
+#[Table(name: 'accounts')]
 class FinancialAccount extends Model
 {
-    protected $table = 'accounts';
-
-    protected $guarded = ['id'];
-
     /**
      * @return HasMany<Product, $this> */
     public function products(): HasMany

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\HeaderImageEnum;
 use Database\Factories\HeaderImageFactory;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -43,16 +45,14 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin Model
  */
+#[Guarded(['id'])]
+#[Table(name: 'headerimages')]
 class HeaderImage extends Model implements HasMedia
 {
     /** @use HasFactory<HeaderImageFactory>*/
     use HasFactory;
 
     use InteractsWithMedia;
-
-    protected $table = 'headerimages';
-
-    protected $guarded = ['id'];
 
     protected $with = ['media'];
 

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -37,10 +39,18 @@ use Override;
  *
  * @mixin \Eloquent
  */
+#[Fillable([
+    'member_id',
+    'department',
+    'mail',
+    'number',
+    'givenname',
+    'surname',
+    'found',
+])]
+#[Table(name: 'ut_accounts')]
 class UtAccount extends Model
 {
-    protected $table = 'ut_accounts';
-
     #[Override]
     protected function casts(): array
     {
@@ -51,16 +61,6 @@ class UtAccount extends Model
             'deleted_at' => 'datetime',
         ];
     }
-
-    protected $fillable = [
-        'member_id',
-        'department',
-        'mail',
-        'number',
-        'givenname',
-        'surname',
-        'found',
-    ];
 
     /**
      * @return BelongsTo<Member, $this>

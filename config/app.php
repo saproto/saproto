@@ -4,6 +4,7 @@ use App\Providers\AppServiceProvider;
 use App\Providers\EventServiceProvider;
 use App\Providers\RouteServiceProvider;
 use App\Providers\TestServiceProvider;
+use App\Providers\TypeScriptTransformerServiceProvider;
 use GrahamCampbell\Markdown\Facades\Markdown;
 use GrahamCampbell\Markdown\MarkdownServiceProvider;
 use Illuminate\Auth\AuthServiceProvider;
@@ -247,6 +248,7 @@ return [
         HashidsServiceProvider::class,
         ServiceProvider::class,
         SocialiteProviders\Manager\ServiceProvider::class,
+        TypeScriptTransformerServiceProvider::class,
     ],
 
     /*

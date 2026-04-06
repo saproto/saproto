@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Override;
@@ -32,12 +34,10 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin Model
  */
+#[Guarded(['id'])]
+#[Table(name: 'soundboard_sounds')]
 class SoundboardSound extends Model implements HasMedia
 {
-    protected $table = 'soundboard_sounds';
-
-    protected $guarded = ['id'];
-
     public $timestamps = false;
 
     use InteractsWithMedia;

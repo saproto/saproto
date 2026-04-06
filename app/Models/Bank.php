@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Database\Factories\BankFactory;
+use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -35,14 +37,12 @@ use Illuminate\Support\Carbon;
  *
  * @mixin \Eloquent
  */
+#[Guarded(['id'])]
+#[Table(name: 'bankaccounts')]
 class Bank extends Model
 {
     /** @use HasFactory<BankFactory>*/
     use HasFactory;
-
-    protected $table = 'bankaccounts';
-
-    protected $guarded = ['id'];
 
     /**
      * @return BelongsTo<User, $this>
