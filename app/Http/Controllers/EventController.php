@@ -458,6 +458,14 @@ class EventController extends Controller
     {
         $user = $personal_key ? User::query()->where('personal_key', $personal_key)->whereNotNull('personal_key')->first() : null;
 
+        if (! $user) {
+            $calendar_wrapped = Cache::get('ical-calendar');
+            if ($calendar_wrapped) {
+                return Response::make($calendar_wrapped)
+                    ->header('Content-Type', 'text/calendar; charset=utf-8')
+                    ->header('Content-Disposition', 'attachment; filename="protocalendar.ics"');
+            }
+        }
         $calendar_name = $user ? sprintf('S.A. Proto Calendar for %s', $user->calling_name) : 'S.A. Proto Calendar';
 
         $calendar = 'BEGIN:VCALENDAR
@@ -581,6 +589,9 @@ CALSCALE:GREGORIAN
             }
 
             $calendar_wrapped .= wordwrap($line, 75, "\r\n ", true)."\r\n";
+        }
+        if (! $user) {
+            Cache::put('ical-calendar', $calendar_wrapped, Date::now()->addMinutes(30));
         }
 
         return Response::make($calendar_wrapped)
