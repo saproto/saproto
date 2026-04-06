@@ -6,7 +6,6 @@ use App\Enums\PhotoEnum;
 use App\Models\Photo;
 use Spatie\LaravelData\Data;
 
-/** @typescript */
 class PhotoData extends Data
 {
     public function __construct(

@@ -7,7 +7,6 @@ use Illuminate\Support\Collection;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Data;
 
-/** @typescript */
 class MenuItemData extends Data
 {
     public function __construct(

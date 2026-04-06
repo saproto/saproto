@@ -6,7 +6,6 @@ use Illuminate\Support\Collection;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Data;
 
-/** @typescript */
 class PhotoAlbumData extends Data
 {
     public function __construct(
