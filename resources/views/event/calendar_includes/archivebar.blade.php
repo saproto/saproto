@@ -1,3 +1,8 @@
+@php
+    use App\Models\EventCategory;
+    use Illuminate\Support\Facades\Date;
+@endphp
+
 <div id="archive-bar" class="row justify-content-center px-2">
     <div class="col-sm-auto col-12 mb-2 overflow-auto text-center">
         <div class="btn-group mb-1">
@@ -54,9 +59,9 @@
 
             @php($categories = Cache::remember(
                 'archivebar.event_categories',
-                \Illuminate\Support\Facades\Date::tomorrow(),
+                Date::tomorrow(),
                 function () {
-                    return \App\Models\EventCategory::query()
+                    return EventCategory::query()
                         ->select(['id', 'name'])
                         ->orderBy('name')
                         ->get();

@@ -54,7 +54,7 @@ class PhotoAdminController extends Controller
     public function edit(int $id): \Illuminate\Contracts\View\View|Factory
     {
         $album = PhotoAlbum::query()
-            ->with('items')
+            ->with('items.media')
             ->with('event')
             ->findOrFail($id);
 

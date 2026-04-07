@@ -50,7 +50,7 @@ class HandleInertiaRequests extends Middleware
             'menu' => [
                 'photos' => Cache::remember('inertia.albums', Date::tomorrow(), fn () => PhotoAlbumData::collect(
                     PhotoAlbum::query()->orderBy('date_taken', 'desc')
-                        ->with('thumbPhoto')
+                        ->with('thumbPhoto.media')
                         ->where('published', true)
                         ->take(4)
                         ->get())),
