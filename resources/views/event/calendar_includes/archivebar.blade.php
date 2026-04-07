@@ -1,4 +1,8 @@
-@php use App\Models\EventCategory;use Illuminate\Support\Facades\Date; @endphp
+@php
+    use App\Models\EventCategory;
+    use Illuminate\Support\Facades\Date;
+@endphp
+
 <div id="archive-bar" class="row justify-content-center px-2">
     <div class="col-sm-auto col-12 mb-2 overflow-auto text-center">
         <div class="btn-group mb-1">
@@ -155,7 +159,7 @@
                                 Your are currently only syncing relevant events.
                             </strong>
                         @else
-                            You are currently syncing all events.
+                                You are currently syncing all events.
                         @endif
 
                         <a
@@ -166,7 +170,7 @@
                             @if (Auth::user()->getCalendarRelevantSetting())
                                 Sync all my events.
                             @else
-                                Sync only relevant events.
+                                    Sync only relevant events.
                             @endif
                         </a>
 
