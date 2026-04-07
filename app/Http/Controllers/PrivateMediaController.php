@@ -12,7 +12,7 @@ class PrivateMediaController extends Controller
 {
     public function show(int $mediaId, ?string $conversion = null): StreamedResponse
     {
-        $media = Cache::remember("media::{$mediaId}", Date::tomorrow(), fn () => Media::query()->findOrFail($mediaId));
+        $media = Cache::remember("media::{$mediaId}", Date::now()->addDays(7), fn () => Media::query()->findOrFail($mediaId));
 
         $disk = $conversion ? $media->conversions_disk : $media->disk;
 
