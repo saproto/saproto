@@ -36,7 +36,7 @@ class HomeController extends Controller
 
         $albums =
             Cache::remember('home.albums', Date::tomorrow(), fn () => PhotoAlbum::query()->orderBy('date_taken', 'desc')
-                ->with('thumbPhoto')
+                ->with('thumbPhoto.media')
                 ->where('published', true)
                 ->take(4)
                 ->get());

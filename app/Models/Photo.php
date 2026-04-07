@@ -125,7 +125,7 @@ class Photo extends Model implements HasMedia
 
     public function getUrl(PhotoEnum $photoEnum = PhotoEnum::ORIGINAL): string
     {
-        return Cache::remember("photo::{$this->id}::url::{$photoEnum->value}::{$this->private}", now()->addWeek(), fn () => $this->getFirstMediaUrl($this->private ? 'private' : 'public', $photoEnum->value));
+        return $this->getFirstMediaUrl($this->private ? 'private' : 'public', $photoEnum->value);
     }
 
     #[Override]
