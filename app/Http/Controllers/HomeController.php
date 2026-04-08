@@ -21,11 +21,28 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
 use Illuminate\View\View;
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+
+
 class HomeController extends Controller
 {
     /** Display the homepage. */
-    public function show(): \Illuminate\Contracts\View\View|Factory
+    public function show()
     {
+        return Auth::user()->created_at;
+        $databaseName = config('database.connections.mysql.database');
+        $targetTypes = ['timestamp'];
+        $smallIntColumns = DB::table('information_schema.columns')
+            ->where('table_schema', $databaseName)
+            ->whereIn('data_type', $targetTypes)
+            ->select('table_name', 'column_name', 'column_type')
+            ->get();
+        $columns = collect();
+        foreach ($smallIntColumns as $column) {
+            $columns->add("Table: {$column->table_name} | Column: {$column->column_name} ({$column->column_type})\n") ;
+        }
+        return $columns;
         $companies =
             Cache::remember('home.companies', Date::tomorrow(), fn () => Company::query()
                 ->where('in_logo_bar', true)
