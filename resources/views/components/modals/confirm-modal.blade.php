@@ -83,7 +83,9 @@
                         el.getAttribute('data-confirm-btn-text')
 
                     const form = el.getAttribute('data-form')
-                    const method = el.getAttribute('data-form-method').toLowerCase()
+                    const method = el
+                        .getAttribute('data-form-method')
+                        .toLowerCase()
                     const formElement = modal.querySelector('form')
 
                     if (method === 'get') {
