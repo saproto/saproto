@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\MollieEnum;
 use Illuminate\Database\Eloquent\Attributes\Guarded;
 use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -72,7 +71,7 @@ class TicketPurchase extends Model
 
     public function canBeDownloaded(): bool
     {
-        return (!$this->ticket->is_prepaid) || $this->orderline->isPayed();
+        return (! $this->ticket->is_prepaid) || $this->orderline->isPayed();
     }
 
     #[Override]

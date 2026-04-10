@@ -136,12 +136,17 @@ class OrderLine extends Model
     {
         return $query->whereNull('payed_with_cash')
             ->whereNull('payed_with_bank_card')
-            ->whereNull('payed_with_withdrawal')
             ->where('payed_with_loss', false)
             ->where(function (\Illuminate\Contracts\Database\Query\Builder $query) {
                 $query->whereDoesntHave('molliePayment')
                     ->orWhereHas('molliePayment', static function ($query) {
                         $query->whereNotIn('status', Config::array('omnomcom.mollie.paid_statuses'));
+                    });
+            })
+            ->where(function (\Illuminate\Contracts\Database\Query\Builder $query) {
+                $query->whereDoesntHave('withdrawal')
+                    ->orWhereHas('withdrawal', static function ($query) {
+                        $query->where('closed', false);
                     });
             })
             ->where('total_price', '!=', 0);
@@ -156,13 +161,7 @@ class OrderLine extends Model
             ->whereNull('payed_with_bank_card')
             ->whereNull('payed_with_withdrawal')
             ->where('payed_with_loss', false)
-            ->where(function (\Illuminate\Contracts\Database\Query\Builder $query) {
-                $query->whereDoesntHave('molliePayment')
-                    ->orWhereHas('molliePayment', static function ($query) {
-                        $query->whereNotIn('status', Config::array('omnomcom.mollie.paid_statuses'));
-                    });
-            })
-            ->where('total_price', '!=', 0);
+            ->whereNull('payed_with_mollie');
     }
 
     public function isProcessed(): bool

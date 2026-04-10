@@ -450,11 +450,11 @@ class WithdrawalController extends Controller
 
     public static function openOrderlinesSum(): int|float
     {
-        return OrderLine::query()->unpayed()->sum('total_price');
+        return OrderLine::query()->unprocessed()->sum('total_price');
     }
 
     public static function openOrderlinesTotal(): int
     {
-        return OrderLine::query()->unpayed()->count();
+        return OrderLine::query()->unprocessed()->count();
     }
 }
