@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MollieEnum;
 use App\Models\Account;
 use App\Models\Event;
 use App\Models\MollieTransaction;
@@ -145,23 +146,27 @@ class MollieController extends Controller
 
     /**
      * @return RedirectResponse
+     *
+     * @throws Exception
      */
     public function receive(int $id)
     {
         /** @var MollieTransaction $transaction */
         $transaction = MollieTransaction::query()->findOrFail($id);
-
-        $flash_message = 'Unknown error';
+        $flash_message = '';
         if ($transaction->user_id == Auth::id()) {
             switch (MollieTransaction::translateStatus($transaction->status)) {
-                case 'failed':
+                case MollieEnum::FAILED:
                     $flash_message = 'Your payment has failed';
                     break;
-                case 'open':
+                case MollieEnum::OPEN:
                     $flash_message = 'Your payment is still open';
                     break;
-                case 'paid':
+                case MollieEnum::PAID:
                     $flash_message = 'Your payment was completed successfully!';
+                    break;
+                case MollieEnum::UNKNOWN:
+                    $flash_message = 'Unknown error';
                     break;
             }
 
@@ -174,7 +179,7 @@ class MollieController extends Controller
             $isMember = Auth::user()->is_member;
 
             switch (MollieTransaction::translateStatus($transaction->status)) {
-                case 'failed':
+                case MollieEnum::FAILED:
                     if ($isMember) {
                         $flash_message = 'Your payment has failed, the tickets are still yours but they are now listed as a withdrawal.';
                     } else {
@@ -182,12 +187,14 @@ class MollieController extends Controller
                     }
 
                     break;
-                case 'open':
+                case MollieEnum::OPEN:
                     $flash_message = 'Your payment is still open, the payment can still be completed.';
                     break;
-                case 'paid':
+                case MollieEnum::PAID:
                     $flash_message = 'Your payment was completed successfully! The tickets have been mailed to you!';
                     break;
+                case MollieEnum::UNKNOWN:
+                    $flash_message = 'Unknown error';
             }
 
             Session::flash('flash_message', $flash_message);
