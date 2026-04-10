@@ -338,10 +338,19 @@
                     '.participant-remove-link'
                 )
                 if (removeLink) {
-                    removeLink.setAttribute('data-confirm-action', user.user_remove_link);
-                    removeLink.setAttribute('data-confirm-message', `Are you sure you want to sign ${user.user_name} out of this event?`);
-                    removeLink.setAttribute('data-confirm-btn-text', `Remove ${user.user_name}`);
-                    window.initConfirmButton(removeLink);
+                    removeLink.setAttribute(
+                        'data-confirm-action',
+                        user.user_remove_link
+                    )
+                    removeLink.setAttribute(
+                        'data-confirm-message',
+                        `Are you sure you want to sign ${user.user_name} out of this event?`
+                    )
+                    removeLink.setAttribute(
+                        'data-confirm-btn-text',
+                        `Remove ${user.user_name}`
+                    )
+                    window.initConfirmButton(removeLink)
                 }
 
                 clone.querySelector('.participant-avatar').src =
