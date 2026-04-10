@@ -90,7 +90,7 @@ class ParticipationController extends Controller
 
         abort_if($event->activity->closed, 403, 'This activity is closed, you cannot change participation anymore.');
 
-        abort_unless($event->activity->isOnBackupList($user) || $event->activity->canUnsubscribe() || Auth::user()->can('board'), 403, 'You cannot unsubscribe for this event at this time.');
+        abort_unless($event->activity->isOnBackupList($user) || $event->activity->canUnsubscribe() || (Auth::user()->can('board') && $user->id !== Auth::id()), 403, 'You cannot unsubscribe for this event at this time.');
 
         $participation = ActivityParticipation::query()->where('activity_id', $event->activity->id)->where('user_id', $user->id)->firstOrFail();
         if ($user->id !== Auth::id()) {
@@ -103,7 +103,7 @@ class ParticipationController extends Controller
 
         Session::flash('flash_message', $participation->user->name.' is not attending '.$participation->activity->event->title.' anymore.');
 
-        if (! $participation->backup && $participation->activity->users->count() < $participation->activity->participants) {
+        if (! $participation->backup && $participation->activity->canUnsubscribe() && $participation->activity->users->count() < $participation->activity->participants) {
             self::transferOneBackupUser($participation->activity);
         }
 
@@ -126,7 +126,7 @@ class ParticipationController extends Controller
 
     public static function processBackupQueue(Activity $activity): void
     {
-        while ($activity->allUsers()->where('backup', true)->count() > 0 && $activity->allUsers()->where('backup', false)->count() < $activity->participants) {
+        while ($activity->canUnsubscribe() && $activity->allUsers()->where('backup', true)->count() > 0 && $activity->allUsers()->where('backup', false)->count() < $activity->participants) {
             self::transferOneBackupUser($activity);
         }
     }
