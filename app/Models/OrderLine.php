@@ -158,7 +158,7 @@ class OrderLine extends Model
             $this->payed_with_loss ||
             $this->payed_with_cash !== null ||
             $this->payed_with_withdrawal !== null ||
-            $mollie_payment == 'paid' ||
+            $mollie_payment === MollieEnum::PAID ||
             $this->payed_with_bank_card !== null;
     }
 

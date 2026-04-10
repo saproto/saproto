@@ -1,5 +1,8 @@
 @php
+    use App\Models\MollieTransaction;
     use App\Models\Withdrawal;
+    /** @var \Illuminate\Support\Collection<Withdrawal> $withdrawals */
+    /** @var \Illuminate\Support\Collection<MollieTransaction> $molliePayments */
 @endphp
 
 <div class="card mb-3">
@@ -8,10 +11,6 @@
     @if ($withdrawals->isNotEmpty())
         <ul class="list-group list-group-flush">
             @foreach ($withdrawals as $withdrawal)
-                @php
-                    /** @var Withdrawal $withdrawal */
-                @endphp
-
                 <div class="list-group-item d-flex justify-content-between">
                     <div>
                         <a
