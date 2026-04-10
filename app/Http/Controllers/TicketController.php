@@ -409,35 +409,6 @@ class TicketController extends Controller
         }
 
         $payment_method = '';
-        if (Config::boolean('omnomcom.mollie.use_fees') && ! $request->has('method') && $prepaid_tickets !== []) {
-            Session::flash('flash_message', 'No payment method is selected!');
-
-            return back();
-        }
-
-        // check if total ticket cost is allowed at this payment_method and validate the selected method
-        if (Config::boolean('omnomcom.mollie.use_fees') && $prepaid_tickets !== []) {
-            $available_methods = MollieController::getPaymentMethods();
-            $requested_method = $request->get('method');
-            $payment_method = $available_methods->filter(static fn ($method): bool => $method->id === $requested_method);
-
-            if ($payment_method->count() === 0) {
-                Session::flash('flash_message', 'The selected payment method is unavailable, please select a different method');
-
-                return back();
-            }
-
-            $payment_method = $payment_method->first();
-
-            if (
-                $total_cost < floatval($payment_method->minimumAmount->value) ||
-                $total_cost > floatval($payment_method->maximumAmount->value)
-            ) {
-                Session::flash('flash_message', 'You are unable to pay this amount with the selected method!');
-
-                return back();
-            }
-        }
 
         if (! $sold) {
             Session::flash('flash_message', "You didn't select any tickets to buy. Maybe buy some tickets?");
@@ -449,7 +420,7 @@ class TicketController extends Controller
 
         if ($prepaid_tickets !== []) {
             Session::put('prepaid_tickets', $event->id);
-            $transaction = MollieController::createPaymentForOrderlines($prepaid_tickets, $payment_method);
+            $transaction = MollieController::createPaymentForOrderlines($prepaid_tickets);
 
             OrderLine::query()->whereIn('id', $prepaid_tickets)->update(['payed_with_mollie' => $transaction->id]);
 

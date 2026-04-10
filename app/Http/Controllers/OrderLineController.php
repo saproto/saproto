@@ -83,15 +83,11 @@ class OrderLineController extends Controller
             'total' => $orderlines->sum('total_price'),
             'methods' => $payment_methods ?? [],
             'molliePayments' => $molliePayments,
-            'use_fees' => Config::boolean('omnomcom.mollie.use_fees'),
             'outstandingAmount' => $outstandingAmount,
             'outstanding' => $outstanding,
         ]);
     }
 
-    /**
-     * @return View
-     */
     public function adminindex(Request $request): \Illuminate\Contracts\View\View|Factory
     {
         $user = $request->has('user') ? User::query()->find($request->integer('user')) : null;

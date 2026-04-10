@@ -20,14 +20,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use Mollie\Api\Exceptions\ApiException;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
@@ -89,15 +87,9 @@ class EventController extends Controller
         return view('event.notclosed', ['activities' => $activities]);
     }
 
-    /**
-     * @throws ApiException
-     */
     public function show(Event $event): View
     {
         $methods = [];
-        if (Config::boolean('omnomcom.mollie.use_fees')) {
-            $methods = MollieController::getPaymentMethods();
-        }
 
         return view('event.display', ['event' => $event, 'payment_methods' => $methods]);
     }

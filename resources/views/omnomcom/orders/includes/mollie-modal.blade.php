@@ -30,17 +30,6 @@
                     @else
                             various payment methods.
                     @endif
-
-                    @if ($use_fees)
-                        <p>
-                            <strong>Important!</strong>
-                            Using this service you will incur a transaction fee
-                            on top of your outstanding balance for some methods.
-                            This transaction will appear in your OmNomCom
-                            history after payment. Hover on a payment method's
-                            icon to see the transaction fee.
-                        </p>
-                    @endif
                 </p>
 
                 <p>
@@ -51,17 +40,6 @@
             </div>
             <form method="post" action="{{ route('omnomcom::mollie::pay') }}">
                 @csrf
-                @if ($use_fees)
-                    <div class="modal-body container text-left">
-                        Available payment methods
-                        <div
-                            class="row justify-content-around btn-group-toggle mb-2"
-                            data-bs-toggle="buttons"
-                        >
-                            @include('omnomcom.mollie.list-all-payment-methods')
-                        </div>
-                    </div>
-                @endif
 
                 <div class="modal-footer">
                     <div class="row">

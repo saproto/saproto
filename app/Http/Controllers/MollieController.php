@@ -6,7 +6,6 @@ use App\Models\Account;
 use App\Models\Event;
 use App\Models\MollieTransaction;
 use App\Models\OrderLine;
-use App\Models\Product;
 use App\Models\User;
 use Exception;
 use Illuminate\Contracts\View\Factory;
@@ -48,10 +47,7 @@ class MollieController extends Controller
     {
         $cap = intval($request->input('cap'));
         $total = 0;
-        $requested_method = $request->input('method');
         $selected_method = null;
-        $use_fees = Config::boolean('omnomcom.mollie.use_fees');
-        $available_methods = $use_fees ? self::getPaymentMethods() : null;
 
         $orderlines = [];
         $unpaid_orderlines = OrderLine::query()
@@ -79,28 +75,7 @@ class MollieController extends Controller
             }
         }
 
-        if ($use_fees) {
-            $selected_method = $available_methods->filter(static fn ($method): bool => $method->id === $requested_method);
-
-            if ($selected_method->count() === 0) {
-                Session::flash('flash_message', 'The selected payment method is unavailable, please select a different method');
-
-                return back();
-            }
-
-            $selected_method = $selected_method->first();
-
-            if (
-                $total < floatval($selected_method->minimumAmount->value) ||
-                $total > floatval($selected_method->maximumAmount->value)
-            ) {
-                Session::flash('flash_message', 'You are unable to pay this amount with the selected method!');
-
-                return back();
-            }
-        }
-
-        $transaction = self::createPaymentForOrderlines($orderlines, $selected_method);
+        $transaction = self::createPaymentForOrderlines($orderlines);
 
         return Redirect::away($transaction->payment_url);
     }
@@ -240,33 +215,9 @@ class MollieController extends Controller
      *
      * @throws ApiException
      */
-    public static function createPaymentForOrderlines(array $orderlines, object|string|null $selected_method)
+    public static function createPaymentForOrderlines(array $orderlines)
     {
         $total = OrderLine::query()->whereIn('id', $orderlines)->sum('total_price');
-
-        if (Config::boolean('omnomcom.mollie.use_fees') && ! is_string($selected_method)) {
-            /** @var object $selected_method */
-            $fee = round(
-                $selected_method->pricing[0]->fixed->value +
-                $total * (floatval($selected_method->pricing[0]->variable) / 100),
-                2
-            );
-            if ($fee > 0) {
-                /** @var OrderLine $orderline */
-                $orderline = OrderLine::query()->findOrFail(Product::query()->findOrFail(Config::integer('omnomcom.mollie.fee_id'))->buyForUser(
-                    Auth::user(),
-                    1,
-                    $fee,
-                    null,
-                    null,
-                    null,
-                    'mollie_transaction_fee'
-                ));
-                $orderline->save();
-                $orderlines[] = $orderline->id;
-                $total += $fee;
-            }
-        }
 
         /** @var MollieTransaction $transaction */
         $transaction = MollieTransaction::query()->create([
@@ -281,7 +232,7 @@ class MollieController extends Controller
                 'currency' => 'EUR',
                 'value' => $total,
             ],
-            'method' => Config::boolean('omnomcom.mollie.use_fees') && ! is_string($selected_method) ? $selected_method->id : null,
+            'method' => null,
             'description' => 'OmNomCom Settlement (€'.$total.')',
             'redirectUrl' => route('omnomcom::mollie::receive', ['id' => $transaction->id]),
         ];
