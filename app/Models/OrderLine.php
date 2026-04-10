@@ -46,6 +46,7 @@ use Override;
  * @method static Builder<static>|OrderLine newQuery()
  * @method static Builder<static>|OrderLine query()
  * @method static Builder<static>|OrderLine unpayed()
+ * @method static Builder<static>|OrderLine unprocessed()
  * @method static Builder<static>|OrderLine whereAuthenticatedBy($value)
  * @method static Builder<static>|OrderLine whereCashierId($value)
  * @method static Builder<static>|OrderLine whereCreatedAt($value)
@@ -146,25 +147,48 @@ class OrderLine extends Model
             ->where('total_price', '!=', 0);
     }
 
+    /** @param Builder<OrderLine> $query
+     * @return Builder<OrderLine>
+     */
+    protected function scopeUnprocessed(Builder $query): Builder
+    {
+        return $query->whereNull('payed_with_cash')
+            ->whereNull('payed_with_bank_card')
+            ->whereNull('payed_with_withdrawal')
+            ->where('payed_with_loss', false)
+            ->where(function (\Illuminate\Contracts\Database\Query\Builder $query) {
+                $query->whereDoesntHave('molliePayment')
+                    ->orWhereHas('molliePayment', static function ($query) {
+                        $query->whereNotIn('status', Config::array('omnomcom.mollie.paid_statuses'));
+                    });
+            })
+            ->where('total_price', '!=', 0);
+    }
+
+    public function isProcessed(): bool
+    {
+        return
+            $this->payed_with_loss ||
+            $this->payed_with_cash !== null ||
+            $this->payed_with_withdrawal !== null ||
+            $this->payed_with_mollie !== null ||
+            $this->payed_with_bank_card !== null;
+    }
+
     public function isPayed(): bool
     {
-        $mollie_payment = false;
-        if ($this->payed_with_mollie !== null) {
-            $mollie_payment = $this->molliePayment->translatedStatus();
-        }
-
         return
             $this->total_price == 0 ||
             $this->payed_with_loss ||
             $this->payed_with_cash !== null ||
-            $this->payed_with_withdrawal !== null ||
-            $mollie_payment === MollieEnum::PAID ||
+            $this->withdrawal?->closed === true ||
+            $this->molliePayment?->translatedStatus() === MollieEnum::PAID ||
             $this->payed_with_bank_card !== null;
     }
 
     public function canBeDeleted(): bool
     {
-        return $this->total_price == 0 || ! $this->isPayed();
+        return $this->total_price == 0 || ! $this->isProcessed();
     }
 
     public function generateHistoryStatus(): string

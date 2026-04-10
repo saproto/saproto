@@ -72,10 +72,7 @@ class TicketPurchase extends Model
 
     public function canBeDownloaded(): bool
     {
-        return
-            (! $this->ticket->is_prepaid) ||
-            ($this->orderline->isPayed() && $this->orderline->payed_with_mollie === null) ||
-            ($this->orderline->molliePayment?->translatedStatus() === MollieEnum::PAID);
+        return (!$this->ticket->is_prepaid) || $this->orderline->isPayed();
     }
 
     #[Override]

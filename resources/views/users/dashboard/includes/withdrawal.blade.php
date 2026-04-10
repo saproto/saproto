@@ -119,7 +119,6 @@
                                 type="submit"
                                 class="btn btn-danger w-50"
                                 @disabled($hasUnpaidOrderlines)
-                                }}
                             >
                                 Cancel my authorization
                             </button>
