@@ -14,11 +14,16 @@
         <span class="participant-name">{{ $user?->name }}</span>
     </a>
     @if (Auth::user()->can('board') && $event && ! $event->activity->closed)
-        <a
-            href="{{ route('event::deleteparticipation', ['event' => $event, 'user' => $user ?? 'replace_user_id']) }}"
-            class="btn btn-outline-warning participant-remove-link"
-        >
-            <i class="fas fa-times" aria-hidden="true"></i>
-        </a>
+        @include(
+            'components.modals.confirm-modal',
+            [
+                'action' => route('event::deleteparticipation', ['event' => $event, 'user' => $user ?? 'replace_user_id']),
+                'confirm' => "Remove $user?->name",
+                'classes' => 'btn btn-outline-warning participant-remove-link',
+                'text' => '<i class="fas fa-times" aria-hidden="true"></i>',
+                'message' =>
+                    "Are you sure you want to sign $user?->name out of this event?",
+            ]
+        )
     @endif
 </div>
