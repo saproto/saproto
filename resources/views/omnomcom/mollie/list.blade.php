@@ -1,7 +1,9 @@
 @php
     use App\Enums\MollieEnum;
     use App\Http\Controllers\MollieController;
+    use Illuminate\Pagination\LengthAwarePaginator;
     use Illuminate\Support\Facades\Date;
+    /** @var LengthAwarePaginator<App\Models\MollieTransaction> $transactions */
 @endphp
 
 @extends('website.layouts.redesign.dashboard')
