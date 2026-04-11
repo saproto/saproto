@@ -7,7 +7,7 @@
 @extends('website.layouts.redesign.generic')
 
 @section('page-title')
-    Mollie Transaction #{{ $transaction->id }}
+        Mollie Transaction #{{ $transaction->id }}
 @endsection
 
 @section('container')
@@ -77,30 +77,30 @@
                             class="table-hover table-borderless table-sm table"
                         >
                             <thead>
-                            <tr>
-                                <th>€</th>
-                                <th>Product</th>
-                                <th>Time</th>
-                            </tr>
+                                <tr>
+                                    <th>€</th>
+                                    <th>Product</th>
+                                    <th>Time</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            @foreach ($transaction->orderlines as $orderline)
-                                <tr>
-                                    <td>
-                                        <strong>&euro;</strong>
-                                        {{ number_format($orderline->total_price, 2, '.', '') }}
-                                    </td>
-                                    <td>
-                                        {{ $orderline->units }}x
-                                        <strong>
-                                            {{ $orderline->product->name }}
-                                        </strong>
-                                    </td>
-                                    <td>
-                                        {{ date('Y-m-d H:i:s', strtotime($orderline->created_at)) }}
-                                    </td>
-                                </tr>
-                            @endforeach
+                                @foreach ($transaction->orderlines as $orderline)
+                                    <tr>
+                                        <td>
+                                            <strong>&euro;</strong>
+                                            {{ number_format($orderline->total_price, 2, '.', '') }}
+                                        </td>
+                                        <td>
+                                            {{ $orderline->units }}x
+                                            <strong>
+                                                {{ $orderline->product->name }}
+                                            </strong>
+                                        </td>
+                                        <td>
+                                            {{ date('Y-m-d H:i:s', strtotime($orderline->created_at)) }}
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     @endif
