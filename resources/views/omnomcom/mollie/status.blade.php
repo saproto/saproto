@@ -1,7 +1,13 @@
+@php
+    use App\Enums\MollieEnum;
+    use App\Models\MollieTransaction;
+    /** @var MollieTransaction $transaction */
+@endphp
+
 @extends('website.layouts.redesign.generic')
 
 @section('page-title')
-        Mollie Transaction #{{ $transaction->id }}
+    Mollie Transaction #{{ $transaction->id }}
 @endsection
 
 @section('container')
@@ -30,18 +36,18 @@
                     <tr>
                         <th>Status</th>
                         <td>
-                            @if (App\Models\MollieTransaction::translateStatus($mollie->status) == 'open')
+                            @if (App\Models\MollieTransaction::translateStatus($mollie->status) === MollieEnum::OPEN)
                                 <a href="{{ $transaction->payment_url }}">
                                     <span class="label label-success">
                                         {{ $mollie->status }} - Continue
                                         Payment
                                     </span>
                                 </a>
-                            @elseif (App\Models\MollieTransaction::translateStatus($mollie->status) == 'paid')
+                            @elseif (App\Models\MollieTransaction::translateStatus($mollie->status) === MollieEnum::PAID)
                                 <span class="label label-success">
                                     {{ $mollie->status }}
                                 </span>
-                            @elseif (App\Models\MollieTransaction::translateStatus($mollie->status) == 'failed')
+                            @elseif (App\Models\MollieTransaction::translateStatus($mollie->status) === MollieEnum::FAILED)
                                 <span class="label label-danger">
                                     {{ $mollie->status }}
                                 </span>
@@ -55,7 +61,7 @@
                 </table>
 
                 <div class="card-body">
-                    @if (App\Models\MollieTransaction::translateStatus($mollie->status) == 'failed')
+                    @if (App\Models\MollieTransaction::translateStatus($mollie->status) === MollieEnum::FAILED)
                         <p>
                             This payment has failed. All orderlines associated
                             with this payment have been set back to unpaid. You
@@ -71,30 +77,30 @@
                             class="table-hover table-borderless table-sm table"
                         >
                             <thead>
-                                <tr>
-                                    <th>€</th>
-                                    <th>Product</th>
-                                    <th>Time</th>
-                                </tr>
+                            <tr>
+                                <th>€</th>
+                                <th>Product</th>
+                                <th>Time</th>
+                            </tr>
                             </thead>
                             <tbody>
-                                @foreach ($transaction->orderlines as $orderline)
-                                    <tr>
-                                        <td>
-                                            <strong>&euro;</strong>
-                                            {{ number_format($orderline->total_price, 2, '.', '') }}
-                                        </td>
-                                        <td>
-                                            {{ $orderline->units }}x
-                                            <strong>
-                                                {{ $orderline->product->name }}
-                                            </strong>
-                                        </td>
-                                        <td>
-                                            {{ date('Y-m-d H:i:s', strtotime($orderline->created_at)) }}
-                                        </td>
-                                    </tr>
-                                @endforeach
+                            @foreach ($transaction->orderlines as $orderline)
+                                <tr>
+                                    <td>
+                                        <strong>&euro;</strong>
+                                        {{ number_format($orderline->total_price, 2, '.', '') }}
+                                    </td>
+                                    <td>
+                                        {{ $orderline->units }}x
+                                        <strong>
+                                            {{ $orderline->product->name }}
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        {{ date('Y-m-d H:i:s', strtotime($orderline->created_at)) }}
+                                    </td>
+                                </tr>
+                            @endforeach
                             </tbody>
                         </table>
                     @endif
