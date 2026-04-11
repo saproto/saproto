@@ -222,7 +222,7 @@ Route::middleware('forcedomain')->group(function () {
         });
 
         /* --- Routes related to 2FA --- */
-        Route::prefix('2fa')->name('2fa::')->group(function () {
+        Route::prefix('2fa')->name('_2fa::')->group(function () {
             Route::post('create', [TFAController::class, 'create'])->name('create');
             Route::post('delete', [TFAController::class, 'destroy'])->name('delete');
             Route::post('delete/{id}', [TFAController::class, 'adminDestroy'])->middleware(['permission:board'])->name('admindelete');
@@ -706,7 +706,7 @@ Route::middleware('forcedomain')->group(function () {
     /* --- Routes related to the OmNomCom --- */
     Route::prefix('omnomcom')->name('omnomcom::')->group(function () {
         /* --- Pubic routes --- */
-        Route::get('minisite', [OmNomController::class, 'miniSite']);
+        Route::get('minisite', [OmNomController::class, 'miniSite'])->name('minisite');
 
         /* --- Routes related to OmNomCom stores --- */
         Route::prefix('store')->name('store::')->group(function () {
@@ -1027,7 +1027,7 @@ Route::middleware('forcedomain')->group(function () {
         Route::resource('codexTextType', CodexTextTypeController::class)->except(['index', 'show']);
     });
 
-    Route::middleware(['auth', 'permission:sysadmin'])->prefix('inertia')->group(function () {
+    Route::prefix('inertia')->group(function () {
         Route::get('/', fn () => inertia('Welcome'))->name('index');
         Route::get('/admin', fn () => inertia('admin/Admin'))->name('admin');
     });

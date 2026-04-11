@@ -37,17 +37,15 @@ import { YouTubeIcon, InspireIcon, InstagramIcon } from 'vue3-simple-icons'
           <br>
           <span class="text-center flex">
             <Clock
-              class="w-4.5 text-proto-dark"
+              class="w-4.5"
               fill="white"
-              color="currentColor"
             />
             &nbsp;&nbsp;Monday &amp; Friday 08:30-16:00
           </span>
           <span class="text-center flex">
             <Clock
-              class="w-4.5 text-proto-dark"
+              class="w-4.5"
               fill="white"
-              color="currentColor"
             />
             &nbsp;&nbsp;Tuesday-Thursday, 08:30-17:30
           </span>

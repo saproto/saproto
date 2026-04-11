@@ -62,96 +62,224 @@
     --sidebar-ring: oklch(0.704 0.04 256.788);
 }
 
-/*night theme*/
-[data-theme='night'] {
-    --background: hsl(222.2 84% 4.9%);
-    --foreground: hsl(210 40% 98%);
+/*dark theme — matches dark.scss (grey palette)*/
+[data-theme='dark'],
+[data-theme='broto'] {
+    --color-brand-dark: #212121;
 
-    --card: hsl(222.2 84% 4.9%);
-    --card-foreground: hsl(210 40% 98%);
+    --background: #424242;
+    --foreground: #fff;
 
-    --popover: hsl(222.2 84% 4.9%);
-    --popover-foreground: hsl(210 40% 98%);
+    --card: #303030;
+    --card-foreground: #f1f1f1;
 
-    --primary: hsl(217.2 91.2% 59.8%);
-    --primary-foreground: hsl(222.2 47.4% 11.2%);
+    --popover: #303030;
+    --popover-foreground: #fff;
 
-    --secondary: hsl(217.2 32.6% 17.5%);
-    --secondary-foreground: hsl(210 40% 98%);
+    --primary: var(--color-brand-primary);
+    --primary-foreground: #fff;
 
-    --muted: hsl(217.2 32.6% 17.5%);
-    --muted-foreground: hsl(215 20.2% 65.1%);
+    --secondary: #212121;
+    --secondary-foreground: #fff;
 
-    --accent: hsl(217.2 32.6% 17.5%);
-    --accent-foreground: hsl(210 40% 98%);
+    --muted: #303030;
+    --muted-foreground: #aaaaaa;
 
-    --destructive: hsl(0 62.8% 30.6%);
-    --destructive-foreground: hsl(210 40% 98%);
+    --accent: #212121;
+    --accent-foreground: #fff;
 
-    --border: hsl(217.2 32.6% 17.5%);
+    --destructive: var(--color-brand-danger);
+    --destructive-foreground: #fff;
 
-    --input: hsl(217.2 32.6% 17.5%);
-
-    --ring: hsl(224.3 76.3% 48%);
+    --border: #212121;
+    --input: #212121;
+    --ring: var(--color-brand-success);
 
     --chart-1: oklch(0.488 0.243 264.376);
     --chart-2: oklch(0.696 0.17 162.48);
     --chart-3: oklch(0.769 0.188 70.08);
     --chart-4: oklch(0.627 0.265 303.9);
     --chart-5: oklch(0.645 0.246 16.439);
-    --sidebar: oklch(0.208 0.042 265.755);
-    --sidebar-foreground: oklch(0.984 0.003 247.858);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-    --sidebar-accent: oklch(0.279 0.041 260.031);
-    --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-    --sidebar-border: oklch(0.279 0.041 260.031);
-    --sidebar-ring: oklch(0.446 0.043 257.281);
+
+    --sidebar: #303030;
+    --sidebar-foreground: #f1f1f1;
+    --sidebar-primary: var(--color-brand-primary);
+    --sidebar-primary-foreground: #fff;
+    --sidebar-accent: #212121;
+    --sidebar-accent-foreground: #f1f1f1;
+    --sidebar-border: #212121;
+    --sidebar-ring: var(--color-brand-success);
 }
 
-/*dark theme*/
-[data-theme='dark'] {
-    --background: hsl(240 10% 3.9%);
-    --foreground: hsl(0 0% 98%);
+/*night theme — matches night.scss (deep blue palette)*/
+[data-theme='night'] {
+    --color-brand-dark: #0c1f66;
 
-    --card: hsl(240 10% 3.9%);
-    --card-foreground: hsl(0 0% 98%);
+    --background: #05103a;
+    --foreground: #fff;
 
-    --popover: hsl(240 10% 3.9%);
-    --popover-foreground: hsl(0 0% 98%);
+    --card: #1e2f62;
+    --card-foreground: #f1f1f1;
 
-    --primary: hsl(0 0% 98%);
-    --primary-foreground: hsl(240 5.9% 10%);
+    --popover: #1e2f62;
+    --popover-foreground: #fff;
 
-    --secondary: hsl(240 3.7% 15.9%);
-    --secondary-foreground: hsl(0 0% 98%);
+    --primary: var(--color-brand-primary);
+    --primary-foreground: #fff;
 
-    --muted: hsl(240 3.7% 15.9%);
-    --muted-foreground: hsl(240 5% 64.9%);
+    --secondary: #0c1f66;
+    --secondary-foreground: #fff;
 
-    --accent: hsl(240 3.7% 15.9%);
-    --accent-foreground: hsl(0 0% 98%);
+    --muted: #0c1f66;
+    --muted-foreground: #aaaaaa;
 
-    --destructive: hsl(0 62.8% 30.6%);
-    --destructive-foreground: hsl(0 0% 98%);
+    --accent: #0c1f66;
+    --accent-foreground: #fff;
 
-    --border: hsl(240 3.7% 15.9%);
-    --input: hsl(240 3.7% 15.9%);
-    --ring: hsl(240 4.9% 83.9%);
+    --destructive: var(--color-brand-danger);
+    --destructive-foreground: #fff;
+
+    --border: #0c1f66;
+    --input: #0c1f66;
+    --ring: var(--color-brand-success);
 
     --chart-1: oklch(0.488 0.243 264.376);
     --chart-2: oklch(0.696 0.17 162.48);
     --chart-3: oklch(0.769 0.188 70.08);
     --chart-4: oklch(0.627 0.265 303.9);
     --chart-5: oklch(0.645 0.246 16.439);
-    --sidebar: oklch(0.208 0.042 265.755);
-    --sidebar-foreground: oklch(0.984 0.003 247.858);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-    --sidebar-accent: oklch(0.279 0.041 260.031);
-    --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-    --sidebar-border: oklch(0.279 0.041 260.031);
-    --sidebar-ring: oklch(0.446 0.043 257.281);
+
+    --sidebar: #0c1f66;
+    --sidebar-foreground: #f1f1f1;
+    --sidebar-primary: var(--color-brand-primary);
+    --sidebar-primary-foreground: #fff;
+    --sidebar-accent: #05103a;
+    --sidebar-accent-foreground: #f1f1f1;
+    --sidebar-border: #05103a;
+    --sidebar-ring: var(--color-brand-success);
+}
+
+/* Night theme: twinkling stars */
+[data-theme='night'] .star {
+    --size: 0.15vw;
+    width: var(--size);
+    height: var(--size);
+    background: white;
+    border-radius: 50%;
+    position: fixed;
+    z-index: -1;
+}
+
+@keyframes proto-star-grow {
+    0%, 100% { transform: scale(0.3); }
+    50% { transform: scale(1.4); }
+}
+
+/*december theme — Christmas palette with red primary*/
+[data-theme='december'] {
+    --color-brand-primary: #a31824;
+    --color-brand-dark: #354d31;
+
+    --background: #14232a;
+    --foreground: #fff;
+
+    --card: #60803f;
+    --card-foreground: #f1f1f1;
+
+    --popover: #354d31;
+    --popover-foreground: #fff;
+
+    --primary: #a31824;
+    --primary-foreground: #fff;
+
+    --secondary: #354d31;
+    --secondary-foreground: #fff;
+
+    --muted: #354d31;
+    --muted-foreground: #aaaaaa;
+
+    --accent: #354d31;
+    --accent-foreground: #fff;
+
+    --destructive: var(--color-brand-danger);
+    --destructive-foreground: #fff;
+
+    --border: #354d31;
+    --input: #354d31;
+    --ring: var(--color-brand-success);
+
+    --chart-1: oklch(0.488 0.243 264.376);
+    --chart-2: oklch(0.696 0.17 162.48);
+    --chart-3: oklch(0.769 0.188 70.08);
+    --chart-4: oklch(0.627 0.265 303.9);
+    --chart-5: oklch(0.645 0.246 16.439);
+
+    --sidebar: #354d31;
+    --sidebar-foreground: #f1f1f1;
+    --sidebar-primary: #a31824;
+    --sidebar-primary-foreground: #fff;
+    --sidebar-accent: #14232a;
+    --sidebar-accent-foreground: #f1f1f1;
+    --sidebar-border: #14232a;
+    --sidebar-ring: var(--color-brand-success);
+}
+
+/* December theme: falling snowflakes */
+[data-theme='december'] .snowflake {
+    --size: 1vw;
+    width: var(--size);
+    height: var(--size);
+    background: white;
+    border-radius: 50%;
+    position: fixed;
+    top: -5vh;
+    z-index: -1;
+}
+
+@keyframes proto-snowfall {
+    0% { transform: translate3d(var(--left-ini), 0, 0); }
+    100% { transform: translate3d(var(--left-end), 110vh, 0); }
+}
+
+/*rainbowbarf theme — animated rainbow gradient*/
+[data-theme='rainbowbarf'] {
+    --background: #f3f3f3;
+    --foreground: hsl(240 10% 3.9%);
+    --card: hsl(0 0% 100%);
+    --card-foreground: hsl(240 10% 3.9%);
+    --popover: hsl(0 0% 100%);
+    --popover-foreground: hsl(240 10% 3.9%);
+    --primary: hsl(142.1 76.2% 36.3%);
+    --primary-foreground: hsl(355.7 100% 97.3%);
+    --secondary: hsl(240 4.8% 95.9%);
+    --secondary-foreground: hsl(240 5.9% 10%);
+    --muted: hsl(240 4.8% 95.9%);
+    --muted-foreground: hsl(240 3.8% 46.1%);
+    --accent: hsl(240 4.8% 95.9%);
+    --accent-foreground: hsl(240 5.9% 10%);
+    --destructive: var(--color-brand-danger);
+    --destructive-foreground: hsl(0 0% 98%);
+    --border: hsl(240 5.9% 90%);
+    --input: hsl(240 5.9% 90%);
+    --ring: hsl(142.1 76.2% 36.3%);
+}
+
+[data-theme='rainbowbarf'] body,
+[data-theme='rainbowbarf'] .card,
+[data-theme='rainbowbarf'] nav {
+    background: linear-gradient(
+        124deg,
+        #ff2400, #e81d1d, #e8b71d, #e3e81d,
+        #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3
+    );
+    background-size: 1800% 1800%;
+    animation: proto-rainbow 18s ease infinite;
+}
+
+@keyframes proto-rainbow {
+    0% { background-position: 0% 82%; }
+    50% { background-position: 100% 19%; }
+    100% { background-position: 0% 82%; }
 }
 
 @theme inline {

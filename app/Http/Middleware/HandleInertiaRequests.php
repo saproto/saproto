@@ -3,7 +3,9 @@
 namespace App\Http\Middleware;
 
 use App\Data\AuthUserData;
+use App\Data\MenuItemData;
 use App\Data\PhotoAlbumData;
+use App\Models\MenuItem;
 use App\Models\PhotoAlbum;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -47,6 +49,15 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'message' => $request->session()->get('flash_message'),
             ],
+            'menuitems' => Cache::rememberForever(
+                'website.navbar',
+                static fn () => MenuItemData::collect(
+                    MenuItem::query()
+                        ->whereNull('parent')
+                        ->orderBy('order')
+                        ->get()
+                )
+            ),
             'menu' => [
                 'photos' => Cache::remember('inertia.albums', Date::tomorrow(), fn () => PhotoAlbumData::collect(
                     PhotoAlbum::query()->orderBy('date_taken', 'desc')

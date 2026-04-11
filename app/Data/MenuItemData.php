@@ -28,7 +28,7 @@ class MenuItemData extends Data
     {
         return $menuItem instanceof MenuItem ? new self(
             $menuItem->menuname,
-            $menuItem->url,
+            $menuItem->parsed_url,
             $menuItem->order,
             $menuItem->is_member_only,
             $menuItem->children->map(fn (MenuItem $child): ?MenuItemData => MenuItemData::fromModel($child)),

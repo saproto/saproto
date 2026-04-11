@@ -81,7 +81,7 @@
                 @include(
                     'components.modals.confirm-modal',
                     [
-                        'action' => route('user::2fa::admindelete', ['id' => $user->id]),
+                        'action' => route('user::_2fa::admindelete', ['id' => $user->id]),
                         'method' => 'POST',
                         'classes' => 'list-group-item text-danger',
                         'text' => 'Disable 2FA',
