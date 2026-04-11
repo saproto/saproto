@@ -91,7 +91,7 @@
                             <a href="{{ route('omnomcom::orders::index') }}">
                                 purchase history
                             </a>
-                            to pay manually via iDeal.
+                            to pay manually via Wero.
                         </p>
 
                         <hr />
