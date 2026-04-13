@@ -103,21 +103,13 @@
                                             class="fas ml-2"
                                             @class([
                                                 'fa-spinner text-normal' =>
-                                                    App\Models\MollieTransaction::translateStatus(
-                                                        $transaction->translatedStatus(),
-                                                    ) == MollieEnum::OPEN,
+                                                    $transaction->translatedStatus() === MollieEnum::OPEN,
                                                 'fa-times text-danger' =>
-                                                    App\Models\MollieTransaction::translateStatus(
-                                                        $transaction->translatedStatus(),
-                                                    ) == MollieEnum::FAILED,
+                                                    $transaction->translatedStatus() === MollieEnum::FAILED,
                                                 'fa-check text-success' =>
-                                                    App\Models\MollieTransaction::translateStatus(
-                                                        $transaction->translatedStatus(),
-                                                    ) == MollieEnum::PAID,
+                                                    $transaction->translatedStatus() === MollieEnum::PAID,
                                                 'fa-question text-normal' =>
-                                                    App\Models\MollieTransaction::translateStatus(
-                                                        $transaction->translatedStatus(),
-                                                    ) == MollieEnum::UNKNOWN,
+                                                    $transaction->translatedStatus() === MollieEnum::UNKNOWN,
                                             ])
                                         ></i>
                                         <span class="label label-default">

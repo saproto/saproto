@@ -154,7 +154,7 @@ class MollieController extends Controller
         $transaction = MollieTransaction::query()->findOrFail($id);
         $flash_message = '';
         if ($transaction->user_id == Auth::id()) {
-            switch (MollieTransaction::translateStatus($transaction->status)) {
+            switch ($transaction->translatedStatus()) {
                 case MollieEnum::FAILED:
                     $flash_message = 'Your payment has failed';
                     break;
@@ -177,7 +177,7 @@ class MollieController extends Controller
             Session::remove('mollie_paid_tickets');
             $isMember = Auth::user()->is_member;
 
-            switch (MollieTransaction::translateStatus($transaction->status)) {
+            switch ($transaction->translatedStatus()) {
                 case MollieEnum::FAILED:
                     if ($isMember) {
                         $flash_message = 'Your payment has failed, the tickets are still yours but they are now listed as a withdrawal.';
