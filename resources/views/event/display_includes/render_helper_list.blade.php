@@ -18,12 +18,20 @@
             {{ $u->name }}
         </a>
         @if (Auth::user()->can('board') && $event && ! $event->activity->closed)
-            <a
-                href="{{ route('event::help::helper::delete', ['helpingCommittee' => $helpingCommittee, 'user' => $u]) }}"
-                class="btn btn-outline-warning"
-            >
-                <i class="fas fa-times" aria-hidden="true"></i>
-            </a>
+            @include(
+                'components.modals.confirm-modal',
+                [
+                    'action' => route('event::help::helper::delete', [
+                        'helpingCommittee' => $helpingCommittee,
+                        'user' => $u,
+                    ]),
+                    'confirm' => "Remove $user?->name as helper",
+                    'classes' => 'btn btn-outline-warning',
+                    'text' => '<i class="fas fa-times" aria-hidden="true"></i>',
+                    'message' => "Are you sure you want to remove $user?->name as helper?",
+                    'confirmButtonVariant' => 'btn-warning',
+                ]
+            )
         @endif
     </div>
 @endforeach
