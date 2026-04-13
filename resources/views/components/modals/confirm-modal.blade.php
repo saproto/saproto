@@ -59,17 +59,3 @@
         </div>
     @endpush
 @endonce
-
-@once
-    @push('javascript')
-        <script @cspNonce>
-            window.addEventListener('load', () => {
-                document
-                    .querySelectorAll('.confirm-modal-button')
-                    .forEach((el) => {
-                        window.initConfirmButton(el)
-                    })
-            })
-        </script>
-    @endpush
-@endonce
