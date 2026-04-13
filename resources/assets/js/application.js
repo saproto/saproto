@@ -94,6 +94,50 @@ if (modalList.length) {
         }
     })
 }
+global.initConfirmButton = (el) => {
+    el.addEventListener('click', (e) => {
+        const modal = document.querySelector(el.getAttribute('data-bs-target'))
+        modal.querySelector('.modal-title').innerHTML =
+            el.getAttribute('data-confirm-title')
+
+        modal.querySelector('#submit-button').classList = el.getAttribute(
+            'data-confirm-btn-variant'
+        )
+
+        modal.querySelector('#confirm-form-method').value =
+            el.getAttribute('data-form-method')
+
+        modal.querySelector('.modal-body').innerHTML = el.getAttribute(
+            'data-confirm-message'
+        )
+        modal.querySelector('.confirm-button').innerHTML = el.getAttribute(
+            'data-confirm-btn-text'
+        )
+
+        const form = el.getAttribute('data-form')
+        const method = el.getAttribute('data-form-method').toLowerCase()
+        const formElement = modal.querySelector('form')
+
+        if (method === 'get') {
+            formElement.method = 'GET'
+        } else {
+            formElement.method = 'POST'
+        }
+
+        if (form) {
+            modal.querySelector('.confirm-button').onclick = (e) => {
+                e.preventDefault()
+                document.querySelector(form).submit()
+            }
+        } else {
+            e.preventDefault()
+            e.stopPropagation()
+            modal.querySelector('form').action = el.getAttribute(
+                'data-confirm-action'
+            )
+        }
+    })
+}
 
 // Enable custom file input elements
 const customFileInputList = Array.from(
