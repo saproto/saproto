@@ -94,7 +94,7 @@ if (modalList.length) {
         }
     })
 }
-global.initConfirmButton = (el) => {
+window.initConfirmButton = (el) => {
     el.addEventListener('click', (e) => {
         const modal = document.querySelector(el.getAttribute('data-bs-target'))
         modal.querySelector('.modal-title').innerHTML =
@@ -138,6 +138,9 @@ global.initConfirmButton = (el) => {
         }
     })
 }
+document.querySelectorAll('.confirm-modal-button').forEach((el) => {
+    window.initConfirmButton(el)
+})
 
 // Enable custom file input elements
 const customFileInputList = Array.from(
