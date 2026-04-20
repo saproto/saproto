@@ -309,18 +309,6 @@ class MollieController extends Controller
             if ($method->status != 'activated' || $method->resource != 'method') {
                 unset($methodsList[$index]);
             }
-
-            if (in_array($method->id, Config::array('omnomcom.mollie.free_methods'))) {
-                $methodsList[$index]->pricing = null;
-                $methodsList[$index]->pricing[0] = (object) [
-                    'description' => $method->description,
-                    'fixed' => (object) [
-                        'value' => '0.00',
-                        'currency' => 'EUR',
-                    ],
-                    'variable' => '0',
-                ];
-            }
         }
 
         return collect($methodsList);

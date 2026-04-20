@@ -34,7 +34,6 @@
                     'event.display_includes.tickets',
                     [
                         'event' => $event,
-                        'payment_methods' => $payment_methods,
                     ]
                 )
 

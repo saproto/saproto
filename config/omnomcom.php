@@ -147,7 +147,6 @@ return [
     */
 
     'mollie' => [
-        'free_methods' => ['creditcard'],
         'has_webhook' => getenv('APP_ENV') !== 'local',
         'paid_statuses' => ['paid', 'paidout'],
     ],

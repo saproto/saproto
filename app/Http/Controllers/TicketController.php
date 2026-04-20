@@ -408,8 +408,6 @@ class TicketController extends Controller
             }
         }
 
-        $payment_method = '';
-
         if (! $sold) {
             Session::flash('flash_message', "You didn't select any tickets to buy. Maybe buy some tickets?");
 
