@@ -223,51 +223,14 @@
             @if (Auth::check() && $tickets_available > 0)
                 <div class="card-footer">
                     {{-- No fees of no prepaid (2,4,5) --}}
-                    @if (! Config::boolean('omnomcom.mollie.use_fees') || ! $has_prepay_tickets)
-                        <button type="submit" class="btn btn-success btn-block">
-                            Total:
-                            <strong>
-                                &euro;
-                                <span id="ticket-total" class="mr-3">0.00</span>
-                            </strong>
-                            Finish purchase!
-                        </button>
-                        {{-- fees and only prepaid (3) --}}
-                    @elseif (Config::boolean('omnomcom.mollie.use_fees') && $only_prepaid)
-                        @include('event.display_includes.mollie-modal')
-                        <a
-                            href="javascript:void();"
-                            class="btn btn-primary btn-block"
-                            data-bs-toggle="modal"
-                            data-bs-target="#mollie-modal"
-                        >
-                            Get tickets now!
-                        </a>
-                    @else
-                        <button
-                            id="directpay"
-                            type="submit"
-                            class="btn btn-success btn-block"
-                        >
-                            Total:
-                            <strong>
-                                &euro;
-                                <span id="ticket-total" class="mr-3">0.00</span>
-                            </strong>
-                            Finish purchase!
-                        </button>
-                        @include('event.display_includes.mollie-modal')
-                        <a
-                            hidden
-                            id="feesbutton"
-                            href="javascript:void();"
-                            class="btn btn-primary btn-block"
-                            data-bs-toggle="modal"
-                            data-bs-target="#mollie-modal"
-                        >
-                            Get tickets now!
-                        </a>
-                    @endif
+                    <button type="submit" class="btn btn-success btn-block">
+                        Total:
+                        <strong>
+                            &euro;
+                            <span id="ticket-total" class="mr-3">0.00</span>
+                        </strong>
+                        Finish purchase!
+                    </button>
                 </div>
             @endif
         </div>
@@ -297,7 +260,6 @@
     @push('javascript')
         <script type="text/javascript" @cspNonce>
             const directPayButton = document.getElementById('directpay')
-            const feesButton = document.getElementById('feesbutton')
             const selectList = Array.from(
                 document.getElementsByClassName('ticket-select')
             )
@@ -319,10 +281,8 @@
                     }
                     if (totalPrepaidSelected === 0) {
                         directPayButton?.setAttribute('hidden', '')
-                        feesButton?.removeAttribute('hidden')
                     } else if (totalPrepaidSelected > 0) {
                         directPayButton?.removeAttribute('hidden')
-                        feesButton?.setAttribute('hidden', '')
                     }
                 })
             )

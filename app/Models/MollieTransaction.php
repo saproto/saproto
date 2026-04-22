@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\MollieEnum;
 use Exception;
 use Illuminate\Database\Eloquent\Attributes\Guarded;
 use Illuminate\Database\Eloquent\Attributes\Table;
@@ -11,7 +12,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Config;
 use Mollie;
 use Mollie\Api\Exceptions\ApiException;
 use Mollie\Api\Resources\Payment;
@@ -75,24 +75,24 @@ class MollieTransaction extends Model
             ->get($this->mollie_id);
     }
 
-    public static function translateStatus(string $status): string
+    public static function translateStatus(string $status): MollieEnum
     {
         if (in_array($status, ['open', 'pending', 'draft'], true)) {
-            return 'open';
+            return MollieEnum::OPEN;
         }
 
         if (in_array($status, ['expired', 'canceled', 'failed', 'charged_back', 'refunded'], true)) {
-            return 'failed';
+            return MollieEnum::FAILED;
         }
 
         if (in_array($status, config('omnomcom.mollie.paid_statuses'))) {
-            return 'paid';
+            return MollieEnum::PAID;
         }
 
-        return 'unknown';
+        return MollieEnum::UNKNOWN;
     }
 
-    public function translatedStatus(): string
+    public function translatedStatus(): MollieEnum
     {
         return self::translateStatus($this->status);
     }
@@ -112,20 +112,14 @@ class MollieTransaction extends Model
 
         $this->status = $mollie->status;
 
-        if ($new_status !== 'open') {
+        if ($new_status !== MollieEnum::OPEN) {
             $this->payment_url = $mollie->getCheckoutUrl();
         }
 
         $this->save();
 
-        if ($new_status === 'failed') {
+        if ($new_status === MollieEnum::FAILED) {
             foreach ($this->orderlines as $orderline) {
-                if ($orderline->product_id == Config::integer('omnomcom.mollie.fee_id')) {
-                    $orderline->delete();
-
-                    continue;
-                }
-
                 /*
                  * Handles the case where an orderline was an unpaid event ticket for which prepayment is required.
                  * If statement components:
@@ -155,7 +149,7 @@ class MollieTransaction extends Model
             return $this;
         }
 
-        if ($new_status === 'paid') {
+        if ($new_status === MollieEnum::PAID) {
             foreach ($this->orderlines as $orderline) {
                 $orderline->ticketPurchase?->update([
                     'payment_complete' => true,

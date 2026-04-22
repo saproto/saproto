@@ -1,3 +1,11 @@
+@php
+    use App\Enums\MollieEnum;
+    use App\Http\Controllers\MollieController;
+    use Illuminate\Pagination\LengthAwarePaginator;
+    use Illuminate\Support\Facades\Date;
+    /** @var LengthAwarePaginator<App\Models\MollieTransaction> $transactions */
+@endphp
+
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
@@ -91,10 +99,19 @@
                                     </td>
 
                                     <td>
-                                        {!! App\Models\MollieTransaction::translateStatus($transaction->translatedStatus()) == 'open' ? '<i class="fas fa-spinner ml-2 text-normal"></i>' : '' !!}
-                                        {!! App\Models\MollieTransaction::translateStatus($transaction->translatedStatus()) == 'failed' ? '<i class="fas fa-times ml-2 text-danger"></i>' : '' !!}
-                                        {!! App\Models\MollieTransaction::translateStatus($transaction->translatedStatus()) == 'paid' ? '<i class="fas fa-check ml-2 text-success"></i>' : '' !!}
-                                        {!! App\Models\MollieTransaction::translateStatus($transaction->translatedStatus()) == 'unknown' ? '<i class="fas fa-question ml-2 text-normal"></i>' : '' !!}
+                                        <i
+                                            class="fas ml-2"
+                                            @class([
+                                                'fa-spinner text-normal' =>
+                                                    $transaction->translatedStatus() === MollieEnum::OPEN,
+                                                'fa-times text-danger' =>
+                                                    $transaction->translatedStatus() === MollieEnum::FAILED,
+                                                'fa-check text-success' =>
+                                                    $transaction->translatedStatus() === MollieEnum::PAID,
+                                                'fa-question text-normal' =>
+                                                    $transaction->translatedStatus() === MollieEnum::UNKNOWN,
+                                            ])
+                                        ></i>
                                         <span class="label label-default">
                                             - {{ $transaction->status }}
                                         </span>
@@ -138,13 +155,11 @@
                         <tbody>
                             @for ($m = 0; $m <= 11 ; $m++)
                                 <?php
-                                $month = \Illuminate\Support\Facades\Date::parse(sprintf('-%s months', $m))
-                                    ->timestamp;
-                                $total = \App\Http\Controllers\MollieController::getTotalForMonth(
-                                    \Illuminate\Support\Facades\Date::createFromTimestamp(
-                                        $month,
-                                        date_default_timezone_get(),
-                                    )->format('Y-m'),
+                                $month = Date::parse(sprintf('-%s months', $m))->timestamp;
+                                $total = MollieController::getTotalForMonth(
+                                    Date::createFromTimestamp($month, date_default_timezone_get())->format(
+                                        'Y-m',
+                                    ),
                                 );
                                 ?>
 

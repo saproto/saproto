@@ -90,6 +90,12 @@ export enum MembershipTypeEnum {
     HONORARY = 4,
     DONOR = 5,
 }
+export enum MollieEnum {
+    PAID = 'paid',
+    FAILED = 'failed',
+    OPEN = 'open',
+    UNKNOWN = 'unknown',
+}
 export enum NarrowcastingEnum {
     LARGE = 'large',
     SMALL = 'small',

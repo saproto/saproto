@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\MollieEnum;
 use Illuminate\Database\Eloquent\Attributes\Guarded;
 use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -74,7 +75,7 @@ class TicketPurchase extends Model
         return
             (! $this->ticket->is_prepaid) ||
             ($this->orderline->isPayed() && $this->orderline->payed_with_mollie === null) ||
-            ($this->orderline->molliePayment?->translatedStatus() == 'paid');
+            ($this->orderline->molliePayment?->translatedStatus() === MollieEnum::PAID);
     }
 
     #[Override]
