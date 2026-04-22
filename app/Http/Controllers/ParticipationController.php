@@ -103,7 +103,7 @@ class ParticipationController extends Controller
 
         Session::flash('flash_message', $participation->user->name.' is not attending '.$participation->activity->event->title.' anymore.');
 
-        $this->processBackupQueue($participation->activity);
+        static::processBackupQueue($participation->activity);
 
         $participation->activity->event->updateUniqueUsersCount();
 
