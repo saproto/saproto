@@ -103,9 +103,7 @@ class ParticipationController extends Controller
 
         Session::flash('flash_message', $participation->user->name.' is not attending '.$participation->activity->event->title.' anymore.');
 
-        if (! $participation->backup && $participation->activity->canUnsubscribe() && $participation->activity->users->count() < $participation->activity->participants) {
-            self::transferOneBackupUser($participation->activity);
-        }
+        $this->processBackupQueue($participation->activity);
 
         $participation->activity->event->updateUniqueUsersCount();
 
