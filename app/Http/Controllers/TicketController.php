@@ -49,12 +49,6 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        if (! $request->has('is_members_only') && ! $request->has('is_prepaid') && ! Auth::user()->can('sysadmin')) {
-            Session::flash('flash_message', 'Making tickets for external people payable via withdrawal is risky and usually not necessary. If you REALLY want this, please contact the Have You Tried Turning It Off And On Again committee.');
-
-            return back();
-        }
-
         $ticket = new Ticket;
         $ticket->event_id = Event::query()->findOrFail($request->input('event'))->id;
         $ticket->product_id = Product::query()->findOrFail($request->input('product'))->id;
