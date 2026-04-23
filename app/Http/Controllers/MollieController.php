@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MollieEnum;
 use App\Models\Account;
 use App\Models\Event;
 use App\Models\MollieTransaction;
 use App\Models\OrderLine;
-use App\Models\Product;
 use App\Models\User;
 use Exception;
 use Illuminate\Contracts\View\Factory;
@@ -48,10 +48,7 @@ class MollieController extends Controller
     {
         $cap = intval($request->input('cap'));
         $total = 0;
-        $requested_method = $request->input('method');
         $selected_method = null;
-        $use_fees = Config::boolean('omnomcom.mollie.use_fees');
-        $available_methods = $use_fees ? self::getPaymentMethods() : null;
 
         $orderlines = [];
         $unpaid_orderlines = OrderLine::query()
@@ -79,28 +76,7 @@ class MollieController extends Controller
             }
         }
 
-        if ($use_fees) {
-            $selected_method = $available_methods->filter(static fn ($method): bool => $method->id === $requested_method);
-
-            if ($selected_method->count() === 0) {
-                Session::flash('flash_message', 'The selected payment method is unavailable, please select a different method');
-
-                return back();
-            }
-
-            $selected_method = $selected_method->first();
-
-            if (
-                $total < floatval($selected_method->minimumAmount->value) ||
-                $total > floatval($selected_method->maximumAmount->value)
-            ) {
-                Session::flash('flash_message', 'You are unable to pay this amount with the selected method!');
-
-                return back();
-            }
-        }
-
-        $transaction = self::createPaymentForOrderlines($orderlines, $selected_method);
+        $transaction = self::createPaymentForOrderlines($orderlines);
 
         return Redirect::away($transaction->payment_url);
     }
@@ -170,23 +146,27 @@ class MollieController extends Controller
 
     /**
      * @return RedirectResponse
+     *
+     * @throws Exception
      */
     public function receive(int $id)
     {
         /** @var MollieTransaction $transaction */
         $transaction = MollieTransaction::query()->findOrFail($id);
-
-        $flash_message = 'Unknown error';
+        $flash_message = '';
         if ($transaction->user_id == Auth::id()) {
-            switch (MollieTransaction::translateStatus($transaction->status)) {
-                case 'failed':
+            switch ($transaction->translatedStatus()) {
+                case MollieEnum::FAILED:
                     $flash_message = 'Your payment has failed';
                     break;
-                case 'open':
+                case MollieEnum::OPEN:
                     $flash_message = 'Your payment is still open';
                     break;
-                case 'paid':
+                case MollieEnum::PAID:
                     $flash_message = 'Your payment was completed successfully!';
+                    break;
+                case MollieEnum::UNKNOWN:
+                    $flash_message = 'Unknown error';
                     break;
             }
 
@@ -198,8 +178,8 @@ class MollieController extends Controller
             Session::remove('mollie_paid_tickets');
             $isMember = Auth::user()->is_member;
 
-            switch (MollieTransaction::translateStatus($transaction->status)) {
-                case 'failed':
+            switch ($transaction->translatedStatus()) {
+                case MollieEnum::FAILED:
                     if ($isMember) {
                         $flash_message = 'Your payment has failed, the tickets are still yours but they are now listed as a withdrawal.';
                     } else {
@@ -207,12 +187,14 @@ class MollieController extends Controller
                     }
 
                     break;
-                case 'open':
+                case MollieEnum::OPEN:
                     $flash_message = 'Your payment is still open, the payment can still be completed.';
                     break;
-                case 'paid':
+                case MollieEnum::PAID:
                     $flash_message = 'Your payment was completed successfully! The tickets have been mailed to you!';
                     break;
+                case MollieEnum::UNKNOWN:
+                    $flash_message = 'Unknown error';
             }
 
             Session::flash('flash_message', $flash_message);
@@ -240,33 +222,9 @@ class MollieController extends Controller
      *
      * @throws ApiException
      */
-    public static function createPaymentForOrderlines(array $orderlines, object|string|null $selected_method)
+    public static function createPaymentForOrderlines(array $orderlines)
     {
         $total = OrderLine::query()->whereIn('id', $orderlines)->sum('total_price');
-
-        if (Config::boolean('omnomcom.mollie.use_fees') && ! is_string($selected_method)) {
-            /** @var object $selected_method */
-            $fee = round(
-                $selected_method->pricing[0]->fixed->value +
-                $total * (floatval($selected_method->pricing[0]->variable) / 100),
-                2
-            );
-            if ($fee > 0) {
-                /** @var OrderLine $orderline */
-                $orderline = OrderLine::query()->findOrFail(Product::query()->findOrFail(Config::integer('omnomcom.mollie.fee_id'))->buyForUser(
-                    Auth::user(),
-                    1,
-                    $fee,
-                    null,
-                    null,
-                    null,
-                    'mollie_transaction_fee'
-                ));
-                $orderline->save();
-                $orderlines[] = $orderline->id;
-                $total += $fee;
-            }
-        }
 
         /** @var MollieTransaction $transaction */
         $transaction = MollieTransaction::query()->create([
@@ -281,7 +239,7 @@ class MollieController extends Controller
                 'currency' => 'EUR',
                 'value' => $total,
             ],
-            'method' => Config::boolean('omnomcom.mollie.use_fees') && ! is_string($selected_method) ? $selected_method->id : null,
+            'method' => null,
             'description' => 'OmNomCom Settlement (€'.$total.')',
             'redirectUrl' => route('omnomcom::mollie::receive', ['id' => $transaction->id]),
         ];
@@ -350,18 +308,6 @@ class MollieController extends Controller
         foreach ($api_response as $index => $method) {
             if ($method->status != 'activated' || $method->resource != 'method') {
                 unset($methodsList[$index]);
-            }
-
-            if (in_array($method->id, Config::array('omnomcom.mollie.free_methods'))) {
-                $methodsList[$index]->pricing = null;
-                $methodsList[$index]->pricing[0] = (object) [
-                    'description' => $method->description,
-                    'fixed' => (object) [
-                        'value' => '0.00',
-                        'currency' => 'EUR',
-                    ],
-                    'variable' => '0',
-                ];
             }
         }
 

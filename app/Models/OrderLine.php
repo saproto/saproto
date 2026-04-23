@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\MollieEnum;
 use Database\Factories\OrderLineFactory;
 use Illuminate\Database\Eloquent\Attributes\Guarded;
 use Illuminate\Database\Eloquent\Attributes\Table;
@@ -157,7 +158,7 @@ class OrderLine extends Model
             $this->payed_with_loss ||
             $this->payed_with_cash !== null ||
             $this->payed_with_withdrawal !== null ||
-            $mollie_payment == 'paid' ||
+            $mollie_payment === MollieEnum::PAID ||
             $this->payed_with_bank_card !== null;
     }
 
@@ -194,22 +195,22 @@ class OrderLine extends Model
 
         if ($this->payed_with_mollie !== null) {
             return match ($this->molliePayment->translatedStatus()) {
-                'paid' => '<i class="fas fa-check ml-2 text-success"></i> - <a href=\''.
+                MollieEnum::PAID => '<i class="fas fa-check ml-2 text-success"></i> - <a href=\''.
                     route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
                     "'>#".
                     $this->payed_with_mollie.
                     '</a>',
-                'failed' => '<i class="fas fa-times ml-2 text-danger"></i> - <a href=\''.
+                MollieEnum::FAILED => '<i class="fas fa-times ml-2 text-danger"></i> - <a href=\''.
                     route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
                     "'>#".
                     $this->payed_with_mollie.
                     '</a>',
-                'open' => '<i class="fas fa-spinner ml-2 text-normal"></i> - <a href=\''.
+                MollieEnum::OPEN => '<i class="fas fa-spinner ml-2 text-normal"></i> - <a href=\''.
                     route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
                     "'>#".
                     $this->payed_with_mollie.
                     '</a>',
-                default => '<i class="fas fa-question ml-2 text-normal"></i> - <a href=\''.
+                MollieEnum::UNKNOWN => '<i class="fas fa-question ml-2 text-normal"></i> - <a href=\''.
                     route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
                     "'>#".
                     $this->payed_with_mollie.

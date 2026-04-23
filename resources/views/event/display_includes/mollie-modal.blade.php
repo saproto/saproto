@@ -52,7 +52,6 @@
                         'omnomcom.mollie.list-all-payment-methods',
                         [
                             'methods' => $payment_methods,
-                            'use_fees' => true,
                         ]
                     )
                 </div>

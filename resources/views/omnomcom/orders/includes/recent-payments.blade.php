@@ -1,5 +1,9 @@
 @php
+    use App\Enums\MollieEnum;
+    use App\Models\MollieTransaction;
     use App\Models\Withdrawal;
+    /** @var \Illuminate\Support\Collection<Withdrawal> $withdrawals */
+    /** @var \Illuminate\Support\Collection<MollieTransaction> $molliePayments */
 @endphp
 
 <div class="card mb-3">
@@ -8,10 +12,6 @@
     @if ($withdrawals->isNotEmpty())
         <ul class="list-group list-group-flush">
             @foreach ($withdrawals as $withdrawal)
-                @php
-                    /** @var Withdrawal $withdrawal */
-                @endphp
-
                 <div class="list-group-item d-flex justify-content-between">
                     <div>
                         <a
@@ -49,7 +49,7 @@
                 <li class="list-group-item">
                     @if ($transaction->mollie_id != 'temp')
                         @php
-                            $status = App\Models\MollieTransaction::translateStatus($transaction->translatedStatus());
+                            $status = $transaction->translatedStatus();
                         @endphp
 
                         <a
@@ -57,7 +57,7 @@
                         >
                             {{ date('d-m-Y H:i', strtotime($transaction->created_at)) }}
                             <i
-                                class="fas {{ $status == 'open' ? ' fa-spinner text-normal' : '' }} {{ $status == 'failed' ? 'fa-times text-danger' : '' }} {{ $status == 'paid' ? 'fa-check text-success' : '' }} {{ $status == 'unknown' ? 'fa-question text-normal' : '' }} ms-2"
+                                class="fas {{ $status === MollieEnum::OPEN ? ' fa-spinner text-normal' : '' }} {{ $status === MollieEnum::FAILED ? 'fa-times text-danger' : '' }} {{ $status === MollieEnum::PAID ? 'fa-check text-success' : '' }} {{ $status === MollieEnum::UNKNOWN ? 'fa-question text-normal' : '' }} ms-2"
                             ></i>
                         </a>
                     @else
