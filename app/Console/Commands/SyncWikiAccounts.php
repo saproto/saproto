@@ -25,16 +25,6 @@ class SyncWikiAccounts extends Command
     protected $description = 'Synchronizes all elegible accounts for the Proto wiki.';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(): void

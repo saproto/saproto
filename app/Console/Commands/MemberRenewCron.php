@@ -24,16 +24,6 @@ class MemberRenewCron extends Command
     protected $description = 'Cronjob that takes care of sending out the membership renewal mail.';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(): void

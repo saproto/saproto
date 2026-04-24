@@ -23,16 +23,6 @@ class FileCleanup extends Command
     protected $description = 'Clears all files that are orphaned (i.e. not referenced anywhere) for privacy reasons as well as storage space.';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(): void

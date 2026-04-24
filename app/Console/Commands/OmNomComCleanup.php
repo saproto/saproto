@@ -25,16 +25,6 @@ class OmNomComCleanup extends Command
     protected $description = 'Anonymise all OmNomCom data older than 7 years for users who disabled their history.';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(): void

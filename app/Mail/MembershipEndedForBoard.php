@@ -17,7 +17,6 @@ class MembershipEndedForBoard extends Mailable
      * Create a new message instance.
      *
      * @param  Member[]  $deleted_memberships
-     * @return void
      */
     public function __construct(public array $deleted_memberships) {}
 

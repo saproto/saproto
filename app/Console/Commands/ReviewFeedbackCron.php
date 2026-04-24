@@ -25,16 +25,6 @@ class ReviewFeedbackCron extends Command
     protected $description = 'Send the email to the reviewer of a feedback category if new feedback needs reviewed';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(): void

@@ -23,16 +23,6 @@ class TestEmail extends Command
     protected $description = 'This command sends a test e-mail message to see if stuff works.';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(): void

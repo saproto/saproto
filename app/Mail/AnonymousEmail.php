@@ -14,8 +14,6 @@ class AnonymousEmail extends Mailable
 
     /**
      * Create a new message instance.
-     *
-     * @return void
      */
     public function __construct(public Committee $committee, public string $message_content, public string $hash) {}
 

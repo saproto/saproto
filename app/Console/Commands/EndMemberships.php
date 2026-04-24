@@ -27,16 +27,6 @@ class EndMemberships extends Command
     protected $description = 'This command terminates all memberships that have an end date in the past';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @throws Exception

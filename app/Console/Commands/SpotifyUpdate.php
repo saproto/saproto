@@ -26,16 +26,6 @@ class SpotifyUpdate extends Command
     protected $description = 'Update ProTube history with Spotify URIs.';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(): void
