@@ -22,16 +22,6 @@ class AddSysadmin extends Command
     protected $description = 'Give a user the sysadmin role.';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(): int

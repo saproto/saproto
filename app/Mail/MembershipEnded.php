@@ -24,7 +24,6 @@ class MembershipEnded extends Mailable
      */
     public $lists;
 
-    /** @return void */
     public function __construct(User $user)
     {
         $this->user = $user;

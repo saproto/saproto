@@ -25,16 +25,6 @@ class VerifyPersonalDetailsEmailCron extends Command
     protected $description = 'Cronjob that sends the bi-yearly e-mail to remind users to keep their personal data up to date.';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(): void

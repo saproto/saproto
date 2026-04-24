@@ -17,7 +17,6 @@ class UtwenteCleanup extends Mailable
      * Create a new message instance.
      *
      * @param  string[]|Collection<(int|string), non-falsy-string>  $unlinked
-     * @return void
      */
     public function __construct(public Collection|array $unlinked) {}
 

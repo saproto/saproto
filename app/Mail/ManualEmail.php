@@ -19,7 +19,6 @@ class ManualEmail extends Mailable
      *
      * @param  Collection<int, Event>  $events
      * @param  Collection<int, Media>  $submitted_attachments
-     * @return void
      */
     public function __construct(public string $sender_address, public string $sender_name, public string $email_subject, public string $body, public Collection $submitted_attachments, public string $destination, public int $user_id, public Collection $events, public int $email_id) {}
 

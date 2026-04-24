@@ -22,16 +22,6 @@ class PrintActiveMembers extends Command
     protected $description = 'Print all active members of the association and the committees they are currently in.';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(): void
