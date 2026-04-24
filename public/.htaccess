@@ -107,11 +107,13 @@
     # One year for image and video files
     <filesMatch "\.(svg|woff|woff2|css|flv|gif|ico|jpg|jpeg|mp4|mpeg|png|svg|swf|webp)$">
         Header set Cache-Control "max-age=31536000, public"
+        Header set Access-Control-Allow-Origin "*"
     </filesMatch>
 
     # One month for JavaScript and PDF files
     <filesMatch "\.(js|pdf)$">
         Header set Cache-Control "max-age=2592000, public"
+        Header set Access-Control-Allow-Origin "*"
     </filesMatch>
 
 </ifModule>
