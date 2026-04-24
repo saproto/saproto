@@ -48,6 +48,7 @@ class MollieController extends Controller
     {
         $cap = intval($request->input('cap'));
         $total = 0;
+        $selected_method = null;
 
         $orderlines = [];
         $unpaid_orderlines = OrderLine::query()
@@ -307,18 +308,6 @@ class MollieController extends Controller
         foreach ($api_response as $index => $method) {
             if ($method->status != 'activated' || $method->resource != 'method') {
                 unset($methodsList[$index]);
-            }
-
-            if (in_array($method->id, Config::array('omnomcom.mollie.free_methods'))) {
-                $methodsList[$index]->pricing = null;
-                $methodsList[$index]->pricing[0] = (object) [
-                    'description' => $method->description,
-                    'fixed' => (object) [
-                        'value' => '0.00',
-                        'currency' => 'EUR',
-                    ],
-                    'variable' => '0',
-                ];
             }
         }
 

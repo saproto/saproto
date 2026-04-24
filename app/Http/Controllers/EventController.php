@@ -89,9 +89,7 @@ class EventController extends Controller
 
     public function show(Event $event): View
     {
-        $methods = [];
-
-        return view('event.display', ['event' => $event, 'payment_methods' => $methods]);
+        return view('event.display', ['event' => $event]);
     }
 
     public function create(): \Illuminate\Contracts\View\View|Factory

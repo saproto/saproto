@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\MollieEnum;
 use Illuminate\Database\Eloquent\Attributes\Guarded;
 use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
