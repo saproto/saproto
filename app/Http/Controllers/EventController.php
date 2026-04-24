@@ -41,7 +41,7 @@ class EventController extends Controller
             ->orderBy('start')
             ->when($category, static function ($query) use ($category) {
                 $query->whereHas('Category', static function (Builder $q) use ($category) {
-                    $q->where('id', $category->id)->where('deleted_at', null);
+                    $q->where('id', $category->id)->whereNull('deleted_at');
                 });
             })
             ->where('start', '>', Date::now()->timestamp)
@@ -215,7 +215,7 @@ class EventController extends Controller
             ->orderBy('start')
             ->unless(empty($category), static function ($query) use ($category) {
                 $query->whereHas('Category', static function (Builder $q) use ($category) {
-                    $q->where('id', $category->id)->where('deleted_at', null);
+                    $q->where('id', $category->id)->whereNull('deleted_at');
                 });
             })->where('start', '>', Date::create($year, 1, 1, 0, 0, 1)->timestamp)
             ->where('start', '<', Date::create($year, 12, 31, 23, 59, 59)->timestamp)

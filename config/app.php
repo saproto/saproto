@@ -135,7 +135,7 @@ return [
     | This will prevent the "X-Forwarded-For" header from being used.
     |
     */
-    'trusted_proxies' => env('TRUSTED_PROXIES', null),
+    'trusted_proxies' => env('TRUSTED_PROXIES'),
 
     /*
     |--------------------------------------------------------------------------

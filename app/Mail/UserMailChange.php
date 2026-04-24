@@ -21,7 +21,6 @@ class UserMailChange extends Mailable
      * ip: string|null
      * } $changer
      * @param  array<string, mixed>  $email
-     * @return void
      */
     public function __construct(public User $user, public array $changer, public array $email) {}
 

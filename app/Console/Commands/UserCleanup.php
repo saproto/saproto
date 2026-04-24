@@ -22,16 +22,6 @@ class UserCleanup extends Command
     protected $description = 'Clears all users registrations that have not been completed (users without password and no data associated).';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(): void

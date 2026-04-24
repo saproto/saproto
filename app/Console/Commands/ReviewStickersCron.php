@@ -24,16 +24,6 @@ class ReviewStickersCron extends Command
     protected $description = 'Send the email to the board if there are reported stickers that need to be reviewed.';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(): void

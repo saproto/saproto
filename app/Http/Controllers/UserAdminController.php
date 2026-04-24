@@ -38,7 +38,7 @@ class UserAdminController extends Controller
                 $q->whereMembershipType(MembershipTypeEnum::PENDING)->where('deleted_at', '=', null);
             }),
             'members' => $userQuery->whereHas('member', static function (\Illuminate\Contracts\Database\Query\Builder $q) {
-                $q->whereNot('membership_type', MembershipTypeEnum::PENDING)->where('deleted_at', '=', null);
+                $q->whereNot('membership_type', MembershipTypeEnum::PENDING)->whereNull('deleted_at');
             }),
             'users' => $userQuery->doesntHave('member'),
             default => $userQuery,

@@ -25,16 +25,6 @@ class MemberCleanup extends Command
     protected $description = 'Delete all pending memberships older than a month.';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      *

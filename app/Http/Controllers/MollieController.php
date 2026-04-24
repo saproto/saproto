@@ -48,7 +48,6 @@ class MollieController extends Controller
     {
         $cap = intval($request->input('cap'));
         $total = 0;
-        $selected_method = null;
 
         $orderlines = [];
         $unpaid_orderlines = OrderLine::query()

@@ -34,16 +34,6 @@ class UpdateWallstreetPrices extends Command
     protected float $maxPriceMultiplier = 1.2;
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @throws RandomException

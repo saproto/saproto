@@ -27,16 +27,6 @@ class SyncRoles extends Command
     protected $description = 'Generate the roles and permissions needed for the application.';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * @throws Exception
      */
     public function handle(): int

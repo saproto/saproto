@@ -16,7 +16,6 @@ class FeeEmailForBoard extends Mailable
      * Create a new message instance.
      *
      * @param  $charged_fees  object{count: int, regular: string[], reduced: string[], remitted: string[]}
-     * @return void
      */
     public function __construct(public object $charged_fees) {}
 
