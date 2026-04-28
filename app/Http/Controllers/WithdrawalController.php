@@ -86,7 +86,7 @@ class WithdrawalController extends Controller
         foreach ($totalPerUser as $user_id => $total) {
             if ($total < 0) {
                 $user = User::query()->findOrFail($user_id);
-                $orderlinesFor = $withdrawal->orderlinesForUser($user);
+                $orderlinesFor = $withdrawal->orderlines->where('user_id', $user->id);
                 foreach ($orderlinesFor as $orderlineFor) {
                     $orderlineFor->withdrawal()->dissociate();
                     $orderlineFor->save();
