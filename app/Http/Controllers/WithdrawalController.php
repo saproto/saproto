@@ -62,6 +62,7 @@ class WithdrawalController extends Controller
             ->with('product')
             ->with('product.ticket')
             ->get();
+
         foreach ($orderlines as $orderline) {
             if (! array_key_exists($orderline->user->id, $totalPerUser)) {
                 $totalPerUser[$orderline->user->id] = 0;
@@ -85,7 +86,7 @@ class WithdrawalController extends Controller
         foreach ($totalPerUser as $user_id => $total) {
             if ($total < 0) {
                 $user = User::query()->findOrFail($user_id);
-                $orderlinesFor = $withdrawal->orderlinesForUser($user);
+                $orderlinesFor = $withdrawal->orderlines->where('user_id', $user->id);
                 foreach ($orderlinesFor as $orderlineFor) {
                     $orderlineFor->withdrawal()->dissociate();
                     $orderlineFor->save();
@@ -206,7 +207,12 @@ class WithdrawalController extends Controller
         /** @var User $user */
         $user = User::withTrashed()->findOrFail($user_id);
 
-        foreach ($withdrawal->orderlinesForUser($user) as $orderline) {
+        $orderlines = $withdrawal
+            ->orderlines()
+            ->where('user_id', $user->id)
+            ->get();
+
+        foreach ($orderlines as $orderline) {
             $orderline->withdrawal()->dissociate();
             $orderline->save();
         }
@@ -280,7 +286,10 @@ class WithdrawalController extends Controller
         /** @var User $user */
         $user = User::query()->findOrFail($user_id);
 
-        $orderlines = $withdrawal->orderlinesForUser($user);
+        $orderlines = $withdrawal
+            ->orderlines()
+            ->where('user_id', $user->id)
+            ->get();
 
         foreach ($orderlines as $orderline) {
             $orderline->withdrawal()->dissociate();
@@ -405,10 +414,15 @@ class WithdrawalController extends Controller
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()
-            ->with('orderlines.product')
             ->findOrFail($id);
 
-        return view('omnomcom.withdrawals.userhistory', ['withdrawal' => $withdrawal, 'orderlines' => $withdrawal->orderlinesForUser(Auth::user())]);
+        $orderlines = $withdrawal
+            ->orderlines()
+            ->where('user_id', Auth::id())
+            ->with('product')
+            ->get();
+
+        return view('omnomcom.withdrawals.userhistory', ['withdrawal' => $withdrawal, 'orderlines' => $orderlines]);
     }
 
     /**
