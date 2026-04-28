@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\PlayedVideo;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -41,10 +41,7 @@ class ProtubeController extends Controller
         ]);
     }
 
-    /**
-     * @return \Illuminate\Support\Collection
-     */
-    private function getTopVideos(int $limit = 10, ?string $since = null, ?User $user = null): \Illuminate\Support\Collection
+    private function getTopVideos(int $limit = 10, ?string $since = null, ?User $user = null): Collection
     {
         $top = PlayedVideo::query()
             ->select([
@@ -69,6 +66,7 @@ class ProtubeController extends Controller
             $stats = $top[$video->video_id];
             $video->played_count = $stats->played_count;
             $video->first_played = $stats->first_played;
+
             return $video;
         });
 
