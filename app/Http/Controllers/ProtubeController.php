@@ -41,6 +41,9 @@ class ProtubeController extends Controller
         ]);
     }
 
+    /**
+     * @return Collection<int, PlayedVideo>
+     */
     private function getTopVideos(int $limit = 10, ?string $since = null, ?User $user = null): Collection
     {
         $top = PlayedVideo::query()
@@ -62,15 +65,13 @@ class ProtubeController extends Controller
             ->distinct()
             ->get();
 
-        $videos = $videos->map(function ($video) use ($top) {
+        return $videos->map(function ($video) use ($top) {
             $stats = $top[$video->video_id];
+            // @phpstan-ignore-next-line
             $video->played_count = $stats->played_count;
-            $video->first_played = $stats->first_played;
 
             return $video;
-        });
-
-        return $videos
+        })            // @phpstan-ignore-next-line
             ->sortByDesc(fn ($v) => $top[$v->video_id]->played_count)
             ->values();
     }
