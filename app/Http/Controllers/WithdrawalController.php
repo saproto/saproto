@@ -284,18 +284,14 @@ class WithdrawalController extends Controller
         }
 
         /** @var User $user */
-        $user = User::query()->findOrFail($user_id);
+        $user = User::withTrashed()->findOrFail($user_id);
 
-        $orderlines = $withdrawal
-            ->orderlines()
+        $withdrawal->orderlines()
             ->where('user_id', $user->id)
-            ->get();
-
-        foreach ($orderlines as $orderline) {
-            $orderline->withdrawal()->dissociate();
-            $orderline->payed_with_loss = true;
-            $orderline->save();
-        }
+            ->update([
+                'payed_with_withdrawal' => null,
+                'payed_with_loss' => true,
+            ]);
 
         $withdrawal->recalculateTotals();
 
