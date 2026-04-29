@@ -268,7 +268,7 @@ return [
             'www.isalfredthere.nl',
         ],
         'static' => [
-            env(' ASSET_URL'),
+            env('ASSET_URL'),
         ],
         'garage' => [
             env('GARAGE_WEB_URL'),

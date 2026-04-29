@@ -315,7 +315,7 @@
 
 @push('javascript')
     @vite('resources/assets/js/echo.js')
-    <script type="text/javascript" @cspNonce>
+    <script type="module" @cspNonce>
         ;{{-- format-ignore-start --}}
         let id = @json($event->id);
         {{-- format-ignore-end --}}
@@ -328,79 +328,71 @@
         const users_count = document.querySelector('#users-count')
         const signupContainer = document.querySelector('#signupContainer')
         const backupContainer = document.querySelector('#backupContainer')
-        window.addEventListener('load', () => {
-            const addUser = (user, local_template) => {
-                const clone = document.importNode(local_template.content, true)
-                clone.querySelector('.participant-profile-link').href =
-                    user.user_profile_link
 
-                const removeLink = clone.querySelector(
-                    '.participant-remove-link'
+        const addUser = (user, local_template) => {
+            const clone = document.importNode(local_template.content, true)
+            clone.querySelector('.participant-profile-link').href =
+                user.user_profile_link
+
+            const removeLink = clone.querySelector('.participant-remove-link')
+            if (removeLink) {
+                removeLink.setAttribute(
+                    'data-confirm-action',
+                    user.user_remove_link
                 )
-                if (removeLink) {
-                    removeLink.setAttribute(
-                        'data-confirm-action',
-                        user.user_remove_link
-                    )
-                    removeLink.setAttribute(
-                        'data-confirm-message',
-                        `Are you sure you want to sign ${user.user_name} out of this event?`
-                    )
-                    removeLink.setAttribute(
-                        'data-confirm-btn-text',
-                        `Remove ${user.user_name}`
-                    )
-                    window.initConfirmButton(removeLink)
-                }
-
-                clone.querySelector('.participant-avatar').src =
-                    user.user_avatar
-                clone.querySelector('.participant-name').innerHTML =
-                    user.user_name
-                clone.querySelector('.participant-id').dataset.userId =
-                    user.user_id
-                local_template.parentNode.appendChild(clone)
+                removeLink.setAttribute(
+                    'data-confirm-message',
+                    `Are you sure you want to sign ${user.user_name} out of this event?`
+                )
+                removeLink.setAttribute(
+                    'data-confirm-btn-text',
+                    `Remove ${user.user_name}`
+                )
+                window.initConfirmButton(removeLink)
             }
 
-            const removeUser = (user_id) => {
-                const element = document.querySelector(
-                    `[data-user-id="${user_id}"]`
-                )
-                if (element) {
-                    element.remove()
-                }
-            }
+            clone.querySelector('.participant-avatar').src = user.user_avatar
+            clone.querySelector('.participant-name').innerHTML = user.user_name
+            clone.querySelector('.participant-id').dataset.userId = user.user_id
+            local_template.parentNode.appendChild(clone)
+        }
 
-            const recountUsers = (template, counter) => {
-                const count =
-                    template?.parentNode.querySelectorAll(
-                        '.participant-id'
-                    ).length
-                if (count) {
-                    counter.innerHTML = count
+        const removeUser = (user_id) => {
+            const element = document.querySelector(
+                `[data-user-id="${user_id}"]`
+            )
+            if (element) {
+                element.remove()
+            }
+        }
+
+        const recountUsers = (template, counter) => {
+            const count =
+                template?.parentNode.querySelectorAll('.participant-id').length
+            if (count) {
+                counter.innerHTML = count
+            } else {
+                counter.innerHTML = 0
+            }
+        }
+
+        Echo.private(`events.${id}`)
+            .listen('.App\\Events\\Events\\UserSignedupEvent', (e) => {
+                removeUser(e.user_id)
+                if (e.backup) {
+                    backupContainer.classList.remove('d-none')
+                    addUser(e, template_backup_users)
                 } else {
-                    counter.innerHTML = 0
+                    signupContainer.classList.remove('d-none')
+                    addUser(e, template)
                 }
-            }
-
-            Echo.private(`events.${id}`)
-                .listen('.App\\Events\\Events\\UserSignedupEvent', (e) => {
-                    removeUser(e.user_id)
-                    if (e.backup) {
-                        backupContainer.classList.remove('d-none')
-                        addUser(e, template_backup_users)
-                    } else {
-                        signupContainer.classList.remove('d-none')
-                        addUser(e, template)
-                    }
-                    recountUsers(template_backup_users, backup_count)
-                    recountUsers(template, users_count)
-                })
-                .listen('.App\\Events\\Events\\UserSignedOutEvent', (e) => {
-                    removeUser(e.user_id)
-                    recountUsers(template, users_count)
-                    recountUsers(template_backup_users, backup_count)
-                })
-        })
+                recountUsers(template_backup_users, backup_count)
+                recountUsers(template, users_count)
+            })
+            .listen('.App\\Events\\Events\\UserSignedOutEvent', (e) => {
+                removeUser(e.user_id)
+                recountUsers(template, users_count)
+                recountUsers(template_backup_users, backup_count)
+            })
     </script>
 @endpush

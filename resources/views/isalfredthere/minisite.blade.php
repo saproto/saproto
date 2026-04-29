@@ -71,7 +71,7 @@
     @vite('resources/assets/js/echo.js')
     @vite('resources/assets/js/moment.js')
 
-    <script type="text/javascript" @cspNonce>
+    <script type="module" @cspNonce>
         const statusElement = document.getElementById('alfred-status')
         const text = document.getElementById('alfred-text')
         const time = document.getElementById('alfred-actualtime')
@@ -107,25 +107,6 @@
                 color: 'bg-warning',
             },
         }
-
-        window.addEventListener('load', () => {
-            updateStatus({
-                status: '{{ $status }}',
-                text: '{{ $text }}',
-                unix: '{{ $unix }}',
-            })
-
-            window.Echo.channel(`isalfredthere`)
-                .listen('IsAlfredThereEvent', (status) => {
-                    updateStatus(status)
-                })
-                .error((error) => {
-                    console.error(error)
-                    setTimeout(() => {
-                        window.location.reload()
-                    }, 10000)
-                })
-        })
 
         const updateStatus = (status) => {
             if (status.text?.length > 0) {
@@ -176,5 +157,22 @@
             // set the correct color corresponding to the status
             document.body.classList.add(newStatus.color)
         }
+
+        updateStatus({
+            status: '{{ $status }}',
+            text: '{{ $text }}',
+            unix: '{{ $unix }}',
+        })
+
+        window.Echo.channel(`isalfredthere`)
+            .listen('IsAlfredThereEvent', (status) => {
+                updateStatus(status)
+            })
+            .error((error) => {
+                console.error(error)
+                setTimeout(() => {
+                    window.location.reload()
+                }, 10000)
+            })
     </script>
 @endpush
