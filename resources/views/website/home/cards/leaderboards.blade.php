@@ -6,7 +6,7 @@
             ->where('featured', true)
             ->with([
                 'entries' => function ($q) {
-                    $q->orderBy('points', 'DESC')->limit(5);
+                    $q->orderBy('points', 'desc')->limit(5);
                 },
             ])
             ->get(),
