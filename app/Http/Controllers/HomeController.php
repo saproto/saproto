@@ -160,7 +160,7 @@ class HomeController extends Controller
             'old' => CommitteeMembership::withTrashed()
                 ->where('committee_id', $committee->id)
                 ->whereNotNull('deleted_at')
-                ->orderBy('created_at', 'ASC')
+                ->orderBy('created_at', 'asc')
                 ->groupBy('user_id')
                 ->with('user')
                 ->get(),

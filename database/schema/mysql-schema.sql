@@ -1058,7 +1058,8 @@ CREATE TABLE `photo_likes` (
   `user_id` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `photo_likes_photo_id_index` (`photo_id`),
-  KEY `photo_likes_user_id_index` (`user_id`)
+  KEY `photo_likes_user_id_index` (`user_id`),
+  CONSTRAINT `photo_likes_photo_id_foreign` FOREIGN KEY (`photo_id`) REFERENCES `photos` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `photos`;
@@ -1879,3 +1880,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_02_27_004429_drop_
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_03_17_160300_add_indexes_to_the_activities_users_table',203);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_04_22_174718_add_covering_index_to_products_categories',204);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_04_29_144605_add_personal_key_index_to_users',204);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_05_06_122228_add_foreign_constraint_to_photo_likes',205);

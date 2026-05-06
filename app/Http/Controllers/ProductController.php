@@ -116,7 +116,7 @@ class ProductController extends Controller
             'product' => $product,
             'accounts' => Account::query()->orderBy('account_number', 'asc')->get(),
             'categories' => ProductCategory::all(),
-            'orderlines' => $product->orderlines()->with('user')->orderBy('created_at', 'DESC')->paginate(20),
+            'orderlines' => $product->orderlines()->with('user')->orderBy('created_at', 'desc')->paginate(20),
         ]);
     }
 

@@ -306,7 +306,7 @@ class OmNomController extends Controller
      */
     public function generateOrder(Request $request): \Illuminate\Contracts\View\View|Factory
     {
-        $products = Product::query()->where('is_visible_when_no_stock', true)->whereRaw('stock < preferred_stock')->orderBy('name', 'ASC')->get();
+        $products = Product::query()->where('is_visible_when_no_stock', true)->whereRaw('stock < preferred_stock')->orderBy('name', 'asc')->get();
         $orders = [];
         foreach ($products as $product) {
             $order_collo = ($product->supplier_collo > 0 ? ceil(($product->preferred_stock - $product->stock) / $product->supplier_collo) : 0);

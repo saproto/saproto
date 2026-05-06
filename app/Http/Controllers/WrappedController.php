@@ -51,7 +51,7 @@ class WrappedController extends Controller
             ->with('product.media')
             ->where('created_at', '>', $from)
             ->where('created_at', '<', $to)
-            ->orderBy('created_at', 'DESC');
+            ->orderBy('created_at', 'desc');
     }
 
     /** @return Collection<(int|string), Collection<(int|string), mixed>>*/
