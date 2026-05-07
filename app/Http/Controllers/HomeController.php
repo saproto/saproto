@@ -42,6 +42,8 @@ class HomeController extends Controller
                 ->get());
 
         if (! Auth::user()?->is_member) {
+            $albums = $albums->filter(fn ($album) => $album->private === false);
+
             return view('website.home.external', ['companies' => $companies, 'header' => $header, 'albums' => $albums]);
         }
 
