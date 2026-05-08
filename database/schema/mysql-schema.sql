@@ -50,7 +50,9 @@ CREATE TABLE `achievements_users` (
   `description` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `achievements_users_user_id_index` (`user_id`),
-  KEY `achievements_users_achievement_id_index` (`achievement_id`)
+  KEY `achievements_users_achievement_id_index` (`achievement_id`),
+  CONSTRAINT `achievements_users_achievement_id_foreign` FOREIGN KEY (`achievement_id`) REFERENCES `achievement` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `achievements_users_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `activities`;
@@ -1393,7 +1395,8 @@ CREATE TABLE `user_welcome` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
-  KEY `user_welcome_user_id_index` (`user_id`)
+  KEY `user_welcome_user_id_index` (`user_id`),
+  CONSTRAINT `user_welcome_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `users`;
@@ -1881,3 +1884,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_03_17_160300_add_i
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_04_22_174718_add_covering_index_to_products_categories',204);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_04_29_144605_add_personal_key_index_to_users',204);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_05_06_122228_add_foreign_constraint_to_photo_likes',205);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_05_08_130754_add_foreign_id_constraint_to_welcome_messages_and_achievements',206);
