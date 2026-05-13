@@ -39,7 +39,7 @@ class PhotoAlbumController extends Controller
                         $query->where('user_id', Auth::id());
                     },
                 ])
-                ->paginate(24),
+                ->paginate(12),
         ]);
     }
 
