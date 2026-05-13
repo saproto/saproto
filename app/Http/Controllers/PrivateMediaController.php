@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -13,6 +14,8 @@ class PrivateMediaController extends Controller
     public function show(int $mediaId, ?string $conversion = null): StreamedResponse
     {
         $media = Cache::remember("media::{$mediaId}", Date::now()->addDays(7), fn () => Media::query()->findOrFail($mediaId));
+
+        DB::disconnect();
 
         $disk = $conversion ? $media->conversions_disk : $media->disk;
 
