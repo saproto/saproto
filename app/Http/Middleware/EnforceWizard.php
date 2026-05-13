@@ -17,7 +17,7 @@ class EnforceWizard
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        if (! $request->is('api/*') && Auth::check() && Auth::user()->wizard) {
+        if (! $request->is('api/*') && ! $request->is('media/*') && Auth::check() && Auth::user()->wizard) {
             if (! $request->is('becomeamember')) {
                 return to_route('becomeamember');
             }
