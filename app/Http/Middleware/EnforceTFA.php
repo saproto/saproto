@@ -18,7 +18,7 @@ class EnforceTFA
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        $isApplicableRoute = ! ($request->is('user/dashboard') || $request->is('auth/logout') || $request->is('user/quit_impersonating') || $request->is('user/*/2fa/*') || $request->is('user/2fa/*') || $request->is('api/*'));
+        $isApplicableRoute = ! ($request->is('user/dashboard') || $request->is('auth/logout') || $request->is('user/quit_impersonating') || $request->is('user/*/2fa/*') || $request->is('user/2fa/*') || $request->is('api/*') || $request->is('media/*'));
         if (App::environment('production') && $isApplicableRoute && Auth::check() && ! Auth::user()->hasTFAEnabled()) {
             $rootUserIds = Cache::remember('middleware.rootUserIds', now()->addDay(), fn () => Committee::whereSlug(Config::string('proto.rootcommittee'))->firstOrFail()->users()->pluck('users.id'));
             if ($rootUserIds->contains(Auth::id()) || Auth::user()->hasRole(Config::array('proto.tfaroles'))) {
