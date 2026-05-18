@@ -10,6 +10,7 @@ use App\Models\PlayedVideo;
 use App\Models\TicketPurchase;
 use App\Models\User;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -21,20 +22,21 @@ use Inertia\Response;
 
 class WrappedController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
-
-        $from = Date::now()->startOfYear();
-        $to = Date::now()->endOfYear();
+        $year = $request->integer('year', Date::now()->year);
+        $from = Date::createFromDate($year)->startOfYear();
+        $to = Date::createFromDate($year)->endOfYear();
         $user = Auth::user();
 
         return Inertia::render('Wrapped/Wrapped',
             [
-                'order_totals' => Cache::remember('wrapped.order_totals', Date::tomorrow(), fn () => $this->orderTotals()),
+                'year' => $year,
+                'order_totals' => Cache::remember("wrapped.order_totals::$from->year::$to->year", Date::tomorrow(), fn () => $this->orderTotals($from, $to)),
                 'purchases' => OrderlineData::collect($this->getPurchases($from, $to, $user)->get()),
-                'total_spent' => Cache::remember('wrapped.total_price', Date::tomorrow(), fn () => round($this->getPurchases($from, $to)->sum('total_price'), 2)),
+                'total_spent' => Cache::remember("wrapped.total_price::$from->year::$to->year", Date::tomorrow(), fn () => round($this->getPurchases($from, $to)->sum('total_price'), 2)),
                 'events' => $this->eventList($from, $to, $user),
-                'protube_totals' => Cache::remember('wrapped.protube_totals', Date::tomorrow(), fn () => $this->ProTubeTotals()),
+                'protube_totals' => Cache::remember("wrapped.protube_totals::$from->year::$to->year", Date::tomorrow(), fn () => $this->ProTubeTotals($from, $to)),
                 'played_videos' => PlayedVideoData::collect($this->topProtubeSongs($from, $to, $user)->toArray()),
             ]);
     }
@@ -55,10 +57,10 @@ class WrappedController extends Controller
     }
 
     /** @return Collection<(int|string), Collection<(int|string), mixed>>*/
-    public function orderTotals(): Collection
+    public function orderTotals(Carbon $from, Carbon $to): Collection
     {
         $totals = OrderLine::query()
-            ->whereBetween('created_at', [now()->startOfYear(), now()->endOfYear()])
+            ->whereBetween('created_at', [$from, $to])
             ->selectRaw('product_id, SUM(units) as total')
             ->groupBy('product_id')
             ->groupBy('user_id')
@@ -156,10 +158,10 @@ class WrappedController extends Controller
     }
 
     /** @return Collection<(int|string), int> **/
-    public function ProTubeTotals(): Collection
+    public function ProTubeTotals(Carbon $from, Carbon $to): Collection
     {
         return PlayedVideo::query()
-            ->whereBetween('created_at', [now()->startOfYear(), now()->endOfYear()])
+            ->whereBetween('created_at', [$from, $to])
             ->selectRaw('COUNT(*) as total')
             ->groupBy('user_id')
             ->orderBy('total')

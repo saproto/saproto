@@ -67,10 +67,9 @@ const shareSlide = async () => {
             domtoimage.toBlob(slide.value).then(async (blob) => {
                 if (!blob) return
                 if (navigator.share) {
-                    const year = new Date().getFullYear()
                     const imgFile = new File(
                         [blob],
-                        `ProtoWrapped${year}.png`,
+                        `ProtoWrapped${stats.year}.png`,
                         { type: 'image/png' }
                     )
                     await navigator.share({
@@ -82,8 +81,7 @@ const shareSlide = async () => {
                 } else {
                     const dataUrl = URL.createObjectURL(blob)
                     const link = document.createElement('a')
-                    const year = new Date().getFullYear()
-                    link.download = `ProtoWrapped${year}.png`
+                    link.download = `ProtoWrapped${stats.year}.png`
                     link.href = dataUrl
                     link.click()
                 }

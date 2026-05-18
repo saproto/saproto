@@ -4,6 +4,7 @@ interface VideoWithUrl extends App.Data.PlayedVideoData {
     thumbnail_url?: string
 }
 export interface statsType {
+    year: number
     images: {
         cookieMonster: string
         beugel: string

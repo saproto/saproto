@@ -16,6 +16,7 @@ import OrderlineData = App.Data.OrderlineData
 import ProductData = App.Data.ProductData
 import { statsType } from '@/pages/Wrapped/types'
 export const prepareStats = async (
+    year: number,
     orders: Array<OrderlineData>,
     order_totals: number[][],
     total_spent: number,
@@ -27,6 +28,7 @@ export const prepareStats = async (
         .map((x) => x.units * x.product.calories)
         .reduce((a, b) => a + b)
     const stats: statsType = {
+        year: year,
         images: {
             cookieMonster: cookieMonster,
             beugel: beugel,
@@ -97,6 +99,8 @@ export const prepareStats = async (
             },
         },
     }
+
+    console.log(stats.year)
 
     // const beerOrders = orders.filter(x => x.product.is_alcoholic);
     // stats.calories.actualBeers = beerOrders.length <= 0 ? 0 : beerOrders.map(x => x.units).reduce((a, b) => a + b);
