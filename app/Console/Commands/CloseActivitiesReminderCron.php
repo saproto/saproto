@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Mail\CloseActivitiesReminder;
-use App\Mail\ReviewStickersMail;
 use App\Models\Activity;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;

@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use App\Models\Activity;
-use App\Models\Sticker;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
