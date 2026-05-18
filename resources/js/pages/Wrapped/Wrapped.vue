@@ -18,6 +18,7 @@ const played_videos = computed(
 const order_totals = computed(() => page.props.order_totals as number[][])
 const protube_totals = computed(() => page.props.protube_totals as number[])
 const total_spent = computed(() => page.props.total_spent as number)
+const year = computed(() => page.props.year as number)
 const events = computed(() => page.props.events as { price: number }[])
 const loaded = ref(false)
 const steps = 10
@@ -32,6 +33,7 @@ const loadData = async () => {
     await new Promise((resolve) => setTimeout(resolve, 50))
     currentStep.value++ // 4
     data.value = await prepareStats(
+        year.value,
         purchases.value,
         order_totals.value,
         total_spent.value,
