@@ -84,6 +84,7 @@ class WrappedController extends Controller
         $events = Event::query()
             ->whereBetween('start', [$from->timestamp, $to->timestamp])
             ->whereNotLike('title', '%cancel%')
+            ->whereNotLike('title', '%postpone%')
             ->where(static function (\Illuminate\Contracts\Database\Query\Builder $query) use ($user) {
                 $query->whereIn('id', static function (Builder $query) use ($user) {
                     $query->select('event_id')
