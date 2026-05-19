@@ -102,6 +102,7 @@ const handleLikeClick = (index: number) => {
     isLiking = true
     if (!user.value) {
         window.location.href = loginIndex.url()
+        return
     }
     const photo = photoList.value[index]
     http.post(toggleLike.url(photo.id), {
@@ -118,6 +119,9 @@ const handleLikeClick = (index: number) => {
                     onClick: () => router.reload(),
                 },
             })
+            isLiking = false
+        },
+        onFinish: () => {
             isLiking = false
         },
     })
