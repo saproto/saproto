@@ -303,7 +303,7 @@ onMounted(() => {
                 <Button
                     :variant="'ghost'"
                     :disabled="!previousPhoto"
-                    class="text-black-100 absolute top-1/2 left-0 flex h-full w-25 -translate-y-1/2 transform items-center justify-center p-2"
+                    class="text-black-100 absolute top-1/2 left-0 flex h-full w-25 -translate-y-1/2 transform items-center justify-center p-2 disabled:pointer-events-auto"
                     @click="goToPhotoAt(state.index - 1)"
                 >
                     <ArrowLeft />
@@ -312,7 +312,7 @@ onMounted(() => {
                 <Button
                     :variant="'ghost'"
                     :disabled="!nextPhoto"
-                    class="text-black-100 absolute top-1/2 right-0 flex h-full w-25 -translate-y-1/2 transform items-center justify-center p-2"
+                    class="text-black-100 absolute top-1/2 right-0 flex h-full w-25 -translate-y-1/2 transform items-center justify-center p-2 disabled:pointer-events-auto"
                     @click="goToPhotoAt(state.index + 1)"
                 >
                     <ArrowRight />
