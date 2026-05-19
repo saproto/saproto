@@ -385,7 +385,7 @@
 
 @push('javascript')
     @vite('resources/assets/js/exifreader.js')
-    <script async type="text/javascript" @cspNonce>
+    <script async type="module" @cspNonce>
         const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
         window.addEventListener('load', () => {
             let fileSizeLimit = '{{ $fileSizeLimit }}B'
