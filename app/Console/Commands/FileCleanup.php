@@ -3,25 +3,15 @@
 namespace App\Console\Commands;
 
 use App\Models\StorageEntry;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
+#[Description('Clears all files that are orphaned (i.e. not referenced anywhere) for privacy reasons as well as storage space.')]
+#[Signature('proto:filecleanup')]
 class FileCleanup extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:filecleanup';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Clears all files that are orphaned (i.e. not referenced anywhere) for privacy reasons as well as storage space.';
-
     /**
      * Execute the console command.
      */

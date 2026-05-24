@@ -4,27 +4,17 @@ namespace App\Console\Commands;
 
 use App\Http\Controllers\SpotifyController;
 use App\Models\PlayedVideo;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use SpotifyWebAPI\SpotifyWebAPIException;
 
+#[Description('Update ProTube history with Spotify URIs.')]
+#[Signature('proto:spotifyupdate')]
 class SpotifyUpdate extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:spotifyupdate';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Update ProTube history with Spotify URIs.';
-
     /**
      * Execute the console command.
      */

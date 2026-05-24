@@ -4,26 +4,16 @@ namespace App\Console\Commands;
 
 use App\Models\Committee;
 use App\Models\User;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 
+#[Description('Synchronizes all elegible accounts for the Proto wiki.')]
+#[Signature('proto:generatewikiauthfile')]
 class SyncWikiAccounts extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:generatewikiauthfile';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Synchronizes all elegible accounts for the Proto wiki.';
-
     /**
      * Execute the console command.
      */

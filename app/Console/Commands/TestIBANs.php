@@ -3,24 +3,14 @@
 namespace App\Console\Commands;
 
 use App\Models\Bank;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
+#[Description('Verify all active SEPA withdrawal contracts and check whether they seem valid and within the SEPA zone.')]
+#[Signature('proto:testibans')]
 class TestIBANs extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:testibans';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Verify all active SEPA withdrawal contracts and check whether they seem valid and within the SEPA zone.';
-
     /**
      * Execute the console command.
      */

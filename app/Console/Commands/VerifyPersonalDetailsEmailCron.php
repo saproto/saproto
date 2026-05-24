@@ -4,26 +4,16 @@ namespace App\Console\Commands;
 
 use App\Mail\VerifyPersonalDetails;
 use App\Models\User;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Mail;
 
+#[Description('Cronjob that sends the bi-yearly e-mail to remind users to keep their personal data up to date.')]
+#[Signature('proto:verifydetailscron')]
 class VerifyPersonalDetailsEmailCron extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:verifydetailscron';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Cronjob that sends the bi-yearly e-mail to remind users to keep their personal data up to date.';
-
     /**
      * Execute the console command.
      */

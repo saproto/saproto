@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Guarded;
 use Illuminate\Database\Eloquent\Attributes\Table;
+use Illuminate\Database\Eloquent\Attributes\WithoutTimestamps;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -49,10 +50,9 @@ use Override;
  */
 #[Guarded(['id'])]
 #[Table(name: 'tickets')]
+#[WithoutTimestamps]
 class Ticket extends Model
 {
-    public $timestamps = false;
-
     /**
      * @return BelongsTo<Product, $this>
      */

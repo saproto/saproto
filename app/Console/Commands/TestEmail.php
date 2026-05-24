@@ -3,25 +3,15 @@
 namespace App\Console\Commands;
 
 use App\Mail\TestMail;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 
+#[Description('This command sends a test e-mail message to see if stuff works.')]
+#[Signature('proto:testmail')]
 class TestEmail extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:testmail';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'This command sends a test e-mail message to see if stuff works.';
-
     /**
      * Execute the console command.
      */

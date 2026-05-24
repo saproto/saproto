@@ -4,26 +4,16 @@ namespace App\Console\Commands;
 
 use App\Models\OrderLine;
 use App\Models\User;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 
+#[Description('Anonymise all OmNomCom data older than 7 years for users who disabled their history.')]
+#[Signature('proto:omnomcleanup')]
 class OmNomComCleanup extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:omnomcleanup';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Anonymise all OmNomCom data older than 7 years for users who disabled their history.';
-
     /**
      * Execute the console command.
      */

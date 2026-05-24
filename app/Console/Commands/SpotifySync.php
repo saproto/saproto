@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Http\Controllers\SpotifyController;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
@@ -10,22 +12,10 @@ use Illuminate\Support\Facades\DB;
 use SpotifyWebAPI\SpotifyWebAPI;
 use SpotifyWebAPI\SpotifyWebAPIException;
 
+#[Description('Sync Spotify playlist etc.')]
+#[Signature('proto:spotifysync')]
 class SpotifySync extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:spotifysync';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Sync Spotify playlist etc.';
-
     private int $spotifyUpdateLimit = 99;
 
     /**

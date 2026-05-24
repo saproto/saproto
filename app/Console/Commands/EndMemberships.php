@@ -6,26 +6,16 @@ use App\Http\Controllers\UserAdminController;
 use App\Mail\MembershipEndedForBoard;
 use App\Models\Member;
 use Exception;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Mail;
 
+#[Description('This command terminates all memberships that have an end date in the past')]
+#[Signature('proto:endmemberships')]
 class EndMemberships extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:endmemberships';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'This command terminates all memberships that have an end date in the past';
-
     /**
      * Execute the console command.
      *
