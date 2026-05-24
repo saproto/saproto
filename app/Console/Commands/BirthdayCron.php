@@ -6,28 +6,18 @@ use App\Enums\MembershipTypeEnum;
 use App\Mail\BirthdayEmail;
 use App\Mail\BirthdayEmailForBoard;
 use App\Models\User;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Mail;
 
+#[Description('Cronjob that sends the daily birthday e-mails.')]
+#[Signature('proto:birthdaycron')]
 class BirthdayCron extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:birthdaycron';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Cronjob that sends the daily birthday e-mails.';
-
     /**
      * Execute the console command.
      */

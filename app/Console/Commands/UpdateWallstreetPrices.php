@@ -10,27 +10,17 @@ use App\Models\Product;
 use App\Models\WallstreetDrink;
 use App\Models\WallstreetEvent;
 use App\Models\WallstreetPrice;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Facades\Date;
 use Random\RandomException;
 
+#[Description('Update the prices when a wallstreet drink is active')]
+#[Signature('proto:updatewallstreetprices')]
 class UpdateWallstreetPrices extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:updatewallstreetprices';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Update the prices when a wallstreet drink is active';
-
     protected float $maxPriceMultiplier = 1.2;
 
     /**

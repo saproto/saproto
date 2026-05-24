@@ -21,6 +21,8 @@ use Google\Service\Gmail\ForwardingAddress;
 use Google_Client;
 use Google_Service_Exception;
 use Google_Task_Exception;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -28,22 +30,10 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Throwable;
 
+#[Description('Manages e-mail accounts and lists via Google Workspace API.')]
+#[Signature('proto:gsync')]
 class GoogleSync extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:gsync';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Manages e-mail accounts and lists via Google Workspace API.';
-
     /**
      * The Google Directory service.
      */

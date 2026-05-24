@@ -82,7 +82,7 @@
         "spatie/laravel-medialibrary": "^11.13",
         "league/flysystem-sftp-v3": "^3.30",
         "laravel/wayfinder": "^0.1.12",
-        "laravel-notification-channels/webpush": "^10.4",
+        "laravel-notification-channels/webpush": "^11.0",
         "laravel/pennant": "^1.18",
         "league/flysystem-aws-s3-v3": "^3.0",
         "predis/predis": "^3.4"

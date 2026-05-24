@@ -4,25 +4,15 @@ namespace App\Console\Commands;
 
 use App\Mail\ReviewStickersMail;
 use App\Models\Sticker;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 
+#[Description('Send the email to the board if there are reported stickers that need to be reviewed.')]
+#[Signature('proto:reviewstickerscron')]
 class ReviewStickersCron extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:reviewstickerscron';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Send the email to the board if there are reported stickers that need to be reviewed.';
-
     /**
      * Execute the console command.
      */

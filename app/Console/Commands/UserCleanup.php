@@ -3,24 +3,14 @@
 namespace App\Console\Commands;
 
 use App\Models\User;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
+#[Description('Clears all users registrations that have not been completed (users without password and no data associated).')]
+#[Signature('proto:usercleanup')]
 class UserCleanup extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:usercleanup';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Clears all users registrations that have not been completed (users without password and no data associated).';
-
     /**
      * Execute the console command.
      */

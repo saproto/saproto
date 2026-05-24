@@ -3,26 +3,16 @@
 namespace App\Console\Commands;
 
 use App\Models\QrAuthRequest;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 
+#[Description('Clear the session table to prevent it from getting too big.')]
+#[Signature('proto:clearsessions')]
 class ClearSessionTable extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:clearsessions';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Clear the session table to prevent it from getting too big.';
-
     /**
      * Execute the console command.
      */

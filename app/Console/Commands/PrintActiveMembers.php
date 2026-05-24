@@ -3,24 +3,14 @@
 namespace App\Console\Commands;
 
 use App\Models\Member;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
+#[Description('Print all active members of the association and the committees they are currently in.')]
+#[Signature('proto:printactivemembers')]
 class PrintActiveMembers extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:printactivemembers';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Print all active members of the association and the committees they are currently in.';
-
     /**
      * Execute the console command.
      */

@@ -14,26 +14,16 @@ use App\Models\OrderLine;
 use App\Models\Product;
 use App\Models\User;
 use App\Notifications\WebPushNotification;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 
+#[Description('Cronjob that automatically assigns achievements')]
+#[Signature('proto:achievementscron')]
 class AchievementsCron extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:achievementscron';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Cronjob that automatically assigns achievements';
-
     /**
      * Execute the console command.
      */

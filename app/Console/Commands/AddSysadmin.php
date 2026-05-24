@@ -3,24 +3,14 @@
 namespace App\Console\Commands;
 
 use App\Models\User;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
+#[Description('Give a user the sysadmin role.')]
+#[Signature('proto:addsysadmin {user_id}')]
 class AddSysadmin extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:addsysadmin {user_id}';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Give a user the sysadmin role.';
-
     /**
      * Execute the console command.
      */
