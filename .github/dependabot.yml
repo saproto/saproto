@@ -11,6 +11,8 @@ updates:
       composer:
         patterns:
           - "*"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "npm"
     directory: "/"
@@ -23,6 +25,8 @@ updates:
       npm:
         patterns:
           - "*"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "github-actions"
     directory: ".github/workflows"
@@ -32,3 +36,5 @@ updates:
       actions:
         patterns:
           - "*"
+    cooldown:
+      default-days: 7
