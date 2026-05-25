@@ -1192,7 +1192,9 @@ CREATE TABLE `qrauth_requests` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `qrauth_requests_user_id_index` (`user_id`)
+  KEY `qrauth_requests_user_id_index` (`user_id`),
+  KEY `qrauth_requests_auth_token_index` (`auth_token`(768)),
+  CONSTRAINT `qrauth_requests_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `rfid`;
@@ -1885,3 +1887,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_04_22_174718_add_c
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_04_29_144605_add_personal_key_index_to_users',204);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_05_06_122228_add_foreign_constraint_to_photo_likes',205);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_05_08_130754_add_foreign_id_constraint_to_welcome_messages_and_achievements',206);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_05_25_111856_add_index_and_foreign_id_constraint_to_qrauth_requests',207);
