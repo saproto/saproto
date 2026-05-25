@@ -4,26 +4,16 @@ namespace App\Console\Commands;
 
 use App\Mail\ReviewFeedbackMail;
 use App\Models\FeedbackCategory;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Mail;
 
+#[Description('Send the email to the reviewer of a feedback category if new feedback needs reviewed')]
+#[Signature('proto:reviewfeedbackcron')]
 class ReviewFeedbackCron extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:reviewfeedbackcron';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Send the email to the reviewer of a feedback category if new feedback needs reviewed';
-
     /**
      * Execute the console command.
      */

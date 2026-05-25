@@ -10,7 +10,7 @@ import {
     Images,
     Shield,
     Download,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import PhotoAlbumData = App.Data.PhotoAlbumData
 import AuthUserData = App.Data.AuthUserData
 

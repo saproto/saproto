@@ -3,25 +3,15 @@
 namespace App\Console\Commands;
 
 use App\Models\User;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
 
+#[Description('Give a user sys-admin rights. This command only works on non-production databases.')]
+#[Signature('proto:makeadmin {email}')]
 class MakeAdmin extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:makeadmin {email}';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Give a user sys-admin rights. This command only works on non-production databases.';
-
     /**
      * Execute the console command.
      */

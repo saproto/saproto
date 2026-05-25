@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Table;
+use Illuminate\Database\Eloquent\Attributes\WithoutTimestamps;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -25,11 +26,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @mixin Model
  */
 #[Table(name: 'password_resets')]
+#[WithoutTimestamps]
 class PasswordReset extends Model
 {
     protected $guarded = [];
-
-    public $timestamps = false;
 
     /**
      * @return HasOne<User, $this> */

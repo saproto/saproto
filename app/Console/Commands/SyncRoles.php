@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use Exception;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
@@ -10,22 +12,10 @@ use Permission;
 use Role;
 use Spatie\Permission\PermissionRegistrar;
 
+#[Description('Generate the roles and permissions needed for the application.')]
+#[Signature('proto:syncroles')]
 class SyncRoles extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:syncroles';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Generate the roles and permissions needed for the application.';
-
     /**
      * @throws Exception
      */

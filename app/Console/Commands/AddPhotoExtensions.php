@@ -3,27 +3,17 @@
 namespace App\Console\Commands;
 
 use App\Models\Photo;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Mime\MimeTypes;
 
+#[Description('Command description')]
+#[Signature('proto:addPhotoExtensions')]
 class AddPhotoExtensions extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:addPhotoExtensions';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Command description';
-
     /**
      * Execute the console command.
      */

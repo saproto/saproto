@@ -9,28 +9,18 @@ use App\Models\Member;
 use App\Models\Product;
 use App\Models\User;
 use Exception;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Mail;
 
+#[Description('Cronjob that takes care of charging the membership fee.')]
+#[Signature('proto:feecron')]
 class FeeCron extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:feecron';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Cronjob that takes care of charging the membership fee.';
-
     /**
      * Execute the console command.
      *

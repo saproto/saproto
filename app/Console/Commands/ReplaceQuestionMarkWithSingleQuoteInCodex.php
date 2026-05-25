@@ -3,24 +3,14 @@
 namespace App\Console\Commands;
 
 use App\Models\CodexSong;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
+#[Description('Replace all triple question marks with quotes in codex song texts.')]
+#[Signature('proto:codexsongcleanup')]
 class ReplaceQuestionMarkWithSingleQuoteInCodex extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:codexsongcleanup';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Replace all triple question marks with quotes in codex song texts.';
-
     /**
      * Execute the console command.
      */

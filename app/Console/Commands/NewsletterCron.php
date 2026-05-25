@@ -5,26 +5,16 @@ namespace App\Console\Commands;
 use App\Mail\Newsletter as NewsletterMail;
 use App\Models\EmailList;
 use App\Models\Newsitem;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
 
+#[Description('Cronjob that sends the weekly newsletter')]
+#[Signature('proto:newslettercron {id}')]
 class NewsletterCron extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:newslettercron {id}';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Cronjob that sends the weekly newsletter';
-
     /**
      * Execute the console command.
      */

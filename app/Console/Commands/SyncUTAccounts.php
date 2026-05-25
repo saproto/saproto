@@ -7,6 +7,8 @@ use App\Http\Controllers\LdapController;
 use App\Mail\UtwenteCleanup;
 use App\Models\User;
 use App\Models\UtAccount;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -14,22 +16,10 @@ use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
+#[Description('Search all our users in the UT system and sync their info')]
+#[Signature('proto:syncutaccounts')]
 class SyncUTAccounts extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:syncutaccounts';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Search all our users in the UT system and sync their info';
-
     /**
      * Execute the console command.
      */

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Database\Factories\HashMapItemFactory;
 use Illuminate\Database\Eloquent\Attributes\Table;
+use Illuminate\Database\Eloquent\Attributes\WithoutTimestamps;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -30,14 +31,13 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin Model
  */
 #[Table(name: 'hashmap')]
+#[WithoutTimestamps]
 class HashMapItem extends Model
 {
     /** @use HasFactory<HashMapItemFactory>*/
     use HasFactory;
 
     protected $guarded = [];
-
-    public $timestamps = false;
 
     /**
      * @param  Builder<HashMapItem>  $query

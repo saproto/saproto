@@ -3,24 +3,14 @@
 namespace App\Console\Commands;
 
 use App\Models\Event;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
+#[Description('A command to recount the unique users count for all events.')]
+#[Signature('proto:refreshuniqueusers')]
 class RefreshEventUniqueUsers extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'proto:refreshuniqueusers';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'A command to recount the unique users count for all events.';
-
     /**
      * Execute the console command.
      */

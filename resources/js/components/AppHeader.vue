@@ -44,7 +44,7 @@ import {
     Search,
     Mail,
     ChevronDown,
-    GithubIcon,
+    CodeIcon,
     Quote,
     Lightbulb,
     Medal,
@@ -60,7 +60,7 @@ import {
     UserPen,
     Shield,
     Calendar1,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { computed, ref } from 'vue'
 import {
     InputGroup,
@@ -224,7 +224,7 @@ const rightNavItems: NavItem[] = [
     {
         title: 'Github',
         href: 'https://github.com/saproto/saproto',
-        icon: GithubIcon,
+        icon: CodeIcon,
     },
 ]
 
