@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 // import { edit } from '@/routes/profile'
 import { Link, router } from '@inertiajs/vue3'
-import { LogOut, Settings } from 'lucide-vue-next'
+import { LogOut, Settings } from '@lucide/vue'
 import AuthController from '@/actions/App/Http/Controllers/AuthController'
 
 interface Props {
