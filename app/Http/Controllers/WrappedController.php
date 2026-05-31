@@ -13,6 +13,7 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
@@ -24,6 +25,7 @@ class WrappedController extends Controller
 {
     public function index(Request $request): Response
     {
+        abort_if(App::environment('production') && now()->month !== Carbon::DECEMBER, 403, 'This feature is only available during December.');
         $year = $request->integer('year', Date::now()->year);
         $from = Date::createFromDate($year)->startOfYear();
         $to = Date::createFromDate($year)->endOfYear();
