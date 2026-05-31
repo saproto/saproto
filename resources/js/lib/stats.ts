@@ -100,8 +100,6 @@ export const prepareStats = async (
         },
     }
 
-    console.log(stats.year)
-
     // const beerOrders = orders.filter(x => x.product.is_alcoholic);
     // stats.calories.actualBeers = beerOrders.length <= 0 ? 0 : beerOrders.map(x => x.units).reduce((a, b) => a + b);
 
