@@ -20,6 +20,7 @@ use App\Console\Commands\MemberRenewCron;
 use App\Console\Commands\NewsletterCron;
 use App\Console\Commands\OmNomComCleanup;
 use App\Console\Commands\PrintActiveMembers;
+use App\Console\Commands\QueueWrappedEmail;
 use App\Console\Commands\RefreshEventUniqueUsers;
 use App\Console\Commands\RefreshWithdrawalTotals;
 use App\Console\Commands\ReplaceQuestionMarkWithSingleQuoteInCodex;
@@ -84,6 +85,7 @@ class Kernel extends ConsoleKernel
         BackupPhotosToStack::class,
         AddPhotoExtensions::class,
         RefreshWithdrawalTotals::class,
+        QueueWrappedEmail::class,
     ];
 
     /**
@@ -114,6 +116,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:reviewfeedbackcron')->daily()->at('16:00');
         $schedule->command('proto:reviewstickerscron')->daily()->at('16:10');
 
+        $schedule->command('proto:queue-wrapped-email')->yearlyOn(12, 1, '11:55');
         $schedule->command('proto:updatewallstreetprices')->everyMinute()->when(static fn (): bool => WallstreetDrink::query()->where('start_time', '<=', Date::now()->timestamp)->where('end_time', '>=', Date::now()->timestamp)->exists());
     }
 }
