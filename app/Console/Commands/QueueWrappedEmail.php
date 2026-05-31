@@ -15,7 +15,7 @@ class QueueWrappedEmail extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $year = Date::now()->year;
         $email = new Email([
