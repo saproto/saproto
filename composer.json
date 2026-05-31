@@ -62,7 +62,7 @@
         "pragmarx/google2fa": "^9.0.0",
         "sentry/sentry-laravel": "^4.4.1",
         "spatie/laravel-csp": "^3.21",
-        "spatie/laravel-permission": "^7",
+        "spatie/laravel-permission": "^8",
         "spipu/html2pdf": "^5.2",
         "vinkla/hashids": "^14.0.0",
         "setasign/tfpdf": "^1.33",
