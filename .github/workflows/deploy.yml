@@ -16,8 +16,8 @@ jobs:
     env:
       BUILD_SOURCE_DIR: .
       BUILD_ARTIFACT_STAGING_DIR: build/
-      SENTRY_ORG: sa-proto
-      SENTRY_PROJECT: sa-proto-website
+      SENTRY_ORG: sa-proto-eu
+      SENTRY_PROJECT: laravel-website
     steps:
       - name: 🛎️ Checkout project
         uses: actions/checkout@v6
