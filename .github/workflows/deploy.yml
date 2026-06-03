@@ -20,7 +20,7 @@ jobs:
       SENTRY_PROJECT: laravel-website
     steps:
       - name: 🛎️ Checkout project
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.2
 
       - name: 🔍 Read .env
         run: grep -E 'PHP_VERSION|NODE_VERSION' .env.prod >> $GITHUB_ENV
