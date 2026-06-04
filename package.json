@@ -28,12 +28,12 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^7.2.0",
-        "@inertiajs/vite": "^3.0.0",
+        "@inertiajs/vite": "^3.3.0",
         "@lucide/vue": "^1.16.0",
         "@popperjs/core": "^2.11.4",
         "@radix-icons/vue": "^1.0.0",
-        "@sentry/browser": "^10.51.0",
-        "@sentry/vue": "^10.51.0",
+        "@sentry/browser": "^10.54.0",
+        "@sentry/vue": "^10.54.0",
         "@tanstack/vue-table": "^8.21.3",
         "@vueuse/core": "^14.3.0",
         "bootstrap": "^5.3.0",
@@ -51,7 +51,7 @@
         "radix-vue": "^1.9.13",
         "reka-ui": "^2.9.7",
         "signature_pad": "^5.0.10",
-        "swiper": "^12.1.4",
+        "swiper": "^12.2.0",
         "tailwind-merge": "^3.4.1",
         "tailwindcss-animate": "^1.0.7",
         "tw-animate-css": "^1.3.6",
@@ -61,7 +61,7 @@
     },
     "devDependencies": {
         "@eslint/js": "^10.0.1",
-        "@inertiajs/vue3": "^3.0.0",
+        "@inertiajs/vue3": "^3.3.0",
         "@laravel/vite-plugin-wayfinder": "^0.1.7",
         "@rushstack/eslint-patch": "^1.12.0",
         "@sentry/vite-plugin": "^5.1.1",
@@ -69,8 +69,8 @@
         "@tailwindcss/postcss": "^4.2.4",
         "@tailwindcss/typography": "^0.5.13",
         "@types/dom-to-image": "^2.6.7",
-        "@typescript-eslint/eslint-plugin": "^8.59.4",
-        "@typescript-eslint/parser": "^8.59.4",
+        "@typescript-eslint/eslint-plugin": "^8.60.0",
+        "@typescript-eslint/parser": "^8.60.0",
         "@vitejs/plugin-vue": "^6.0.5",
         "@vue/eslint-config-typescript": "^14.7.0",
         "autoprefixer": "^10.5.0",
@@ -94,10 +94,10 @@
         "tailwindcss": "^4.1.10",
         "tw-colors": "^3.3.2",
         "typescript": "^6.0.2",
-        "vite-plugin-checker": "^0.13.0",
-        "vue": "^3.5.33",
+        "vite-plugin-checker": "^0.14.1",
+        "vue": "^3.5.35",
         "vue-eslint-parser": "^10.4.0",
-        "vue-tsc": "^3.3.0"
+        "vue-tsc": "^3.3.2"
     },
     "type": "module"
 }
