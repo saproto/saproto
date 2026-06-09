@@ -81,12 +81,6 @@ class TicketController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        if (! $request->has('is_members_only') && ! $request->has('is_prepaid') && ! Auth::user()->can('sysadmin')) {
-            Session::flash('flash_message', 'Making tickets for external people payable via withdrawal is risky and usually not necessary. If you REALLY want this, please contact the Have You Tried Turninig It Off And On Again committee.');
-
-            return back();
-        }
-
         /** @var Ticket $ticket */
         $ticket = Ticket::query()->findOrFail($id);
 
