@@ -52,7 +52,7 @@ class MollieController extends Controller
         $orderlines = [];
         $unpaid_orderlines = OrderLine::query()
             ->where('user_id', Auth::id())
-            ->unpayed()
+            ->unprocessed()
             ->orderBy('total_price')
             ->orderBy('created_at', 'desc')
             ->get();
