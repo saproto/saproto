@@ -50,7 +50,7 @@ jobs:
           php-version: ${{ env.PHP_VERSION }}
           coverage: xdebug
 
-      - uses: dorny/paths-filter@v4
+      - uses: dorny/paths-filter@v4.0.1
         id: changes
         with:
           filters: |
@@ -94,7 +94,7 @@ jobs:
         run: ./vendor/bin/pint --parallel
 
       - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v7.1.0
+        uses: stefanzweifel/git-auto-commit-action@v7.2.0
         with:
           commit_message: PHP Automatic Fixing (Pint & Rector)
           skip_fetch: true
@@ -133,7 +133,7 @@ jobs:
 
       - name: Commit changes
         if: steps.changes.outputs.resources == 'true'
-        uses: stefanzweifel/git-auto-commit-action@v7.1.0
+        uses: stefanzweifel/git-auto-commit-action@v7.2.0
         with:
           commit_message: Automatic linting (Prettier and eslint)
           skip_fetch: true
@@ -167,7 +167,7 @@ jobs:
 
       - name: Commit changes (schema dump)
         if: steps.changes.outputs.migrations == 'true'
-        uses: stefanzweifel/git-auto-commit-action@v7.1.0
+        uses: stefanzweifel/git-auto-commit-action@v7.2.0
         with:
           commit_message: Changed sql schema (artisan dump)
           skip_fetch: true
