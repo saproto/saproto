@@ -99,5 +99,11 @@
         "vue-eslint-parser": "^10.4.1",
         "vue-tsc": "^3.3.5"
     },
-    "type": "module"
+    "type": "module",
+    "allowScripts": {
+        "vue-demi@0.14.10": true,
+        "@sentry/cli@2.58.6": true,
+        "exifreader@4.41.0": true,
+        "@parcel/watcher@2.5.6": true
+    }
 }
