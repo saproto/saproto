@@ -51,7 +51,7 @@
         "radix-vue": "^1.9.13",
         "reka-ui": "^2.10.1",
         "signature_pad": "^5.0.10",
-        "swiper": "^12.2.0",
+        "swiper": "^14.0.1",
         "tailwind-merge": "^3.4.1",
         "tailwindcss-animate": "^1.0.7",
         "tw-animate-css": "^1.3.6",
@@ -99,5 +99,11 @@
         "vue-eslint-parser": "^10.4.1",
         "vue-tsc": "^3.3.5"
     },
-    "type": "module"
+    "type": "module",
+    "allowScripts": {
+        "vue-demi@0.14.10": true,
+        "@sentry/cli@2.58.6": true,
+        "exifreader@4.41.0": true,
+        "@parcel/watcher@2.5.6": true
+    }
 }
