@@ -17,7 +17,7 @@ class ProtoApi implements Preset
             'https://www.proto.utwente.nl',
         ]);
 
-        $policy->add([Directive::CONNECT, Directive::MEDIA, Directive::STYLE, Directive::FONT, Directive::IMG], Config::array('proto.domains.static'));
+        $policy->add([Directive::CONNECT, Directive::SCRIPT, Directive::MEDIA, Directive::STYLE, Directive::FONT, Directive::IMG], Config::array('proto.domains.static'));
 
         // allow inline svgs and blobs
         $policy->add(Directive::IMG, [
