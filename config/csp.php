@@ -1,5 +1,6 @@
 <?php
 
+use App\Csp\Presets\Analytics;
 use App\Csp\Presets\Basic;
 use App\Csp\Presets\Discord;
 use App\Csp\Presets\FontAwesome;
@@ -42,6 +43,7 @@ return [
         UtilityScripts::class,
         Websockets::class,
         Wrapped::class,
+        Analytics::class,
     ],
 
     /**
