@@ -12,7 +12,7 @@ class Analytics implements Preset
     public function configure(Policy $policy): void
     {
         $policy->add([Directive::CONNECT, Directive::SCRIPT], [
-            Config::string('proto.analytics_url')
+            Config::string('proto.analytics_url'),
         ]);
     }
 }
