@@ -50,7 +50,7 @@ jobs:
           php-version: ${{ env.PHP_VERSION }}
           coverage: xdebug
 
-      - uses: dorny/paths-filter@v4.0.1
+      - uses: dorny/paths-filter@v4.0.2
         id: changes
         with:
           filters: |
@@ -103,7 +103,7 @@ jobs:
         run: grep -E 'NODE_VERSION' .env.prod >> $GITHUB_ENV
 
       - name: 🖱️ Set Node v${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v6.4.0
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
