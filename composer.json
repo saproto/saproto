@@ -97,7 +97,7 @@
         "laravel/pint": "^1.10",
         "driftingly/rector-laravel": "^2.0.2",
         "mockery/mockery": "^1.6",
-        "pestphp/pest-plugin-laravel": "^4.0.0",
+        "pestphp/pest-plugin-laravel": "^5.0.0",
         "beyondcode/expose": "^3.0",
         "pestphp/pest-plugin-browser": "^5.0.0",
         "pestphp/pest-plugin-phpstan": "^5.0"
