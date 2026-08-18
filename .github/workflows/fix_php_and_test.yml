@@ -50,7 +50,7 @@ jobs:
           php-version: ${{ env.PHP_VERSION }}
           coverage: xdebug
 
-      - uses: dorny/paths-filter@v4.0.2
+      - uses: dorny/paths-filter@v4.0.3
         id: changes
         with:
           filters: |
