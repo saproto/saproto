@@ -63,7 +63,7 @@ class PasswordController extends Controller
             return $this->forwardToAuth();
         }
 
-        return view('passwordstore.edit', ['password' => null, 'type' => $request->get('type')]);
+        return view('passwordstore.edit', ['password' => null, 'type' => $request->input('type')]);
     }
 
     /**
@@ -75,7 +75,7 @@ class PasswordController extends Controller
             return $this->forwardToAuth();
         }
 
-        $permission = Permission::findOrFail($request->get('permission_id'));
+        $permission = Permission::findOrFail($request->input('permission_id'));
 
         if (! Auth::user()->can($permission->name)) {
             Session::flash('flash_message', 'You are not allowed to set this permission for a password.');
@@ -83,28 +83,28 @@ class PasswordController extends Controller
             return back();
         }
 
-        if ($request->get('type') == 'password') {
+        if ($request->input('type') == 'password') {
             PasswordEntry::query()->create([
                 'permission_id' => $permission->id,
-                'description' => $request->get('description'),
-                'username' => Crypt::encrypt($request->get('username')),
-                'password' => Crypt::encrypt($request->get('password')),
-                'url' => ($request->get('url') == '' ? null : $request->get('url')),
-                'note' => Crypt::encrypt($request->get('note')),
+                'description' => $request->input('description'),
+                'username' => Crypt::encrypt($request->input('username')),
+                'password' => Crypt::encrypt($request->input('password')),
+                'url' => ($request->input('url') == '' ? null : $request->input('url')),
+                'note' => Crypt::encrypt($request->input('note')),
             ]);
             Session::flash('flash_message', 'Password saved.');
 
             return to_route('passwordstore::index');
         }
 
-        if ($request->get('type') == 'note') {
+        if ($request->input('type') == 'note') {
             PasswordEntry::query()->create([
                 'permission_id' => $permission->id,
-                'description' => $request->get('description'),
+                'description' => $request->input('description'),
                 'username' => null,
                 'password' => null,
                 'url' => null,
-                'note' => Crypt::encrypt($request->get('note')),
+                'note' => Crypt::encrypt($request->input('note')),
             ]);
             Session::flash('flash_message', 'Note saved.');
 
@@ -156,7 +156,7 @@ class PasswordController extends Controller
             return to_route('passwordstore::index');
         }
 
-        $permission = Permission::findOrFail($request->get('permission_id'));
+        $permission = Permission::findOrFail($request->input('permission_id'));
 
         if (! Auth::user()->can($permission->name)) {
             Session::flash('flash_message', 'You are not allowed to set this permission for a password.');
@@ -164,14 +164,14 @@ class PasswordController extends Controller
             return back();
         }
 
-        if ($request->get('type') == 'password') {
+        if ($request->input('type') == 'password') {
             $password->fill([
                 'permission_id' => $permission->id,
-                'description' => $request->get('description'),
-                'username' => Crypt::encrypt($request->get('username')),
-                'password' => Crypt::encrypt($request->get('password')),
-                'url' => ($request->get('url') == '' ? null : $request->get('url')),
-                'note' => Crypt::encrypt($request->get('note')),
+                'description' => $request->input('description'),
+                'username' => Crypt::encrypt($request->input('username')),
+                'password' => Crypt::encrypt($request->input('password')),
+                'url' => ($request->input('url') == '' ? null : $request->input('url')),
+                'note' => Crypt::encrypt($request->input('note')),
             ]);
             $password->save();
             Session::flash('flash_message', 'Password saved.');
@@ -179,14 +179,14 @@ class PasswordController extends Controller
             return to_route('passwordstore::index');
         }
 
-        if ($request->get('type') == 'note') {
+        if ($request->input('type') == 'note') {
             $password->fill([
                 'permission_id' => $permission->id,
-                'description' => $request->get('description'),
+                'description' => $request->input('description'),
                 'username' => null,
                 'password' => null,
                 'url' => null,
-                'note' => Crypt::encrypt($request->get('note')),
+                'note' => Crypt::encrypt($request->input('note')),
             ]);
             $password->save();
             Session::flash('flash_message', 'Note saved.');

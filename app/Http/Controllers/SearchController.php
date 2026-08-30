@@ -169,7 +169,7 @@ class SearchController extends Controller
     {
         $search_attributes = ['id', 'name', 'calling_name', 'utwente_username', 'email'];
         $result = [];
-        $users = $this->getGenericSearchQuery(User::class, $request->get('q'), $search_attributes)?->with('media')->get() ?? [];
+        $users = $this->getGenericSearchQuery(User::class, $request->input('q'), $search_attributes)?->with('media')->get() ?? [];
         foreach ($users as $user) {
             /** @var User $user */
             $result[] = (object) [
@@ -187,7 +187,7 @@ class SearchController extends Controller
     {
         $search_attributes = ['id', 'title'];
 
-        return $this->getGenericSearchQuery(Event::class, $request->get('q'), $search_attributes)?->get();
+        return $this->getGenericSearchQuery(Event::class, $request->input('q'), $search_attributes)?->get();
     }
 
     /** @return Collection<int, Committee>|null */
@@ -195,7 +195,7 @@ class SearchController extends Controller
     {
         $search_attributes = ['id', 'name', 'slug'];
 
-        return $this->getGenericSearchQuery(Committee::class, $request->get('q'), $search_attributes)?->get();
+        return $this->getGenericSearchQuery(Committee::class, $request->input('q'), $search_attributes)?->get();
     }
 
     /** @return Collection<int, Product>|null */
@@ -203,7 +203,7 @@ class SearchController extends Controller
     {
         $search_attributes = ['id', 'name'];
 
-        return $this->getGenericSearchQuery(Product::class, $request->get('q'), $search_attributes)?->get();
+        return $this->getGenericSearchQuery(Product::class, $request->input('q'), $search_attributes)?->get();
     }
 
     /** @return Collection<int, Achievement>|null */
@@ -211,7 +211,7 @@ class SearchController extends Controller
     {
         $search_attributes = ['id', 'name'];
 
-        return $this->getGenericSearchQuery(Achievement::class, $request->get('q'), $search_attributes)?->get();
+        return $this->getGenericSearchQuery(Achievement::class, $request->input('q'), $search_attributes)?->get();
     }
 
     /**

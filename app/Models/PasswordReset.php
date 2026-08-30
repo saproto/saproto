@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Table;
+use Illuminate\Database\Eloquent\Attributes\Unguarded;
 use Illuminate\Database\Eloquent\Attributes\WithoutTimestamps;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -27,10 +28,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 #[Table(name: 'password_resets')]
 #[WithoutTimestamps]
+#[Unguarded]
 class PasswordReset extends Model
 {
-    protected $guarded = [];
-
     /**
      * @return HasOne<User, $this> */
     public function user(): HasOne

@@ -23,8 +23,8 @@ class StockMutationController extends Controller
         $mutations = StockMutation::query()->orderBy('stock_mutations.created_at', 'desc')->orderBy('stock_mutations.id', 'desc');
 
         // Find mutations by Product
-        if ($rq->has('product_name') && strlen((string) $rq->get('product_name')) > 2) {
-            $search = $rq->get('product_name');
+        if ($rq->has('product_name') && strlen((string) $rq->input('product_name')) > 2) {
+            $search = $rq->input('product_name');
             $mutations = $mutations
                 ->join('products', 'products.id', '=', 'stock_mutations.product_id', 'inner')
                 ->whereLike('products.name', "%{$search}%");
@@ -32,7 +32,7 @@ class StockMutationController extends Controller
 
         // Find mutations by authoring User
         if ($rq->has('author_name') && strlen((string) $rq->input('author_name')) > 2) {
-            $search = $rq->get('author_name');
+            $search = $rq->input('author_name');
             $mutations = $mutations
                 ->join('users', 'users.id', '=', 'stock_mutations.user_id', 'inner')
                 ->whereLike('users.name', "%{$search}%");

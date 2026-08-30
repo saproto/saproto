@@ -138,7 +138,7 @@ class AchievementController extends Controller
     public function award(int $achievement_id, Request $request): RedirectResponse
     {
         $achievement = Achievement::query()->findOrFail($achievement_id);
-        $user = User::query()->findOrFail($request->get('user-id'));
+        $user = User::query()->findOrFail($request->input('user-id'));
 
         if ($this->giveAchievement($achievement, $user, $request->input('description'), $request->input('achieved_on'))) {
             Session::flash('flash_message', "Achievement $achievement->name has been given to $user->name.");

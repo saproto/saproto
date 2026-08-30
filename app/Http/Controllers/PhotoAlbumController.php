@@ -56,7 +56,7 @@ class PhotoAlbumController extends Controller
 
         return Inertia::render('Photos/Photo',
             [
-                'photo' => $request->get('photo'),
+                'photo' => $request->input('photo'),
                 'album' => PhotoAlbumData::from($album),
                 'emaildomain' => Config::string('proto.emaildomain'),
             ]);

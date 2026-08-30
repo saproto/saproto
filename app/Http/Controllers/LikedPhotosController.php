@@ -28,7 +28,7 @@ class LikedPhotosController extends Controller
 
         return Inertia::render('Photos/Photo',
             [
-                'photo' => $request->get('photo'),
+                'photo' => $request->input('photo'),
                 'album' => PhotoAlbumData::from([
                     'id' => 'liked',
                     'name' => 'My liked photos',

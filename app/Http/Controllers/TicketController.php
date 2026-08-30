@@ -319,7 +319,7 @@ class TicketController extends Controller
             return back();
         }
 
-        $tickets = $request->get('tickets');
+        $tickets = $request->input('tickets');
 
         foreach ($tickets as $ticket_id => $amount) {
             $ticket = Ticket::query()->find($ticket_id);

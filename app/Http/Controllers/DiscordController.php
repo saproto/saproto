@@ -37,7 +37,7 @@ class DiscordController extends Controller
             'client_id' => Config::string('proto.discord_client_id'),
             'client_secret' => Config::string('proto.discord_secret'),
             'grant_type' => 'authorization_code',
-            'code' => $request->get('code'),
+            'code' => $request->input('code'),
             'redirect_uri' => route('api::discord::linked'),
             'scope' => 'identify',
         ];

@@ -151,7 +151,7 @@ class UserPasswordController extends Controller
             'email' => ['required', 'email'],
         ]);
 
-        $user = User::whereEmail($request->get('email'))->first();
+        $user = User::whereEmail($request->input('email'))->first();
         $user?->sendForgotUsernameEmail();
 
         Session::flash('flash_message', 'If your e-mail belongs to an account, we have just e-mailed you the username.');
