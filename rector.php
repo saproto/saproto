@@ -17,7 +17,6 @@ use RectorLaravel\Set\LaravelSetList;
 
 try {
     return RectorConfig::configure()
-        ->withComposerBased(laravel: true/** other options */)
         ->withCache(
             // ensure file system caching is used instead of in-memory
             cacheDirectory: '.tmp/rector',
