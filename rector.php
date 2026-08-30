@@ -14,11 +14,9 @@ use RectorLaravel\Rector\MethodCall\ResponseHelperCallToJsonResponseRector;
 use RectorLaravel\Rector\MethodCall\WhereToWhereLikeRector;
 use RectorLaravel\Rector\StaticCall\RouteActionCallableRector;
 use RectorLaravel\Set\LaravelSetList;
-use RectorLaravel\Set\LaravelSetProvider;
 
 try {
     return RectorConfig::configure()
-        ->withSetProviders(LaravelSetProvider::class)
         ->withComposerBased(laravel: true/** other options */)
         ->withCache(
             // ensure file system caching is used instead of in-memory
