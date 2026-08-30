@@ -16,7 +16,7 @@ class StickerTypeFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $this->faker->word(),
+            'title' => fake()->word(),
             'created_at' => Date::now(),
             'updated_at' => Date::now(),
         ];

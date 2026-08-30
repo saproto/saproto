@@ -7,6 +7,7 @@ use Rector\CodingStyle\Rector\ArrowFunction\ArrowFunctionDelegatingCallToFirstCl
 use Rector\Config\RectorConfig;
 use Rector\Exception\Configuration\InvalidConfigurationException;
 use Rector\Php81\Rector\Array_\ArrayToFirstClassCallableRector;
+use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use RectorLaravel\Rector\Class_\AddHasFactoryToModelsRector;
 use RectorLaravel\Rector\MethodCall\EloquentOrderByToLatestOrOldestRector;
@@ -14,11 +15,9 @@ use RectorLaravel\Rector\MethodCall\ResponseHelperCallToJsonResponseRector;
 use RectorLaravel\Rector\MethodCall\WhereToWhereLikeRector;
 use RectorLaravel\Rector\StaticCall\RouteActionCallableRector;
 use RectorLaravel\Set\LaravelSetList;
-use RectorLaravel\Set\LaravelSetProvider;
 
 try {
     return RectorConfig::configure()
-        ->withSetProviders(LaravelSetProvider::class)
         ->withComposerBased(laravel: true/** other options */)
         ->withCache(
             // ensure file system caching is used instead of in-memory
@@ -61,6 +60,7 @@ try {
             AddHasFactoryToModelsRector::class,
             ArrowFunctionDelegatingCallToFirstClassCallableRector::class,
             ArrayToFirstClassCallableRector::class,
+            RenameMethodRector::class,
             __DIR__.'/app/Libraries',
         ])
         ->withPaths([

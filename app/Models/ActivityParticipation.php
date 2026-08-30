@@ -50,11 +50,6 @@ class ActivityParticipation extends Model
     /** @use HasFactory<ActivityParticipationFactory>*/
     use HasFactory;
 
-    protected $casts = [
-        'backup' => 'boolean',
-        'is_present' => 'boolean',
-    ];
-
     /**
      * @return BelongsTo<User, $this>
      */
@@ -69,5 +64,13 @@ class ActivityParticipation extends Model
     public function activity(): BelongsTo
     {
         return $this->belongsTo(Activity::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'backup' => 'boolean',
+            'is_present' => 'boolean',
+        ];
     }
 }
