@@ -104,6 +104,6 @@
         "vue-demi@0.14.10": true,
         "@sentry/cli@2.58.6": true,
         "@parcel/watcher@2.6.0": true,
-        "exifreader@4.43.0": true
+        "exifreader@4.44.0": true
     }
 }
