@@ -26,7 +26,6 @@ try {
             // specify a path that works locally as well as on CI job runners
             cacheClass: FileCacheStorage::class
         )
-        ->withImportNames(removeUnusedImports: true)
         ->withsets([
             LaravelSetList::LARAVEL_CODE_QUALITY,
             LaravelSetList::LARAVEL_CONTAINER_STRING_TO_FULLY_QUALIFIED_NAME,
@@ -41,7 +40,6 @@ try {
             LaravelSetList::LARAVEL_FACTORIES,
             LaravelSetList::LARAVEL_IF_HELPERS,
             LaravelSetList::LARAVEL_TESTING,
-            LaravelSetList::LARAVEL_130,
         ])
         ->withPreparedSets(deadCode: true)
         ->withPhpSets(php84: true)
