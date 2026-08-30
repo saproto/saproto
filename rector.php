@@ -17,6 +17,7 @@ use RectorLaravel\Set\LaravelSetList;
 
 try {
     return RectorConfig::configure()
+        ->withComposerBased(laravel: true/** other options */)
         ->withCache(
             // ensure file system caching is used instead of in-memory
             cacheDirectory: '.tmp/rector',
@@ -39,8 +40,7 @@ try {
             LaravelSetList::LARAVEL_FACTORIES,
             LaravelSetList::LARAVEL_IF_HELPERS,
             LaravelSetList::LARAVEL_TESTING,
-            LaravelSetList::LARAVEL_130,
-        ])
+            ])
         ->withPreparedSets(deadCode: true)
         ->withPhpSets(php84: true)
         ->withConfiguredRule(WhereToWhereLikeRector::class, [
