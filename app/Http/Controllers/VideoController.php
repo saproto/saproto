@@ -98,7 +98,7 @@ class VideoController extends Controller
         $video->save();
 
         if ($request->has('event')) {
-            $event = Event::query()->findOrFail($request->get('event'));
+            $event = Event::query()->findOrFail($request->input('event'));
             $video->event_id = $event->id;
             $video->save();
         }

@@ -119,8 +119,9 @@ class Member extends Model implements HasMedia
         return $this->hasOne(UtAccount::class);
     }
 
-    /** @param Builder<$this> $query
-     * @return Builder<$this>
+    /**
+     * @param  Builder<static>  $query
+     * @return Builder<static>
      */
     protected function scopePrimary(Builder $query): Builder
     {

@@ -95,8 +95,9 @@ class PhotoAlbum extends Model
         return $this->hasMany(Photo::class, 'album_id')->orderBy('date_taken');
     }
 
-    /** @param Builder<$this> $query
-     * @return Builder<$this>
+    /**
+     * @param  Builder<static>  $query
+     * @return Builder<static>
      * */
     protected function scopeName(Builder $query, string $name): Builder
     {

@@ -28,11 +28,11 @@ class ProductController extends Controller
      */
     public function index(Request $request): \Illuminate\Contracts\View\View|Factory
     {
-        if ($request->has('search') && strlen((string) $request->get('search')) > 2) {
-            $search = $request->get('search');
+        if ($request->has('search') && strlen((string) $request->input('search')) > 2) {
+            $search = $request->input('search');
             $products = Product::query()->where('name', 'like', "%{$search}%")->orderBy('is_visible', 'desc')->orderBy('name', 'asc')->limit(100)->get();
         } elseif ($request->has('filter')) {
-            $products = match ($request->get('filter')) {
+            $products = match ($request->input('filter')) {
                 'invisible' => Product::query()->where('is_visible', false)->orderBy('name', 'asc')->get(),
                 default => Product::query()->orderBy('is_visible', 'desc')->orderBy('name', 'asc')->paginate(20),
             };

@@ -128,8 +128,9 @@ class OrderLine extends Model
         return $this->hasOne(TicketPurchase::class, 'orderline_id');
     }
 
-    /** @param Builder<OrderLine> $query
-     * @return Builder<OrderLine>
+    /**
+     * @param  Builder<static>  $query
+     * @return Builder<static>
      */
     protected function scopeUnpayed(Builder $query): Builder
     {

@@ -252,7 +252,7 @@ class CommitteeController extends Controller
 
         $name = $committee->name;
 
-        $message_content = strip_tags((string) $request->get('message'));
+        $message_content = strip_tags((string) $request->input('message'));
         $message_hash = md5($message_content);
 
         Log::info('Anonymous e-mail with hash '.$message_hash.' sent to '.$name.' by user #'.Auth::user()->id);

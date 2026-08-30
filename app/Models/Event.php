@@ -187,8 +187,9 @@ class Event extends Model implements HasMedia
         return $this->belongsTo(Committee::class);
     }
 
-    /** @param Builder<$this> $query
-     * @return Builder<$this>
+    /**
+     * @param  Builder<static>  $query
+     * @return Builder<static>
      */
     protected function scopeEagerloadEventBlock(Builder $query, ?User $user): Builder
     {

@@ -54,8 +54,9 @@ class EmailList extends Model
         return EmailListSubscription::query()->where('user_id', $user->id)->where('list_id', $this->id)->count() > 0;
     }
 
-    /** @param Builder<$this> $query
-     * @return Builder<$this>
+    /**
+     * @param  Builder<static>  $query
+     * @return Builder<static>
      */
     protected function scopeSubscribed(Builder $query, User $user): Builder
     {

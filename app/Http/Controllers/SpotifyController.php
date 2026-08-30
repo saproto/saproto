@@ -39,7 +39,7 @@ class SpotifyController extends Controller
             return Redirect::to($session->getAuthorizeUrl($options));
         }
 
-        $session->requestAccessToken($request->get('code'));
+        $session->requestAccessToken($request->input('code'));
         $api->setAccessToken($session->getAccessToken());
         /** @phpstan-ignore-next-line */
         $spotify_user = $api->me()->id;
