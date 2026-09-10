@@ -68,6 +68,7 @@ class NarrowcastingController extends Controller
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 Session::flash('flash_message', $e->getMessage());
                 $narrowcasting->delete();
+
                 return to_route('narrowcasting::edit', ['id' => $narrowcasting->id]);
             }
         }
@@ -121,7 +122,6 @@ class NarrowcastingController extends Controller
     }
 
     /**
-     * @param int $id
      * @return RedirectResponse
      *
      * @throws Exception
