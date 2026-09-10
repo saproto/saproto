@@ -119,7 +119,6 @@ class NarrowcastingController extends Controller
     }
 
     /**
-     * @param int $id
      * @return RedirectResponse
      *
      * @throws Exception
