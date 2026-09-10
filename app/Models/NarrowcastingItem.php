@@ -78,8 +78,9 @@ class NarrowcastingItem extends Model implements HasMedia
     {
         return $this->getFirstMediaUrl('default', $narrowcastingEnum->value);
     }
+
     public function isVideo(): bool
     {
-        return Str::contains($this->getFirstMedia()->mime_type, "mp4");
+        return Str::contains($this->getFirstMedia()->mime_type, 'mp4');
     }
 }
