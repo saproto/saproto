@@ -47,7 +47,7 @@ class NarrowcastingController extends Controller
             'image' => ['nullable', 'file', 'max:5120', 'mimes:jpeg,png,jpg,mp4'], // max 5MB
         ]);
 
-        if (! $request->has('image') && ! $request->has('youtube_id')) {
+        if (! $request->has('image')) {
             Session::flash('flash_message', 'Every campaign needs either an image or a video!');
 
             return back();
@@ -58,14 +58,6 @@ class NarrowcastingController extends Controller
         $narrowcasting->campaign_start = $request->date('campaign_start')->timestamp;
         $narrowcasting->campaign_end = $request->date('campaign_end')->timestamp;
         $narrowcasting->slide_duration = $request->integer('slide_duration');
-
-        $youtube_id = $request->string('youtube_id');
-
-        if ($request->has('youtube_id') && (string) $youtube_id !== '') {
-            $narrowcasting->youtube_id = $youtube_id;
-            $narrowcasting->slide_duration = -1;
-        }
-
         $narrowcasting->save();
 
         if ($request->has('image')) {
@@ -75,7 +67,7 @@ class NarrowcastingController extends Controller
                     ->toMediaCollection();
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 Session::flash('flash_message', $e->getMessage());
-
+                $narrowcasting->delete();
                 return to_route('narrowcasting::edit', ['id' => $narrowcasting->id]);
             }
         }
@@ -121,16 +113,6 @@ class NarrowcastingController extends Controller
             }
         }
 
-        $youtube_id = $request->string('youtube_id');
-        if ($request->has('youtube_id') && (string) $youtube_id !== '') {
-
-            $narrowcasting->youtube_id = $youtube_id;
-            $narrowcasting->save();
-            $narrowcasting->slide_duration = -1;
-        } else {
-            $narrowcasting->youtube_id = null;
-        }
-
         $narrowcasting->save();
 
         Session::flash('flash_message', "Your campaign '".$narrowcasting->name."' has been saved.");
@@ -139,12 +121,12 @@ class NarrowcastingController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $narrowcasting = NarrowcastingItem::query()->findOrFail($id);
 
@@ -176,19 +158,11 @@ class NarrowcastingController extends Controller
         $data = [];
         foreach (
             NarrowcastingItem::query()->where('campaign_start', '<', Date::now()->timestamp)->where('campaign_end', '>', Date::now()->timestamp)->get() as $item) {
-            if ($item->youtube_id) {
-                $data[] = [
-                    'slide_duration' => $item->slide_duration,
-                    'video' => $item->youtube_id,
-                    'is_video' => true,
-                ];
-            } elseif ($item->hasMedia()) {
-                $data[] = [
-                    'slide_duration' => $item->slide_duration,
-                    'image' => $item->getImageUrl(),
-                    'is_video' => $item->isVideo(),
-                ];
-            }
+            $data[] = [
+                'slide_duration' => $item->slide_duration,
+                'image' => $item->getImageUrl(),
+                'is_video' => $item->isVideo(),
+            ];
         }
 
         return $data;

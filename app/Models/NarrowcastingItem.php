@@ -26,7 +26,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int $slide_duration
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property string|null $youtube_id
  *
  * @method static Builder<static>|NarrowcastingItem newModelQuery()
  * @method static Builder<static>|NarrowcastingItem newQuery()
