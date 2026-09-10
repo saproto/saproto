@@ -60,16 +60,14 @@ class NarrowcastingController extends Controller
         $narrowcasting->slide_duration = $request->integer('slide_duration');
         $narrowcasting->save();
 
-        if ($request->has('image')) {
-            try {
-                $narrowcasting->addMediaFromRequest('image')
-                    ->usingFileName('narrowcasting_'.$narrowcasting->id)
-                    ->toMediaCollection();
-            } catch (FileDoesNotExist|FileIsTooBig $e) {
-                Session::flash('flash_message', $e->getMessage());
-                $narrowcasting->delete();
-                return to_route('narrowcasting::edit', ['id' => $narrowcasting->id]);
-            }
+        try {
+            $narrowcasting->addMediaFromRequest('image')
+                ->usingFileName('narrowcasting_'.$narrowcasting->id)
+                ->toMediaCollection();
+        } catch (FileDoesNotExist|FileIsTooBig $e) {
+            Session::flash('flash_message', $e->getMessage());
+            $narrowcasting->delete();
+            return to_route('narrowcasting::edit', ['id' => $narrowcasting->id]);
         }
 
         Session::flash('flash_message', "Your campaign '".$narrowcasting->name."' has been added.");
