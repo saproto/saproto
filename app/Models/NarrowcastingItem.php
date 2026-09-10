@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Str;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -55,7 +56,7 @@ class NarrowcastingItem extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('default')
-            ->useDisk(App::environment('local') ? 'local' : 'stack')
+            ->useDisk('garage-public')
             ->storeConversionsOnDisk('garage-public')
             ->singleFile();
     }
@@ -76,5 +77,10 @@ class NarrowcastingItem extends Model implements HasMedia
     public function getImageUrl(NarrowcastingEnum $narrowcastingEnum = NarrowcastingEnum::LARGE): string
     {
         return $this->getFirstMediaUrl('default', $narrowcastingEnum->value);
+    }
+
+    public function isVideo(): bool
+    {
+        return Str::contains($this->getFirstMedia()->mime_type, 'mp4');
     }
 }
