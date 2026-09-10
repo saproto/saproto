@@ -119,24 +119,32 @@
                                     </sup>
 
                                     @if ($item?->hasMedia())
-                                        @if($item->isVideo())
-                                            <video width="320" height="240" autoplay muted>
+                                        @if ($item->isVideo())
+                                            <video
+                                                width="320"
+                                                height="240"
+                                                autoplay
+                                                muted
+                                            >
                                                 <source
                                                     src="{!! $item->getImageUrl() !!}"
-                                                    type="video/mp4">
-                                                Your browser does not support the video tag.
+                                                    type="video/mp4"
+                                                />
+                                                Your browser does not support
+                                                the video tag.
                                             </video>
                                         @else
-                                        <label>Current image:</label>
-                                        <img
-                                            src="{!! $item->getImageUrl(NarrowcastingEnum::SMALL) !!}"
-                                            class="w-100"
-                                            alt="{{ $item->name }}'s image"
-                                        />
+                                            <label>Current image:</label>
+                                            <img
+                                                src="{!! $item->getImageUrl(NarrowcastingEnum::SMALL) !!}"
+                                                class="w-100"
+                                                alt="{{ $item->name }}'s image"
+                                            />
                                         @endif
                                     @endif
                                 </p>
                             @endif
+                        </p>
                     </div>
 
                     <div class="card-footer">

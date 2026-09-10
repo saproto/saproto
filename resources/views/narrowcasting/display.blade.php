@@ -130,11 +130,10 @@
                             'slide-' + currentCampaign
                         )
                     }
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         slide.classList.add(hideClass)
                         updateSlide()
                     }, campaign.slide_duration * 1000)
-
                 } else {
                     player.classList.remove(hideClass)
                     let video = document.getElementById(
@@ -142,23 +141,25 @@
                     )
                     if (video) {
                         video.classList.remove(hideClass)
-                    }else{
+                    } else {
                         player.innerHTML +=
                             '<video id="video-' +
                             currentCampaign +
                             '" autoplay muted class="video">' +
-                            '<source src="'+campaign.image+'" type="video/mp4"></video>'
+                            '<source src="' +
+                            campaign.image +
+                            '" type="video/mp4"></video>'
 
                         video = document.getElementById(
                             'video-' + currentCampaign
                         )
                     }
                     video.play()
-                    video.addEventListener("ended", () => {
+                    video.addEventListener('ended', () => {
                         video.classList.add(hideClass)
                         video.pause()
                         updateSlide()
-                    });
+                    })
                 }
                 currentCampaign++
             }
