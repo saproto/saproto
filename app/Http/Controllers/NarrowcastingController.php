@@ -44,7 +44,7 @@ class NarrowcastingController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'image' => ['nullable', 'image', 'max:5120', 'mimes:jpeg,png,jpg'], // max 5MB
+            'image' => ['nullable', 'file', 'max:5120', 'mimes:jpeg,png,jpg,mp4'], // max 5MB
         ]);
 
         if (! $request->has('image') && ! $request->has('youtube_id')) {
@@ -180,11 +180,13 @@ class NarrowcastingController extends Controller
                 $data[] = [
                     'slide_duration' => $item->slide_duration,
                     'video' => $item->youtube_id,
+                    'is_video' => true,
                 ];
             } elseif ($item->hasMedia()) {
                 $data[] = [
                     'slide_duration' => $item->slide_duration,
                     'image' => $item->getImageUrl(),
+                    'is_video' => $item->isVideo(),
                 ];
             }
         }
