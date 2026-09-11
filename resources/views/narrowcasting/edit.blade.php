@@ -1,4 +1,5 @@
 @php
+    /** @var App\Models\NarrowcastingItem $item */
     use App\Enums\NarrowcastingEnum;
 @endphp
 
@@ -55,7 +56,7 @@
                             ]
                         )
 
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="slide_duration">
                                 Slide duration in seconds:
                             </label>
@@ -69,80 +70,47 @@
                             />
                         </div>
 
-                        <div class="form-group">
-                            <label for="youtube_id">YouTube ID:</label>
+                        <div class="custom-file mb-3">
                             <input
-                                type="text"
+                                id="image"
+                                type="file"
                                 class="form-control"
-                                id="youtube_id"
-                                name="youtube_id"
-                                placeholder="Only the ID!"
-                                value="{{ $item->youtube_id ?? '' }}"
+                                name="image"
                             />
+                            <label class="form-label">
+                                Upload an image or video
+                            </label>
                         </div>
 
                         <p>
                             <sup>
-                                <strong>Note:</strong>
-                                if a YouTube ID is present, the image file and
-                                slide duration field is ignored and hidden.
+                                <strong>Images should be</strong>
+                                1366 x 768 pixels.
                             </sup>
 
-                            @if ($item?->youtube_id)
-                                <label>Current video:</label>
-
-                                <div class="row">
-                                    <iframe
-                                        height="300"
-                                        src="https://www.youtube.com/embed/{{ $item->youtube_id }}"
-                                        allow="encrypted-media"
-                                        allowfullscreen
-                                    ></iframe>
-                                </div>
-                            @else
-                                <div class="custom-file mb-3">
-                                    <input
-                                        id="image"
-                                        type="file"
-                                        class="form-control"
-                                        name="image"
+                            @if ($item?->hasMedia())
+                                @if ($item->isVideo())
+                                    <video
+                                        width="320"
+                                        height="240"
+                                        autoplay
+                                        muted
+                                    >
+                                        <source
+                                            src="{!! $item->getImageUrl() !!}"
+                                            type="video/mp4"
+                                        />
+                                        Your browser does not support the video
+                                        tag.
+                                    </video>
+                                @else
+                                    <label>Current image:</label>
+                                    <img
+                                        src="{!! $item->getImageUrl(NarrowcastingEnum::SMALL) !!}"
+                                        class="w-100"
+                                        alt="{{ $item->name }}'s image"
                                     />
-                                    <label class="form-label">
-                                        Upload an image or video
-                                    </label>
-                                </div>
-
-                                <p>
-                                    <sup>
-                                        <strong>Images should be</strong>
-                                        1366 x 768 pixels.
-                                    </sup>
-
-                                    @if ($item?->hasMedia())
-                                        @if ($item->isVideo())
-                                            <video
-                                                width="320"
-                                                height="240"
-                                                autoplay
-                                                muted
-                                            >
-                                                <source
-                                                    src="{!! $item->getImageUrl() !!}"
-                                                    type="video/mp4"
-                                                />
-                                                Your browser does not support
-                                                the video tag.
-                                            </video>
-                                        @else
-                                            <label>Current image:</label>
-                                            <img
-                                                src="{!! $item->getImageUrl(NarrowcastingEnum::SMALL) !!}"
-                                                class="w-100"
-                                                alt="{{ $item->name }}'s image"
-                                            />
-                                        @endif
-                                    @endif
-                                </p>
+                                @endif
                             @endif
                         </p>
                     </div>
@@ -158,14 +126,6 @@
                         >
                             Cancel
                         </a>
-
-                        <p class="mt-2 mb-0 text-center">
-                            Developed with
-                            <span class="text-danger">
-                                <i class="fab fa-youtube fa-fw"></i>
-                                YouTube
-                            </span>
-                        </p>
                     </div>
                 </form>
             </div>

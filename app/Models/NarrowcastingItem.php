@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
@@ -26,7 +25,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int $slide_duration
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property string|null $youtube_id
  *
  * @method static Builder<static>|NarrowcastingItem newModelQuery()
  * @method static Builder<static>|NarrowcastingItem newQuery()

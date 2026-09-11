@@ -824,7 +824,6 @@ CREATE TABLE `narrowcasting` (
   `slide_duration` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `youtube_id` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1888,3 +1887,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_04_29_144605_add_p
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_05_06_122228_add_foreign_constraint_to_photo_likes',205);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_05_08_130754_add_foreign_id_constraint_to_welcome_messages_and_achievements',206);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_05_25_111856_add_index_and_foreign_id_constraint_to_qrauth_requests',207);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_10_165101_remove_youtube_id_from_narrowcasting',208);
