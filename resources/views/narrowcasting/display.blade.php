@@ -155,10 +155,14 @@
                     }
                     video.currentTime = 0
                     video.play()
-                    video.addEventListener('ended', () => {
-                        video.classList.add(hideClass)
-                        updateSlide()
-                    }, { once: true })
+                    video.addEventListener(
+                        'ended',
+                        () => {
+                            video.classList.add(hideClass)
+                            updateSlide()
+                        },
+                        { once: true }
+                    )
                 }
                 currentCampaign++
             }
