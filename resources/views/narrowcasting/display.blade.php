@@ -108,7 +108,6 @@
                     currentCampaign = 0
                 }
                 const campaign = campaigns[currentCampaign]
-
                 if (campaign.is_video === false) {
                     slides.classList.remove(hideClass)
 
@@ -154,12 +153,16 @@
                             'video-' + currentCampaign
                         )
                     }
+                    video.currentTime = 0
                     video.play()
-                    video.addEventListener('ended', () => {
-                        video.classList.add(hideClass)
-                        video.pause()
-                        updateSlide()
-                    })
+                    video.addEventListener(
+                        'ended',
+                        () => {
+                            video.classList.add(hideClass)
+                            updateSlide()
+                        },
+                        { once: true }
+                    )
                 }
                 currentCampaign++
             }
