@@ -104,7 +104,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:birthdaycron')->daily()->at('00:01');
         $schedule->command('proto:achievementscron')->daily()->at('00:10');
         $schedule->command('proto:clearsessions')->daily()->at('01:00');
-        $schedule->command('proto:backup-photos-to-stack')->daily()->at('01:15');
         $schedule->command('proto:endmemberships')->hourly()->at('02:00');
         $schedule->command('proto:syncutaccounts')->daily()->at('03:00');
         $schedule->command('proto:feecron')->daily()->at('03:30');
@@ -115,6 +114,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:omnomcleanup')->daily()->at('07:00');
         $schedule->command('proto:reviewfeedbackcron')->daily()->at('16:00');
         $schedule->command('proto:reviewstickerscron')->daily()->at('16:10');
+        $schedule->command('proto:backup-photos-to-stack')->weekly()->at('01:15');
         $schedule->command('proto:closeactivitiesremindercron')->weeklyOn(1, '8:00');
         $schedule->command('proto:checkutaccounts')->monthly();
         $schedule->command('proto:verifydetailscron')->monthlyOn(1, '12:00');
