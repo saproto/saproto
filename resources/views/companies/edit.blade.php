@@ -1,5 +1,7 @@
 @php
     use App\Enums\CompanyEnum;
+    use App\Models\Company;
+    /** @var Company $company */
 @endphp
 
 @extends('website.layouts.redesign.dashboard')
@@ -11,7 +13,7 @@
 @section('container')
     <form
         method="post"
-        action="{{ $company == null ? route('companies::store') : route('companies::update', ['id' => $company->id]) }}"
+        action="{{ $company == null ? route('companies::store') : route('companies::update', ['company' => $company]) }}"
         enctype="multipart/form-data"
     >
         @csrf

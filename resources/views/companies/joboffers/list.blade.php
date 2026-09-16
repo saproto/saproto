@@ -32,7 +32,7 @@
                             <h5 class="card-title">{{ $company->name }}</h5>
 
                             <a
-                                href="{{ route('companies::show', ['id' => $company->id]) }}"
+                                href="{{ route('companies::show', ['company' => $company]) }}"
                                 class="card-link text-info"
                             >
                                 Learn more
