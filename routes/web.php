@@ -507,7 +507,7 @@ Route::middleware('forcedomain')->group(function () {
 
         // Public routes
         Route::get('', [EventController::class, 'index'])->name('index');
-        Route::get('archive/{year}', [EventController::class, 'archive'])->name('archive');
+        Route::get('archive/{year}', [EventController::class, 'archive'])->name('archive')->whereNumber('year');
         Route::post('copy', [EventController::class, 'copyEvent'])->name('copy');
 
         // Catch-alls
