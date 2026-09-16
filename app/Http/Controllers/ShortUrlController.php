@@ -71,7 +71,7 @@ class ShortUrlController extends Controller
         return response((new DNS2D)->getBarcodeSVG(sprintf('https://%s', $url->target), 'QRCODE,M'))->header('Content-Type', 'image/svg+xml');
     }
 
-    public function go(string $short): RedirectResponse
+    public function go(?string $short = null): RedirectResponse
     {
         $url = ShortUrl::query()->where('url', $short)->firstOrFail();
         $url->clicks++;

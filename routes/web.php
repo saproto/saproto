@@ -992,7 +992,7 @@ Route::middleware('forcedomain')->group(function () {
     });
 
     /* Routes related to the Short URL Service */
-    Route::get('go/{short?}', [ShortUrlController::class, 'go'])->name('short_urls.go');
+    Route::get('go/{short?}', [ShortUrlController::class, 'go'])->name('short_urls.go')->whereAlpha('short');
     Route::get('short_urls/qr_code/{id}', [ShortUrlController::class, 'qrCode'])->name('short_urls.qr_code')->middleware(['auth', 'permission:board']);
     Route::resource('short_urls', ShortUrlController::class)->except('show')->middleware(['auth', 'permission:board']);
 
