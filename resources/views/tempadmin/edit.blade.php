@@ -3,6 +3,7 @@
     use App\Models\Tempadmin;
     /** @var Tempadmin|null $item */
 @endphp
+
 @section('page-title')
     @if ($new)
         New temporary admin

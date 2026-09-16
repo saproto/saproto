@@ -3,6 +3,7 @@
     use App\Models\Tempadmin;
     /** @var Tempadmin $tempadmin */
 @endphp
+
 @section('page-title')
     Temporary Admin Admin
 @endsection
@@ -23,13 +24,13 @@
 
                 <table class="table-hover table-sm table">
                     <thead>
-                    <tr class="bg-dark text-white">
-                        <td>User</td>
-                        <td>Given by</td>
-                        <td>From</td>
-                        <td>Until</td>
-                        <td></td>
-                    </tr>
+                        <tr class="bg-dark text-white">
+                            <td>User</td>
+                            <td>Given by</td>
+                            <td>From</td>
+                            <td>Until</td>
+                            <td></td>
+                        </tr>
                     </thead>
 
                     @foreach ($tempadmins as $tempadmin)
