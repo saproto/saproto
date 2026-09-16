@@ -1,4 +1,9 @@
 @extends('website.layouts.redesign.generic')
+@php
+    use App\Models\Company;
+    use Illuminate\Support\Collection;
+    /** @var Collection<Company> $companies */
+@endphp
 
 @section('page-title')
     Interesting companies
@@ -31,7 +36,7 @@
                         <h5 class="card-title">{{ $company->name }}</h5>
 
                         <a
-                            href="{{ route('companies::show', ['id' => $company->id]) }}"
+                            href="{{ route('companies::show', ['company' => $company]) }}"
                             class="card-link text-info"
                         >
                             Learn more

@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Enums\CompanyEnum;
+use Database\Factories\CompanyFactory;
 use Illuminate\Database\Eloquent\Attributes\Guarded;
 use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
@@ -64,6 +66,9 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 #[Table(name: 'companies')]
 class Company extends Model implements HasMedia
 {
+    /** @use HasFactory<CompanyFactory>*/
+    use HasFactory;
+
     use InteractsWithMedia;
 
     public function registerMediaCollections(): void

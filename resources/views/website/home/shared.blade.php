@@ -74,7 +74,7 @@
                                             class="swiper-slide justify-content-center align-items-center d-flex"
                                         >
                                             <a
-                                                href="{{ route("companies::show", ["id" => $company->id]) }}"
+                                                href="{{ route("companies::show", ["company" => $company]) }}"
                                             >
                                                 <img
                                                     class="company-{{ strtolower($company->name) }}"

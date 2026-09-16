@@ -31,7 +31,7 @@
                         Posted on
                         {{ date_format($joboffer->created_at, 'd-m-Y') }} for
                         <a
-                            href="{{ route('companies::show', ['id' => $joboffer->company->id]) }}"
+                            href="{{ route('companies::show', ['company' => $joboffer->company]) }}"
                             class="text-info"
                         >
                             {{ $joboffer->company->name }}
