@@ -1,4 +1,8 @@
 @extends('website.layouts.redesign.dashboard')
+@php
+    use App\Models\Tempadmin;
+    /** @var Tempadmin $tempadmin */
+@endphp
 
 @section('page-title')
     Temporary Admin Admin
@@ -61,7 +65,7 @@
                                 @include(
                                     'components.modals.confirm-modal',
                                     [
-                                        'action' => route('tempadmin::endId', ['id' => $tempadmin->id]),
+                                        'action' => route('tempadmin::end', ['user' => $tempadmin->user]),
                                         'text' => Carbon::parse($tempadmin->start_at)->isFuture()
                                             ? '<i class="fas fa-trash fa-fw text-danger"></i>'
                                             : '<i class="fas fa-hourglass-end text-danger fa-fw"></i>',

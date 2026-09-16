@@ -972,9 +972,8 @@ Route::middleware('forcedomain')->group(function () {
 
     /* --- Routes related to Protube TempAdmin (Board only) --- */
     Route::prefix('tempadmin')->name('tempadmin::')->middleware(['auth', 'permission:board'])->group(function () {
-        Route::get('make/{id}', [TempAdminController::class, 'make'])->name('make');
-        Route::get('end/{id}', [TempAdminController::class, 'end'])->name('end');
-        Route::get('endId/{id}', [TempAdminController::class, 'endId'])->name('endId');
+        Route::get('make/{user}', [TempAdminController::class, 'make'])->name('make');
+        Route::get('end/{user}', [TempAdminController::class, 'end'])->name('end');
     });
     Route::resource('tempadmins', TempAdminController::class)->only(['index', 'create', 'store', 'edit', 'update'])->middleware(['auth', 'permission:board']);
 

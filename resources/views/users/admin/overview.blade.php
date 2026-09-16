@@ -166,7 +166,7 @@
 
                                             @if ($user->isTempadmin())
                                                 <a
-                                                    href="{{ route('tempadmin::end', ['id' => $user->id]) }}"
+                                                    href="{{ route('tempadmin::end', ['user' => $user]) }}"
                                                     data-bs-toggle="tooltip"
                                                     data-bs-placement="top"
                                                     title="Revoke temp admin"
