@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Date;
 use PDF;
 use Spipu\Html2Pdf\Exception\Html2PdfException;
@@ -11,23 +13,23 @@ use Spipu\Html2Pdf\Exception\Html2PdfException;
 class MemberCardController extends Controller
 {
     /**
-     * @param  int  $id
-     * @return string
+     * @return ResponseFactory|Response
      *
      * @throws Html2PdfException
      */
-    public function download(Request $request, $id)
+    public function download(Request $request, User $user)
     {
-        /** @var User $user */
-        $user = User::query()->findOrFail($id);
-
         abort_unless($user->is_member, 403, 'Only members can have a member card printed.');
 
         $card = new PDF('L', [86, 54], 'en');
         $card->setDefaultFont('freeserif');
         $card->writeHTML(view('users.membercard.membercard', ['user' => $user, 'overlayonly' => $request->has('overlayonly')]));
+        $filename = 'usercard_'.$user->id.'.pdf';
 
-        return $card->output();
+        return response($card->Output($filename, 'S'), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="'.$filename.'.pdf"',
+        ]);
     }
 
     public function startPrint(Request $request): string
@@ -42,7 +44,7 @@ class MemberCardController extends Controller
             return 'Only members can have their card printed!';
         }
 
-        $result = FileController::requestPrint('card', route('membercard::download', ['id' => $user->id]));
+        $result = FileController::requestPrint('card', route('membercard::download', ['user' => $user]));
         $user->member->card_printed_on = Date::now()->format('Y-m-d');
         $user->member->save();
 

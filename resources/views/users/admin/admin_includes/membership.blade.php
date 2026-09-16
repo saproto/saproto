@@ -45,7 +45,7 @@
                         Change membership type
                     </a>
                     <a
-                        href="{{ route('membercard::download', ['id' => $user->id]) }}"
+                        href="{{ route('membercard::download', ['user' => $user]) }}"
                         target="_blank"
                         class="list-group-item"
                     >
