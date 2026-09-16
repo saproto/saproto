@@ -6,10 +6,10 @@ use App\Models\Company;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-use Illuminate\View\View;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
@@ -17,10 +17,8 @@ class CompanyController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return RedirectResponse|View
      */
-    public function index(): Factory|\Illuminate\Contracts\View\View|RedirectResponse
+    public function index(): Factory|View|RedirectResponse
     {
         $companies = Company::query()->with('media')->where('on_carreer_page', true)->inRandomOrder()->get();
         if (count($companies) > 0) {
@@ -34,10 +32,8 @@ class CompanyController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return RedirectResponse|View
      */
-    public function indexMembercard(): Factory|\Illuminate\Contracts\View\View|RedirectResponse
+    public function indexMembercard(): Factory|View|RedirectResponse
     {
         $companies = Company::query()->where('on_membercard', true)->inRandomOrder()->get();
         if (count($companies) > 0) {
@@ -51,20 +47,16 @@ class CompanyController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return View
      */
-    public function adminIndex(): \Illuminate\Contracts\View\View|Factory
+    public function adminIndex(): View|Factory
     {
         return view('companies.adminlist', ['companies' => Company::query()->orderBy('sort')->paginate(20)]);
     }
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return View
      */
-    public function create(): \Illuminate\Contracts\View\View|Factory
+    public function create(): View|Factory
     {
         return view('companies.edit', ['company' => null]);
     }
@@ -115,33 +107,25 @@ class CompanyController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @return View
      */
-    public function show(int $id): \Illuminate\Contracts\View\View|Factory
+    public function show(Company $company): View|Factory
     {
-        return view('companies.show', ['company' => Company::query()->findOrFail($id)]);
+        return view('companies.show', ['company' => $company]);
     }
 
     /**
      * Display the specified resource.
-     *
-     * @return View
      */
-    public function showMembercard(int $id): \Illuminate\Contracts\View\View|Factory
+    public function showMembercard(Company $company): View|Factory
     {
-        return view('companies.showmembercard', ['company' => Company::query()->findOrFail($id)]);
+        return view('companies.showmembercard', ['company' => $company]);
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @return View
      */
-    public function edit(int $id): \Illuminate\Contracts\View\View|Factory
+    public function edit(Company $company): View|Factory
     {
-        $company = Company::query()->findOrFail($id);
-
         return view('companies.edit', ['company' => $company]);
     }
 
@@ -152,13 +136,12 @@ class CompanyController extends Controller
      *
      * @throws FileNotFoundException
      */
-    public function update(Request $request, int $id)
+    public function update(Request $request, Company $company)
     {
         $request->validate([
             'image' => ['nullable', 'image', 'max:5120', 'mimes:jpeg,png,jpg'], // max 5MB
         ]);
 
-        $company = Company::query()->findOrFail($id);
         $company->name = $request->name;
         $company->url = $request->url;
         $company->excerpt = $request->excerpt;
@@ -191,10 +174,8 @@ class CompanyController extends Controller
     /**
      * @return RedirectResponse
      */
-    public function orderUp(int $id)
+    public function orderUp(Company $company)
     {
-        $company = Company::query()->findOrFail($id);
-
         abort_if($company->sort <= 0, 500);
 
         $companyAbove = Company::query()->where('sort', $company->sort - 1)->first();
@@ -211,10 +192,8 @@ class CompanyController extends Controller
     /**
      * @return RedirectResponse
      */
-    public function orderDown(int $id)
+    public function orderDown(Company $company)
     {
-        $company = Company::query()->findOrFail($id);
-
         abort_if($company->sort >= Company::query()->count() - 1, 500);
 
         $companyAbove = Company::query()->where('sort', $company->sort + 1)->first();
@@ -234,10 +213,8 @@ class CompanyController extends Controller
      *
      * @throws Exception
      */
-    public function destroy(int $id): RedirectResponse
+    public function destroy(Company $company): RedirectResponse
     {
-        $company = Company::query()->findOrFail($id);
-
         Session::flash('flash_message', "The company '".$company->name."' has been deleted.");
         $company->delete();
 
