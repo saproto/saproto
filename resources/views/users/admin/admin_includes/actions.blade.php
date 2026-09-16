@@ -46,14 +46,14 @@
 
             @if ($user->isTempadmin())
                 <a
-                    href="{{ route('tempadmin::end', ['id' => $user->id]) }}"
+                    href="{{ route('tempadmin::end', ['user' => $user]) }}"
                     class="list-group-item"
                 >
                     End temporary admin
                 </a>
             @else
                 <a
-                    href="{{ route('tempadmin::make', ['id' => $user->id]) }}"
+                    href="{{ route('tempadmin::make', ['user' => $user]) }}"
                     class="list-group-item"
                 >
                     Make temporary admin

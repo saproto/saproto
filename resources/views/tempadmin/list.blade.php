@@ -1,5 +1,8 @@
 @extends('website.layouts.redesign.dashboard')
-
+@php
+    use App\Models\Tempadmin;
+    /** @var Tempadmin $tempadmin */
+@endphp
 @section('page-title')
     Temporary Admin Admin
 @endsection
@@ -20,13 +23,13 @@
 
                 <table class="table-hover table-sm table">
                     <thead>
-                        <tr class="bg-dark text-white">
-                            <td>User</td>
-                            <td>Given by</td>
-                            <td>From</td>
-                            <td>Until</td>
-                            <td></td>
-                        </tr>
+                    <tr class="bg-dark text-white">
+                        <td>User</td>
+                        <td>Given by</td>
+                        <td>From</td>
+                        <td>Until</td>
+                        <td></td>
+                    </tr>
                     </thead>
 
                     @foreach ($tempadmins as $tempadmin)
@@ -61,7 +64,7 @@
                                 @include(
                                     'components.modals.confirm-modal',
                                     [
-                                        'action' => route('tempadmin::endId', ['id' => $tempadmin->id]),
+                                        'action' => route('tempadmin::end', ['user' => $tempadmin->user]),
                                         'text' => Carbon::parse($tempadmin->start_at)->isFuture()
                                             ? '<i class="fas fa-trash fa-fw text-danger"></i>'
                                             : '<i class="fas fa-hourglass-end text-danger fa-fw"></i>',

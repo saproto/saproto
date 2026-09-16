@@ -17,7 +17,7 @@ use Illuminate\View\View;
 class TempAdminController extends Controller
 {
     /**
-     * @return View
+     * @return \Illuminate\Contracts\View\View|Factory
      */
     public function index(): \Illuminate\Contracts\View\View|Factory
     {
@@ -25,14 +25,16 @@ class TempAdminController extends Controller
             ->with('user')
             ->with('creator')
             ->where('end_at', '>', DB::raw('NOW()'))
-            ->orderBy('end_at', 'desc')
+            ->orderByDesc('end_at')
             ->get();
         $pastTempadmins = Tempadmin::query()->where('end_at', '<=', DB::raw('NOW()'))->orderBy('end_at', 'desc')->take(10)->get();
 
         return view('tempadmin.list', ['tempadmins' => $tempadmins, 'pastTempadmins' => $pastTempadmins]);
     }
 
-    /** @return View */
+    /**
+     * @return \Illuminate\Contracts\View\View|Factory
+     */
     public function create(): \Illuminate\Contracts\View\View|Factory
     {
         return view('tempadmin.edit', ['tempadmin' => null, 'new' => true]);
@@ -58,7 +60,8 @@ class TempAdminController extends Controller
     }
 
     /**
-     * @return View
+     * @param Tempadmin $tempadmin
+     * @return \Illuminate\Contracts\View\View|Factory
      */
     public function edit(Tempadmin $tempadmin): \Illuminate\Contracts\View\View|Factory
     {
@@ -79,10 +82,8 @@ class TempAdminController extends Controller
         return to_route('tempadmins.index');
     }
 
-    public function make(int $id): RedirectResponse
+    public function make(User $user): RedirectResponse
     {
-        $user = User::query()->findOrFail($id);
-
         $tempAdmin = new Tempadmin;
         $tempAdmin->created_by = Auth::user()->id;
         $tempAdmin->start_at = Date::today();
@@ -95,39 +96,18 @@ class TempAdminController extends Controller
         return back();
     }
 
-    public function end(int $id): RedirectResponse
+    public function end(User $user): RedirectResponse
     {
-        /** @var User $user */
-        $user = User::query()->findOrFail($id);
-
         foreach ($user->tempadmin as $tempadmin) {
             if (Date::now()->between(Date::parse($tempadmin->start_at), Date::parse($tempadmin->end_at))) {
-                $tempadmin->end_at = Date::now()->subSeconds(1);
+                $tempadmin->end_at = Date::now()->subSecond();
                 $tempadmin->save();
+            } else if(Date::parse($tempadmin->start_at)->isFuture()) {
+                $tempadmin->delete();
             }
         }
 
         ProTubeApiService::updateAdmin($user->id, $user->isTempadminLaterToday());
-
-        return back();
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function endId(int $id): RedirectResponse
-    {
-        /** @var Tempadmin $tempadmin */
-        $tempadmin = Tempadmin::query()->findOrFail($id);
-
-        if (Date::parse($tempadmin->start_at)->isFuture()) {
-            $tempadmin->delete();
-        } else {
-            $tempadmin->end_at = Date::now()->subSeconds(1);
-            $tempadmin->save();
-        }
-
-        ProTubeApiService::updateAdmin($tempadmin->user->id, $tempadmin->user->isTempadminLaterToday());
 
         return back();
     }
