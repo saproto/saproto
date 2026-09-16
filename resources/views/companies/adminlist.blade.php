@@ -1,5 +1,8 @@
 @extends('website.layouts.redesign.dashboard')
-
+@php
+    use App\Models\Company;
+    /** @var Company $company */
+@endphp
 @section('page-title')
     Company Administration
 @endsection
@@ -49,7 +52,7 @@
                                 </td>
                                 <td>
                                     <a
-                                        href="{{ route('companies::edit', ['id' => $company->id]) }}"
+                                        href="{{ route('companies::edit', ['company' => $company]) }}"
                                     >
                                         <i class="fas fa-edit fa-fw me-2"></i>
                                     </a>
@@ -57,7 +60,7 @@
                                     @include(
                                         'components.modals.confirm-modal',
                                         [
-                                            'action' => route('companies::delete', ['id' => $company->id]),
+                                            'action' => route('companies::delete', ['company' => $company]),
                                             'text' => '<i class="fas fa-trash me-2 fa-fw text-danger"></i>',
                                             'title' => 'Confirm Delete',
                                             'message' => "Are you sure you want to delete $company->name?",
@@ -67,7 +70,7 @@
 
                                     @if ($company->sort > 0)
                                         <a
-                                            href="{{ route('companies::orderUp', ['id' => $company->id]) }}"
+                                            href="{{ route('companies::orderUp', ['company' => $company]) }}"
                                         >
                                             <i
                                                 class="fas fa-arrow-up fa-fw text-info me-2"
@@ -77,7 +80,7 @@
 
                                     @if ($company->sort != $companies->count())
                                         <a
-                                            href="{{ route('companies::orderDown', ['id' => $company->id]) }}"
+                                            href="{{ route('companies::orderDown', ['company' => $company]) }}"
                                         >
                                             <i
                                                 class="fas fa-arrow-down fa-fw text-info me-2"

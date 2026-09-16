@@ -1,5 +1,8 @@
 @extends('website.layouts.redesign.generic')
-
+@php
+    use App\Models\Company;
+    /** @var Company $company */
+@endphp
 @section('page-title')
     {{ $company->name }}
 @endsection

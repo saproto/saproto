@@ -55,7 +55,7 @@
                 <div class="card-body d-flex align-items-end text-start">
                     <h2 class="card-text ellipsis px-1" style="font-size: 30px">
                         @section("greeting")
-                            
+
                         @endsection
 
                         @yield("greeting")
@@ -74,7 +74,7 @@
                                             class="swiper-slide justify-content-center align-items-center d-flex"
                                         >
                                             <a
-                                                href="{{ route("companies::show", ["id" => $company->id]) }}"
+                                                href="{{ route("companies::show", ["company" => $company]) }}"
                                             >
                                                 <img
                                                     class="company-{{ strtolower($company->name) }}"
@@ -94,7 +94,7 @@
 
             <div class="row justify-content-center">
                 @section("left-column")
-                    
+
                 @endsection
 
                 @yield("left-column")
@@ -103,7 +103,7 @@
 
         <div class="col-xl-3 col-md-6 col-sm-12">
             @section("right-column")
-                
+
             @endsection
 
             @yield("right-column")

@@ -1,5 +1,9 @@
 @extends('website.layouts.redesign.generic')
-
+@php
+    use App\Models\Company;
+    use Illuminate\Support\Collection;
+    /** @var Collection<Company> $companies */
+@endphp
 @section('page-title')
     Promotions for members
 @endsection
@@ -31,7 +35,7 @@
                         <h5 class="card-title">{{ $company->name }}</h5>
 
                         <a
-                            href="{{ route('membercard::show', ['id' => $company->id]) }}"
+                            href="{{ route('membercard::show', ['company' => $company]) }}"
                             class="card-link text-info"
                         >
                             More information
