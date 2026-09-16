@@ -360,7 +360,7 @@ Route::middleware('forcedomain')->group(function () {
         Route::get('{id}', [CompanyController::class, 'showmembercard'])->name('show');
 
         Route::post('print', [MemberCardController::class, 'startPrint'])->middleware(['auth', 'permission:board'])->name('print');
-        Route::get('download/{id}', [MemberCardController::class, 'download'])->name('download');
+        Route::get('download/{user}', [MemberCardController::class, 'download'])->name('download');
     });
 
     /* --- Routes related to joboffers --- */
