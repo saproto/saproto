@@ -24,6 +24,7 @@
                 id="export"
                 name="export"
                 value="{{ $codex->export ?? '' }}"
+                required
             />
         </div>
 
@@ -36,6 +37,7 @@
                 id="description"
                 name="description"
                 value="{{ $codex->description ?? '' }}"
+                required
             />
         </div>
     </div>

@@ -7,8 +7,10 @@ use App\Models\Codex;
 use App\Models\CodexSongCategory;
 use App\Models\CodexTextType;
 use Illuminate\Contracts\Database\Query\Builder;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -89,7 +91,7 @@ class CodexController extends Controller
         $codex->texts()->sync($validated['textids'] ?? []);
     }
 
-    public function show(Codex $codex): ?RedirectResponse
+    public function show(Codex $codex): ResponseFactory|Response|RedirectResponse
     {
         $categories = CodexSongCategory::query()->whereHas('songs', function ($q) use ($codex) {
             $q->whereHas('codices', function (Builder $q) use ($codex) {
@@ -265,8 +267,11 @@ class CodexController extends Controller
         $pdf->Image(public_path('images/logo/codex_logo.png'), -5, 47, 210);
         $pdf->SetAlpha(1);
 
-        $pdf->Output();
+        $export = $codex->export ?? $codex_name;
 
-        return null;
+        return response($pdf->Output('S'), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="'.$export.'.pdf"',
+        ]);
     }
 }
