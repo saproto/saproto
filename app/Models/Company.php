@@ -66,10 +66,10 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 #[Table(name: 'companies')]
 class Company extends Model implements HasMedia
 {
-    use InteractsWithMedia;
-
     /** @use HasFactory<CompanyFactory>*/
     use HasFactory;
+
+    use InteractsWithMedia;
 
     public function registerMediaCollections(): void
     {

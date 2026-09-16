@@ -21,11 +21,11 @@ class CompanyFactory extends Factory
             'url' => fake()->url(),
             'excerpt' => fake()->text(),
             'description' => fake()->text(),
-            'on_carreer_page' =>fake()->boolean(),
-            'in_logo_bar' =>fake()->boolean(),
-            'membercard_excerpt' =>fake()->text(),
-            'membercard_long' =>fake()->text(),
-            'on_membercard' =>fake()->boolean(),
+            'on_carreer_page' => fake()->boolean(),
+            'in_logo_bar' => fake()->boolean(),
+            'membercard_excerpt' => fake()->text(),
+            'membercard_long' => fake()->text(),
+            'on_membercard' => fake()->boolean(),
             'sort' => Company::query()->max('sort') + 1,
         ];
     }
