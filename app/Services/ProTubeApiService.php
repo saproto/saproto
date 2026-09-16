@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Exception;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\App;
@@ -54,8 +55,13 @@ class ProTubeApiService
         if (! App::environment('production')) {
             return true;
         }
+        try {
+            $response = self::client()->post('/skipsong');
+        } catch (ConnectionException $e) {
+            captureException($e);
 
-        $response = self::client()->post('/skipsong');
+            return false;
+        }
         if (! self::assertResponse($response)) {
             return false;
         }
@@ -77,10 +83,16 @@ class ProTubeApiService
             return true;
         }
 
-        $response = self::client()->post('/updateadmin', [
-            'user_id' => $userID,
-            'admin' => $admin,
-        ]);
+        try {
+            $response = self::client()->post('/updateadmin', [
+                'user_id' => $userID,
+                'admin' => $admin,
+            ]);
+        } catch (ConnectionException $e) {
+            captureException($e);
+
+            return false;
+        }
 
         if (! self::assertResponse($response)) {
             return false;

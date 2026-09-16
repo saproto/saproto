@@ -1345,7 +1345,9 @@ CREATE TABLE `tempadmins` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `tempadmins_created_by_index` (`created_by`),
-  KEY `tempadmins_user_id_index` (`user_id`)
+  KEY `tempadmins_user_id_index` (`user_id`),
+  CONSTRAINT `tempadmins_created_by_foreign` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tempadmins_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `ticket_purchases`;
@@ -1888,3 +1890,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_05_06_122228_add_f
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_05_08_130754_add_foreign_id_constraint_to_welcome_messages_and_achievements',206);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_05_25_111856_add_index_and_foreign_id_constraint_to_qrauth_requests',207);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_10_165101_remove_youtube_id_from_narrowcasting',208);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_16_155645_add_foreign_constraint_to_tempadmins',209);
