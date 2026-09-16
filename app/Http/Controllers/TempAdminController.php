@@ -6,6 +6,7 @@ use App\Models\Tempadmin;
 use App\Models\User;
 use App\Services\ProTubeApiService;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 
 class TempAdminController extends Controller
 {
-    public function index(): \Illuminate\Contracts\View\View|Factory
+    public function index(): View|Factory
     {
         $tempadmins = Tempadmin::query()
             ->with('user')
@@ -27,7 +28,7 @@ class TempAdminController extends Controller
         return view('tempadmin.list', ['tempadmins' => $tempadmins, 'pastTempadmins' => $pastTempadmins]);
     }
 
-    public function create(): \Illuminate\Contracts\View\View|Factory
+    public function create(): View|Factory
     {
         return view('tempadmin.edit', ['tempadmin' => null, 'new' => true]);
     }
@@ -51,7 +52,7 @@ class TempAdminController extends Controller
         return to_route('tempadmins.index');
     }
 
-    public function edit(Tempadmin $tempadmin): \Illuminate\Contracts\View\View|Factory
+    public function edit(Tempadmin $tempadmin): View|Factory
     {
         return view('tempadmin.edit', ['item' => $tempadmin, 'new' => false]);
     }
