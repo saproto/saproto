@@ -341,17 +341,17 @@ Route::middleware('forcedomain')->group(function () {
             Route::get('list', [CompanyController::class, 'adminIndex'])->name('admin');
             Route::get('create', [CompanyController::class, 'create'])->name('create');
             Route::post('store', [CompanyController::class, 'store'])->name('store');
-            Route::get('edit/{id}', [CompanyController::class, 'edit'])->name('edit');
-            Route::post('edit/{id}', [CompanyController::class, 'update'])->name('update');
-            Route::get('delete/{id}', [CompanyController::class, 'destroy'])->name('delete');
+            Route::get('edit/{company}', [CompanyController::class, 'edit'])->name('edit');
+            Route::post('edit/{company}', [CompanyController::class, 'update'])->name('update');
+            Route::get('delete/{company}', [CompanyController::class, 'destroy'])->name('delete');
 
-            Route::get('up/{id}', [CompanyController::class, 'orderUp'])->name('orderUp');
-            Route::get('down/{id}', [CompanyController::class, 'orderDown'])->name('orderDown');
+            Route::get('up/{company}', [CompanyController::class, 'orderUp'])->name('orderUp');
+            Route::get('down/{company}', [CompanyController::class, 'orderDown'])->name('orderDown');
         });
 
         /* --- Public routes --- */
         Route::get('index', [CompanyController::class, 'index'])->name('index');
-        Route::get('{id}', [CompanyController::class, 'show'])->name('show');
+        Route::get('{company}', [CompanyController::class, 'show'])->name('show');
     });
 
     /* --- Routes related to membercard --- */
