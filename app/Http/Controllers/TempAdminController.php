@@ -11,7 +11,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Facades\DB;
 
 class TempAdminController extends Controller
 {
@@ -20,10 +19,11 @@ class TempAdminController extends Controller
         $tempadmins = Tempadmin::query()
             ->with('user')
             ->with('creator')
-            ->where('end_at', '>', DB::raw('NOW()'))
+            ->where('end_at', '>', Date::now())
             ->orderByDesc('end_at')
             ->get();
-        $pastTempadmins = Tempadmin::query()->where('end_at', '<=', DB::raw('NOW()'))->orderBy('end_at', 'desc')->take(10)->get();
+
+        $pastTempadmins = Tempadmin::query()->where('end_at', '<=', Date::now())->orderByDesc('end_at')->take(10)->get();
 
         return view('tempadmin.list', ['tempadmins' => $tempadmins, 'pastTempadmins' => $pastTempadmins]);
     }
