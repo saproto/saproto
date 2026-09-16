@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\PhotoLikes;
 use App\Models\Tempadmin;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
