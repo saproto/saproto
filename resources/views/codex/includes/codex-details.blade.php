@@ -17,7 +17,7 @@
 
         <!-- Description -->
         <div class="mb-3">
-            <label for="export">Document name:</label>
+            <label for="export">Name of PDF:</label>
             <input
                 type="text"
                 class="form-control"
