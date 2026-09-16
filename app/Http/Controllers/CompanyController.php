@@ -6,6 +6,7 @@ use App\Models\Company;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -16,10 +17,8 @@ class CompanyController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return Factory|\Illuminate\Contracts\View\View|RedirectResponse
      */
-    public function index(): Factory|\Illuminate\Contracts\View\View|RedirectResponse
+    public function index(): Factory|View|RedirectResponse
     {
         $companies = Company::query()->with('media')->where('on_carreer_page', true)->inRandomOrder()->get();
         if (count($companies) > 0) {
@@ -33,10 +32,8 @@ class CompanyController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return Factory|\Illuminate\Contracts\View\View|RedirectResponse
      */
-    public function indexMembercard(): Factory|\Illuminate\Contracts\View\View|RedirectResponse
+    public function indexMembercard(): Factory|View|RedirectResponse
     {
         $companies = Company::query()->where('on_membercard', true)->inRandomOrder()->get();
         if (count($companies) > 0) {
@@ -50,20 +47,16 @@ class CompanyController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Contracts\View\View|Factory
      */
-    public function adminIndex(): \Illuminate\Contracts\View\View|Factory
+    public function adminIndex(): View|Factory
     {
         return view('companies.adminlist', ['companies' => Company::query()->orderBy('sort')->paginate(20)]);
     }
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Contracts\View\View|Factory
      */
-    public function create(): \Illuminate\Contracts\View\View|Factory
+    public function create(): View|Factory
     {
         return view('companies.edit', ['company' => null]);
     }
@@ -114,33 +107,24 @@ class CompanyController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param Company $company
-     * @return \Illuminate\Contracts\View\View|Factory
      */
-    public function show(Company $company): \Illuminate\Contracts\View\View|Factory
+    public function show(Company $company): View|Factory
     {
         return view('companies.show', ['company' => $company]);
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param Company $company
-     * @return \Illuminate\Contracts\View\View|Factory
      */
-    public function showMembercard(Company $company): \Illuminate\Contracts\View\View|Factory
+    public function showMembercard(Company $company): View|Factory
     {
         return view('companies.showmembercard', ['company' => $company]);
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param Company $company
-     * @return \Illuminate\Contracts\View\View|Factory
      */
-    public function edit(Company $company): \Illuminate\Contracts\View\View|Factory
+    public function edit(Company $company): View|Factory
     {
         return view('companies.edit', ['company' => $company]);
     }
