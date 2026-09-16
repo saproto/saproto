@@ -4,6 +4,7 @@
     use Illuminate\Support\Collection;
     /** @var Collection<Company> $companies */
 @endphp
+
 @section('page-title')
     Promotions for members
 @endsection

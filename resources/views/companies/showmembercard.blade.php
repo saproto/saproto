@@ -3,6 +3,7 @@
     use App\Models\Company;
     /** @var Company $company */
 @endphp
+
 @section('page-title')
         {{ $company->name }}'s promotion for members
 @endsection
