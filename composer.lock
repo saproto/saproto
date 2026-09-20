@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "98506a6057b7e278a4169e57a6adb71a",
+    "content-hash": "4c4f8f5dba9ae2c6aac6c4eadc0365c9",
     "packages": [
         {
             "name": "abcaeffchen/sepa-utilities",
@@ -1376,20 +1376,20 @@
         },
         {
             "name": "globalcitizen/php-iban",
-            "version": "v4.2.3",
+            "version": "v5.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/globalcitizen/php-iban.git",
-                "reference": "d8d2b7c60ba01286fc625763618760aa3b684c00"
+                "reference": "44da5d9fc92716752dd3452de99b19d2b5483605"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/globalcitizen/php-iban/zipball/d8d2b7c60ba01286fc625763618760aa3b684c00",
-                "reference": "d8d2b7c60ba01286fc625763618760aa3b684c00",
+                "url": "https://api.github.com/repos/globalcitizen/php-iban/zipball/44da5d9fc92716752dd3452de99b19d2b5483605",
+                "reference": "44da5d9fc92716752dd3452de99b19d2b5483605",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.4 || ^5.5 || ^5.6 || ^7.0 || ^7.4 || ^8.0 || ^8.1"
+                "php": "^5.4 || ^5.5 || ^5.6 || ^7.0 || ^7.4 || ^8.0 || ^8.1 || ^8.2 || ^8.3 || ^8.4"
             },
             "type": "library",
             "autoload": {
@@ -1405,9 +1405,9 @@
             "description": "php-iban is a library for parsing and validating IBAN (and IIBAN) bank account information.",
             "support": {
                 "issues": "https://github.com/globalcitizen/php-iban/issues",
-                "source": "https://github.com/globalcitizen/php-iban/tree/v4.2.3"
+                "source": "https://github.com/globalcitizen/php-iban/tree/v5.0.0"
             },
-            "time": "2024-03-25T00:37:02+00:00"
+            "time": "2026-09-12T19:39:53+00:00"
         },
         {
             "name": "google/apiclient",
