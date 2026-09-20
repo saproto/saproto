@@ -47,7 +47,7 @@
         "ext-calendar": "*",
         "ext-curl": "*",
         "ext-json": "*",
-        "globalcitizen/php-iban": "4.2.3",
+        "globalcitizen/php-iban": "^5.0.0",
         "graham-campbell/markdown": "^16.0.0",
         "guzzlehttp/guzzle": "^7.5",
         "jwilsson/spotify-web-api-php": "^7.0.0",
@@ -82,7 +82,7 @@
         "spatie/laravel-medialibrary": "^11.13",
         "league/flysystem-sftp-v3": "^3.30",
         "laravel/wayfinder": "^0.1.12",
-        "laravel-notification-channels/webpush": "^12.1",
+        "laravel-notification-channels/webpush": "^13.0",
         "laravel/pennant": "^1.18",
         "league/flysystem-aws-s3-v3": "^3.0",
         "predis/predis": "^3.4"
