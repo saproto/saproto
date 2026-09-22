@@ -322,7 +322,9 @@ CREATE TABLE `committees_users` (
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `committees_users_user_id_index` (`user_id`),
-  KEY `committees_users_committee_id_index` (`committee_id`)
+  KEY `committees_users_committee_id_index` (`committee_id`),
+  CONSTRAINT `committees_users_committee_id_foreign` FOREIGN KEY (`committee_id`) REFERENCES `committees` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `committees_users_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `companies`;
@@ -1045,7 +1047,9 @@ CREATE TABLE `photo_albums` (
   PRIMARY KEY (`id`),
   KEY `photo_albums_thumb_id_index` (`thumb_id`),
   KEY `photo_albums_event_id_index` (`event_id`),
-  KEY `photo_albums_published_private_date_taken_index` (`published`,`private`,`date_taken`)
+  KEY `photo_albums_published_private_date_taken_index` (`published`,`private`,`date_taken`),
+  CONSTRAINT `photo_albums_event_id_foreign` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `photo_albums_thumb_id_foreign` FOREIGN KEY (`thumb_id`) REFERENCES `photos` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `photo_likes`;
@@ -1060,7 +1064,8 @@ CREATE TABLE `photo_likes` (
   PRIMARY KEY (`id`),
   KEY `photo_likes_photo_id_index` (`photo_id`),
   KEY `photo_likes_user_id_index` (`user_id`),
-  CONSTRAINT `photo_likes_photo_id_foreign` FOREIGN KEY (`photo_id`) REFERENCES `photos` (`id`) ON DELETE CASCADE
+  CONSTRAINT `photo_likes_photo_id_foreign` FOREIGN KEY (`photo_id`) REFERENCES `photos` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `photo_likes_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `photos`;
@@ -1074,7 +1079,8 @@ CREATE TABLE `photos` (
   `date_taken` int(11) NOT NULL,
   `private` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `photos_album_id_index` (`album_id`)
+  KEY `photos_album_id_index` (`album_id`),
+  CONSTRAINT `photos_album_id_foreign` FOREIGN KEY (`album_id`) REFERENCES `photo_albums` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `playedvideos`;
@@ -1207,7 +1213,8 @@ CREATE TABLE `rfid` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
-  KEY `rfid_user_id_index` (`user_id`)
+  KEY `rfid_user_id_index` (`user_id`),
+  CONSTRAINT `rfid_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `role_user`;
@@ -1461,7 +1468,9 @@ CREATE TABLE `users_mailinglists` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `users_mailinglists_list_id_index` (`list_id`),
-  KEY `users_mailinglists_user_id_index` (`user_id`)
+  KEY `users_mailinglists_user_id_index` (`user_id`),
+  CONSTRAINT `users_mailinglists_list_id_foreign` FOREIGN KEY (`list_id`) REFERENCES `mailinglists` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `users_mailinglists_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `ut_accounts`;
@@ -1478,7 +1487,9 @@ CREATE TABLE `ut_accounts` (
   `found` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `ut_accounts_member_id_foreign` (`member_id`),
+  CONSTRAINT `ut_accounts_member_id_foreign` FOREIGN KEY (`member_id`) REFERENCES `members` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `videos`;
@@ -1891,3 +1902,8 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_05_08_130754_add_f
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_05_25_111856_add_index_and_foreign_id_constraint_to_qrauth_requests',207);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_10_165101_remove_youtube_id_from_narrowcasting',208);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_16_155645_add_foreign_constraint_to_tempadmins',209);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_22_155309_add_foreign_constraint_to_rfid',210);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_22_155451_add_foreign_constraint_to_committees_users',210);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_22_155746_add_foreign_constraint_to_ut_accounts',210);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_22_164142_add_foreign_constraint_to_photos',210);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_22_172127_add_foreign_constraint_to_users_mailinglist',211);

@@ -22,7 +22,7 @@ class PhotoAlbumFactory extends Factory
             'name' => fake()->name(),
             'date_create' => fake()->randomNumber(),
             'date_taken' => fake()->randomNumber(),
-            'thumb_id' => 0,
+            'thumb_id' => null,
             'private' => fake()->boolean(),
             'published' => fake()->boolean(),
             'created_at' => Date::now(),
