@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\View\View;
 use Inertia\Inertia;
@@ -18,10 +19,9 @@ use Inertia\Response;
 
 class PhotoAlbumController extends Controller
 {
-    /** @return View */
     public function index(): \Illuminate\Contracts\View\View|Factory
     {
-        $albums = PhotoAlbum::query()->orderBy('date_taken', 'desc')
+        $albums = PhotoAlbum::query()->orderByDesc('date_taken')
             ->where('published', true)
             ->paginate(24);
 
@@ -45,14 +45,20 @@ class PhotoAlbumController extends Controller
 
     public function photo(HttpRequest $request, PhotoAlbum $album): Response
     {
-        $album->load(['items' => function ($q) {
-            $q->withCount('likes')
-                ->withExists([
-                    'likes as liked_by_me' => function ($query) {
-                        $query->where('user_id', Auth::id());
-                    },
-                ]);
-        }]);
+        $items = Cache::rememberForever("album::{$album->id}::items", fn () => $album->items()->withoutGlobalScopes()->get());
+
+        if (! Auth::user()?->is_member) {
+            $items = $items->filter(fn ($item) => ! $item->private)->values();
+        }
+
+        $items->loadCount('likes')
+            ->loadExists([
+                'likes as liked_by_me' => function ($query) {
+                    $query->where('user_id', Auth::id());
+                },
+            ]);
+
+        $album->setRelation('items', $items);
 
         return Inertia::render('Photos/Photo',
             [

@@ -6,22 +6,21 @@ use App\Models\Photo;
 use App\Models\PhotoAlbum;
 use Exception;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
-use Illuminate\View\View;
 
 class PhotoAdminController extends Controller
 {
-    /** @return View */
-    public function index(Request $request): \Illuminate\Contracts\View\View|Factory
+    public function index(Request $request): View|Factory
     {
         $name = $request->input('query');
-        $published = PhotoAlbum::query()->where('published', true)->orderBy('date_taken', 'desc');
-        $unpublished = PhotoAlbum::query()->where('published', false)->orderBy('date_taken', 'desc');
+        $published = PhotoAlbum::query()->where('published', true)->orderByDesc('date_taken');
+        $unpublished = PhotoAlbum::query()->where('published', false)->orderByDesc('date_taken');
 
         if ($name) {
             $published = $published->name($name);
@@ -48,10 +47,7 @@ class PhotoAdminController extends Controller
         return to_route('albums::admin::edit', ['id' => $album->id]);
     }
 
-    /**
-     * @return View
-     */
-    public function edit(int $id): \Illuminate\Contracts\View\View|Factory
+    public function edit(int $id): View|Factory
     {
         $album = PhotoAlbum::query()
             ->with('items.media')
@@ -113,6 +109,8 @@ class PhotoAdminController extends Controller
             $photo->addMediaFromRequest('file')
                 ->usingFileName($album->id.'_'.$photo->id.'.'.$extension)
                 ->toMediaCollection($album->private ? 'private' : 'public');
+
+            Cache::forget("album::{$album->id}::items");
 
             return html_entity_decode(view('photos.includes.selectablephoto', ['photo' => $photo]));
         } catch (Exception $exception) {
@@ -178,6 +176,8 @@ class PhotoAdminController extends Controller
                     break;
             }
 
+            Cache::forget("album::{$album->id}::items");
+
             $album->save();
         }
 
@@ -193,6 +193,7 @@ class PhotoAdminController extends Controller
     {
         $album = PhotoAlbum::query()->findOrFail($id);
         $album->items->each->delete();
+        Cache::forget("album::{$album->id}::items");
         $album->delete();
 
         return to_route('albums::admin::index');
