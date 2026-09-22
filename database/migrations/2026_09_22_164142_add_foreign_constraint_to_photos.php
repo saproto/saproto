@@ -29,7 +29,7 @@ return new class extends Migration
                 ->on('photos');
         });
 
-        PhotoLikes::whereDoesntHave('user')->delete();
+        PhotoLikes::query()->whereDoesntHave('user')->delete();
 
         Schema::table('photo_likes', function (Blueprint $table) {
             $table->foreign('user_id')
