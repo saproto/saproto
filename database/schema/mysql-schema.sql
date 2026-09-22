@@ -1468,7 +1468,9 @@ CREATE TABLE `users_mailinglists` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `users_mailinglists_list_id_index` (`list_id`),
-  KEY `users_mailinglists_user_id_index` (`user_id`)
+  KEY `users_mailinglists_user_id_index` (`user_id`),
+  CONSTRAINT `users_mailinglists_list_id_foreign` FOREIGN KEY (`list_id`) REFERENCES `mailinglists` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `users_mailinglists_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `ut_accounts`;
@@ -1904,3 +1906,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_22_155309_add_f
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_22_155451_add_foreign_constraint_to_committees_users',210);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_22_155746_add_foreign_constraint_to_ut_accounts',210);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_22_164142_add_foreign_constraint_to_photos',210);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_22_172127_add_foreign_constraint_to_users_mailinglist',211);
