@@ -37,10 +37,11 @@ use Illuminate\Support\Carbon;
 class EmailListSubscription extends Model
 {
     /**
-     * @return HasOne<User, $this> */
-    public function user(): HasOne
+     * @return BelongsTo<User, $this>
+     */
+    public function user(): BelongsTo
     {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class);
     }
 
     /**
