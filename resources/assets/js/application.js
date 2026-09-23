@@ -32,29 +32,31 @@ formList.forEach((form) =>
     form.addEventListener('submit', preventSubmitBounce, { once: true })
 )
 
-const [{ default: Swiper }, { Autoplay, Navigation }] = await Promise.all([
+Promise.all([
     import('swiper'),
     import('swiper/modules'),
     import('swiper/css'),
     import('swiper/css/autoplay'),
     import('swiper/css/navigation'),
-])
-window.swiper = new Swiper('.swiper', {
-    modules: [Autoplay, Navigation],
-    loop: config.company_count > 2,
-    slidesPerView: config.company_count > 1 ? 2 : 1,
-    spaceBetween: 10,
-    watchOverflow: false,
-    autoplay: {
-        delay: 3000,
-        disableOnInteraction: false,
-    },
-    breakpoints: {
-        1200: {
-            slidesPerView: config.company_count > 4 ? 4 : config.company_count,
-            spaceBetween: 50,
+]).then(([{ default: Swiper }, { Autoplay, Navigation }]) => {
+    window.swiper = new Swiper('.swiper', {
+        modules: [Autoplay, Navigation],
+        loop: config.company_count > 2,
+        slidesPerView: config.company_count > 1 ? 2 : 1,
+        spaceBetween: 10,
+        watchOverflow: false,
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
         },
-    },
+        breakpoints: {
+            1200: {
+                slidesPerView:
+                    config.company_count > 4 ? 4 : config.company_count,
+                spaceBetween: 50,
+            },
+        },
+    })
 })
 
 // Enables tooltips elements
@@ -162,32 +164,33 @@ const markdownFieldList = Array.from(
 )
 if (markdownFieldList.length) {
     window.easyMDEFields = {}
-    const [{ default: EasyMDE }] = await Promise.all([
+    Promise.all([
         import('easymde'),
         import('easymde/dist/easymde.min.css'),
-    ])
-    markdownFieldList.forEach((el) => {
-        window.easyMDEFields[el.id] = new EasyMDE({
-            element: el,
-            toolbar: [
-                'bold',
-                'italic',
-                'strikethrough',
-                '|',
-                'table',
-                'unordered-list',
-                'ordered-list',
-                '|',
-                'image',
-                'link',
-                'quote',
-                'code',
-                '|',
-                'preview',
-                'guide',
-            ],
-            toolbarButtonClassPrefix: 'mde-',
-            autoDownloadFontAwesome: false,
+    ]).then(([{ default: EasyMDE }]) => {
+        markdownFieldList.forEach((el) => {
+            window.easyMDEFields[el.id] = new EasyMDE({
+                element: el,
+                toolbar: [
+                    'bold',
+                    'italic',
+                    'strikethrough',
+                    '|',
+                    'table',
+                    'unordered-list',
+                    'ordered-list',
+                    '|',
+                    'image',
+                    'link',
+                    'quote',
+                    'code',
+                    '|',
+                    'preview',
+                    'guide',
+                ],
+                toolbarButtonClassPrefix: 'mde-',
+                autoDownloadFontAwesome: false,
+            })
         })
     })
 }
@@ -235,62 +238,65 @@ if (
     achievementSearchList.length ||
     committeeSearchList.length
 ) {
-    const [{ default: SearchField }] = await Promise.all([
-        import('./search-field'),
-    ])
-    userSearchList.forEach(
-        (el) =>
-            new SearchField(el, config.routes.api_search_user, {
-                optionTemplate: (el, item) => {
-                    el.className = item.is_member ? '' : 'text-muted'
-                    el.innerHTML = `#${item.id} ${item.name}`
-                },
-            })
-    )
+    Promise.all([import('./search-field')]).then(
+        ([{ default: SearchField }]) => {
+            userSearchList.forEach(
+                (el) =>
+                    new SearchField(el, config.routes.api_search_user, {
+                        optionTemplate: (el, item) => {
+                            el.className = item.is_member ? '' : 'text-muted'
+                            el.innerHTML = `#${item.id} ${item.name}`
+                        },
+                    })
+            )
 
-    eventSearchList.forEach(
-        (el) =>
-            new SearchField(el, config.routes.api_search_event, {
-                optionTemplate: (el, item) => {
-                    el.className = item.is_future ? '' : 'text-muted'
-                    el.innerHTML = `${item.title} (${item.formatted_date.simple})`
-                },
-                selectedTemplate: (item) => item.title,
-                sorter: (a, b) => {
-                    if (a.start < b.start) return 1
-                    else if (a.start > b.start) return -1
-                    else return 0
-                },
-            })
-    )
+            eventSearchList.forEach(
+                (el) =>
+                    new SearchField(el, config.routes.api_search_event, {
+                        optionTemplate: (el, item) => {
+                            el.className = item.is_future ? '' : 'text-muted'
+                            el.innerHTML = `${item.title} (${item.formatted_date.simple})`
+                        },
+                        selectedTemplate: (item) => item.title,
+                        sorter: (a, b) => {
+                            if (a.start < b.start) return 1
+                            else if (a.start > b.start) return -1
+                            else return 0
+                        },
+                    })
+            )
 
-    productSearchList.forEach(
-        (el) =>
-            new SearchField(el, config.routes.api_search_product, {
-                optionTemplate: (el, item) => {
-                    el.className = item.is_visible ? '' : 'text-muted'
-                    el.innerHTML = `${item.name} (€${item.price.toFixed(2)}; ${item.stock} in stock)`
-                },
-                selectedTemplate: (item) =>
-                    item.name +
-                    (el.multiple ? ` (€${item.price.toFixed(2)})` : ''),
-                sorter: (a, b) => {
-                    if (a.is_visible === 0 && b.is_visible === 1) return 1
-                    else if (a.is_visible === 1 && b.is_visible === 0) return -1
-                    else return 0
-                },
-            })
-    )
-    committeeSearchList.forEach(
-        (el) => new SearchField(el, config.routes.api_search_committee)
-    )
-    achievementSearchList.forEach(
-        (el) =>
-            new SearchField(el, config.routes.api_search_achievement, {
-                optionTemplate: (el, item) => {
-                    el.innerHTML = `#${item.id} ${item.name}`
-                },
-            })
+            productSearchList.forEach(
+                (el) =>
+                    new SearchField(el, config.routes.api_search_product, {
+                        optionTemplate: (el, item) => {
+                            el.className = item.is_visible ? '' : 'text-muted'
+                            el.innerHTML = `${item.name} (€${item.price.toFixed(2)}; ${item.stock} in stock)`
+                        },
+                        selectedTemplate: (item) =>
+                            item.name +
+                            (el.multiple ? ` (€${item.price.toFixed(2)})` : ''),
+                        sorter: (a, b) => {
+                            if (a.is_visible === 0 && b.is_visible === 1)
+                                return 1
+                            else if (a.is_visible === 1 && b.is_visible === 0)
+                                return -1
+                            else return 0
+                        },
+                    })
+            )
+            committeeSearchList.forEach(
+                (el) => new SearchField(el, config.routes.api_search_committee)
+            )
+            achievementSearchList.forEach(
+                (el) =>
+                    new SearchField(el, config.routes.api_search_achievement, {
+                        optionTemplate: (el, item) => {
+                            el.innerHTML = `#${item.id} ${item.name}`
+                        },
+                    })
+            )
+        }
     )
 }
 
@@ -298,23 +304,25 @@ if (
 global.timerList = []
 const countdownList = Array.from(document.querySelectorAll('.proto-countdown'))
 if (countdownList.length) {
-    const [{ default: CountdownTimer }] = await Promise.all([
-        import('./countdown-timer.js'),
-    ])
-    countdownList.forEach((el) => {
-        timerList.push(new CountdownTimer(el))
-    })
+    Promise.all([import('./countdown-timer.js')]).then(
+        ([{ default: CountdownTimer }]) => {
+            countdownList.forEach((el) => {
+                timerList.push(new CountdownTimer(el))
+            })
+        }
+    )
 }
 
 const shiftElements = document.querySelectorAll('.shift-select')
 if (shiftElements.length) {
-    const [{ default: shiftSelect }] = await Promise.all([
-        import('./shift-select.js'),
-    ])
-    shiftElements.forEach((el) =>
-        el.hasAttribute('data-name')
-            ? shiftSelect(el, el.getAttribute('data-name'))
-            : null
+    Promise.all([import('./shift-select.js')]).then(
+        ([{ default: shiftSelect }]) => {
+            shiftElements.forEach((el) =>
+                el.hasAttribute('data-name')
+                    ? shiftSelect(el, el.getAttribute('data-name'))
+                    : null
+            )
+        }
     )
 }
 
