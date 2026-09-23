@@ -17,6 +17,13 @@
 
         <meta name="theme-color" content="#C1FF00" />
 
+        @foreach (Config::array('proto.domains.static') as $domain)
+            <link rel="preconnect" href="{{ $domain }}" />
+        @endforeach
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
         <link
             rel="shortcut icon"
             href="{{ asset('images/favicons/favicon' . mt_rand(1, 4) . '.png') }}"

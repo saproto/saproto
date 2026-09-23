@@ -11,18 +11,21 @@ Sentry.init({
 })
 
 // Vendors
-
 import './utilities'
+
 // Execute theme JavaScript
 if (new Date().getMonth() + 1 !== 12) {
-    if (config.theme == 'broto') {
-        await import('./broto')
+    if (config.theme === 'broto') {
+        import('./broto').then(() => {
+            window[config.theme]?.()
+        })
+    } else if (config.theme === 'night') {
+        import('./night').then(() => {
+            window[config.theme]?.()
+        })
+    } else {
+        window[config.theme]?.()
     }
-    if (config.theme == 'night') {
-        await import('./night')
-    }
-
-    window[config.theme]?.()
 }
 
 // Disable submit buttons after a form has been submitted so
