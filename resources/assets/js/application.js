@@ -304,25 +304,26 @@ if (
 global.timerList = []
 const countdownList = Array.from(document.querySelectorAll('.proto-countdown'))
 if (countdownList.length) {
-    Promise.all([
-        import('./countdown-timer.js'),
-    ])
-    .then(([{ default: CountdownTimer }]) => {
-        countdownList.forEach((el) => {
-            timerList.push(new CountdownTimer(el))
-        })
-    })
+    Promise.all([import('./countdown-timer.js')]).then(
+        ([{ default: CountdownTimer }]) => {
+            countdownList.forEach((el) => {
+                timerList.push(new CountdownTimer(el))
+            })
+        }
+    )
 }
 
 const shiftElements = document.querySelectorAll('.shift-select')
 if (shiftElements.length) {
-    Promise.all([import('./shift-select.js')]).then(([{ default: shiftSelect }])=>{
-        shiftElements.forEach((el) =>
-            el.hasAttribute('data-name')
-                ? shiftSelect(el, el.getAttribute('data-name'))
-                : null
-        )
-    })
+    Promise.all([import('./shift-select.js')]).then(
+        ([{ default: shiftSelect }]) => {
+            shiftElements.forEach((el) =>
+                el.hasAttribute('data-name')
+                    ? shiftSelect(el, el.getAttribute('data-name'))
+                    : null
+            )
+        }
+    )
 }
 
 //Lazy load background images
