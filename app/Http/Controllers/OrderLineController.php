@@ -40,7 +40,7 @@ class OrderLineController extends Controller
 
         $next_withdrawal = OrderLine::query()
             ->where('user_id', $user->id)
-            ->unpayed()
+            ->unprocessed()
             ->sum('total_price');
 
         $orderlines = OrderLine::query()
