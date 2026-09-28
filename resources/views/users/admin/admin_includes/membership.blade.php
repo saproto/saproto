@@ -146,7 +146,7 @@
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    @if ($user->member->membershipForm)
+                                    @if ($user->member->hasMedia('membership_form'))
                                         <a
                                             class="ms-2"
                                             href="{{ route('memberform::download::signed', ['id' => $user->member->membership_form_id]) }}"
@@ -200,7 +200,7 @@
                                     <td>
                                         {{ strtotime($membership->created_at) > 0 ? date('d-m-Y', strtotime($membership->created_at)) : 'forever' }}
                                     </td>
-                                    @if ($membership->membershipForm)
+                                    @if ($membership->hasMedia('membership_form'))
                                         <td>
                                             <a
                                                 href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}"
@@ -258,7 +258,7 @@
                                     <td>
                                         {{ date('d-m-Y', strtotime($membership->deleted_at)) }}
                                     </td>
-                                    @if ($membership->membershipForm)
+                                    @if ($membership->hasMedia('membership_form'))
                                         <td>
                                             <a
                                                 href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}"

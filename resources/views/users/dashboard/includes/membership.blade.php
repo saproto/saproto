@@ -129,7 +129,7 @@
                         <tr>
                             <th>Current Membership</th>
 
-                            @if ($user->member->membershipForm)
+                            @if ($user->member->hasMedia('membership_form'))
                                 <td>
                                     Since
                                     {{ strtotime($user->member->created_at) > 0 ? date('d-m-Y', strtotime($user->member->created_at)) : 'forever' }}
@@ -160,7 +160,7 @@
                         <tr>
                             <th>Previous Membership(s)</th>
                             @foreach ($memberships['previous'] as $membership)
-                                @if ($membership->membershipForm)
+                                @if ($membership->hasMedia('membership_form'))
                                     <td>
                                         {{ strtotime($membership->created_at) > 0 ? date('d-m-Y', strtotime($membership->created_at)) : 'forever' }}
                                         -
@@ -198,7 +198,7 @@
                         <tr>
                             <th>Pending Membership</th>
                             @foreach ($memberships['pending'] as $membership)
-                                @if ($membership->membershipForm)
+                                @if ($membership->hasMedia('membership_form'))
                                     <td>
                                         Since
                                         {{ strtotime($membership->created_at) > 0 ? date('d-m-Y', strtotime($membership->created_at)) : 'forever' }}

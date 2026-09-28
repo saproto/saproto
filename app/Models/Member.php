@@ -38,7 +38,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int|null $omnomcom_sound_id
  * @property MembershipTypeEnum $membership_type
  * @property-read UtAccount|null $UtAccount
- * @property-read StorageEntry|null $membershipForm
  * @property-read User|null $user
  *
  * @method static MemberFactory factory($count = null, $state = [])
@@ -106,14 +105,6 @@ class Member extends Model implements HasMedia
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
-    }
-
-    /**
-     * @return BelongsTo<StorageEntry, $this>
-     */
-    public function membershipForm(): BelongsTo
-    {
-        return $this->belongsTo(StorageEntry::class, 'membership_form_id');
     }
 
     /**

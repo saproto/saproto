@@ -626,7 +626,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      */
     protected function signedMembershipForm(): Attribute
     {
-        return Attribute::make(get: fn (): bool => $this->member?->membershipForm !== null);
+        return Attribute::make(get: fn (): bool => $this->member?->hasMedia('membership_form'));
     }
 
     public function getIcalUrl(): string
