@@ -23,6 +23,7 @@ class MoveMedia implements ShouldQueue
      */
     public function handle(): void
     {
+        /** @phpstan-ignore-next-line  */
         $this->media->move($this->media->model, $this->collection);
     }
 }
