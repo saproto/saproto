@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\StorageEntry;
+use App\Models\Member;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
@@ -17,15 +17,17 @@ class BackupMembershipFormsToStack extends Command
      */
     public function handle(): void
     {
-        $query = StorageEntry::query()->whereHas('member', function ($q) {
-            $q->withTrashed();
-        })->with('member')->orderBy('id');
+        $query = Member::query()->whereHas('media', function ($query) {
+            $query->where('collection_name', 'membership_form');
+        });
 
-        $query->chunkById(10, function ($entries) {
-            foreach ($entries as $entry) {
-                $stackPath = 'membership_forms/'.$entry->original_filename;
+        $query->chunkById(10, function ($members) {
+            foreach ($members as $member) {
+                $stackPath = 'membership_forms/membership_form_user_'.$member->user->id.'.pdf';
                 if (Storage::disk('stack_backup')->missing($stackPath)) {
-                    $content = Storage::disk('local')->get($entry->filename);
+                    $media = $member->getFirstMedia('membership_form');
+                    $file = $media->getPathRelativeToRoot();
+                    $content = Storage::disk($media->disk)->get($file);
                     Storage::disk('stack_backup')->put($stackPath, $content);
                 }
             }
