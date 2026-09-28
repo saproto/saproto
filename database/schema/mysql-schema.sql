@@ -588,20 +588,6 @@ CREATE TABLE `feedback_votes` (
   KEY `feedback_votes_feedback_id_index` (`feedback_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `files`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
-CREATE TABLE `files` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `filename` varchar(255) NOT NULL,
-  `mime` varchar(255) NOT NULL,
-  `original_filename` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `hash` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `hashmap`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -1907,3 +1893,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_22_155451_add_f
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_22_155746_add_foreign_constraint_to_ut_accounts',210);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_22_164142_add_foreign_constraint_to_photos',210);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_22_172127_add_foreign_constraint_to_users_mailinglist',211);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_29_001133_remove_file_table',212);
