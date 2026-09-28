@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
@@ -54,6 +55,14 @@ class StorageEntry extends Model
     public function isOrphan(): bool
     {
         return Member::withTrashed()->where('membership_form_id', $this->id)->count() == 0;
+    }
+
+    /**
+     * @return BelongsTo<Member, $this>
+     */
+    public function member(): BelongsTo
+    {
+        return $this->belongsTo(Member::class, 'id', 'membership_form_id');
     }
 
     public function createFromData(string $data, string $mime, string $name, ?string $customPath = null): void

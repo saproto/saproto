@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Console\Commands\AchievementsCron;
 use App\Console\Commands\AddPhotoExtensions;
 use App\Console\Commands\AddSysadmin;
+use App\Console\Commands\BackupMembershipFormsToStack;
 use App\Console\Commands\BackupPhotosToStack;
 use App\Console\Commands\BirthdayCron;
 use App\Console\Commands\CheckUtwenteAccounts;
@@ -90,6 +91,7 @@ class Kernel extends ConsoleKernel
         CloseActivitiesReminderCron::class,
         QueueWrappedEmail::class,
         MoveMediaToGarage::class,
+        BackupMembershipFormsToStack::class,
     ];
 
     /**
