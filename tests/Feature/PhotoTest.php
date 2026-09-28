@@ -40,7 +40,7 @@ it('uploads a photo to an unpublished album with correct custom path and disk, a
     $disk = $private ? 'garage' : 'garage-public';
     $fileName = $album->id.'_'.$photo->id;
 
-    Storage::disk('stack')->assertExists("{$hashedPath}/{$media->file_name}");
+    Storage::disk($disk)->assertExists("{$hashedPath}/{$media->file_name}");
     Storage::disk($disk)->assertExists("{$hashedPath}/conversions/{$fileName}-small.webp");
 
     /*
@@ -60,7 +60,7 @@ it('uploads a photo to an unpublished album with correct custom path and disk, a
     $media = $photo->getFirstMedia('*');
     $hashedPath = md5($media->id.config('app.key'));
 
-    Storage::disk('stack')->assertExists("{$hashedPath}/{$media->file_name}");
+    Storage::disk('garage')->assertExists("{$hashedPath}/{$media->file_name}");
     Storage::disk('garage')->assertExists("{$hashedPath}/conversions/{$fileName}-small.webp");
     Storage::disk('garage-public')->assertMissing("{$hashedPath}/conversions/{$fileName}-small.webp");
 
