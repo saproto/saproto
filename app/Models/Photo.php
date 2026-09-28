@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Override;
 use Spatie\Image\Enums\Fit;
@@ -84,12 +83,12 @@ class Photo extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('private')
-            ->useDisk(App::environment('local') ? 'local' : 'stack')
+            ->useDisk('garage')
             ->storeConversionsOnDisk('garage')
             ->singleFile();
 
         $this->addMediaCollection('public')
-            ->useDisk(App::environment('local') ? 'public' : 'stack')
+            ->useDisk('garage-public')
             ->storeConversionsOnDisk('garage-public')
             ->singleFile();
     }
