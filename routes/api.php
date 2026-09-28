@@ -43,7 +43,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], static function
     });
     /* Routes related to the Events API */
     Route::group(['prefix' => 'events', 'as' => 'events::', 'middleware' => ['web']], static function () {
-        Route::get('upcoming/{limit?}', [EventController::class, 'apiUpcomingEvents'])->name('upcoming');
+        Route::get('upcoming/{limit?}', [EventController::class, 'apiUpcomingEvents'])->name('upcoming')->whereNumber('limit');
     });
     /* Routes related to the Photos API */
     Route::group(['prefix' => 'photos', 'as' => 'photos::'], static function () {
