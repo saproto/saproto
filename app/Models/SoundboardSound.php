@@ -45,7 +45,7 @@ class SoundboardSound extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('sound')
-            ->useDisk('local')
+            ->useDisk('garage')
             ->acceptsMimeTypes(['audio/mpeg'])
             ->singleFile();
     }
