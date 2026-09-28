@@ -93,6 +93,11 @@ class Member extends Model implements HasMedia
             ->useDisk('public')
             ->acceptsMimeTypes(['audio/mpeg', 'audio/mp3', 'audio/mpga'])
             ->singleFile();
+
+        $this->addMediaCollection('membership_form')
+            ->useDisk('garage')
+            ->acceptsMimeTypes(['application/pdf'])
+            ->singleFile();
     }
 
     /**

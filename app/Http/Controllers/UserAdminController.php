@@ -15,12 +15,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use PDF;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Models\Permission;
 use Spipu\Html2Pdf\Exception\Html2PdfException;
 
@@ -350,16 +350,14 @@ class UserAdminController extends Controller
         return back();
     }
 
-    public function getSignedMemberForm(int $id): RedirectResponse
+    public function getSignedMemberForm(int $id): ?Media
     {
         $user = Auth::user();
         $member = Member::withTrashed()->where('membership_form_id', '=', $id)->first();
 
         abort_if($user->id != $member->user_id && ! $user->can('registermembers'), 403);
 
-        $form = $member->membershipForm;
-
-        return Redirect::to($form->generatePath());
+        return $user->member->getFirstMedia('membership_form');
     }
 
     /**

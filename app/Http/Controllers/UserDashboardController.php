@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Enums\MembershipTypeEnum;
 use App\Mail\UserMailChange;
 use App\Models\Member;
-use App\Models\StorageEntry;
 use App\Models\User;
 use App\Rules\NotUtwenteEmail;
 use DateTime;
@@ -22,7 +21,10 @@ use Illuminate\View\View;
 use Milon\Barcode\DNS2D;
 use PDF;
 use PragmaRX\Google2FA\Google2FA;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Spatie\Permission\Models\Permission;
+use Spipu\Html2Pdf\Exception\Html2PdfException;
 
 class UserDashboardController extends Controller
 {
@@ -368,6 +370,8 @@ class UserDashboardController extends Controller
 
     /**
      * @return RedirectResponse
+     *
+     * @throws Html2PdfException
      */
     public function postMemberForm(Request $request)
     {
@@ -386,16 +390,24 @@ class UserDashboardController extends Controller
         $member = Member::query()->create();
         $member->user()->associate($user);
         $member->membership_type = MembershipTypeEnum::PENDING;
+        $member->save();
 
         $form = new PDF('P', 'A4', 'en');
         $form->setDefaultFont('freeserif');
         $form->writeHTML(view('users.admin.membershipform_pdf', ['user' => $user, 'signature' => $request->input('signature')]));
 
-        $file = new StorageEntry;
-        $file->createFromData($form->output('membership_form_user_'.$user->id.'.pdf', 'S'), 'application/pdf', 'membership_form_user_'.$user->id.'.pdf');
+        $pdfContent = $form->output('membership_form_user_'.$user->id.'.pdf', 'S');
+        $fileName = 'membership_form_user_'.$user->id.'.pdf';
 
-        $member->membershipForm()->associate($file);
-        $member->save();
+        try {
+            $member->addMediaFromString($pdfContent)
+                ->usingFileName($fileName)
+                ->toMediaCollection('membership_form');
+        } catch (FileDoesNotExist|FileIsTooBig) {
+            Session::flash('flash_message', 'Failed to upload membership form. Please contact the board.');
+
+            return to_route('becomeamember');
+        }
 
         Session::flash('flash_message', 'Thanks for signing the membership form!');
 
