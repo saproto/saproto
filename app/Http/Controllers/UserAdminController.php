@@ -350,16 +350,14 @@ class UserAdminController extends Controller
         return back();
     }
 
-    public function getSignedMemberForm(int $id): RedirectResponse
+    public function getSignedMemberForm(int $id)
     {
         $user = Auth::user();
         $member = Member::withTrashed()->where('membership_form_id', '=', $id)->first();
 
         abort_if($user->id != $member->user_id && ! $user->can('registermembers'), 403);
 
-        $form = $member->membershipForm;
-
-        return Redirect::to($form->generatePath());
+        return $user->member->getFirstMedia('membership_form');
     }
 
     /**

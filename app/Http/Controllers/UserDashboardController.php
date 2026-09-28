@@ -357,11 +357,11 @@ class UserDashboardController extends Controller
     public function getMemberForm()
     {
         $user = Auth::user();
-        if ($user->is_member || $user->signed_membership_form) {
-            Session::flash('flash_message', 'You have already signed the membership form');
-
-            return to_route('becomeamember');
-        }
+//        if ($user->is_member || $user->signed_membership_form) {
+//            Session::flash('flash_message', 'You have already signed the membership form');
+//
+//            return to_route('becomeamember');
+//        }
 
         return view('users.dashboard.membershipform', ['user' => $user]);
     }
@@ -372,30 +372,34 @@ class UserDashboardController extends Controller
     public function postMemberForm(Request $request)
     {
         $user = Auth::user();
-        if ($user->is_member || $user->signed_membership_form) {
-            Session::flash('flash_message', 'You have already signed the membership form');
+//        if ($user->is_member || $user->signed_membership_form) {
+//            Session::flash('flash_message', 'You have already signed the membership form');
+//
+//            return to_route('becomeamember');
+//        }
+//
+//        if ($user->member?->membership_type === MembershipTypeEnum::PENDING) {
+//            $user->member->delete();
+//        }
+//
+//        /** @var Member $member */
+//        $member = Member::query()->create();
+//        $member->user()->associate($user);
+//        $member->membership_type = MembershipTypeEnum::PENDING;
+//        $member->save();
 
-            return to_route('becomeamember');
-        }
-
-        if ($user->member?->membership_type === MembershipTypeEnum::PENDING) {
-            $user->member->delete();
-        }
-
-        /** @var Member $member */
-        $member = Member::query()->create();
-        $member->user()->associate($user);
-        $member->membership_type = MembershipTypeEnum::PENDING;
+        $member = Auth::user()->member;
 
         $form = new PDF('P', 'A4', 'en');
         $form->setDefaultFont('freeserif');
         $form->writeHTML(view('users.admin.membershipform_pdf', ['user' => $user, 'signature' => $request->input('signature')]));
 
-        $file = new StorageEntry;
-        $file->createFromData($form->output('membership_form_user_'.$user->id.'.pdf', 'S'), 'application/pdf', 'membership_form_user_'.$user->id.'.pdf');
+        $pdfContent = $form->output('membership_form_user_'.$user->id.'.pdf', 'S');
+        $fileName = 'membership_form_user_'.$user->id.'.pdf';
 
-        $member->membershipForm()->associate($file);
-        $member->save();
+        $member->addMediaFromString($pdfContent)
+            ->usingFileName($fileName)
+            ->toMediaCollection('membership_form');
 
         Session::flash('flash_message', 'Thanks for signing the membership form!');
 
