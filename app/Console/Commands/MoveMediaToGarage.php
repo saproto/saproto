@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Jobs\MoveMedia;
+use App\Models\Sticker;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
@@ -18,13 +19,13 @@ class MoveMediaToGarage extends Command
     public function handle(): void
     {
         $disk = 'stack';
-        $model = 'App\Models\Sticker';
+        $model = Sticker::class;
         $collection = 'default';
 
         $query = Media::query()->where('disk', $disk)->where('model_type', $model)->with('model');
         $query->chunkById(100, function ($medias) use ($collection) {
             foreach ($medias as $media) {
-                MoveMedia::dispatch($media, $collection)->onQueue('low');
+                dispatch(new MoveMedia($media, $collection))->onQueue('low');
             }
         });
     }
