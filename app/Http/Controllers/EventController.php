@@ -376,7 +376,7 @@ class EventController extends Controller
     /**
      * @return array<int, object>
      */
-    public function apiUpcomingEvents(Request $request, ?int $limit = 4): array
+    public function apiUpcomingEvents(?int $limit = 4): array
     {
         $limit = min($limit, 100);
         /** @var Collection<int, Event> $events */
