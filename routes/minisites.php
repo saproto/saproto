@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IsAlfredThereController;
 use App\Http\Controllers\OmNomController;
@@ -38,14 +37,5 @@ foreach ($domains['developers'] as $domain) {
 foreach ($domains['isalfredthere'] as $domain) {
     Route::group(['domain' => $domain], static function () {
         Route::get('', [IsAlfredThereController::class, 'index']);
-    });
-}
-
-foreach ($domains['static'] as $domain) {
-    Route::group(['domain' => $domain], static function () {
-        Route::group(['prefix' => 'file'], static function () {
-            Route::get('{id}/{hash}', [FileController::class, 'get']);
-            Route::get('{id}/{hash}/{name}', [FileController::class, 'get']);
-        });
     });
 }
