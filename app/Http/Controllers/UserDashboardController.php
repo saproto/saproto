@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Enums\MembershipTypeEnum;
 use App\Mail\UserMailChange;
 use App\Models\Member;
-use App\Models\StorageEntry;
 use App\Models\User;
 use App\Rules\NotUtwenteEmail;
 use DateTime;
@@ -22,7 +21,10 @@ use Illuminate\View\View;
 use Milon\Barcode\DNS2D;
 use PDF;
 use PragmaRX\Google2FA\Google2FA;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Spatie\Permission\Models\Permission;
+use Spipu\Html2Pdf\Exception\Html2PdfException;
 
 class UserDashboardController extends Controller
 {
@@ -357,38 +359,38 @@ class UserDashboardController extends Controller
     public function getMemberForm()
     {
         $user = Auth::user();
-//        if ($user->is_member || $user->signed_membership_form) {
-//            Session::flash('flash_message', 'You have already signed the membership form');
-//
-//            return to_route('becomeamember');
-//        }
+        if ($user->is_member || $user->signed_membership_form) {
+            Session::flash('flash_message', 'You have already signed the membership form');
+
+            return to_route('becomeamember');
+        }
 
         return view('users.dashboard.membershipform', ['user' => $user]);
     }
 
     /**
      * @return RedirectResponse
+     *
+     * @throws Html2PdfException
      */
     public function postMemberForm(Request $request)
     {
         $user = Auth::user();
-//        if ($user->is_member || $user->signed_membership_form) {
-//            Session::flash('flash_message', 'You have already signed the membership form');
-//
-//            return to_route('becomeamember');
-//        }
-//
-//        if ($user->member?->membership_type === MembershipTypeEnum::PENDING) {
-//            $user->member->delete();
-//        }
-//
-//        /** @var Member $member */
-//        $member = Member::query()->create();
-//        $member->user()->associate($user);
-//        $member->membership_type = MembershipTypeEnum::PENDING;
-//        $member->save();
+        if ($user->is_member || $user->signed_membership_form) {
+            Session::flash('flash_message', 'You have already signed the membership form');
 
-        $member = Auth::user()->member;
+            return to_route('becomeamember');
+        }
+
+        if ($user->member?->membership_type === MembershipTypeEnum::PENDING) {
+            $user->member->delete();
+        }
+
+        /** @var Member $member */
+        $member = Member::query()->create();
+        $member->user()->associate($user);
+        $member->membership_type = MembershipTypeEnum::PENDING;
+        $member->save();
 
         $form = new PDF('P', 'A4', 'en');
         $form->setDefaultFont('freeserif');
@@ -397,9 +399,15 @@ class UserDashboardController extends Controller
         $pdfContent = $form->output('membership_form_user_'.$user->id.'.pdf', 'S');
         $fileName = 'membership_form_user_'.$user->id.'.pdf';
 
-        $member->addMediaFromString($pdfContent)
-            ->usingFileName($fileName)
-            ->toMediaCollection('membership_form');
+        try {
+            $member->addMediaFromString($pdfContent)
+                ->usingFileName($fileName)
+                ->toMediaCollection('membership_form');
+        } catch (FileDoesNotExist|FileIsTooBig) {
+            Session::flash('flash_message', 'Failed to upload membership form. Please contact the board.');
+
+            return to_route('becomeamember');
+        }
 
         Session::flash('flash_message', 'Thanks for signing the membership form!');
 

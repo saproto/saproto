@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Photo;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -22,7 +23,7 @@ class PrivateMediaController extends Controller
         abort_if($disk === 'public' || $disk === 'garage-public', 403, 'This is not a private media file.');
 
         // only allow if the model is a Photo
-        abort_if($media->model_type !== 'App\Models\Photo', 403, 'This is not a private media file.');
+        abort_if($media->model_type !== Photo::class, 403, 'This is not a private media file.');
 
         $path = $media->getPathRelativeToRoot($conversion ?? '');
 
