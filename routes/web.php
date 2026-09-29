@@ -24,7 +24,6 @@ use App\Http\Controllers\EventCategoryController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\FeedbackController;
-use App\Http\Controllers\FileController;
 use App\Http\Controllers\HeaderImageController;
 use App\Http\Controllers\HelperCommitteeController;
 use App\Http\Controllers\HelperController;
@@ -890,11 +889,6 @@ Route::middleware('forcedomain')->group(function () {
     /* --- Fetching media: Private --- */
     Route::middleware(['auth', 'member'])->prefix('media')->name('media::')->group(function () {
         Route::get('{id}/{conversion?}', [PrivateMediaController::class, 'show'])->name('show');
-    });
-
-    /* --- Fetching files: Public   --- */
-    Route::prefix('file')->name('file::')->group(function () {
-        Route::get('{id}/{hash}/{name?}', [FileController::class, 'get'])->name('get');
     });
 
     /* --- Routes related to Spotify. (Board) --- */

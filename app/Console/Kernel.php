@@ -14,13 +14,11 @@ use App\Console\Commands\CloseActivitiesReminderCron;
 use App\Console\Commands\EmailCron;
 use App\Console\Commands\EndMemberships;
 use App\Console\Commands\FeeCron;
-use App\Console\Commands\FileCleanup;
 use App\Console\Commands\GoogleSync;
 use App\Console\Commands\MakeAdmin;
 use App\Console\Commands\MemberCleanup;
 use App\Console\Commands\MemberRenewCron;
 use App\Console\Commands\MoveMediaToGarage;
-use App\Console\Commands\MoveMembershipFormsToGarage;
 use App\Console\Commands\NewsletterCron;
 use App\Console\Commands\OmNomComCleanup;
 use App\Console\Commands\PrintActiveMembers;
@@ -61,7 +59,6 @@ class Kernel extends ConsoleKernel
         NewsletterCron::class,
         BirthdayCron::class,
         AchievementsCron::class,
-        FileCleanup::class,
         FeeCron::class,
         UserCleanup::class,
         CheckUtwenteAccounts::class,
@@ -93,7 +90,6 @@ class Kernel extends ConsoleKernel
         QueueWrappedEmail::class,
         MoveMediaToGarage::class,
         BackupMembershipFormsToStack::class,
-        MoveMembershipFormsToGarage::class,
     ];
 
     /**
@@ -115,7 +111,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:feecron')->daily()->at('03:30');
         $schedule->command('proto:membercleanup')->daily()->at('04:00');
         $schedule->command('proto:tempadmincleanup')->daily()->at('04:30');
-        $schedule->command('proto:filecleanup')->daily()->at('05:00');
         $schedule->command('proto:spotifysync')->daily()->at('06:00');
         $schedule->command('proto:omnomcleanup')->daily()->at('07:00');
         $schedule->command('proto:reviewfeedbackcron')->daily()->at('16:00');

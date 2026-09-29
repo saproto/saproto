@@ -2,31 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\StorageEntry;
 use Exception;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
-    public function get(int $id, string $hash): Response
-    {
-        $entry = Cache::remember('file-entry:'.$id, 31536000, fn (): StorageEntry => StorageEntry::query()->findOrFail($id));
-
-        abort_if($hash != $entry->hash, 404);
-
-        $file = Storage::disk('local')->get($entry->filename);
-
-        $response = new Response($file, 200);
-        $response->header('Content-Type', $entry->mime);
-        $response->header('Cache-Control', 'max-age=86400, public');
-        $response->header('Content-Disposition', sprintf('attachment; filename="%s"', $entry->original_filename));
-
-        return $response;
-    }
-
     public static function requestPrint(string $printer, string $url, int $copies = 1): string
     {
         if ($printer === 'document') {

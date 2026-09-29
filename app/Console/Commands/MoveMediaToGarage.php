@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Jobs\MoveMedia;
 use App\Models\Member;
-use App\Models\SoundboardSound;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
