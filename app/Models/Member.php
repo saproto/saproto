@@ -89,7 +89,7 @@ class Member extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('omnomcom_sound')
-            ->useDisk('public')
+            ->useDisk('garage-public')
             ->acceptsMimeTypes(['audio/mpeg', 'audio/mp3', 'audio/mpga'])
             ->singleFile();
 
