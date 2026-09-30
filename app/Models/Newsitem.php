@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
 use Override;
@@ -80,7 +79,7 @@ class Newsitem extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('default')
-            ->useDisk(App::environment('local') ? 'public' : 'stack')
+            ->useDisk('garage-public')
             ->storeConversionsOnDisk('garage-public')
             ->singleFile();
     }

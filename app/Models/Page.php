@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\App;
 use Override;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
@@ -68,11 +67,11 @@ class Page extends Model implements HasMedia
     {
         $this->addMediaCollection('files')
             ->acceptsMimeTypes(['application/pdf'])
-            ->useDisk(App::environment('local') ? 'local' : 'stack');
+            ->useDisk('garage');
 
         $this->addMediaCollection('images')
             ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/jpg', 'image/webp'])
-            ->useDisk(App::environment('local') ? 'local' : 'stack')
+            ->useDisk('garage-public')
             ->storeConversionsOnDisk('garage-public');
     }
 

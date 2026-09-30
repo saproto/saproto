@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as SupportCollection;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Override;
 use Spatie\MediaLibrary\HasMedia;
@@ -94,7 +93,7 @@ class Email extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('default')
-            ->useDisk(App::environment('local') ? 'public' : 'stack');
+            ->useDisk('garage-public');
     }
 
     /**

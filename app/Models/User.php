@@ -30,7 +30,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -256,7 +255,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('profile_picture')
-            ->useDisk(App::environment('local') ? 'public' : 'stack')
+            ->useDisk('garage-public')
             ->storeConversionsOnDisk('garage-public')
             ->useFallbackUrl(asset('images/default-avatars/other.png'))
             ->singleFile();

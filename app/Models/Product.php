@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Date;
 use Override;
 use Spatie\Image\Enums\Fit;
@@ -88,7 +87,7 @@ class Product extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('default')
-            ->useDisk(App::environment('local') ? 'local' : 'stack')
+            ->useDisk('garage-public')
             ->storeConversionsOnDisk('garage-public')
             ->singleFile();
     }

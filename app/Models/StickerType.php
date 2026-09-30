@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\App;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -29,7 +28,7 @@ class StickerType extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('default')
-            ->useDisk(App::environment('local') ? 'local' : 'stack')
+            ->useDisk('garage-public')
             ->storeConversionsOnDisk('garage-public')
             ->singleFile();
     }

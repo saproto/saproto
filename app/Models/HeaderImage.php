@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Override;
 use Spatie\Image\Enums\Fit;
@@ -59,7 +58,7 @@ class HeaderImage extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('default')
-            ->useDisk(App::environment('local') ? 'local' : 'stack')
+            ->useDisk('garage-public')
             ->storeConversionsOnDisk('garage-public')
             ->singleFile();
     }
