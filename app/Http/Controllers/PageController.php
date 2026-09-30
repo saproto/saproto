@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use League\CommonMark\Exception\CommonMarkException;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
@@ -23,7 +24,6 @@ class PageController extends Controller
      */
     protected array $reservedSlugs = ['add', 'edit', 'delete'];
 
-    /** @return View */
     public function index(): \Illuminate\Contracts\View\View|Factory
     {
         $pages = Page::query()->orderBy('created_at', 'desc')->paginate(20);
@@ -31,7 +31,6 @@ class PageController extends Controller
         return view('pages.list', ['pages' => $pages]);
     }
 
-    /** @return View */
     public function create(): \Illuminate\Contracts\View\View|Factory
     {
         return view('pages.edit', ['item' => null, 'new' => true]);
@@ -68,7 +67,7 @@ class PageController extends Controller
     }
 
     /**
-     * @return View
+     * @throws CommonMarkException
      */
     public function show(string $slug): \Illuminate\Contracts\View\View|Factory
     {
@@ -81,9 +80,6 @@ class PageController extends Controller
         return view('pages.show', ['page' => $page, 'parsedContent' => Markdown::convert($page->content)]);
     }
 
-    /**
-     * @return View
-     */
     public function edit(int $id): \Illuminate\Contracts\View\View|Factory
     {
         $page = Page::query()->findOrFail($id);

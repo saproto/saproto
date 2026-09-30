@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Jobs\MoveMedia;
-use App\Models\Member;
+use App\Models\Event;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
@@ -18,9 +18,9 @@ class MoveMediaToGarage extends Command
      */
     public function handle(): void
     {
-        $disk = 'public';
-        $model = Member::class;
-        $collection = 'omnomcom_sound';
+        $disk = 'stack';
+        $model = Event::class;
+        $collection = 'header';
 
         $query = Media::query()->where('disk', $disk)->where('model_type', $model)->with('model', function ($q) {
             $q->withoutGlobalScopes();

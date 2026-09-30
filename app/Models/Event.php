@@ -22,7 +22,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as SupportCollection;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Str;
@@ -165,7 +164,7 @@ class Event extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('header')
-            ->useDisk(App::environment('local') ? 'public' : 'stack')
+            ->useDisk('garage-public')
             ->storeConversionsOnDisk('garage-public')
             ->singleFile();
     }
