@@ -152,6 +152,7 @@ jobs:
 
       - name: Install MariaDB client
         run: |
+          sudo apt-get update
           sudo apt-get install -y mariadb-client
 
       - name: 🐘 Run Pest tests
