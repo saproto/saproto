@@ -1,5 +1,6 @@
 import '../css/app.css'
 
+import { OpenPanel } from '@openpanel/web'
 import { createApp, h, DefineComponent } from 'vue'
 import { createInertiaApp } from '@inertiajs/vue3'
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
@@ -19,6 +20,8 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         const sentryDsn = props.initialPage.props.sentry.dsn
         const sentrySampleRate = props.initialPage.props.sentry.sampling_rate
+        const openPanelUrl = props.initialPage.props.openpanel.url
+        const openPanelClientID = props.initialPage.props.openpanel.client_id
 
         const app = createApp({ render: () => h(App, props) })
 
@@ -33,6 +36,14 @@ createInertiaApp({
                 'localhost',
                 /^https:\/\/proto\.utwente\.nl/,
             ],
+        })
+
+        app.config.globalProperties.$op = new OpenPanel({
+            apiUrl: openPanelUrl,
+            clientId: openPanelClientID!,
+            trackScreenViews: true,
+            trackOutgoingLinks: true,
+            trackAttributes: true,
         })
 
         app.use(plugin).mount(el)
