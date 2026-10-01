@@ -36,7 +36,7 @@
         />
 
         <title>
-            @if (! App::environment('production'))
+            @if (! App::environment('production')) 
             [{{ strtoupper(config('app.env')) }}]
             @endif S.A.
             Proto | @yield('page-title', 'Default Page Title')
@@ -69,7 +69,32 @@
 
         <!-- OpenPanel -->
         <script @cspNonce>
-            window.op=window.op||function(){var n=[];return new Proxy(function(){arguments.length&&n.push([].slice.call(arguments))},{get:function(t,r){return"q"===r?n:function(){n.push([r].concat([].slice.call(arguments)))}} ,has:function(t,r){return"q"===r}}) }();
+            window.op =
+                window.op ||
+                (function () {
+                    var n = []
+                    return new Proxy(
+                        function () {
+                            arguments.length && n.push([].slice.call(arguments))
+                        },
+                        {
+                            get: function (t, r) {
+                                return 'q' === r
+                                    ? n
+                                    : function () {
+                                          n.push(
+                                              [r].concat(
+                                                  [].slice.call(arguments)
+                                              )
+                                          )
+                                      }
+                            },
+                            has: function (t, r) {
+                                return 'q' === r
+                            },
+                        }
+                    )
+                })()
             window.op('init', {
                 apiUrl: '{{ Config::string('proto.analytics_url') }}',
                 clientId: '{{ Config::string('proto.analytics_client_id') }}',
@@ -77,9 +102,9 @@
                 trackOutgoingLinks: true,
                 trackAttributes: true,
                 sessionReplay: {
-                  enabled: true,
+                    enabled: true,
                 },
-            });
+            })
         </script>
         <script src="https://openpanel.dev/op1.js" defer async></script>
         <!-- End OpenPanel -->
