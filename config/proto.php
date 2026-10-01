@@ -326,6 +326,7 @@ return [
     */
 
     'analytics_url' => env('ANALYTICS_URL'),
+    'analytics_client_id' => env('ANALYTICS_CLIENT_ID'),
 
     /*
     |--------------------------------------------------------------------------
