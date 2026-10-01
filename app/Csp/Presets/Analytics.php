@@ -13,6 +13,8 @@ class Analytics implements Preset
     {
         $policy->add([Directive::CONNECT, Directive::SCRIPT], [
             Config::string('proto.analytics_url'),
+            'https://openpanel.dev/op1.js',
+            'https://openpanel.dev/op1-replay.js',
         ]);
     }
 }

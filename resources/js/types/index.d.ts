@@ -18,6 +18,10 @@ export type AppPageProps<
         dsn: string | undefined
         sampling_rate: string | undefined
     }
+    openpanel: {
+        url: string | undefined
+        client_id: string | undefined
+    }
     auth: { user: App.Data.AuthUserData }
     menu: { photos: Array<App.Data.PhotoAlbumData> }
 }

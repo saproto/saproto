@@ -67,25 +67,47 @@
 
         @yield('opengraph')
 
-        <!-- Matomo -->
+        <!-- OpenPanel -->
         <script @cspNonce>
-            var _paq = (window._paq = window._paq || [])
-            /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-            _paq.push(['trackPageView'])
-            _paq.push(['enableLinkTracking'])
-            ;(function () {
-                var u = '{{ Config::string('proto.analytics_url') }}/'
-                _paq.push(['setTrackerUrl', u + 'matomo.php'])
-                _paq.push(['setSiteId', '1'])
-                var d = document,
-                    g = d.createElement('script'),
-                    s = d.getElementsByTagName('script')[0]
-                g.async = true
-                g.src = u + 'matomo.js'
-                s.parentNode.insertBefore(g, s)
-            })()
+            window.op =
+                window.op ||
+                (function () {
+                    var n = []
+                    return new Proxy(
+                        function () {
+                            arguments.length && n.push([].slice.call(arguments))
+                        },
+                        {
+                            get: function (t, r) {
+                                return 'q' === r
+                                    ? n
+                                    : function () {
+                                          n.push(
+                                              [r].concat(
+                                                  [].slice.call(arguments)
+                                              )
+                                          )
+                                      }
+                            },
+                            has: function (t, r) {
+                                return 'q' === r
+                            },
+                        }
+                    )
+                })()
+            window.op('init', {
+                apiUrl: '{{ Config::string('proto.analytics_url') }}',
+                clientId: '{{ Config::string('proto.analytics_client_id') }}',
+                trackScreenViews: true,
+                trackOutgoingLinks: true,
+                trackAttributes: true,
+                sessionReplay: {
+                    enabled: true,
+                },
+            })
         </script>
-        <!-- End Matomo Code -->
+        <script src="https://openpanel.dev/op1.js" defer async></script>
+        <!-- End OpenPanel -->
     </head>
 
     <body>
