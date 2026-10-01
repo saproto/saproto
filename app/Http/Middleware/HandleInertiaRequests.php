@@ -43,7 +43,7 @@ class HandleInertiaRequests extends Middleware
                 'dsn' => Config::get('app-proto.sentry-dsn'),
                 'sampling_rate' => Config::get('app-proto.sentry-sample-rate'),
             ],
-            'openpanel' =>[
+            'openpanel' => [
                 'url' => Config::string('proto.analytics_url'),
                 'client_id' => Config::string('proto.analytics_client_id'),
             ],
