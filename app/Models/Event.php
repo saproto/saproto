@@ -196,20 +196,16 @@ class Event extends Model implements HasMedia
 
         return $query
             ->with('media')
-            ->with('activity.helpingCommittees.users', function ($q) use ($userId) {
-                $q->where('users.id', $userId);
-            })
-            ->with('activity', function ($q) use ($userId) {
-                $q
-                    ->with('allUsers', function ($q) use ($userId) {
+            ->when($userId, function ($q) use ($userId) {
+                $q->with('activity.helpingCommittees.users', function ($q) use ($userId) {
+                    $q->where('users.id', $userId);
+                })
+                    ->with('activity.allUsers', function ($q) use ($userId) {
                         $q->where('users.id', $userId);
                     })
-                    ->withCount(['allUsers as users_count' => function ($q) {
-                        $q->where('backup', false);
-                    }]);
-            })
-            ->with('tickets.purchases', function ($q) use ($userId) {
-                $q->where('ticket_purchases.user_id', $userId);
+                    ->with('tickets.purchases', function ($q) use ($userId) {
+                        $q->where('ticket_purchases.user_id', $userId);
+                    });
             });
     }
 
