@@ -47,7 +47,7 @@ use Override;
  * @property-read Collection<int, ActivityParticipation> $participation
  * @property-read int|null $participation_count
  * @property-read Collection<int, User> $users
- * @property-read int|null $users_count
+ * @property-read int $users_count
  *
  * @method static ActivityFactory factory($count = null, $state = [])
  * @method static Builder<static>|Activity newModelQuery()
@@ -112,6 +112,14 @@ class Activity extends Validatable
         return $this->belongsToMany(User::class, 'activities_users')
             ->withPivot('id', 'is_present', 'backup')
             ->withTimestamps();
+    }
+
+    // recounts the unique users on an event to make the fetching of the event_block way faster
+    public function updateUsersCount(): void
+    {
+        $this->update([
+            'users_count' => $this->allUsers()->where('backup', false)->count(),
+        ]);
     }
 
     /**
@@ -192,7 +200,7 @@ class Activity extends Validatable
      */
     public function isFull(): bool
     {
-        return $this->participants != -1 && ($this->users_count ?? $this->users->count()) >= $this->participants;
+        return $this->participants != -1 && $this->users_count >= $this->participants;
     }
 
     /**
@@ -204,7 +212,7 @@ class Activity extends Validatable
             return -1;
         }
 
-        return max(($this->participants - ($this->users_count ?? $this->users->count())), 0);
+        return max(($this->participants - $this->users_count), 0);
     }
 
     /**

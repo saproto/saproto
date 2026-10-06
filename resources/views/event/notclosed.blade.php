@@ -1,3 +1,10 @@
+@php
+    use App\Models\Account;
+    use App\Models\Activity;
+    use Illuminate\Support\Collection;
+    /** @var Collection<int, Activity> $activities */
+@endphp
+
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
@@ -75,7 +82,7 @@
                                             name="account"
                                             class="form-control"
                                         >
-                                            @foreach (\App\Models\Account::orderBy('account_number', 'asc')->get() as $account)
+                                            @foreach (Account::query()->orderBy('account_number', 'asc')->get() as $account)
                                                 <option
                                                     value="{{ $account->id }}"
                                                 >

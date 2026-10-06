@@ -203,10 +203,7 @@ class Event extends Model implements HasMedia
                 $q
                     ->with('allUsers', function ($q) use ($userId) {
                         $q->where('users.id', $userId);
-                    })
-                    ->withCount(['allUsers as users_count' => function ($q) {
-                        $q->where('backup', false);
-                    }]);
+                    });
             })
             ->with('tickets.purchases', function ($q) use ($userId) {
                 $q->where('ticket_purchases.user_id', $userId);

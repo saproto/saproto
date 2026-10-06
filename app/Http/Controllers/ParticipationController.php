@@ -47,6 +47,7 @@ class ParticipationController extends Controller
         event(new UserSignedupEvent($event, Auth::user(), $participation->backup ?? false));
 
         $event->updateUniqueUsersCount();
+        $event->activity->updateUsersCount();
 
         if ($event->activity->redirect_url) {
             return Redirect::to($event->activity->redirect_url);
@@ -72,6 +73,7 @@ class ParticipationController extends Controller
         event(new UserSignedupEvent($event, $user, $participation->backup ?? false));
 
         $event->updateUniqueUsersCount();
+        $event->activity->updateUsersCount();
 
         Session::flash('flash_message', 'You added '.$user->name.' for '.$event->title.'.');
 
@@ -106,6 +108,7 @@ class ParticipationController extends Controller
         static::processBackupQueue($participation->activity);
 
         $participation->activity->event->updateUniqueUsersCount();
+        $event->activity->updateUsersCount();
 
         return back();
     }
@@ -146,6 +149,8 @@ class ParticipationController extends Controller
         event(new UserSignedupEvent($activity->event, $backup_participation->user, backup: false));
 
         $backup_participation->activity->event->updateUniqueUsersCount();
+
+        $backup_participation->activity->updateUsersCount();
 
         Mail::to($backup_participation->user)->queue(new ActivityMovedFromBackup($backup_participation)->onQueue('high'));
     }
