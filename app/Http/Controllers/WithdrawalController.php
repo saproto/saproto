@@ -14,6 +14,7 @@ use App\Models\Product;
 use App\Models\User;
 use App\Models\Withdrawal;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -450,6 +451,7 @@ class WithdrawalController extends Controller
             $q->unpayed();
         })->whereDoesntHave('bank')
             ->with(['orderlines' => function ($q) {
+                /** @var Builder<OrderLine> $q */
                 $q->unpayed()->with('product');
             }])
             ->withTrashed()
