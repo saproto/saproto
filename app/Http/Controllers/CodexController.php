@@ -98,7 +98,7 @@ class CodexController extends Controller
                 $q->where('codex', $codex->id);
             });
         })->with(['songs' => function ($query) use ($codex) {
-            $query->whereHas('codices', function ($query) use ($codex) {
+            $query->whereHas('codices', function (Builder $query) use ($codex) {
                 $query->where('codex_codices.id', $codex->id);
             })->orderBy('title');
         }])->orderBy('id')->get();
@@ -108,7 +108,7 @@ class CodexController extends Controller
                 $q->where('codex_codices.id', $codex->id);
             });
         })->with(['texts' => function ($query) use ($codex) {
-            $query->whereHas('codices', function ($query) use ($codex) {
+            $query->whereHas('codices', function (Builder $query) use ($codex) {
                 $query->where('codex_codices.id', $codex->id);
             });
         }])->orderBy('type')->get();
