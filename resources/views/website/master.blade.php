@@ -101,9 +101,6 @@
                 trackScreenViews: true,
                 trackOutgoingLinks: true,
                 trackAttributes: true,
-                sessionReplay: {
-                    enabled: true,
-                },
             })
         </script>
         <script src="https://openpanel.dev/op1.js" defer async></script>
