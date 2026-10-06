@@ -720,7 +720,6 @@ CREATE TABLE `members` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL,
   `proto_username` varchar(255) DEFAULT NULL,
-  `membership_form_id` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `is_primary_at_another_association` tinyint(1) NOT NULL DEFAULT 0,
@@ -1894,3 +1893,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_22_155746_add_f
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_22_164142_add_foreign_constraint_to_photos',210);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_22_172127_add_foreign_constraint_to_users_mailinglist',211);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_29_001133_remove_file_table',212);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_10_06_114015_remove_membership_form_id_from_members',213);
