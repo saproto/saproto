@@ -28,7 +28,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int $id
  * @property int $user_id
  * @property string $proto_username
- * @property string|null $membership_form_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property bool $is_primary_at_another_association
