@@ -353,9 +353,10 @@ class UserAdminController extends Controller
     public function getSignedMemberForm(int $id): ?Media
     {
         $user = Auth::user();
-        $member = Member::withTrashed()->where('membership_form_id', '=', $id)->first();
+        $member = Member::withTrashed()->findOrFail($id);
 
         abort_if($user->id != $member->user_id && ! $user->can('registermembers'), 403);
+        abort_unless($member->hasMedia('membership_form'), 404);
 
         return $user->member->getFirstMedia('membership_form');
     }
@@ -391,7 +392,7 @@ class UserAdminController extends Controller
     {
         abort_if(! Auth::check() || ! Auth::user()->can('board'), 403);
 
-        $member = Member::query()->where('membership_form_id', '=', $id)->first();
+        $member = Member::withTrashed()->findOrFail($id);
         $user = $member->user;
 
         $member->forceDelete();

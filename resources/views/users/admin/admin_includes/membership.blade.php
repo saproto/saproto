@@ -149,7 +149,7 @@
                                     @if ($user->member->hasMedia('membership_form'))
                                         <a
                                             class="ms-2"
-                                            href="{{ route('memberform::download::signed', ['id' => $user->member->membership_form_id]) }}"
+                                            href="{{ route('memberform::download::signed', ['id' => $user->member->id]) }}"
                                         >
                                             <i class="fas fa-download"></i>
                                         </a>
@@ -203,7 +203,7 @@
                                     @if ($membership->hasMedia('membership_form'))
                                         <td>
                                             <a
-                                                href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}"
+                                                href="{{ route('memberform::download::signed', ['id' => $membership->id]) }}"
                                                 class="text-decoration-none"
                                             >
                                                 <i
@@ -215,7 +215,7 @@
                                                 'components.modals.confirm-modal',
                                                 [
                                                     'action' => route('memberform::delete', [
-                                                        'id' => $membership->membership_form_id,
+                                                        'id' => $membership->id,
                                                     ]),
                                                     'method' => 'POST',
                                                     'classes' => 'text-danger',
@@ -261,7 +261,7 @@
                                     @if ($membership->hasMedia('membership_form'))
                                         <td>
                                             <a
-                                                href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}"
+                                                href="{{ route('memberform::download::signed', ['id' => $membership->id]) }}"
                                                 class="text-decoration-none"
                                             >
                                                 <i
@@ -273,7 +273,7 @@
                                                 'components.modals.confirm-modal',
                                                 [
                                                     'action' => route('memberform::delete', [
-                                                        'id' => $membership->membership_form_id,
+                                                        'id' => $membership->id,
                                                     ]),
                                                     'method' => 'POST',
                                                     'classes' => 'text-danger',

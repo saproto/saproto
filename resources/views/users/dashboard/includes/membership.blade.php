@@ -135,7 +135,7 @@
                                     {{ strtotime($user->member->created_at) > 0 ? date('d-m-Y', strtotime($user->member->created_at)) : 'forever' }}
                                     <br />
                                     <a
-                                        href="{{ route('memberform::download::signed', ['id' => $user->member->membership_form_id]) }}"
+                                        href="{{ route('memberform::download::signed', ['id' => $user->member->id]) }}"
                                         class="badge rounded-pill bg-info"
                                     >
                                         Download membership form
@@ -167,7 +167,7 @@
                                         {{ date('d-m-Y', strtotime($membership->deleted_at)) }}
                                         <br />
                                         <a
-                                            href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}"
+                                            href="{{ route('memberform::download::signed', ['id' => $membership->id]) }}"
                                             class="badge rounded-pill bg-info"
                                         >
                                             Download membership form
@@ -204,7 +204,7 @@
                                         {{ strtotime($membership->created_at) > 0 ? date('d-m-Y', strtotime($membership->created_at)) : 'forever' }}
                                         <br />
                                         <a
-                                            href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}"
+                                            href="{{ route('memberform::download::signed', ['id' => $membership->id]) }}"
                                             class="badge rounded-pill bg-info"
                                         >
                                             Download membership form
