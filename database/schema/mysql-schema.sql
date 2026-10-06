@@ -65,6 +65,7 @@ CREATE TABLE `activities` (
   `no_show_fee` double(8,2) NOT NULL DEFAULT 0.00,
   `participants` int(11) NOT NULL DEFAULT -1,
   `hide_participants` tinyint(1) NOT NULL DEFAULT 0,
+  `users_count` int(11) NOT NULL DEFAULT 0,
   `attendees` int(11) DEFAULT NULL,
   `registration_start` int(11) NOT NULL,
   `registration_end` int(11) NOT NULL,
@@ -1894,3 +1895,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_22_164142_add_f
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_22_172127_add_foreign_constraint_to_users_mailinglist',211);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_29_001133_remove_file_table',212);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_10_06_114015_remove_membership_form_id_from_members',213);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_10_06_142855_add_users_count_to_activities',214);
