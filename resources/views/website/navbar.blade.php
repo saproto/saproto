@@ -695,7 +695,7 @@
                                         class="dropdown-item"
                                     >
                                         <span
-                                            class="fa-brands fa-discord"
+                                            class="fa-regular fa-comment"
                                         ></span>
                                         Discord
                                         <span

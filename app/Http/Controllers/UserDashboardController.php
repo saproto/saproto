@@ -258,7 +258,7 @@ class UserDashboardController extends Controller
                 'unlocked' => Auth::check() && Auth::user()->is_member,
                 'done' => Auth::check() && Auth::user()->discord_id,
                 'heading' => 'Join the Discord server',
-                'icon' => 'fa-brands fa-discord',
+                'icon' => 'fa-regular fa-comment',
                 'text' => 'Join our Discord server to chat with other students, play some games, send memes and more!',
                 'shouldOpenInNewTab' => true,
             ],
