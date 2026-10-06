@@ -1,7 +1,7 @@
 <div class="card mb-3">
     <div class="card-header bg-dark text-white">
         Discord
-        <i class="far fa-brands fa-discord"></i>
+        <i class="far fa-regular fa-comment"></i>
     </div>
 
     <div class="card-body">
