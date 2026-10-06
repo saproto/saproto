@@ -92,13 +92,13 @@
                 <div class="card">
                     <div class="card-header bg-dark text-white">Events</div>
                     <div class="card-body">
-                        @foreach ($events as $counter => $event)
+                        @foreach ($events as $event)
                             @include(
                                 'event.display_includes.event_block',
                                 [
                                     'event' => $event,
                                     'include_year' => true,
-                                    'lazyload' => $counter > 6,
+                                    'lazyload' => $loop->index > 5,
                                 ]
                             )
                         @endforeach

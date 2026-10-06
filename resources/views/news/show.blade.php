@@ -57,12 +57,12 @@
                         Related Events
                     </div>
                     <div class="card-body">
-                        @foreach ($events as $counter => $event)
+                        @foreach ($events as $event)
                             @include(
                                 'event.display_includes.event_block',
                                 [
                                     'event' => $event,
-                                    'lazyload' => $counter > 12,
+                                    'lazyload' => $loop->index > 11,
                                 ]
                             )
                         @endforeach

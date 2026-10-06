@@ -5,9 +5,9 @@
     </div>
     <div class="card-body">
         @if (count($events) > 0)
-            @foreach ($events as $counter => $event)
+            @foreach ($events as $event)
                 @if ($event->mayViewEvent(Auth::user()) && $event->isPublished())
-                    @include('event.display_includes.event_block', ['event' => $event, 'lazyload' => $counter > 4])
+                    @include('event.display_includes.event_block', ['event' => $event, 'lazyload' => $loop->index > 3])
 
                     @php
                         $week = date('W', $event->start);
