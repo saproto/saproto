@@ -35,7 +35,7 @@ return [
 
     'connections' => [
         'mysql' => [
-            'driver' => 'mariadb',
+            'driver' => 'mysql',
             'host' => env('DB_HOST', 'localhost'),
             'port' => env('DB_PORT', 3306),
             'database' => env('DB_DATABASE', 'forge'),
@@ -45,6 +45,9 @@ return [
             'collation' => 'utf8mb4_unicode_520_ci',
             'prefix' => '',
             'strict' => false,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                (PHP_VERSION_ID >= 80500 ? \Pdo\Mysql::ATTR_SSL_CA : \PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
         ],
     ],
 

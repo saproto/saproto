@@ -43,7 +43,7 @@ export default defineConfig({
             assets: ['resources/assets/images/**'],
             refresh: true,
         }),
-        wayfinder({
+        process.env.SENTRY_AUTH_TOKEN && wayfinder({
             formVariants: true,
         }),
         vue({
