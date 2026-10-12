@@ -89,6 +89,7 @@
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.0",
+        "brianium/paratest": "<7.26.1",
         "fakerphp/faker": "^1.13",
         "itsgoingd/clockwork": "^5.1",
         "laravel/tinker": "^v3.0.0",
