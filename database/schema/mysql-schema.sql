@@ -308,7 +308,9 @@ CREATE TABLE `committees_activities` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `committees_activities_activity_id_index` (`activity_id`),
-  KEY `committees_activities_committee_id_index` (`committee_id`)
+  KEY `committees_activities_committee_id_index` (`committee_id`),
+  CONSTRAINT `committees_activities_activity_id_foreign` FOREIGN KEY (`activity_id`) REFERENCES `activities` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `committees_activities_committee_id_foreign` FOREIGN KEY (`committee_id`) REFERENCES `committees` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `committees_users`;
@@ -427,7 +429,9 @@ CREATE TABLE `emails_events` (
   `event_id` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `emails_events_email_id_index` (`email_id`),
-  KEY `emails_events_event_id_index` (`event_id`)
+  KEY `emails_events_event_id_index` (`event_id`),
+  CONSTRAINT `emails_events_email_id_foreign` FOREIGN KEY (`email_id`) REFERENCES `emails` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `emails_events_event_id_foreign` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `emails_lists`;
@@ -439,7 +443,9 @@ CREATE TABLE `emails_lists` (
   `list_id` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `emails_lists_email_id_index` (`email_id`),
-  KEY `emails_lists_list_id_index` (`list_id`)
+  KEY `emails_lists_list_id_index` (`list_id`),
+  CONSTRAINT `emails_lists_email_id_foreign` FOREIGN KEY (`email_id`) REFERENCES `emails` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `emails_lists_list_id_foreign` FOREIGN KEY (`list_id`) REFERENCES `mailinglists` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `emails_withdrawals`;
@@ -1900,3 +1906,5 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_10_06_114015_remov
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_10_06_142855_add_users_count_to_activities',214);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_10_12_235231_add_foreign_constraints_to_addresses',215);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_10_12_235730_add_foreign_constraints_to_bankaccounts',215);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_10_13_001339_add_foreign_constraints_to_committees_activities',216);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_10_13_002702_add_foreign_constraints_to_emails_events_and_email_lists',216);
