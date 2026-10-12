@@ -202,7 +202,8 @@
                         <div class="modal-body">
                             <textarea class="form-control" rows="15" readonly>
                                 {{ Crypt::decrypt($password->note) }}
-                            </textarea>
+                            </textarea
+                            >
                         </div>
                     </div>
                 </div>

@@ -6,7 +6,7 @@
     @if ($message != null)
         {!! $message->message !!}
     @else
-            Nice to see you back!
+        Nice to see you back!
     @endif
 @endsection
 
@@ -169,10 +169,7 @@
                 </p>
             @endif
 
-            <a
-                href="{{ route('news::index') }}"
-                class="btn btn-info btn-block"
-            >
+            <a href="{{ route('news::index') }}" class="btn btn-info btn-block">
                 View older news
             </a>
         </div>

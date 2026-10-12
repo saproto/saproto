@@ -26,12 +26,9 @@
                                     <td class="text-end">
                                         {{ $category->id }}
                                     </td>
+                                    <td>{{ $category->name }}</td>
                                     <td>
-                                        {{ $category->name }}
-                                    </td>
-                                    <td>
-                                        {{ $category->products_count }}
-                                        products
+                                        {{ $category->products_count }} products
                                     </td>
                                     <td>
                                         <a

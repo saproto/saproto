@@ -10,7 +10,7 @@
                     <strong>
                         {{ $instance->committee->name }}
                         @if (Auth::user()->can('board') || Auth::user()->committees->contains($instance->committee))
-                                ({{ $instance->users->count() }}/{{ $instance->amount }})
+                            ({{ $instance->users->count() }}/{{ $instance->amount }})
                         @endif
                     </strong>
 

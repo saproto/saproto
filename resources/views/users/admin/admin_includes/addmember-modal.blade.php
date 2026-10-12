@@ -72,9 +72,9 @@
                         @if (! $user->signed_membership_form)
                             <li class="text-danger">
                                 <strong>
-                                    {{ $user->calling_name }} has not signed
-                                    the membership form digitally, make sure
-                                    they sign it either digitally or physically.
+                                    {{ $user->calling_name }} has not signed the
+                                    membership form digitally, make sure they
+                                    sign it either digitally or physically.
                                 </strong>
                             </li>
                         @endif

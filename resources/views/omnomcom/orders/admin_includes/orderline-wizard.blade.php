@@ -35,8 +35,7 @@
                                 >
                                     @foreach ($members as $member)
                                         <option value="{{ $member->id }}">
-                                            {{ $member->name }}
-                                            (#{{ $member->id }})
+                                            {{ $member->name }} (#{{ $member->id }})
                                         </option>
                                     @endforeach
                                 </select>
@@ -52,8 +51,7 @@
                                             value="{{ $product->id }}"
                                             data-price="{{ $product->price }}"
                                         >
-                                            {{ $product->name }}
-                                            (&euro;{{ $product->price }},
+                                            {{ $product->name }} (&euro;{{ $product->price }},
                                             #{{ $product->id }})
                                         </option>
                                     @endforeach

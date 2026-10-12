@@ -336,9 +336,7 @@
 
             const ctx = document.getElementById('wallstreet-graph-canvas')
 
-            get(
-                `{{ route('api::wallstreet::all_prices', ['id' => $activeDrink->id]) }}`
-            ).then((products) => {
+            get(`{{ route('api::wallstreet::all_prices', ['id' => $activeDrink->id]) }}`).then((products) => {
                 var chart = new Chart(ctx, {
                     type: 'line',
                     options: {
@@ -421,16 +419,16 @@
                                     card.querySelector('#diff').classList.add(
                                         'text-danger'
                                     )
-                                    card.querySelector(
-                                        '#diff'
-                                    ).classList.remove('text-green')
+                                    card.querySelector('#diff').classList.remove(
+                                        'text-green'
+                                    )
                                 } else {
                                     card.querySelector('#diff').classList.add(
                                         'text-green'
                                     )
-                                    card.querySelector(
-                                        '#diff'
-                                    ).classList.remove('text-danger')
+                                    card.querySelector('#diff').classList.remove(
+                                        'text-danger'
+                                    )
                                 }
                             })
                         }

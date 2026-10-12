@@ -150,9 +150,7 @@
         @endif
     </ul>
 
-    <div class="card-body">
-        {!! Markdown::convert($event->description) !!}
-    </div>
+    <div class="card-body">{!! Markdown::convert($event->description) !!}</div>
 </div>
 
 @if ($event->videos->count() || $event->albums->count())

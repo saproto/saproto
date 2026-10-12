@@ -11,9 +11,7 @@
     class="form-group {{ $form_class_name ?? '' }}"
 >
     @isset($label)
-        <label for="datetimepicker-{{ $name }}">
-            {!! $label !!}
-        </label>
+        <label for="datetimepicker-{{ $name }}"> {!! $label !!} </label>
     @endisset
 
     <input

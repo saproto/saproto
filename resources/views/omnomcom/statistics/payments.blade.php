@@ -23,14 +23,12 @@
 
                     <p>
                         <i class="fas fa-fw fa-coins me-2"></i>
-                        Cash payments:
-                        &euro;{{ number_format($total_cash, 2) }}
+                        Cash payments: &euro;{{ number_format($total_cash, 2) }}
                     </p>
 
                     <p>
                         <i class="fas fa-fw fa-credit-card me-2"></i>
-                        Card payments:
-                        &euro;{{ number_format($total_card, 2) }}
+                        Card payments: &euro;{{ number_format($total_card, 2) }}
                     </p>
                 </div>
 

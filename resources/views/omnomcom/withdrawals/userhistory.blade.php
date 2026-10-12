@@ -23,8 +23,7 @@
                     @endif
 
                     <p class="card-text text-center">
-                        Withdrawal total:
-                        &euro;{{ number_format($withdrawal->totalForUser(Auth::user()), 2, '.', ',') }}
+                        Withdrawal total: &euro;{{ number_format($withdrawal->totalForUser(Auth::user()), 2, '.', ',') }}
                     </p>
                 </div>
             </div>

@@ -18,9 +18,7 @@
 
                 <span class="text-muted">
                     <em>
-                        Played
-                        {{ $played_count ?? $video->played_count }}
-                        times.
+                        Played {{ $played_count ?? $video->played_count }} times.
                     </em>
                 </span>
             @endif

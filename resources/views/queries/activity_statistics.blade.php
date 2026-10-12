@@ -78,9 +78,7 @@
                         <tbody>
                             @foreach ($eventCategories as $category)
                                 <tr>
-                                    <td>
-                                        {{ $category->name }}
-                                    </td>
+                                    <td>{{ $category->name }}</td>
                                     {{-- nr events --}}
                                     <td>{{ $category->events_count }}</td>
                                     {{-- % events --}}
@@ -151,11 +149,7 @@
                 let prices = []
                 product.forEach((item) => {
                     date = new Date(item.start * 1000)
-                    date = date.setFullYear(
-                        date.getFullYear(),
-                        date.getMonth(),
-                        1
-                    )
+                    date = date.setFullYear(date.getFullYear(), date.getMonth(), 1)
                     prices.push({
                         x: date,
                         y: item.total,

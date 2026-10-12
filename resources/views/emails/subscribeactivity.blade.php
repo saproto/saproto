@@ -13,9 +13,9 @@
                 >
                     {{ $activity['title'] }}
                 </a>
-                as part of the {{ $activity['help'] }}. If you believe this is
-                a mistake, please let us know or head over to the website and
-                sign out of the activity.
+                as part of the {{ $activity['help'] }}. If you believe this is a
+                mistake, please let us know or head over to the website and sign
+                out of the activity.
             </p>
         @else
             <p>

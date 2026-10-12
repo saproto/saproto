@@ -81,10 +81,10 @@
                                                     Helper
                                                 </span>
                                             @else
-                                                    Participant
+                                                Participant
                                             @endif
                                         @else
-                                                Ticket
+                                            Ticket
                                         @endif
                                     </td>
 
@@ -110,7 +110,9 @@
                                         @endif
                                     </td>
 
-                                    <td>{{ $user->is_member ? '✅' : '❌' }}</td>
+                                    <td>
+                                        {{ $user->is_member ? '✅' : '❌' }}
+                                    </td>
 
                                     @if ($event->shouldShowDietInfo())
                                         <td>
@@ -143,8 +145,7 @@
                 ).then((data) => {
                     el.classList.toggle('bg-success')
                     el.classList.toggle('bg-danger')
-                    el.innerHTML =
-                        el.innerHTML === 'Present' ? 'Absent' : 'Present'
+                    el.innerHTML = el.innerHTML === 'Present' ? 'Absent' : 'Present'
                     present.innerHTML = data
                 })
             }
