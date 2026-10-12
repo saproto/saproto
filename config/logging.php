@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('LOG_CHANNEL', 'daily'),
+    'default' => env('LOG_CHANNEL', 'stack'),
 
     /*
     |--------------------------------------------------------------------------
@@ -35,7 +35,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => ['daily', 'discord'],
         ],
 
         'single' => [
@@ -67,6 +67,19 @@ return [
         'errorlog' => [
             'driver' => 'errorlog',
             'level' => 'debug',
+        ],
+
+        'discord' => [
+            'driver' => 'monolog',
+            'level' => env('LOG_LEVEL', 'critical'),
+            'handler' => \Monolog\Handler\SlackWebhookHandler::class,
+            'handler_with' => [
+                'webhookUrl' => env('LOG_DISCORD_WEBHOOK_URL') . '/slack',
+                'username' => env('APP_NAME', 'Laravel') . ' ' . env('APP_ENV', 'production'),
+                'includeContextAndExtra' => true,
+                'useAttachment' => true,
+                'useShortAttachment' => true,
+            ],
         ],
     ],
 
