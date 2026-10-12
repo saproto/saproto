@@ -2,24 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\QRAuthApproved;
 use App\Models\QrAuthRequest;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Str;
-use Illuminate\View\View;
 use Milon\Barcode\DNS2D;
 
 class QrAuthController extends Controller
 {
     /**
-     * @param  string  $code
      * @return Response
      */
-    public function showCode($code)
+    public function showCode(string $code)
     {
         $qrAuthRequest = QrAuthRequest::query()->where('qr_token', '=', $code)->first();
 
@@ -41,11 +40,7 @@ class QrAuthController extends Controller
         return $qrAuthRequest;
     }
 
-    /**
-     * @param  string  $code
-     * @return View
-     */
-    public function showDialog($code): \Illuminate\Contracts\View\View|Factory
+    public function showDialog(string $code): View|Factory
     {
         $qrAuthRequest = QrAuthRequest::query()->where('qr_token', '=', $code)->first();
 
@@ -54,11 +49,7 @@ class QrAuthController extends Controller
         return view('auth.qr.dialog', ['description' => $qrAuthRequest->description, 'code' => $qrAuthRequest->qr_token]);
     }
 
-    /**
-     * @param  string  $code
-     * @return View
-     */
-    public function approve($code): \Illuminate\Contracts\View\View|Factory
+    public function approve(string $code): View|Factory
     {
         $qrAuthRequest = QrAuthRequest::query()->where('qr_token', '=', $code)->first();
 
@@ -68,39 +59,10 @@ class QrAuthController extends Controller
         $qrAuthRequest->user_id = Auth::id();
 
         $qrAuthRequest->save();
+
+        event(new QRAuthApproved($qrAuthRequest->auth_token));
 
         return view('auth.qr.done');
-    }
-
-    /**
-     * @param  string  $code
-     * @return JsonResponse
-     */
-    public function apiApprove($code)
-    {
-        $qrAuthRequest = QrAuthRequest::query()->where('qr_token', '=', $code)->first();
-
-        abort_if($qrAuthRequest === null, 403);
-
-        $qrAuthRequest->approved_at = Date::now();
-        $qrAuthRequest->user_id = Auth::id();
-
-        $qrAuthRequest->save();
-
-        return new JsonResponse(['status' => 'ok'], 200);
-    }
-
-    /**
-     * @param  string  $code
-     * @return JsonResponse
-     */
-    public function apiInfo($code)
-    {
-        $qrAuthRequest = QrAuthRequest::query()->where('qr_token', '=', $code)->first();
-
-        abort_if($qrAuthRequest === null, 404);
-
-        return new JsonResponse(['description' => $qrAuthRequest->description], 200);
     }
 
     public function isApproved(Request $request): string
