@@ -1,5 +1,6 @@
 <?php
 
+use Monolog\Handler\SlackWebhookHandler;
 use Monolog\Handler\StreamHandler;
 
 return [
@@ -72,10 +73,10 @@ return [
         'discord' => [
             'driver' => 'monolog',
             'level' => env('LOG_LEVEL', 'critical'),
-            'handler' => \Monolog\Handler\SlackWebhookHandler::class,
+            'handler' => SlackWebhookHandler::class,
             'handler_with' => [
-                'webhookUrl' => env('LOG_DISCORD_WEBHOOK_URL') . '/slack',
-                'username' => env('APP_NAME', 'Laravel') . ' ' . env('APP_ENV', 'production'),
+                'webhookUrl' => env('LOG_DISCORD_WEBHOOK_URL').'/slack',
+                'username' => env('APP_NAME', 'Laravel').' '.env('APP_ENV', 'production'),
                 'includeContextAndExtra' => true,
                 'useAttachment' => true,
                 'useShortAttachment' => true,
