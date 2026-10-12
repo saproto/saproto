@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Exception;
 use Illuminate\Database\Eloquent\Attributes\Guarded;
 use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -44,12 +43,7 @@ class QrAuthRequest extends Model
         return $this->approved_at !== null;
     }
 
-    /**
-     * @return false|User
-     *
-     * @throws Exception
-     */
-    public function authUser()
+    public function authUser(): false|User
     {
         if ($this->approved_at) {
             /** @var User $user */
