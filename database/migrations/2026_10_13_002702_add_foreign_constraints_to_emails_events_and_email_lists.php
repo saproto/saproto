@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -30,7 +31,7 @@ return new class extends Migration
                     ->whereColumn('emails.id', 'emails_lists.email_id');
             })->delete();
 
-        // email_lists
+        //email_lists
         Schema::table('emails_lists', function (Blueprint $table) {
             $table->foreign('email_id')->references('id')->on('emails')->onDelete('cascade');
             $table->foreign('list_id')->references('id')->on('mailinglists')->onDelete('cascade');
