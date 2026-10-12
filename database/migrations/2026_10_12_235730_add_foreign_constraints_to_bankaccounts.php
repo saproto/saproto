@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Bank::whereDoesntHave('user')->delete();
+        Bank::query()->whereDoesntHave('user')->delete();
         Schema::table('bankaccounts', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
