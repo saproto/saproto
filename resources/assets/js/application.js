@@ -5,7 +5,21 @@ Sentry.init({
     dsn: config.sentry_dsn,
     integrations: [Sentry.browserTracingIntegration()],
     tracesSampleRate: parseFloat(config.sentry_sample_rate),
-    sendDefaultPii: false,
+    dataCollection: {
+        userInfo: false,
+        cookies: false,
+        httpHeaders: {
+            request: { deny: ['forwarded', '-ip', 'remote-', 'via', '-user'] },
+            response: { deny: ['forwarded', '-ip', 'remote-', 'via', '-user'] },
+        },
+        httpBodies: [],
+        urlQueryParams: {
+            deny: ['forwarded', '-ip', 'remote-', 'via', '-user'],
+        },
+        genAI: { inputs: false, outputs: false },
+        databaseQueryData: false,
+        graphQL: { document: false, variables: false },
+    },
     // Set `tracePropagationTargets` to control for which URLs trace propagation should be enabled
     tracePropagationTargets: ['localhost', /^https:\/\/proto\.utwente\.nl/],
 })
