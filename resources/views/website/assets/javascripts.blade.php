@@ -14,8 +14,7 @@
         sentry_dsn: '{{ Config::get('app-proto.sentry-dsn') }}',
         sentry_sample_rate: '{{ Config::get('app-proto.sentry-sample-rate') }}',
         theme: '{{ Auth::check() && Auth::user()->theme !== null ? Config::array('proto.themes')[Auth::user()->theme] : 'light' }}',
-        @isset($companies) company_count:
-            {{ count($companies) }} @endisset,
+        company_count: {{ isset($companies)?count($companies):0 }},
     }
 
     window.modals = {}
