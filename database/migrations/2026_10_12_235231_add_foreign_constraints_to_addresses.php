@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Address::whereDoesntHave('user', function ($q){
+        Address::query()->whereDoesntHave('user', function ($q) {
             $q->withTrashed();
         })->delete();
 

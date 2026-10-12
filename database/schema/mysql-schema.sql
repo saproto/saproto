@@ -129,7 +129,8 @@ CREATE TABLE `addresses` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
-  KEY `addresses_user_id_index` (`user_id`)
+  KEY `addresses_user_id_index` (`user_id`),
+  CONSTRAINT `addresses_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `alias`;
@@ -182,7 +183,8 @@ CREATE TABLE `bankaccounts` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
-  KEY `bankaccounts_user_id_index` (`user_id`)
+  KEY `bankaccounts_user_id_index` (`user_id`),
+  CONSTRAINT `bankaccounts_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `codex_category`;
@@ -1896,3 +1898,5 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_22_172127_add_f
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_29_001133_remove_file_table',212);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_10_06_114015_remove_membership_form_id_from_members',213);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_10_06_142855_add_users_count_to_activities',214);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_10_12_235231_add_foreign_constraints_to_addresses',215);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_10_12_235730_add_foreign_constraints_to_bankaccounts',215);
