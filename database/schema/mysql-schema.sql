@@ -553,7 +553,7 @@ DROP TABLE IF EXISTS `feedback`;
 CREATE TABLE `feedback` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL,
-  `feedback_category_id` bigint(20) NOT NULL DEFAULT 1,
+  `feedback_category_id` bigint(20) unsigned NOT NULL,
   `feedback` mediumtext NOT NULL,
   `reviewed` tinyint(1) NOT NULL DEFAULT 0,
   `accepted` tinyint(1) DEFAULT NULL,
@@ -562,7 +562,10 @@ CREATE TABLE `feedback` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `feedback_user_id_index` (`user_id`)
+  KEY `feedback_user_id_index` (`user_id`),
+  KEY `feedback_feedback_category_id_foreign` (`feedback_category_id`),
+  CONSTRAINT `feedback_feedback_category_id_foreign` FOREIGN KEY (`feedback_category_id`) REFERENCES `feedback_categories` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `feedback_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `feedback_categories`;
@@ -579,7 +582,8 @@ CREATE TABLE `feedback_categories` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `feedback_categories_reviewer_id_index` (`reviewer_id`)
+  KEY `feedback_categories_reviewer_id_index` (`reviewer_id`),
+  CONSTRAINT `feedback_categories_reviewer_id_foreign` FOREIGN KEY (`reviewer_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `feedback_votes`;
@@ -594,7 +598,9 @@ CREATE TABLE `feedback_votes` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `feedback_votes_user_id_index` (`user_id`),
-  KEY `feedback_votes_feedback_id_index` (`feedback_id`)
+  KEY `feedback_votes_feedback_id_index` (`feedback_id`),
+  CONSTRAINT `feedback_votes_feedback_id_foreign` FOREIGN KEY (`feedback_id`) REFERENCES `feedback` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `feedback_votes_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `hashmap`;
@@ -1908,3 +1914,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_10_12_235231_add_f
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_10_12_235730_add_foreign_constraints_to_bankaccounts',215);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_10_13_001339_add_foreign_constraints_to_committees_activities',216);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_10_13_002702_add_foreign_constraints_to_emails_events_and_email_lists',216);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_10_13_010434_add_foreign_constraints_to_feedback',217);
