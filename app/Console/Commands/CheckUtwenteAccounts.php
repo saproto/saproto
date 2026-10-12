@@ -10,6 +10,7 @@ use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 use Sentry\Severity;
+
 use function Sentry\captureMessage;
 
 #[Description('Verifies all currently linked UT accounts for being valid, and check studies.')]
@@ -31,7 +32,7 @@ class CheckUtwenteAccounts extends Command
         $remoteusers = LdapController::searchUtwente("(&(extensionattribute6=actief)(|{$userSns}))");
         if (property_exists($remoteusers, 'error')) {
 
-            Mail::queue(new UtwenteCleanup(["Something went wrong with the LDAP Server! Contact the HYT ASAP"])->onQueue('high'));
+            Mail::queue(new UtwenteCleanup(['Something went wrong with the LDAP Server! Contact the HYT ASAP'])->onQueue('high'));
 
             captureMessage('Could not access the LDAP to sync the UT accounts!', Severity::fatal());
             $this->error($remoteusers->error);
