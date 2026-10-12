@@ -453,21 +453,40 @@
                             '" width="200px" height="200px"><br><br>or go to<br><strong>' +
                             qrLink +
                             '</strong>'
+
                         authToken = data.auth_token
-                        const qrAuthInterval = setInterval(() => {
-                            if (actionStatus == null)
-                                return clearInterval(qrAuthInterval)
-                            get('{{ route('qr::approved') }}', {
-                                code: authToken,
-                            }).then((approved) => {
-                                if (approved) {
+
+                        const currentState =
+                            window.Echo.connector.pusher.connection.state
+                        if (currentState === 'connected') {
+                            Echo.channel(`QRAuth.${authToken}`).listen(
+                                '.App\\Events\\QRAuthApproved',
+                                (_) => {
                                     element.innerHTML =
                                         'Successfully authenticated :)'
-                                    clearInterval(qrAuthInterval)
+                                    Echo.leave(`QRAuth.${data.qr_token}`)
                                     onComplete(authToken, 'qr')
                                 }
-                            })
-                        }, 1000)
+                            )
+                        } else {
+                            console.error(
+                                `Pusher connection state is ${currentState}. Falling back to polling for QR auth approval.`
+                            )
+                            const qrAuthInterval = setInterval(() => {
+                                if (actionStatus == null)
+                                    return clearInterval(qrAuthInterval)
+                                get('{{ route('qr::approved') }}', {
+                                    code: authToken,
+                                }).then((approved) => {
+                                    if (approved) {
+                                        element.innerHTML =
+                                            'Successfully authenticated :)'
+                                        clearInterval(qrAuthInterval)
+                                        onComplete(authToken, 'qr')
+                                    }
+                                })
+                            }, 1000)
+                        }
                     })
                     .catch((err) => {
                         element.innerHTML = `Error retrieving QR code.\n\n${err.status}: ${err.statusText}`

@@ -7,7 +7,6 @@ use App\Http\Controllers\ExportController;
 use App\Http\Controllers\NarrowcastingController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\OmNomController;
-use App\Http\Controllers\QrAuthController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SmartXpScreenController;
 use App\Http\Controllers\TicketController;
@@ -25,10 +24,6 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], static function
     /* Routes related to the User API */
     Route::group(['prefix' => 'user', 'as' => 'user::'], static function () {
         Route::get('info', fn () => Auth::user())->name('info')->middleware('auth:api');
-        Route::group(['middleware' => ['auth:api'], 'as' => 'qr::'], static function () {
-            Route::get('qr_auth_approve/{code}', [QrAuthController::class, 'apiApprove'])->name('approve');
-            Route::get('qr_auth_info/{code}', [QrAuthController::class, 'apiInfo'])->name('info');
-        });
         Route::group(['middleware' => ['web']], static function () {
             Route::get('gdpr_export', [ApiController::class, 'gdprExport'])->name('gdpr_export')->middleware(['auth']);
             Route::get('dev_export/{table}/{personal_key}', [ExportController::class, 'export'])->name('dev_export');
