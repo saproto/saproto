@@ -20,7 +20,7 @@
         />
 
         <title>
-            @if (! App::environment('production')) 
+            @if (! App::environment('production'))
             [{{ strtoupper(config('app.env')) }}]
             @endif S.A.
             Proto | @yield('page-title', 'Default Page Title')
@@ -131,7 +131,7 @@
                     />
                 @else
                     <img
-                        src="{{ asset('images/logo/regular.png') }}"
+                        src="{{ asset('images/logo/regular.webp') }}"
                         style="width: 30%; max-width: 200px"
                         alt="ProtoLogo"
                     />
