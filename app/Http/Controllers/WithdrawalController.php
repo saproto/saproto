@@ -146,8 +146,8 @@ class WithdrawalController extends Controller
 
         $request->validate([
             'date' => ['required', 'date'],
-            'max' => ['required', 'numeric', 'min:1'],
         ]);
+
         if ($withdrawal->closed) {
             Session::flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
 
