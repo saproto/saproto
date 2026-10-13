@@ -22,7 +22,7 @@
         />
         <meta
             property="og:image"
-            content="{{ asset('images/subsites/smartxp.jpg') }}"
+            content="{{ asset('images/subsites/smartxp.webp') }}"
         />
 
         <link

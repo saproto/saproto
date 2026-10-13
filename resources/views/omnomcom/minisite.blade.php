@@ -27,7 +27,7 @@
         <meta property="og:url" content="https://www.omnomcom.nl/" />
         <meta
             property="og:image"
-            content="{{ asset('images/subsites/omnomcom.jpg') }}"
+            content="{{ asset('images/subsites/omnomcom.webp') }}"
         />
 
         <link

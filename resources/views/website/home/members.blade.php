@@ -1,4 +1,8 @@
-@php use App\Models\Newsitem;use Illuminate\Support\Collection; @endphp
+@php
+    use App\Models\Newsitem;
+    use Illuminate\Support\Collection;
+    /** @var Collection<int, Newsitem> $newsitems */
+@endphp
 @extends('website.home.shared')
 
 @section('greeting')
@@ -133,9 +137,6 @@
             News
         </div>
         <div class="card-body">
-            @php
-                /** @var Collection<int, Newsitem> $newsitems */
-            @endphp
             @if (count($newsitems) > 0)
                 @foreach ($newsitems as $index => $newsitem)
                     <div style="max-height: 300px">
