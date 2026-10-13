@@ -36,7 +36,7 @@
         />
 
         <title>
-            @if (! App::environment('production'))
+            @if (! App::environment('production')) 
             [{{ strtoupper(config('app.env')) }}]
             @endif S.A.
             Proto | @yield('page-title', 'Default Page Title')
