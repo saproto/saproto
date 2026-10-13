@@ -82,6 +82,7 @@ jobs:
           filename: ${{ env.BUILD_ARTIFACT_STAGING_DIR }}build.zip
           path: ${{ env.BUILD_SOURCE_DIR }}
           exclusions: 'build/* storage/* *.git* .editorconfig /*node_modules/* /tests/*'
+          custom: '-qdgds 10m'
 
       - name: ➗ Calculate checksum
         run: openssl md5 ${{ env.BUILD_ARTIFACT_STAGING_DIR }}build.zip | cut -d" " -f2 > ${{ env.BUILD_ARTIFACT_STAGING_DIR }}checksum.txt
