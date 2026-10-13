@@ -36,7 +36,7 @@
         />
 
         <title>
-            @if (! App::environment('production')) 
+            @if (! App::environment('production'))
             [{{ strtoupper(config('app.env')) }}]
             @endif S.A.
             Proto | @yield('page-title', 'Default Page Title')
@@ -61,7 +61,7 @@
             />
             <meta
                 property="og:image"
-                content="@yield('og-image', asset('images/logo/og-image.png'))"
+                content="@yield('og-image', asset('images/logo/og-image.webp'))"
             />
         @endsection()
 

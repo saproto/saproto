@@ -75,7 +75,7 @@
                             <div
                                 class="product-image-inner"
                                 style="
-                                    background-image: url('{{ asset('images/omnomcom/dice.png') }}');
+                                    background-image: url('{{ asset('images/omnomcom/dice.webp') }}');
                                 "
                             ></div>
                         </div>

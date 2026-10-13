@@ -1,3 +1,4 @@
+@php use App\Models\Newsitem;use Illuminate\Support\Collection; @endphp
 @extends('website.home.shared')
 
 @section('greeting')
@@ -6,7 +7,7 @@
     @if ($message != null)
         {!! $message->message !!}
     @else
-            Nice to see you back!
+        Nice to see you back!
     @endif
 @endsection
 
@@ -132,6 +133,9 @@
             News
         </div>
         <div class="card-body">
+            @php
+                /** @var Collection<int, Newsitem> $newsitems */
+            @endphp
             @if (count($newsitems) > 0)
                 @foreach ($newsitems as $index => $newsitem)
                     <div style="max-height: 300px">
@@ -143,7 +147,7 @@
                                 'img' => $newsitem->hasMedia()
                                     ? $newsitem->getImageUrl()
                                     : ($newsitem->is_weekly
-                                        ? url('images/weekly-cover.png')
+                                        ? url('images/weekly-cover.webp')
                                         : null),
                                 'html' => sprintf(
                                     '<strong>%s</strong><br><em>Published %s</em>',

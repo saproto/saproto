@@ -29,7 +29,7 @@
                                 'img' => $newsitem->hasMedia()
                                     ? $newsitem->getImageUrl()
                                     : ($newsitem->is_weekly
-                                        ? url('images/weekly-cover.png')
+                                        ? url('images/weekly-cover.webp')
                                         : null),
                                 'html' => sprintf(
                                     '<div class="w-100">%s %s %s</div>',

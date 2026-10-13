@@ -54,10 +54,10 @@
                     The first date is inclusive and should be the day when the monster should be appearing.
                     The second date is exclusive and should thus be the first day the monster should no longer be there.
                  */
-                @php($bg_image = 'images/omnomcom/cookiemonster.png')
+                @php($bg_image = 'images/omnomcom/cookiemonster.webp')
                 @foreach(Config::array('omnomcom.cookiemonsters') as $cookiemonster)
                     @if(date('U') > strtotime($cookiemonster->start) && date('U') < strtotime($cookiemonster->end))
-                       @php($bg_image = "images/omnomcom/cookiemonster_seasonal/$cookiemonster->name.png")
+                       @php($bg_image = "images/omnomcom/cookiemonster_seasonal/$cookiemonster->name.webp")
                        @break
                     @endif
                 @endforeach
