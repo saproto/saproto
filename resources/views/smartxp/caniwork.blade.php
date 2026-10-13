@@ -175,7 +175,7 @@
                 <div class="col-md-12 mt-3" style="text-align: center">
                     <a href="https://www.proto.utwente.nl/">
                         <img
-                            src="{{ asset('images/logo/inverse.png') }}"
+                            src="{{ asset('images/logo/inverse.webp') }}"
                             style="margin: 40px"
                             height="130px"
                             width="234.7px"

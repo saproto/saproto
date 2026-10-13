@@ -45,7 +45,7 @@
                 href="//{{ config('app-proto.primary-domain') }}{{ route('homepage', [], false) }}"
             >
                 <img
-                    src="{{ asset('images/logo/inverse.png') }}"
+                    src="{{ asset('images/logo/inverse.webp') }}"
                     alt="Proto logo"
                     height="130px"
                     width="234.7px"

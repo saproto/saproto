@@ -3,7 +3,7 @@ window.broto = () => {
     document.querySelectorAll('img').forEach((el) => {
         if (el.classList.contains('rounded-circle'))
             el.src = '/images/default-avatars/cookiemonster.jpg'
-        else if (el.src.includes('images/logo/inverse.png'))
+        else if (el.src.includes('images/logo/inverse.webp'))
             el.src = '/images/logo/broto-inverse.png'
         else if (el.src.includes('images/logo/regular.png'))
             el.src = '/images/logo/broto-regular.png'
