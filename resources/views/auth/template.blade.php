@@ -23,7 +23,7 @@
                 </div>
 
                 <img
-                    src="{{ asset('images/logo/regular.png') }}"
+                    src="{{ asset('images/logo/regular.webp') }}"
                     width="60%"
                     class="mt-5 mb-3"
                     alt="Proto logo"

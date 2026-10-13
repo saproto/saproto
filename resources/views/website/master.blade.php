@@ -61,7 +61,7 @@
             />
             <meta
                 property="og:image"
-                content="@yield('og-image', asset('images/logo/og-image.png'))"
+                content="@yield('og-image', asset('images/logo/og-image.webp'))"
             />
         @endsection()
 
