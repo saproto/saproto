@@ -415,14 +415,12 @@
 
                         authToken = data.auth_token
 
-                        const currentState =
-                            window.Echo.connector.pusher.connection.state
+                        const currentState = window.Echo.connector.pusher.connection.state
                         if (currentState === 'connected') {
                             Echo.channel(`QRAuth.${authToken}`).listen(
                                 '.App\\Events\\QRAuthApproved',
                                 (_) => {
-                                    element.innerHTML =
-                                        'Successfully authenticated :)'
+                                    element.innerHTML = 'Successfully authenticated :)'
                                     Echo.leave(`QRAuth.${data.qr_token}`)
                                     onComplete(authToken, 'qr')
                                 }
@@ -438,8 +436,7 @@
                                     code: authToken,
                                 }).then((approved) => {
                                     if (approved) {
-                                        element.innerHTML =
-                                            'Successfully authenticated :)'
+                                        element.innerHTML = 'Successfully authenticated :)'
                                         clearInterval(qrAuthInterval)
                                         onComplete(authToken, 'qr')
                                     }
