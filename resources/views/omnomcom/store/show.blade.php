@@ -54,10 +54,10 @@
                     The first date is inclusive and should be the day when the monster should be appearing.
                     The second date is exclusive and should thus be the first day the monster should no longer be there.
                  */
-                @php($bg_image = 'images/omnomcom/cookiemonster.png')
+                @php($bg_image = 'images/omnomcom/cookiemonster.webp')
                 @foreach(Config::array('omnomcom.cookiemonsters') as $cookiemonster)
                     @if(date('U') > strtotime($cookiemonster->start) && date('U') < strtotime($cookiemonster->end))
-                       @php($bg_image = "images/omnomcom/cookiemonster_seasonal/$cookiemonster->name.png")
+                       @php($bg_image = "images/omnomcom/cookiemonster_seasonal/$cookiemonster->name.webp")
                        @break
                     @endif
                 @endforeach
@@ -412,19 +412,40 @@
                             '" width="200px" height="200px"><br><br>or go to<br><strong>' +
                             qrLink +
                             '</strong>'
+
                         authToken = data.auth_token
-                        const qrAuthInterval = setInterval(() => {
-                            if (actionStatus == null) return clearInterval(qrAuthInterval)
-                            get('{{ route('qr::approved') }}', {
-                                code: authToken,
-                            }).then((approved) => {
-                                if (approved) {
-                                    element.innerHTML = 'Successfully authenticated :)'
-                                    clearInterval(qrAuthInterval)
+
+                        const currentState =
+                            window.Echo.connector.pusher.connection.state
+                        if (currentState === 'connected') {
+                            Echo.channel(`QRAuth.${authToken}`).listen(
+                                '.App\\Events\\QRAuthApproved',
+                                (_) => {
+                                    element.innerHTML =
+                                        'Successfully authenticated :)'
+                                    Echo.leave(`QRAuth.${data.qr_token}`)
                                     onComplete(authToken, 'qr')
                                 }
-                            })
-                        }, 1000)
+                            )
+                        } else {
+                            console.error(
+                                `Pusher connection state is ${currentState}. Falling back to polling for QR auth approval.`
+                            )
+                            const qrAuthInterval = setInterval(() => {
+                                if (actionStatus == null)
+                                    return clearInterval(qrAuthInterval)
+                                get('{{ route('qr::approved') }}', {
+                                    code: authToken,
+                                }).then((approved) => {
+                                    if (approved) {
+                                        element.innerHTML =
+                                            'Successfully authenticated :)'
+                                        clearInterval(qrAuthInterval)
+                                        onComplete(authToken, 'qr')
+                                    }
+                                })
+                            }, 1000)
+                        }
                     })
                     .catch((err) => {
                         element.innerHTML = `Error retrieving QR code.\n\n${err.status}: ${err.statusText}`

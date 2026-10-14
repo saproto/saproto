@@ -301,9 +301,6 @@ class OmNomController extends Controller
         return json_encode($result);
     }
 
-    /**
-     * @return View
-     */
     public function generateOrder(Request $request): \Illuminate\Contracts\View\View|Factory
     {
         $products = Product::query()->where('is_visible_when_no_stock', true)->whereRaw('stock < preferred_stock')->orderBy('name', 'asc')->get();

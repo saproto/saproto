@@ -77,6 +77,7 @@ services:
             SOCKUDO_DEFAULT_APP_ID: '${PUSHER_APP_ID}'
             SOCKUDO_DEFAULT_APP_KEY: '${PUSHER_APP_KEY}'
             SOCKUDO_DEFAULT_APP_SECRET: '${PUSHER_APP_SECRET}'
+            PUSH_ALLOW_MEMORY_DRIVERS: true
         ports:
             - '${PUSHER_PORT:-6001}:6001'
             - '${PUSHER_METRICS_PORT:-9601}:9601'

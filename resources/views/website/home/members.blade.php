@@ -1,3 +1,9 @@
+@php
+    use App\Models\Newsitem;
+    use Illuminate\Support\Collection;
+    /** @var Collection<int, Newsitem> $newsitems */
+@endphp
+
 @extends('website.home.shared')
 
 @section('greeting')
@@ -143,7 +149,7 @@
                                 'img' => $newsitem->hasMedia()
                                     ? $newsitem->getImageUrl()
                                     : ($newsitem->is_weekly
-                                        ? url('images/weekly-cover.png')
+                                        ? url('images/weekly-cover.webp')
                                         : null),
                                 'html' => sprintf(
                                     '<strong>%s</strong><br><em>Published %s</em>',

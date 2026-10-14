@@ -27,7 +27,7 @@
         <meta property="og:url" content="https://www.omnomcom.nl/" />
         <meta
             property="og:image"
-            content="{{ asset('images/subsites/omnomcom.jpg') }}"
+            content="{{ asset('images/subsites/omnomcom.webp') }}"
         />
 
         <link
@@ -221,7 +221,7 @@
 
             <a href="https://www.proto.utwente.nl/">
                 <img
-                    src="{{ asset('images/logo/inverse.png') }}"
+                    src="{{ asset('images/logo/inverse.webp') }}"
                     height="130px"
                     width="234.7px"
                     alt="{{ $product->name }}"

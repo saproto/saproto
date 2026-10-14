@@ -257,7 +257,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         $this->addMediaCollection('profile_picture')
             ->useDisk('garage-public')
             ->storeConversionsOnDisk('garage-public')
-            ->useFallbackUrl(asset('images/default-avatars/other.png'))
+            ->useFallbackUrl(asset('images/default-avatars/other.webp'))
             ->singleFile();
     }
 

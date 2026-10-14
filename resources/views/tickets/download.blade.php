@@ -74,7 +74,7 @@
     <div class="half">
         <img
             style="margin-top: 30mm"
-            src="{{ str_replace('https', 'http', public_path('images/logo/regular.png')) }}"
+            src="{{ str_replace('https', 'http', public_path('images/logo/regular.webp')) }}"
             id="protologo"
             alt="proto logo"
         />

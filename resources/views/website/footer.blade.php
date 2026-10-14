@@ -92,7 +92,7 @@
                 <img
                     height="130px"
                     width="234.7px"
-                    src="{{ asset('images/logo/inverse.png') }}"
+                    src="{{ asset('images/logo/inverse.webp') }}"
                     alt="inverse proto logo"
                 />
             </div>

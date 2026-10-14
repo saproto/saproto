@@ -31,20 +31,17 @@
         @inertiaHead
 
         @section('opengraph')
-            <meta property="og:url" content="{{ Request::url() }}" />
-            <meta property="og:type" content="website" />
-            <meta
-                property="og:title"
-                content="@yield('page-title', 'Website')"
-            />
-            <meta
-                property="og:description"
-                content="@yield('og-description', 'S.A. Proto is the study association for Creative Technology at the University of Twente.')"
-            />
-            <meta
-                property="og:image"
-                content="@yield('og-image', asset('images/logo/og-image.png'))"
-            />
+        <meta property="og:url" content="{{ Request::url() }}" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="@yield('page-title', 'Website')" />
+        <meta
+            property="og:description"
+            content="@yield('og-description', 'S.A. Proto is the study association for Creative Technology at the University of Twente.')"
+        />
+        <meta
+            property="og:image"
+            content="@yield('og-image', asset('images/logo/og-image.webp'))"
+        />
         @show
     </head>
     <body

@@ -78,7 +78,7 @@
             @else
                 <img
                     id="photo"
-                    src="{{ public_path('images/default-avatars/other.png') }}"
+                    src="{{ public_path('images/default-avatars/other.webp') }}"
                 />
             @endif
         @endif

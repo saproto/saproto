@@ -126,13 +126,13 @@
             <a href="{{ route('homepage') }}">
                 @if (Auth::check() && Auth::user()->theme)
                     <img
-                        src="{{ asset('images/logo/' . Config::array('proto.logoThemes')[Auth::user()->theme] . '.png') }}"
+                        src="{{ asset('images/logo/' . Config::array('proto.logoThemes')[Auth::user()->theme] . '.webp') }}"
                         style="width: 30%; max-width: 200px"
                         alt="ProtoLogo"
                     />
                 @else
                     <img
-                        src="{{ asset('images/logo/regular.png') }}"
+                        src="{{ asset('images/logo/regular.webp') }}"
                         style="width: 30%; max-width: 200px"
                         alt="ProtoLogo"
                     />

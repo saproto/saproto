@@ -14,6 +14,8 @@ Broadcast::channel('wallstreet-prices.{wallstreetId}', fn ($user, $wallstreetId)
 
 Broadcast::channel('isalfredthere', fn ($user): true => true);
 
+Broadcast::channel('QRAuth.{qr_token}', fn ($user): true => true);
+
 Broadcast::channel('stickers', fn (User $user): bool => $user->is_member);
 
 Broadcast::channel('events.{eventId}', fn (User $user, int $eventId) => $user->is_member && Event::query()->find($eventId)?->mayViewEvent($user) ?? false);

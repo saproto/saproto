@@ -129,7 +129,8 @@ CREATE TABLE `addresses` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
-  KEY `addresses_user_id_index` (`user_id`)
+  KEY `addresses_user_id_index` (`user_id`),
+  CONSTRAINT `addresses_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `alias`;
@@ -182,7 +183,8 @@ CREATE TABLE `bankaccounts` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
-  KEY `bankaccounts_user_id_index` (`user_id`)
+  KEY `bankaccounts_user_id_index` (`user_id`),
+  CONSTRAINT `bankaccounts_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `codex_category`;
@@ -306,7 +308,9 @@ CREATE TABLE `committees_activities` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `committees_activities_activity_id_index` (`activity_id`),
-  KEY `committees_activities_committee_id_index` (`committee_id`)
+  KEY `committees_activities_committee_id_index` (`committee_id`),
+  CONSTRAINT `committees_activities_activity_id_foreign` FOREIGN KEY (`activity_id`) REFERENCES `activities` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `committees_activities_committee_id_foreign` FOREIGN KEY (`committee_id`) REFERENCES `committees` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `committees_users`;
@@ -425,7 +429,9 @@ CREATE TABLE `emails_events` (
   `event_id` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `emails_events_email_id_index` (`email_id`),
-  KEY `emails_events_event_id_index` (`event_id`)
+  KEY `emails_events_event_id_index` (`event_id`),
+  CONSTRAINT `emails_events_email_id_foreign` FOREIGN KEY (`email_id`) REFERENCES `emails` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `emails_events_event_id_foreign` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `emails_lists`;
@@ -437,7 +443,9 @@ CREATE TABLE `emails_lists` (
   `list_id` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `emails_lists_email_id_index` (`email_id`),
-  KEY `emails_lists_list_id_index` (`list_id`)
+  KEY `emails_lists_list_id_index` (`list_id`),
+  CONSTRAINT `emails_lists_email_id_foreign` FOREIGN KEY (`email_id`) REFERENCES `emails` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `emails_lists_list_id_foreign` FOREIGN KEY (`list_id`) REFERENCES `mailinglists` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `emails_withdrawals`;
@@ -545,7 +553,7 @@ DROP TABLE IF EXISTS `feedback`;
 CREATE TABLE `feedback` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL,
-  `feedback_category_id` bigint(20) NOT NULL DEFAULT 1,
+  `feedback_category_id` bigint(20) unsigned NOT NULL,
   `feedback` mediumtext NOT NULL,
   `reviewed` tinyint(1) NOT NULL DEFAULT 0,
   `accepted` tinyint(1) DEFAULT NULL,
@@ -554,7 +562,10 @@ CREATE TABLE `feedback` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `feedback_user_id_index` (`user_id`)
+  KEY `feedback_user_id_index` (`user_id`),
+  KEY `feedback_feedback_category_id_foreign` (`feedback_category_id`),
+  CONSTRAINT `feedback_feedback_category_id_foreign` FOREIGN KEY (`feedback_category_id`) REFERENCES `feedback_categories` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `feedback_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `feedback_categories`;
@@ -571,7 +582,8 @@ CREATE TABLE `feedback_categories` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `feedback_categories_reviewer_id_index` (`reviewer_id`)
+  KEY `feedback_categories_reviewer_id_index` (`reviewer_id`),
+  CONSTRAINT `feedback_categories_reviewer_id_foreign` FOREIGN KEY (`reviewer_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `feedback_votes`;
@@ -586,7 +598,9 @@ CREATE TABLE `feedback_votes` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `feedback_votes_user_id_index` (`user_id`),
-  KEY `feedback_votes_feedback_id_index` (`feedback_id`)
+  KEY `feedback_votes_feedback_id_index` (`feedback_id`),
+  CONSTRAINT `feedback_votes_feedback_id_foreign` FOREIGN KEY (`feedback_id`) REFERENCES `feedback` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `feedback_votes_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `hashmap`;
@@ -1896,3 +1910,8 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_22_172127_add_f
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_09_29_001133_remove_file_table',212);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_10_06_114015_remove_membership_form_id_from_members',213);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_10_06_142855_add_users_count_to_activities',214);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_10_12_235231_add_foreign_constraints_to_addresses',215);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_10_12_235730_add_foreign_constraints_to_bankaccounts',215);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_10_13_001339_add_foreign_constraints_to_committees_activities',216);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_10_13_002702_add_foreign_constraints_to_emails_events_and_email_lists',216);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2026_10_13_010434_add_foreign_constraints_to_feedback',217);
