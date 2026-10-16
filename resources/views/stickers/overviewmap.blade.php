@@ -45,12 +45,9 @@
     <script type="text/javascript" @cspNonce>
         window.addEventListener('load', () => {
             window.Echo.channel(`stickers`)
-                .listen(
-                    '.App\\Events\\Stickers\\StickerPlacedEvent',
-                    (marker) => {
-                        addMarkerToMap(marker)
-                    }
-                )
+                .listen('.App\\Events\\Stickers\\StickerPlacedEvent', (marker) => {
+                    addMarkerToMap(marker)
+                })
                 .error((error) => {
                     console.error(error)
                     setTimeout(() => {
@@ -64,14 +61,7 @@
                     '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
             }).addTo(map)
 
-            const markerFiles = [
-                'chip',
-                'cloud',
-                'gear',
-                'heart',
-                'light',
-                'world',
-            ]
+            const markerFiles = ['chip', 'cloud', 'gear', 'heart', 'light', 'world']
 
             const markerIcons = markerFiles.map((path) => {
                 return L.icon({
@@ -92,9 +82,7 @@
             })
             function addMarkerToMap(marker) {
                 L.marker([marker.lat, marker.lng], {
-                    icon: markerIcons[
-                        Math.floor(Math.random() * markerIcons.length)
-                    ],
+                    icon: markerIcons[Math.floor(Math.random() * markerIcons.length)],
                 }).addTo(map)
                 markerCount++
                 stickerAmount.textContent = markerCount

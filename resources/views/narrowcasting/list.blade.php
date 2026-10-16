@@ -91,9 +91,7 @@
                     </table>
                 </div>
 
-                <div class="card-footer pb-0">
-                    {{ $messages->links() }}
-                </div>
+                <div class="card-footer pb-0">{{ $messages->links() }}</div>
             </div>
         </div>
     </div>

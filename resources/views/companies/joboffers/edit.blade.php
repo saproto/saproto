@@ -30,7 +30,7 @@
                             >
                                 <option
                                     value=""
-                                    @if($joboffer == null) selected @endif
+                                    @if ($joboffer == null) selected @endif
                                     disabled
                                 >
                                     Select a company...
@@ -38,7 +38,7 @@
                                 @foreach ($companies as $company)
                                     <option
                                         value="{{ $company->id }}"
-                                        @if($joboffer?->company->id == $company->id) selected @endif
+                                        @if ($joboffer?->company->id == $company->id) selected @endif
                                     >
                                         {{ $company->name }}
                                     </option>
@@ -78,13 +78,13 @@
                                 </option>
                                 <option
                                     value="description"
-                                    @if($joboffer?->description != null) selected @endif
+                                    @if ($joboffer?->description != null) selected @endif
                                 >
                                     Description
                                 </option>
                                 <option
                                     value="url"
-                                    @if($joboffer?->redirect_url != null) selected @endif
+                                    @if ($joboffer?->redirect_url != null) selected @endif
                                 >
                                     Redirect URL
                                 </option>

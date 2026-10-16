@@ -20,10 +20,11 @@
         />
 
         <title>
-            @if (! App::environment('production')) 
-            [{{ strtoupper(config('app.env')) }}]
-            @endif S.A.
-            Proto | @yield('page-title', 'Default Page Title')
+            @if (! App::environment('production'))
+                [{{ strtoupper(config('app.env')) }}]
+            @endif
+            S.A. Proto |
+            @yield('page-title', 'Default Page Title')
         </title>
 
         @include('website.assets.stylesheets')

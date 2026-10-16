@@ -18,9 +18,7 @@
                 </div>
 
                 <div class="card-body">
-                    <p class="card-text">
-                        {!! $parsed_content !!}
-                    </p>
+                    <p class="card-text">{!! $parsed_content !!}</p>
                 </div>
             </div>
         </div>

@@ -26,10 +26,9 @@
                         @if ($user->id != Auth::id())
                             <p>
                                 Sorry, but due to accountability issues you can
-                                only add authorizations for yourself. If
-                                {{ $user->name }} really wants to pay via
-                                automatic withdrawal, they should authorize so
-                                themselves.
+                                only add authorizations for yourself. If {{ $user->name }} really
+                                wants to pay via automatic withdrawal, they
+                                should authorize so themselves.
                             </p>
                         @else
                             @if (! $new)
@@ -50,11 +49,9 @@
 
                                         <p class="card-text text-center">
                                             <sub>
-                                                authorization issued on
-                                                {{ $user->bank->created_at }}.
+                                                authorization issued on {{ $user->bank->created_at }}.
                                                 <br />
-                                                Authorization ID:
-                                                {{ $user->bank->machtigingid }}
+                                                Authorization ID: {{ $user->bank->machtigingid }}
                                             </sub>
                                         </p>
                                     </div>

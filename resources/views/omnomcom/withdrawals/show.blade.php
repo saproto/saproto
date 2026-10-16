@@ -4,7 +4,6 @@
     @php
         /** @var \App\Models\Withdrawal $withdrawal */
     @endphp
-
     Withdrawal of {{ date('d-m-Y', strtotime($withdrawal->date)) }}
 @endsection
 
@@ -173,8 +172,7 @@
                                         <td>
                                             {{ iban_to_obfuscated_format($data->user->bank->iban) }}
                                             <span class="text-muted">
-                                                /
-                                                {{ iban_to_obfuscated_format($data->user->bank->bic) }}
+                                                / {{ iban_to_obfuscated_format($data->user->bank->bic) }}
                                             </span>
                                         </td>
                                         <td>
@@ -221,9 +219,7 @@
                                             >
                                                 Remove
                                             </a>
-
                                             |
-
                                             @include(
                                                 'components.modals.confirm-modal',
                                                 [
@@ -240,9 +236,7 @@
                                                     'classes' => 'fw-bold underline-on-hover text-white',
                                                 ]
                                             )
-
                                             |
-
                                             @include(
                                                 'components.modals.confirm-modal',
                                                 [

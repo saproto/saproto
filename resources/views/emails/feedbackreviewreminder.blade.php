@@ -28,15 +28,12 @@
             >
                 <tr style="margin: 0; padding: 0; border: none">
                     <td style="margin: 0; padding: 10px 20px; border: none">
-                        <p>
-                            {{ $feedback->feedback }}
-                        </p>
+                        <p>{{ $feedback->feedback }}</p>
 
                         <hr />
                         <p>
                             <sub>
-                                {{ $feedback->user->name }} --
-                                {{ $feedback->created_at->format('j M Y, H:i') }}
+                                {{ $feedback->user->name }} -- {{ $feedback->created_at->format('j M Y, H:i') }}
                             </sub>
                         </p>
                     </td>

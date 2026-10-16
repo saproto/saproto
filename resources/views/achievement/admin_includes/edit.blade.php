@@ -9,8 +9,7 @@
             @yield('page-title')
             @if ($achievement)
                 <span class="badge bg-info float-end">
-                    Obtained by
-                    {{ $achievement->currentOwners(true)->count() }} members
+                    Obtained by {{ $achievement->currentOwners(true)->count() }} members
                 </span>
             @endif
         </div>
@@ -102,7 +101,7 @@
             <div
                 id="achieve_page_block"
                 class="d-none"
-                @if(!$achievement || !$achievement->has_page) @endif
+                @if (!$achievement || !$achievement->has_page) @endif
             >
                 <div class="form-group">
                     <label for="page_name">Achieve URL</label>
@@ -141,10 +140,7 @@
                 Submit
             </button>
 
-            <a
-                href="{{ route('achievement::index') }}"
-                class="btn btn-default"
-            >
+            <a href="{{ route('achievement::index') }}" class="btn btn-default">
                 Cancel
             </a>
         </div>

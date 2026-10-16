@@ -20,7 +20,7 @@
                             @if (isset($select_text))
                                 {!! $select_text !!}
                             @else
-                                    Select a time range to generate statistics
+                                Select a time range to generate statistics
                             @endif
                         </p>
 

@@ -7,7 +7,7 @@
 @extends('website.layouts.redesign.generic')
 
 @section('page-title')
-        Mollie Transaction #{{ $transaction->id }}
+    Mollie Transaction #{{ $transaction->id }}
 @endsection
 
 @section('container')
@@ -39,8 +39,7 @@
                             @if (App\Models\MollieTransaction::translateStatus($mollie->status) === MollieEnum::OPEN)
                                 <a href="{{ $transaction->payment_url }}">
                                     <span class="label label-success">
-                                        {{ $mollie->status }} - Continue
-                                        Payment
+                                        {{ $mollie->status }} - Continue Payment
                                     </span>
                                 </a>
                             @elseif (App\Models\MollieTransaction::translateStatus($mollie->status) === MollieEnum::PAID)

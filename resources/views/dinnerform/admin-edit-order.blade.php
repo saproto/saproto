@@ -15,9 +15,8 @@
 
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        Edit order by {{ $dinnerformOrderline->user->name }}
-                        for dinnerform at
-                        {{ $dinnerformOrderline->dinnerform->restaurant }}
+                        Edit order by {{ $dinnerformOrderline->user->name }} for
+                        dinnerform at {{ $dinnerformOrderline->dinnerform->restaurant }}
                     </div>
 
                     <div class="card-body">
