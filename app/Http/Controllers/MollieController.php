@@ -19,17 +19,12 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use Illuminate\View\View;
 use Mollie;
 use Mollie\Api\Exceptions\ApiException;
 use Mollie\Api\Exceptions\RequestException;
 
 class MollieController extends Controller
 {
-    /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\View|Factory
-     */
     public function index(Request $request): \Illuminate\Contracts\View\View|Factory
     {
         $user = $request->input('user_id') ? User::query()->findOrFail($request->input('user_id')) : null;
@@ -83,9 +78,6 @@ class MollieController extends Controller
     }
 
     /**
-     * @param int $id
-     * @return \Illuminate\Contracts\View\View|Factory
-     *
      * @throws RequestException
      */
     public function status(int $id): \Illuminate\Contracts\View\View|Factory
@@ -104,10 +96,6 @@ class MollieController extends Controller
         ]);
     }
 
-    /**
-     * @param string $month
-     * @return RedirectResponse|Factory|\Illuminate\Contracts\View\View
-     */
     public function monthly(string $month): RedirectResponse|Factory|\Illuminate\Contracts\View\View
     {
         try {
