@@ -10,6 +10,7 @@ use App\Models\OrderLine;
 use App\Models\User;
 use Exception;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -25,7 +26,7 @@ use Mollie\Api\Exceptions\RequestException;
 
 class MollieController extends Controller
 {
-    public function index(Request $request): \Illuminate\Contracts\View\View|Factory
+    public function index(Request $request): View|Factory
     {
         $user = $request->input('user_id') ? User::query()->findOrFail($request->input('user_id')) : null;
 
@@ -80,7 +81,7 @@ class MollieController extends Controller
     /**
      * @throws RequestException
      */
-    public function status(int $id): \Illuminate\Contracts\View\View|Factory
+    public function status(int $id): View|Factory
     {
         /** @var MollieTransaction $transaction */
         $transaction = MollieTransaction::query()->findOrFail($id);
@@ -96,7 +97,7 @@ class MollieController extends Controller
         ]);
     }
 
-    public function monthly(string $month): RedirectResponse|Factory|\Illuminate\Contracts\View\View
+    public function monthly(string $month): RedirectResponse|Factory|View
     {
         try {
             $month = Date::parse($month);
