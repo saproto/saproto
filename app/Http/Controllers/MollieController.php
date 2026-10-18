@@ -23,6 +23,10 @@ use Illuminate\Support\Facades\Session;
 use Mollie;
 use Mollie\Api\Exceptions\ApiException;
 use Mollie\Api\Exceptions\RequestException;
+use Mollie\Api\Http\Data\Money;
+use Mollie\Api\Http\Requests\CreatePaymentRequest;
+use Mollie\Api\Http\Requests\GetPaymentRequest;
+use Mollie\Api\Types\PaymentStatus;
 
 class MollieController extends Controller
 {
@@ -91,9 +95,7 @@ class MollieController extends Controller
 
         return view('omnomcom.mollie.status', [
             'transaction' => $transaction,
-            'mollie' => Mollie::api()
-                ->payments
-                ->get($transaction->mollie_id),
+            'mollie' => Mollie::send(new GetPaymentRequest($transaction->mollie_id)),
         ]);
     }
 
@@ -225,28 +227,21 @@ class MollieController extends Controller
             'status' => 'draft',
         ]);
 
-        $total = round($total, 2);
-        $properties = [
-            'amount' => [
-                'currency' => 'EUR',
-                'value' => $total,
-            ],
-            'method' => null,
-            'description' => 'OmNomCom Settlement (€'.$total.')',
-            'redirectUrl' => route('omnomcom::mollie::receive', ['id' => $transaction->id]),
-        ];
+        $request = new CreatePaymentRequest(
+            description: 'OmNomCom Settlement (€'.$total.')',
+            amount: Money::of('EUR')->fromString(number_format($total, 2, '.', '')),
+            redirectUrl: route('omnomcom::mollie::receive', ['id' => $transaction->id]),
+            webhookUrl: Config::boolean('omnomcom.mollie.has_webhook')?route('webhook::mollie', ['id' => $transaction->id]):null,
+            metadata: [
+                "order_id" => $transaction->id,
+            ]
+        );
 
-        if (Config::boolean('omnomcom.mollie.has_webhook')) {
-            $properties['webhookUrl'] = route('webhook::mollie', ['id' => $transaction->id]);
-        }
+        $payment = Mollie::send($request);
 
-        $mollie = Mollie::api()
-            ->payments
-            ->create($properties);
-
-        $transaction->mollie_id = $mollie->id;
-        $transaction->amount = floatval($mollie->amount->value);
-        $transaction->payment_url = $mollie->getCheckoutUrl();
+        $transaction->mollie_id = $payment->id;
+        $transaction->amount = floatval(number_format($total, 2, '.', ''));
+        $transaction->payment_url = $payment->getCheckoutUrl();
         $transaction->save();
 
         OrderLine::query()->whereIn('id', $orderlines)->update(['payed_with_mollie' => $transaction->id]);
