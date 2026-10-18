@@ -89,7 +89,6 @@
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.0",
-        "brianium/paratest": "<7.26.1",
         "fakerphp/faker": "^1.13",
         "itsgoingd/clockwork": "^5.1",
         "laravel/tinker": "^v3.0.0",
@@ -100,8 +99,8 @@
         "mockery/mockery": "^1.6",
         "pestphp/pest-plugin-laravel": "^5.0.0",
         "beyondcode/expose": "^3.0",
-        "pestphp/pest-plugin-browser": "^5.0.0",
-        "pestphp/pest-plugin-phpstan": "^5.0"
+        "pestphp/pest-plugin-browser": "^v5.0.0",
+        "pestphp/pest-plugin-phpstan": "^v5.2.2"
     },
     "autoload": {
         "psr-4": {
