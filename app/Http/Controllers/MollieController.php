@@ -26,7 +26,6 @@ use Mollie\Api\Exceptions\RequestException;
 use Mollie\Api\Http\Data\Money;
 use Mollie\Api\Http\Requests\CreatePaymentRequest;
 use Mollie\Api\Http\Requests\GetPaymentRequest;
-use Mollie\Api\Types\PaymentStatus;
 
 class MollieController extends Controller
 {
@@ -231,9 +230,9 @@ class MollieController extends Controller
             description: 'OmNomCom Settlement (€'.$total.')',
             amount: Money::of('EUR')->fromString(number_format($total, 2, '.', '')),
             redirectUrl: route('omnomcom::mollie::receive', ['id' => $transaction->id]),
-            webhookUrl: Config::boolean('omnomcom.mollie.has_webhook')?route('webhook::mollie', ['id' => $transaction->id]):null,
+            webhookUrl: Config::boolean('omnomcom.mollie.has_webhook') ? route('webhook::mollie', ['id' => $transaction->id]) : null,
             metadata: [
-                "order_id" => $transaction->id,
+                'order_id' => $transaction->id,
             ]
         );
 
