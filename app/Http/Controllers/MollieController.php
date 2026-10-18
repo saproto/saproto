@@ -22,11 +22,13 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Mollie;
 use Mollie\Api\Exceptions\ApiException;
+use Mollie\Api\Exceptions\RequestException;
 
 class MollieController extends Controller
 {
     /**
-     * @return View
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\View|Factory
      */
     public function index(Request $request): \Illuminate\Contracts\View\View|Factory
     {
@@ -81,9 +83,10 @@ class MollieController extends Controller
     }
 
     /**
-     * @return View
+     * @param int $id
+     * @return \Illuminate\Contracts\View\View|Factory
      *
-     * @throws Exception
+     * @throws RequestException
      */
     public function status(int $id): \Illuminate\Contracts\View\View|Factory
     {
@@ -102,7 +105,8 @@ class MollieController extends Controller
     }
 
     /**
-     * @return View|RedirectResponse
+     * @param string $month
+     * @return RedirectResponse|Factory|\Illuminate\Contracts\View\View
      */
     public function monthly(string $month): RedirectResponse|Factory|\Illuminate\Contracts\View\View
     {
@@ -232,7 +236,7 @@ class MollieController extends Controller
             'status' => 'draft',
         ]);
 
-        $total = number_format($total, 2, '.', '');
+        $total = round($total, 2);
         $properties = [
             'amount' => [
                 'currency' => 'EUR',
@@ -252,7 +256,7 @@ class MollieController extends Controller
             ->create($properties);
 
         $transaction->mollie_id = $mollie->id;
-        $transaction->amount = $mollie->amount->value;
+        $transaction->amount = floatval($mollie->amount->value);
         $transaction->payment_url = $mollie->getCheckoutUrl();
         $transaction->save();
 
@@ -287,7 +291,7 @@ class MollieController extends Controller
     /**
      * @return null|Collection<int, object{status: string, resource: string, id: string, description?: string, pricing?: mixed}>
      *
-     * @throws ApiException
+     * @throws ApiException|RequestException
      */
     public static function getPaymentMethods(): ?Collection
     {
