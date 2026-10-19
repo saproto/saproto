@@ -17,8 +17,6 @@ use App\Models\Newsitem;
 use App\Models\OrderLine;
 use App\Models\Page;
 use App\Models\User;
-use Database\Factories\FeedbackCategoryFactory;
-use Database\Factories\FeedbackFactory;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 
@@ -124,7 +122,7 @@ class OtherDataSeeder extends Seeder
 
         // create quotes and good ideas
         $n = 100;
-        $output->task("creating Good Idea Category", fn () => FeedbackCategory::factory()->state([
+        $output->task('creating Good Idea Category', fn () => FeedbackCategory::factory()->state([
             'title' => 'Good Ideas',
             'url' => 'goodideas',
             'review' => false,
@@ -132,7 +130,7 @@ class OtherDataSeeder extends Seeder
             'can_reply' => true,
         ])->create());
         $output->task("creating {$n} Good Ideas", fn () => Feedback::factory()->state(['feedback_category_id' => 1])->count($n)->create());
-        $output->task("creating Quote Category", fn () => FeedbackCategory::factory()->state([
+        $output->task('creating Quote Category', fn () => FeedbackCategory::factory()->state([
             'title' => 'Quotes',
             'url' => 'quotes',
             'review' => false,

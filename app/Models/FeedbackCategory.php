@@ -51,6 +51,7 @@ class FeedbackCategory extends Model
 {
     /** @use HasFactory<FeedbackCategoryFactory>*/
     use HasFactory;
+
     /**
      * @return HasMany<Feedback, $this>
      */
