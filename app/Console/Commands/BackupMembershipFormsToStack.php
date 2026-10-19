@@ -21,7 +21,10 @@ class BackupMembershipFormsToStack extends Command
             $query->where('collection_name', 'membership_form');
         });
 
-        $query->chunkById(10, function ($members) {
+        $bar = $this->output->createProgressBar($query->count());
+        $bar->start();
+
+        $query->chunkById(100, function ($members) use ($bar) {
             foreach ($members as $member) {
                 $stackPath = 'membership_forms/membership_form_user_'.$member->user->id.'.pdf';
                 if (Storage::disk('stack_backup')->missing($stackPath)) {
@@ -30,7 +33,9 @@ class BackupMembershipFormsToStack extends Command
                     $content = Storage::disk($media->disk)->get($file);
                     Storage::disk('stack_backup')->put($stackPath, $content);
                 }
+                $bar->advance();
             }
         });
+        $bar->finish();
     }
 }
