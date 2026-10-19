@@ -8,6 +8,7 @@ use App\Models\Member;
 use App\Models\User;
 use Exception;
 use Illuminate\Database\Seeder;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -59,8 +60,10 @@ class ImportLiveDataSeeder extends Seeder
      *
      * @param  $tableName  string The table to import from the live website.
      * @return mixed|null
+     *
+     * @throws ConnectionException
      */
-    public static function getDataFromExportApi($tableName)
+    public static function getDataFromExportApi(string $tableName): mixed
     {
         $local_url = route('api::user::dev_export', ['personal_key' => Config::string('app-proto.personal-proto-key'), 'table' => $tableName]);
         $remote_url = str_replace(Config::string('app-proto.app-url'), 'https://www.proto.utwente.nl', $local_url);
@@ -86,8 +89,11 @@ class ImportLiveDataSeeder extends Seeder
                     unset($entry[$column]);
                 }
             }
-
-            DB::table($table['name'])->insert($entry);
+            try {
+                DB::table($table['name'])->insert($entry);
+            } catch (Exception $e) {
+                echo "Failed to insert entry into table {$table['name']}: ".$e->getMessage().PHP_EOL;
+            }
         }
     }
 

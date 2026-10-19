@@ -17,7 +17,7 @@ class CommitteeMembershipFactory extends Factory
      * @return array<string, mixed>
      */
     #[Override]
-    public function definition()
+    public function definition(): array
     {
         $created_at = fake()->dateTimeBetween('-1 year', '+1 year');
         $deleted_at = fake()->dateTimeBetween($created_at, '+1 year');
