@@ -114,6 +114,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:reviewfeedbackcron')->daily()->at('16:00');
         $schedule->command('proto:reviewstickerscron')->daily()->at('16:10');
         $schedule->command('proto:backup-photos-to-stack')->weekly()->at('01:15');
+        $schedule->command('proto:backup_membershipforms_to_stack')->weekly()->at('02:15');
         $schedule->command('proto:closeactivitiesremindercron')->weeklyOn(1, '8:00');
         $schedule->command('proto:checkutaccounts')->monthly();
         $schedule->command('proto:verifydetailscron')->monthlyOn(1, '12:00');
