@@ -11,6 +11,7 @@ use App\Models\Bank;
 use App\Models\Committee;
 use App\Models\CommitteeMembership;
 use App\Models\Feedback;
+use App\Models\FeedbackCategory;
 use App\Models\Member;
 use App\Models\Newsitem;
 use App\Models\OrderLine;
@@ -121,7 +122,21 @@ class OtherDataSeeder extends Seeder
 
         // create quotes and good ideas
         $n = 100;
+        $output->task('creating Good Idea Category', fn () => FeedbackCategory::factory()->state([
+            'title' => 'Good Ideas',
+            'url' => 'goodideas',
+            'review' => false,
+            'show_publisher' => false,
+            'can_reply' => true,
+        ])->create());
         $output->task("creating {$n} Good Ideas", fn () => Feedback::factory()->state(['feedback_category_id' => 1])->count($n)->create());
+        $output->task('creating Quote Category', fn () => FeedbackCategory::factory()->state([
+            'title' => 'Quotes',
+            'url' => 'quotes',
+            'review' => false,
+            'show_publisher' => true,
+            'can_reply' => false,
+        ])->create());
         $output->task("creating {$n} quotes", fn () => Feedback::factory()->state(['feedback_category_id' => 2])->count($n)->create());
 
         // Create newsitems and weekly newsitems
