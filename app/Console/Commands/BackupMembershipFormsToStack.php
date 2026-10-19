@@ -24,7 +24,7 @@ class BackupMembershipFormsToStack extends Command
         $bar = $this->output->createProgressBar($query->count());
         $bar->start();
 
-        $query->chunkById(100, function ($members) use($bar) {
+        $query->chunkById(100, function ($members) use ($bar) {
             foreach ($members as $member) {
                 $stackPath = 'membership_forms/membership_form_user_'.$member->user->id.'.pdf';
                 if (Storage::disk('stack_backup')->missing($stackPath)) {
