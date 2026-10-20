@@ -24,7 +24,7 @@ class AuthController extends Controller
     /**
      * Show the register page
      */
-    public function registerIndex(Request $request): RedirectResponse|View
+    public function registerIndex(): RedirectResponse|View
     {
         if (Auth::check()) {
             Session::flash('flash_message', 'You already have an account. To register an account, please log off.');
