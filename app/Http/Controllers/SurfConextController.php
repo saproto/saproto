@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use Illuminate\View\View;
 use Socialite;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 
@@ -68,14 +67,13 @@ class SurfConextController extends Controller
     /**
      * Send the user to surfconext to log in to create a new account
      */
-    public static function createAccount(string $email): View
+    public static function createAccount(string $email): HttpFoundationResponse
     {
         Session::flash(self::SESSION_FLASH_KEY, self::CREATE_ACCOUNT);
         Session::flash(self::SESSION_FLASH_KEY_EMAIL, $email);
-        $url = Socialite::driver('saml2')
-            ->redirect()->getTargetUrl();
 
-        return view('auth.surfconextRedirect', ['url' => $url]);
+        return Socialite::driver('saml2')
+            ->redirect();
     }
 
     /**
