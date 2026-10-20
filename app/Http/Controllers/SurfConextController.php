@@ -139,7 +139,10 @@ class SurfConextController extends Controller
         // We're in a create new account attempt, do not log them in
         if ($this->accountAlreadyExists($utUser->uid)) {
             Session::flash('flash_message', 'This University of Twente account is already registered to a user. We have logged you in.');
+
             AuthController::loginUser($request, User::query()->where('utwente_username', $utUser->uid)->first());
+
+            return to_route('homepage');
         }
 
         User::register(
