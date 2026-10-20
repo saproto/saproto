@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Socialite;
-use Symfony\Component\HttpFoundation\RedirectResponse as HttpFoundationRedirectResponse;
+use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 
 class SurfConextController extends Controller
 {
@@ -29,7 +29,7 @@ class SurfConextController extends Controller
     /**
      * Send the user to surfconext to login
      */
-    public function login(): HttpFoundationRedirectResponse
+    public function login(): HttpFoundationResponse
     {
         Session::flash(self::SESSION_FLASH_KEY, self::LOGIN);
 
@@ -40,7 +40,7 @@ class SurfConextController extends Controller
     /**
      * Send the user to surfconext to login to link their account
      */
-    public function linkAccount(): HttpFoundationRedirectResponse
+    public function linkAccount(): HttpFoundationResponse
     {
         Session::flash(self::SESSION_FLASH_KEY, self::LINK_ACCOUNT);
 
