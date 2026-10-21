@@ -128,7 +128,10 @@
                         could be verified. UTwente numbers are only included if
                         available, and e-mail addresses are only included if
                         they are an
-                        <code>@utwente.nl</code>
+                        <code>
+                            @utwente
+                            .nl</code
+                        >
                         address.
                     </p>
 

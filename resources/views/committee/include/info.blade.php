@@ -66,8 +66,7 @@
                 href="mailto:{{ $committee->slug . '@' . Config::string('proto.emaildomain') }}"
                 class="card-link text-info"
             >
-                E-mail them at
-                {{ $committee->slug . '@' . Config::string('proto.emaildomain') }}
+                E-mail them at {{ $committee->slug . '@' . Config::string('proto.emaildomain') }}
             </a>
         </p>
     </div>

@@ -60,10 +60,7 @@
                                                     <i
                                                         class="fas fa-id-badge fa-fw"
                                                     ></i>
-                                                    {{ $result['givenname'] ?? null }}
-                                                    {{ $result['middlename'] ?? null }}
-                                                    {{ $result['sn'] ?? null }},
-                                                    {{ $result['initials'] ?? null }}
+                                                    {{ $result['givenname'] ?? null }} {{ $result['middlename'] ?? null }} {{ $result['sn'] ?? null }}, {{ $result['initials'] ?? null }}
                                                     <br />
 
                                                     <i

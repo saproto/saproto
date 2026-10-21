@@ -4,4 +4,11 @@
     name="{{ $name }}"
     {!! isset($placeholder) ? sprintf('placeholder="%s"', $placeholder) : null !!}
 >
-{!! $value ?? null !!}</textarea>
+
+
+
+
+
+
+{!! $value ?? null !!}</textarea
+>

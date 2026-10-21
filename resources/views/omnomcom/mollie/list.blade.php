@@ -176,8 +176,7 @@
                                     <td class="text-end">
                                         @if ($total > 0)
                                             <span class="label label-success">
-                                                &euro;
-                                                {{ number_format($total, 2) }}
+                                                &euro; {{ number_format($total, 2) }}
                                             </span>
                                         @else
                                             <span class="label label-default">

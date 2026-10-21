@@ -80,9 +80,7 @@
                     </table>
                 </div>
 
-                <div class="card-footer pb-0">
-                    {!! $newsitems->links() !!}
-                </div>
+                <div class="card-footer pb-0">{!! $newsitems->links() !!}</div>
             </div>
         </div>
     </div>

@@ -5,8 +5,8 @@
         <div class="card-body">
             <p class="card-text">
                 <strong>
-                    {{ $email->recipients()->count() }} people will receive
-                    this e-mail:
+                    {{ $email->recipients()->count() }} people will receive this
+                    e-mail:
                 </strong>
             </p>
 

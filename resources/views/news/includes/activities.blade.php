@@ -53,8 +53,7 @@
     @else
         <div class="card-body">
             <p class="card-text text-center">
-                There are no upcoming events. Seriously. Go fix that
-                {{ Auth::user()->calling_name }}.
+                There are no upcoming events. Seriously. Go fix that {{ Auth::user()->calling_name }}.
             </p>
         </div>
     @endif

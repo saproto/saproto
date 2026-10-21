@@ -81,8 +81,7 @@
                                         {{ $ticket->product->name }}
                                     </strong>
                                     <span class="badge bg-primary float-end">
-                                        {{ $ticket->sold() }} sold /
-                                        {{ $ticket->product->stock }} available
+                                        {{ $ticket->sold() }} sold / {{ $ticket->product->stock }} available
                                     </span>
                                     <span class="badge bg-info float-end me-4">
                                         &euro;{{ number_format($ticket->turnover(), 2) }}
@@ -240,9 +239,7 @@
     <script type="text/javascript" @cspNonce>
         window.addEventListener('load', () => {
             const scanList = Array.from(document.getElementsByClassName('scan'))
-            const unscanList = Array.from(
-                document.getElementsByClassName('unscan')
-            )
+            const unscanList = Array.from(document.getElementsByClassName('unscan'))
             scanList.forEach((el) => setEventListener(el, false))
             unscanList.forEach((el) => setEventListener(el, true))
         })
@@ -266,9 +263,7 @@
                         link.href = '#'
                         link.setAttribute('data-id', barcode)
                         link.innerHTML = unscan ? 'Scan Manually' : 'Unscan'
-                        link.className = unscan
-                            ? 'scan dontprint'
-                            : 'unscan dontprint'
+                        link.className = unscan ? 'scan dontprint' : 'unscan dontprint'
                         parent.innerHTML = ''
                         parent.append(link)
                         setEventListener(link, !unscan)

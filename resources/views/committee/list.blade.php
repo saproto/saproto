@@ -14,8 +14,7 @@
 
     <div class="card mb-3">
         <div class="card-header bg-dark text-white">
-            Active
-            {{ $society ? 'societies' : 'committees' }}
+            Active {{ $society ? 'societies' : 'committees' }}
         </div>
         <div class="card-body">
             <div class="row" id="committee__list">
@@ -38,8 +37,7 @@
     @if ($inactive->count() > 0)
         <div class="card mb-3">
             <div class="card-header bg-dark text-white">
-                Inactive
-                {{ $society ? 'societies' : 'committees' }}
+                Inactive {{ $society ? 'societies' : 'committees' }}
             </div>
             <div class="card-body">
                 <div class="row" id="committee__list_inactive">

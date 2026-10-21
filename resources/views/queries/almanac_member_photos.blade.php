@@ -38,9 +38,7 @@
                             @endforeach
                         </ul>
                     </div>
-                    <div>
-                        Showing the users for {{ $year }}/{{ $year + 1 }}
-                    </div>
+                    <div>Showing the users for {{ $year }}/{{ $year + 1 }}</div>
                 </div>
 
                 <div class="card-body">

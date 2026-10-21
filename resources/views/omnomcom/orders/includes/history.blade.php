@@ -25,8 +25,7 @@
 
                 <tr>
                     <td class="text-end">
-                        &euro;
-                        {{ number_format($orderline->total_price, 2, '.', '') }}
+                        &euro; {{ number_format($orderline->total_price, 2, '.', '') }}
                     </td>
                     <td>
                         <span class="text-muted me-2">

@@ -45,9 +45,7 @@
                 </div>
 
                 @if ($data->links() != '')
-                    <div class="card-footer">
-                        {{ $data->links() }}
-                    </div>
+                    <div class="card-footer">{{ $data->links() }}</div>
                 @endif
             </div>
         </div>

@@ -39,8 +39,7 @@
                                 <td>{{ $product->name }}</td>
                                 <td>{{ $product->number_sold }}</td>
                                 <td>
-                                    &euro;
-                                    {{ number_format($product->total_turnover, 2) }}
+                                    &euro; {{ number_format($product->total_turnover, 2) }}
                                 </td>
                             </tr>
                         @endforeach

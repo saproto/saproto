@@ -159,8 +159,7 @@
                             <ul class="list-group">
                                 @foreach ($email->events as $event)
                                     <li class="list-group-item">
-                                        {{ $event->title }}
-                                        ({{ $event->formatted_date->simple }})
+                                        {{ $event->title }} ({{ $event->formatted_date->simple }})
                                     </li>
                                 @endforeach
                             </ul>

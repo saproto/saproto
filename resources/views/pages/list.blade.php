@@ -65,9 +65,7 @@
                     @endforeach
                 </table>
 
-                <div class="card-footer pb-0">
-                    {!! $pages->links() !!}
-                </div>
+                <div class="card-footer pb-0">{!! $pages->links() !!}</div>
             </div>
         </div>
     </div>

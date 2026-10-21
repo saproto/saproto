@@ -56,6 +56,7 @@ jobs:
           filters: |
             resources:
               - 'resources/**'
+              - '.prettierrc'
             migrations:
               - 'database/migrations/**'
             types:

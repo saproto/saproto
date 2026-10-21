@@ -67,9 +67,7 @@
                                             {{ $order->product->name }}
                                         </a>
                                     </td>
-                                    <td>
-                                        {{ $order->product->supplier_id }}
-                                    </td>
+                                    <td>{{ $order->product->supplier_id }}</td>
                                     @if ($order->order_collo > 0)
                                         <td class="opacity-50">
                                             {{ $order->product->supplier_collo > 0 ? $order->product->supplier_collo : null }}
