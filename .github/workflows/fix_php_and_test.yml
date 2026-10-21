@@ -17,7 +17,7 @@ jobs:
       DB_HOST: 127.0.0.1
     services:
       mysql:
-        image: mariadb:10.6
+        image: mariadb:10.6.27
         env:
           MYSQL_ROOT_PASSWORD: ${{ env.DB_PASSWORD }}
           MYSQL_DATABASE:  ${{ env.DB_DATABASE }}
