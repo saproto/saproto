@@ -60,6 +60,7 @@ class PhotoAlbum extends Model
     /** @use HasFactory<PhotoAlbumFactory>*/
     use HasFactory;
 
+    #[Override]
     protected $with = ['thumbPhoto'];
 
     #[Override]

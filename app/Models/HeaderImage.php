@@ -53,6 +53,7 @@ class HeaderImage extends Model implements HasMedia
 
     use InteractsWithMedia;
 
+    #[Override]
     protected $with = ['media'];
 
     public function registerMediaCollections(): void

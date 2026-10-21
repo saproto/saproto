@@ -13,6 +13,7 @@ class Authenticate extends \Illuminate\Auth\Middleware\Authenticate
      *
      * @var Factory
      */
+    #[Override]
     protected $auth;
 
     /**

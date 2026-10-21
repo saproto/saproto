@@ -74,7 +74,7 @@ class AccountController extends Controller
         /** @var Account $account */
         $account = Account::query()->findOrFail($id);
 
-        if ($account->products->count() > 0) {
+        if ($account->products->isNotEmpty()) {
             Session::flash('flash_message', 'Could not delete account '.$account->account_number.' ('.$account->name.') since there are products associated with this account.');
 
             return back();

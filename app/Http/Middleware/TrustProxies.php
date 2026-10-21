@@ -13,6 +13,7 @@ class TrustProxies extends Middleware
      *
      * @var int
      */
+    #[Override]
     protected $headers = RequestAlias::HEADER_X_FORWARDED_FOR |
         RequestAlias::HEADER_X_FORWARDED_HOST |
         RequestAlias::HEADER_X_FORWARDED_PORT |

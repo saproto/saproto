@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Override;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -69,6 +70,7 @@ class Committee extends Model implements HasMedia
 
     use InteractsWithMedia;
 
+    #[Override]
     protected $with = ['media'];
 
     public function getPublicId(): string

@@ -13,6 +13,7 @@ use Override;
  */
 class WelcomeMessageFactory extends Factory
 {
+    #[Override]
     protected $model = WelcomeMessage::class;
 
     #[Override]
