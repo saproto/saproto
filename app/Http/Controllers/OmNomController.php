@@ -33,7 +33,7 @@ class OmNomController extends Controller
             return view('omnomcom.choose');
         }
 
-        if (! array_key_exists($store_slug, Config::array('omnomcom.stores'))) {
+        if (! array_key_exists((string) $store_slug, Config::array('omnomcom.stores'))) {
             Session::flash('flash_message', 'This store does not exist. Please check the URL.');
 
             return to_route('homepage');

@@ -62,6 +62,7 @@ class Feedback extends Model
 
     use SoftDeletes;
 
+    #[Override]
     protected $with = ['user', 'category'];
 
     /**
