@@ -45,6 +45,7 @@ use Override;
 class HelpingCommittee extends Validatable
 {
     /** @var array|string[] */
+    #[Override]
     protected array $rules = [
         'activity_id' => 'required|integer',
         'committee_id' => 'required|integer',

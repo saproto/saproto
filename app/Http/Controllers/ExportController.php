@@ -18,6 +18,7 @@ use App\Models\ProductCategory;
 use App\Models\ProductCategoryEntry;
 use App\Models\Ticket;
 use App\Models\User;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
@@ -74,7 +75,21 @@ class ExportController extends Controller
 
                 break;
             case 'committees_activities':
-                $data = HelpingCommittee::all();
+                $data = HelpingCommittee::query()->whereHas('activity', function ($q) use ($user) {
+                    $q->whereHas('event', function (Builder $q) use ($user) {
+                        $q
+                            ->where('end', '>=', Date::now()->subYear()->timestamp)
+                            ->when($user->cannot('sysadmin'), function ($q) {
+                                $q->where([
+                                    ['secret', false],
+                                    [static function ($query) {
+                                        $query->where('publication', '<', Date::tomorrow()->timestamp)
+                                            ->orWhereNull('publication');
+                                    }],
+                                ]);
+                            });
+                    });
+                })->get();
                 break;
             case 'companies':
                 $data = Company::all();

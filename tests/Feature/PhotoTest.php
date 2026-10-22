@@ -12,7 +12,6 @@ dataset('privacy_states', [
 ]);
 
 it('uploads a photo to an unpublished album with correct custom path and disk, and moves it when made public or private', function (bool $private) {
-    Storage::fake('stack');
     Storage::fake('garage');
     Storage::fake('garage-public');
 

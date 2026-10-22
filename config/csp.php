@@ -8,6 +8,7 @@ use App\Csp\Presets\Mollie;
 use App\Csp\Presets\ProtoApi;
 use App\Csp\Presets\ProTube;
 use App\Csp\Presets\StickerMap;
+use App\Csp\Presets\SurfConext;
 use App\Csp\Presets\UtilityScripts;
 use App\Csp\Presets\Websockets;
 use App\Csp\Presets\Wrapped;
@@ -44,6 +45,7 @@ return [
         Websockets::class,
         Wrapped::class,
         Analytics::class,
+        SurfConext::class,
     ],
 
     /**

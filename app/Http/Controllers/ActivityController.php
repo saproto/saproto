@@ -40,7 +40,7 @@ class ActivityController extends Controller
             return to_route('event::edit', ['event' => $event]);
         }
 
-        if ($newNoShow > $activity->no_show_fee && $activity->users->count() > 0) {
+        if ($newNoShow > $activity->no_show_fee && $activity->users->isNotEmpty()) {
             Session::flash('flash_message', 'You cannot make the no show fee higher since this activity already has participants.');
 
             return to_route('event::edit', ['event' => $event]);
@@ -52,7 +52,7 @@ class ActivityController extends Controller
             return to_route('event::edit', ['event' => $event]);
         }
 
-        if ($newPrice > floatval($activity->price) && $activity->users->count() > 0) {
+        if ($newPrice > floatval($activity->price) && $activity->users->isNotEmpty()) {
             Session::flash('flash_message', 'You cannot make the price of this activity higher since this activity already has participants.');
 
             return to_route('event::edit', ['event' => $event]);

@@ -9,9 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use Illuminate\View\View;
 use Socialite;
-use Symfony\Component\HttpFoundation\RedirectResponse as HttpFoundationRedirectResponse;
+use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 
 class SurfConextController extends Controller
 {
@@ -29,7 +28,7 @@ class SurfConextController extends Controller
     /**
      * Send the user to surfconext to login
      */
-    public function login(): HttpFoundationRedirectResponse
+    public function login(): HttpFoundationResponse
     {
         Session::flash(self::SESSION_FLASH_KEY, self::LOGIN);
 
@@ -40,7 +39,7 @@ class SurfConextController extends Controller
     /**
      * Send the user to surfconext to login to link their account
      */
-    public function linkAccount(): HttpFoundationRedirectResponse
+    public function linkAccount(): HttpFoundationResponse
     {
         Session::flash(self::SESSION_FLASH_KEY, self::LINK_ACCOUNT);
 
@@ -68,14 +67,13 @@ class SurfConextController extends Controller
     /**
      * Send the user to surfconext to log in to create a new account
      */
-    public static function createAccount(string $email): View
+    public static function createAccount(string $email): HttpFoundationResponse
     {
         Session::flash(self::SESSION_FLASH_KEY, self::CREATE_ACCOUNT);
         Session::flash(self::SESSION_FLASH_KEY_EMAIL, $email);
-        $url = Socialite::driver('saml2')
-            ->redirect()->getTargetUrl();
 
-        return view('auth.surfconextRedirect', ['url' => $url]);
+        return Socialite::driver('saml2')
+            ->redirect();
     }
 
     /**
@@ -141,7 +139,10 @@ class SurfConextController extends Controller
         // We're in a create new account attempt, do not log them in
         if ($this->accountAlreadyExists($utUser->uid)) {
             Session::flash('flash_message', 'This University of Twente account is already registered to a user. We have logged you in.');
+
             AuthController::loginUser($request, User::query()->where('utwente_username', $utUser->uid)->first());
+
+            return to_route('homepage');
         }
 
         User::register(

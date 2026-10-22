@@ -30,7 +30,7 @@ class BackupPhotosToStack extends Command
         $photos
             ->chunkById(200, function ($photos) use ($bar) {
                 foreach ($photos as $photo) {
-                    $stackPath = $photo->album->id.'/'.$photo->id;
+                    $stackPath = 'photos/'.$photo->album->id.'/'.$photo->id;
                     if (Storage::disk('stack_backup')->missing($stackPath)) {
                         $media = $photo->getFirstMedia('*');
                         $file = $media->getPathRelativeToRoot();

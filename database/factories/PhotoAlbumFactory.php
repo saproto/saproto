@@ -13,6 +13,7 @@ use Override;
  */
 class PhotoAlbumFactory extends Factory
 {
+    #[Override]
     protected $model = PhotoAlbum::class;
 
     #[Override]
