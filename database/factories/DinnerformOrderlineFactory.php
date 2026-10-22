@@ -15,6 +15,7 @@ use Override;
  */
 class DinnerformOrderlineFactory extends Factory
 {
+    #[Override]
     protected $model = DinnerformOrderline::class;
 
     #[Override]

@@ -11,6 +11,7 @@ use Override;
  */
 class CompanyFactory extends Factory
 {
+    #[Override]
     protected $model = Company::class;
 
     #[Override]

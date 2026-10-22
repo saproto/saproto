@@ -13,6 +13,7 @@ use Override;
  */
 class ActivityFactory extends Factory
 {
+    #[Override]
     protected $model = Activity::class;
 
     #[Override]

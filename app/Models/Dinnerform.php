@@ -71,6 +71,7 @@ class Dinnerform extends Model
     /** @use HasFactory<DinnerformFactory>*/
     use HasFactory;
 
+    #[Override]
     protected $casts = [
         'closed' => 'boolean',
         'visible_home_page' => 'boolean',

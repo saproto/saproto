@@ -13,6 +13,7 @@ use Override;
  */
 class PhotoFactory extends Factory
 {
+    #[Override]
     protected $model = Photo::class;
 
     #[Override]

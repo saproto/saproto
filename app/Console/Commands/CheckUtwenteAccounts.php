@@ -44,7 +44,7 @@ class CheckUtwenteAccounts extends Command
 
         foreach ($users as $user) {
 
-            if ($remoteusers->filter(fn ($item): bool => strtolower((string) $item) === strtolower((string) $user->utwente_username))->count() <= 0) {
+            if ($remoteusers->filter(fn ($item): bool => strtolower((string) $item) === strtolower((string) $user->utwente_username))->isEmpty()) {
                 $msg = "Not found: {$user->utwente_username} (".$user->name.')';
                 $this->info($msg);
                 $unlinked[] = $msg;
