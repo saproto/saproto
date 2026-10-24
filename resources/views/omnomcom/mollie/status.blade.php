@@ -36,24 +36,24 @@
                     <tr>
                         <th>Status</th>
                         <td>
-                            @if (App\Models\MollieTransaction::translateStatus($mollie->status) === MollieEnum::OPEN)
+                            @if (App\Models\MollieTransaction::translateStatus($mollie->status->value) === MollieEnum::OPEN)
                                 <a href="{{ $transaction->payment_url }}">
                                     <span class="label label-success">
                                         {{ $mollie->status }} - Continue
                                         Payment
                                     </span>
                                 </a>
-                            @elseif (App\Models\MollieTransaction::translateStatus($mollie->status) === MollieEnum::PAID)
+                            @elseif (App\Models\MollieTransaction::translateStatus($mollie->status->value) === MollieEnum::PAID)
                                 <span class="label label-success">
                                     {{ $mollie->status }}
                                 </span>
-                            @elseif (App\Models\MollieTransaction::translateStatus($mollie->status) === MollieEnum::FAILED)
+                            @elseif (App\Models\MollieTransaction::translateStatus($mollie->status->value) === MollieEnum::FAILED)
                                 <span class="label label-danger">
-                                    {{ $mollie->status }}
+                                    {{ $mollie->status->value }}
                                 </span>
                             @else
                                 <span class="label label-warning">
-                                    {{ $mollie->status }}
+                                    {{ $mollie->status->value }}
                                 </span>
                             @endif
                         </td>
@@ -61,7 +61,7 @@
                 </table>
 
                 <div class="card-body">
-                    @if (App\Models\MollieTransaction::translateStatus($mollie->status) === MollieEnum::FAILED)
+                    @if (App\Models\MollieTransaction::translateStatus($mollie->status->value) === MollieEnum::FAILED)
                         <p>
                             This payment has failed. All orderlines associated
                             with this payment have been set back to unpaid. You
