@@ -1,0 +1,8 @@
+vendor
+node_modules
+.github
+.tmp
+rector.php
+setup_garage.sh
+phpstan*.neon
+.prettier*
