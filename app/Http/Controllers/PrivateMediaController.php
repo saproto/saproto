@@ -10,11 +10,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class PrivateMediaController extends Controller
 {
-    public function show(int $mediaId, ?string $conversion = null):  ResponseFactory|Response
+    public function show(int $mediaId, ?string $conversion = null): ResponseFactory|Response
     {
         $media = Cache::remember("media::{$mediaId}", Date::now()->addDays(7), fn () => Media::query()->findOrFail($mediaId));
 
@@ -29,12 +28,13 @@ class PrivateMediaController extends Controller
 
         $content = Cache::store('file')->rememberForever("media::{$mediaId}::{$conversion}", function () use ($media, $conversion, $disk) {
             $path = $media->getPathRelativeToRoot($conversion ?? '');
+
             return Storage::disk($disk)->get($path);
         });
 
         return response($content, 200, [
             'Content-Type' => $media->mime_type,
-            'Content-Disposition' => 'inline; filename="' . $media->file_name . '"',
+            'Content-Disposition' => 'inline; filename="'.$media->file_name.'"',
             'Cache-Control' => 'private, max-age=3600',
         ]);
     }
