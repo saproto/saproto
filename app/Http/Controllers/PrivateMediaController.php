@@ -3,17 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Photo;
-use Illuminate\Routing\ResponseFactory;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class PrivateMediaController extends Controller
 {
-    public function show(int $mediaId, ?string $conversion = null): ResponseFactory|Response
+    public function show(int $mediaId, ?string $conversion = null): Response
     {
         $media = Cache::remember("media::{$mediaId}", Date::now()->addDays(7), fn () => Media::query()->findOrFail($mediaId));
 
