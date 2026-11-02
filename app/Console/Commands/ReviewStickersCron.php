@@ -20,7 +20,7 @@ class ReviewStickersCron extends Command
     {
         $reported = Sticker::query()->whereNotNull('reporter_id')->get();
 
-        if ($reported->count() > 0) {
+        if ($reported->isNotEmpty()) {
             $this->info('Sending an email to remind the board to review the stickers reported.');
             Mail::queue(new ReviewStickersMail($reported)->onQueue('low'));
         } else {

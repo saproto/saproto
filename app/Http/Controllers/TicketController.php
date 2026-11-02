@@ -307,7 +307,7 @@ class TicketController extends Controller
      */
     public function buyForEvent(Request $request, Event $event)
     {
-        if ($event->tickets->count() < 1) {
+        if ($event->tickets->isEmpty()) {
             Session::flash('flash_message', 'There are no tickets available for this event.');
 
             return back();
