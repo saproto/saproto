@@ -80,7 +80,6 @@ class Activity extends Validatable
     use HasFactory;
 
     /** @var array|string[] */
-    #[Override]
     protected array $rules = [
         'registration_start' => 'required|integer',
         'registration_end' => 'required|integer',

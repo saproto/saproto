@@ -60,7 +60,6 @@ class Photo extends Model implements HasMedia
 
     use InteractsWithMedia;
 
-    #[Override]
     protected $with = ['media'];
 
     #[Override]

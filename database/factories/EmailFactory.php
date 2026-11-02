@@ -12,7 +12,6 @@ use Override;
  */
 class EmailFactory extends Factory
 {
-    #[Override]
     protected $model = Email::class;
 
     #[Override]
