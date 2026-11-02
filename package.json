@@ -46,7 +46,7 @@
         "embla-carousel-vue": "^8.6.0",
         "exifreader": "^4.46.0",
         "leaflet": "^1.9.4",
-        "leaflet-geosearch": "^4.2.0",
+        "leaflet-geosearch": "^5.0.0",
         "leaflet.markercluster": "^1.5.3",
         "moment": "^2.31.0",
         "radix-vue": "^1.9.13",
@@ -65,7 +65,7 @@
         "@inertiajs/vue3": "^3.6.1",
         "@laravel/vite-plugin-wayfinder": "^0.1.11",
         "@rushstack/eslint-patch": "^1.12.0",
-        "@sentry/vite-plugin": "^5.4.1",
+        "@sentry/vite-plugin": "^11.9.0",
         "@tailwindcss/forms": "^0.5.3",
         "@tailwindcss/postcss": "^4.3.3",
         "@tailwindcss/typography": "^0.5.20",
@@ -105,6 +105,6 @@
         "vue-demi@0.14.10": true,
         "@sentry/cli@2.58.6": true,
         "@parcel/watcher@2.6.0": true,
-        "exifreader@4.50.0": true
+        "exifreader@4.52.0": true
     }
 }
