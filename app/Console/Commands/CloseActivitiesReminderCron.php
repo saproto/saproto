@@ -27,7 +27,7 @@ class CloseActivitiesReminderCron extends Command
             ->orderBy('registration_end')
             ->get();
 
-        if ($activities->isNotEmpty()) {
+        if ($activities->count() > 0) {
             $this->info('Sending an email to remind the treasurer to close activities.');
             Mail::queue(new CloseActivitiesReminder($activities)->onQueue('low'));
         } else {

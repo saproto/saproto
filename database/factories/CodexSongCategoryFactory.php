@@ -12,7 +12,6 @@ use Override;
  */
 class CodexSongCategoryFactory extends Factory
 {
-    #[Override]
     protected $model = CodexSongCategory::class;
 
     #[Override]

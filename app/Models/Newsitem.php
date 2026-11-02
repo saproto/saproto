@@ -74,7 +74,6 @@ class Newsitem extends Model implements HasMedia
     use InteractsWithMedia;
     use SoftDeletes;
 
-    #[Override]
     protected $with = ['media'];
 
     public function registerMediaCollections(): void

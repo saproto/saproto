@@ -51,7 +51,6 @@ class Kernel extends ConsoleKernel
      *
      * @var array<class-string>
      */
-    #[Override]
     protected $commands = [
         SyncRoles::class,
         TestEmail::class,

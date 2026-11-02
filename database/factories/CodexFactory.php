@@ -12,7 +12,6 @@ use Override;
  */
 class CodexFactory extends Factory
 {
-    #[Override]
     protected $model = Codex::class;
 
     #[Override]

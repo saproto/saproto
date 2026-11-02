@@ -195,7 +195,7 @@ class OrderLineController extends Controller
         $order->product->save();
 
         $ticketPurchase = TicketPurchase::query()->where('orderline_id', $id)->with('ticket.event')->get();
-        if ($ticketPurchase->isNotEmpty()) {
+        if ($ticketPurchase->count() > 0) {
             $ticketPurchase = $ticketPurchase->first();
             $ticketPurchase->delete();
             $ticketPurchase->ticket->event->updateUniqueUsersCount();

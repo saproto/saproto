@@ -31,7 +31,6 @@ class Handler extends ExceptionHandler
      *
      * @var array<int, class-string<Throwable>>
      */
-    #[Override]
     protected $dontReport = [
         HttpExceptionInterface::class,
         NotFoundHttpException::class,

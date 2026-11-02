@@ -20,7 +20,7 @@ class AliasController extends Controller
         $aliases = Alias::query()->with('user')->orderBy('alias')->get()
             ->groupBy('alias');
 
-        if ($aliases->isNotEmpty()) {
+        if ($aliases->count() > 0) {
             return view('aliases.index', ['aliases' => $aliases]);
         }
 
