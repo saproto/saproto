@@ -60,7 +60,6 @@ class Photo extends Model implements HasMedia
 
     use InteractsWithMedia;
 
-    #[Override]
     protected $with = ['media'];
 
     #[Override]
@@ -98,6 +97,10 @@ class Photo extends Model implements HasMedia
     {
         $this->addMediaConversion(PhotoEnum::LARGE->value)
             ->fit(Fit::Max, 1920, 1920)
+            ->format('webp');
+
+        $this->addMediaConversion(PhotoEnum::MEDIUM->value)
+            ->fit(Fit::Max, 750, 750)
             ->format('webp');
 
         $this->addMediaConversion(PhotoEnum::SMALL->value)

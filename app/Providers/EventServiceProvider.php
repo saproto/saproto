@@ -15,7 +15,6 @@ class EventServiceProvider extends ServiceProvider
      *
      * @var array<string,array<int,string>>
      */
-    #[Override]
     protected $listen = [
         Login::class => [
             AuthLoginEventHandler::class,

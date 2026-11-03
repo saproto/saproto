@@ -31,7 +31,6 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Override;
 use Spatie\Csp\AddCspHeaders;
 use Spatie\Permission\Middleware\PermissionMiddleware;
 use Spatie\Permission\Middleware\RoleMiddleware;
@@ -44,7 +43,6 @@ class Kernel extends HttpKernel
      *
      * @var array<int, class-string|string>
      */
-    #[Override]
     protected $middleware = [
         InvokeDeferredCallbacks::class,
         TrustProxies::class,
@@ -56,7 +54,6 @@ class Kernel extends HttpKernel
         GenerateAndSetCspNonce::class,
     ];
 
-    #[Override]
     protected $middlewareGroups = [
         'web' => [
             EncryptCookies::class,
@@ -86,7 +83,6 @@ class Kernel extends HttpKernel
      *
      * @var array<string, string>
      */
-    #[Override]
     protected $middlewareAliases = [
         'auth' => Authenticate::class,
         'member' => Member::class,

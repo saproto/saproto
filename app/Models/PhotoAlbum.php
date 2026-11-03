@@ -60,7 +60,6 @@ class PhotoAlbum extends Model
     /** @use HasFactory<PhotoAlbumFactory>*/
     use HasFactory;
 
-    #[Override]
     protected $with = ['thumbPhoto'];
 
     #[Override]
@@ -107,7 +106,7 @@ class PhotoAlbum extends Model
 
     public function thumb(): ?string
     {
-        return $this->thumbPhoto?->getUrl(PhotoEnum::SMALL);
+        return $this->thumbPhoto?->getUrl(PhotoEnum::MEDIUM);
     }
 
     #[Override]

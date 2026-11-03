@@ -14,7 +14,6 @@ use Override;
  */
 class DinnerformFactory extends Factory
 {
-    #[Override]
     protected $model = Dinnerform::class;
 
     #[Override]

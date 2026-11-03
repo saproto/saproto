@@ -13,7 +13,6 @@ use Override;
  */
 class CodexSongFactory extends Factory
 {
-    #[Override]
     protected $model = CodexSong::class;
 
     #[Override]

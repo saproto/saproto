@@ -13,7 +13,6 @@ use Override;
  */
 class HeaderImageFactory extends Factory
 {
-    #[Override]
     protected $model = HeaderImage::class;
 
     #[Override]

@@ -114,7 +114,6 @@ class Event extends Model implements HasMedia
     use InteractsWithMedia;
     use SoftDeletes;
 
-    #[Override]
     protected $with = ['category'];
 
     #[Override]

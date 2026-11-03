@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
-use Override;
 
 /**
  * Address Model.
@@ -51,7 +50,6 @@ class Address extends Validatable
     use HasFactory;
 
     /** @var array|string[] */
-    #[Override]
     protected array $rules = [
         'user_id' => 'required|integer',
         'street' => 'required|string',

@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
-use Override;
 
 /**
  * Class WallstreetPrice.
@@ -40,7 +39,6 @@ use Override;
 #[Table(name: 'wallstreet_drink_prices')]
 class WallstreetPrice extends Model
 {
-    #[Override]
     protected $with = ['drink', 'product'];
 
     /**

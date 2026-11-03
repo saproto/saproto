@@ -12,7 +12,6 @@ use Override;
  */
 class CommitteeFactory extends Factory
 {
-    #[Override]
     protected $model = Committee::class;
 
     #[Override]
