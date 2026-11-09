@@ -10,6 +10,7 @@ use App\Models\OrderLine;
 use App\Models\User;
 use Exception;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -19,16 +20,16 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use Illuminate\View\View;
 use Mollie;
 use Mollie\Api\Exceptions\ApiException;
+use Mollie\Api\Exceptions\RequestException;
+use Mollie\Api\Http\Data\Money;
+use Mollie\Api\Http\Requests\CreatePaymentRequest;
+use Mollie\Api\Http\Requests\GetPaymentRequest;
 
 class MollieController extends Controller
 {
-    /**
-     * @return View
-     */
-    public function index(Request $request): \Illuminate\Contracts\View\View|Factory
+    public function index(Request $request): View|Factory
     {
         $user = $request->input('user_id') ? User::query()->findOrFail($request->input('user_id')) : null;
 
@@ -81,11 +82,9 @@ class MollieController extends Controller
     }
 
     /**
-     * @return View
-     *
-     * @throws Exception
+     * @throws RequestException
      */
-    public function status(int $id): \Illuminate\Contracts\View\View|Factory
+    public function status(int $id): View|Factory
     {
         /** @var MollieTransaction $transaction */
         $transaction = MollieTransaction::query()->findOrFail($id);
@@ -95,16 +94,11 @@ class MollieController extends Controller
 
         return view('omnomcom.mollie.status', [
             'transaction' => $transaction,
-            'mollie' => Mollie::api()
-                ->payments
-                ->get($transaction->mollie_id),
+            'mollie' => Mollie::send(new GetPaymentRequest($transaction->mollie_id)),
         ]);
     }
 
-    /**
-     * @return View|RedirectResponse
-     */
-    public function monthly(string $month): RedirectResponse|Factory|\Illuminate\Contracts\View\View
+    public function monthly(string $month): RedirectResponse|Factory|View
     {
         try {
             $month = Date::parse($month);
@@ -232,28 +226,21 @@ class MollieController extends Controller
             'status' => 'draft',
         ]);
 
-        $total = number_format($total, 2, '.', '');
-        $properties = [
-            'amount' => [
-                'currency' => 'EUR',
-                'value' => $total,
-            ],
-            'method' => null,
-            'description' => 'OmNomCom Settlement (€'.$total.')',
-            'redirectUrl' => route('omnomcom::mollie::receive', ['id' => $transaction->id]),
-        ];
+        $request = new CreatePaymentRequest(
+            description: 'OmNomCom Settlement (€'.$total.')',
+            amount: Money::of('EUR')->fromString(number_format($total, 2, '.', '')),
+            redirectUrl: route('omnomcom::mollie::receive', ['id' => $transaction->id]),
+            webhookUrl: Config::boolean('omnomcom.mollie.has_webhook') ? route('webhook::mollie', ['id' => $transaction->id]) : null,
+            metadata: [
+                'order_id' => $transaction->id,
+            ]
+        );
 
-        if (Config::boolean('omnomcom.mollie.has_webhook')) {
-            $properties['webhookUrl'] = route('webhook::mollie', ['id' => $transaction->id]);
-        }
+        $payment = Mollie::send($request);
 
-        $mollie = Mollie::api()
-            ->payments
-            ->create($properties);
-
-        $transaction->mollie_id = $mollie->id;
-        $transaction->amount = $mollie->amount->value;
-        $transaction->payment_url = $mollie->getCheckoutUrl();
+        $transaction->mollie_id = $payment->id;
+        $transaction->amount = floatval(number_format($total, 2, '.', ''));
+        $transaction->payment_url = $payment->getCheckoutUrl();
         $transaction->save();
 
         OrderLine::query()->whereIn('id', $orderlines)->update(['payed_with_mollie' => $transaction->id]);
@@ -287,7 +274,7 @@ class MollieController extends Controller
     /**
      * @return null|Collection<int, object{status: string, resource: string, id: string, description?: string, pricing?: mixed}>
      *
-     * @throws ApiException
+     * @throws ApiException|RequestException
      */
     public static function getPaymentMethods(): ?Collection
     {
