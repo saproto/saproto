@@ -144,30 +144,28 @@
                                 @elseif ($email->to_list)
                                     list(s)
                                     @foreach ($email->lists as $list)
-                                            {{ $list->name }}{{ $loop->last ? '' : ',' }}
+                                        {{ $list->name }}{{ $loop->last ? '' : ',' }}
                                     @endforeach
                                 @elseif ($email->to_event)
                                     event(s)
                                     {{ $email->to_backup ? 'with backup users' : '' }}:
                                     @foreach ($email->events()->get() as $event)
-                                            {{ $event->title }}.
+                                        {{ $event->title }}.
                                     @endforeach
                                 @elseif ($email->to_withdrawal)
                                     withdrawal(s)
                                     @foreach ($email->withdrawals as $withdrawal)
-                                            {{ $withdrawal->id }}.
+                                        {{ $withdrawal->id }}.
                                     @endforeach
                                 @endif
                             </td>
-                            <td>
-                                {{ date('d-m-Y H:i', $email->time) }}
-                            </td>
+                            <td>{{ date('d-m-Y H:i', $email->time) }}</td>
                             <td>
                                 @if (! $email->sent)
                                     @if ($email->ready)
                                         Queued
                                     @else
-                                            Draft
+                                        Draft
                                     @endif
                                 @else
                                     <i>Sent</i>

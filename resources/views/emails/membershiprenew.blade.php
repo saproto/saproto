@@ -15,10 +15,9 @@
         If you would like to cancel your membership with S.A. Proto, please let
         us know by replying to this e-mail before September 1. If you do so your
         membership will be terminated immediately and you will not be charged
-        the membership fee for academic year
-        {{ date('Y') }}/{{ date('Y') + 1 }}. If you don't reply to this e-mail
-        before September 1, we will assume that you wish to continue your
-        membership for academic year {{ date('Y') }}/{{ date('Y') + 1 }}.
+        the membership fee for academic year {{ date('Y') }}/{{ date('Y') + 1 }}.
+        If you don't reply to this e-mail before September 1, we will assume
+        that you wish to continue your membership for academic year {{ date('Y') }}/{{ date('Y') + 1 }}.
     </p>
 
     <p>

@@ -6,8 +6,8 @@
 
         @if (count($unlinked) > 0)
             <p>
-                I just checked the validity of UTwente accounts. I found
-                {{ count($unlinked) }} inactive accounts:
+                I just checked the validity of UTwente accounts. I found {{ count($unlinked) }} inactive
+                accounts:
             </p>
 
             <ul>

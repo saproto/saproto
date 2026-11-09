@@ -59,8 +59,7 @@
                 </div>
                 <div class="heading">Card validity</div>
                 <div>
-                    {{ date('M Y') }} -
-                    {{ date('M Y', strtotime('+3 years')) }}
+                    {{ date('M Y') }} - {{ date('M Y', strtotime('+3 years')) }}
                 </div>
                 <barcode
                     id="barcode"

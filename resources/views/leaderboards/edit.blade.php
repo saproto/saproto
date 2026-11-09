@@ -23,8 +23,7 @@
                         @can('board')
                             <div class="form-group autocomplete">
                                 <label for="organisation">
-                                    Committee:
-                                    {{ $leaderboard->committee->name ?? '' }}
+                                    Committee: {{ $leaderboard->committee->name ?? '' }}
                                 </label>
                                 <input
                                     class="form-control committee-search"
@@ -251,25 +250,19 @@
 
 @push('javascript')
     <script type="text/javascript" @cspNonce>
-        Array.from(document.getElementsByClassName('le-points')).forEach(
-            (el) => {
-                ;['click', 'keyup'].forEach((e) =>
-                    el.addEventListener(e, (e) => {
-                        const id = el.getAttribute('data-id')
-                        const input = el.querySelector('.le-points-input')
-                        let points = input.value
-                        if (e.target.classList.contains('le-points-increase'))
-                            points++
-                        else if (
-                            e.target.classList.contains('le-points-decrease')
-                        )
-                            points--
-                        input.value = points
-                        updatePoints(id, points)
-                    })
-                )
-            }
-        )
+        Array.from(document.getElementsByClassName('le-points')).forEach((el) => {
+            ;['click', 'keyup'].forEach((e) =>
+                el.addEventListener(e, (e) => {
+                    const id = el.getAttribute('data-id')
+                    const input = el.querySelector('.le-points-input')
+                    let points = input.value
+                    if (e.target.classList.contains('le-points-increase')) points++
+                    else if (e.target.classList.contains('le-points-decrease')) points--
+                    input.value = points
+                    updatePoints(id, points)
+                })
+            )
+        })
 
         function updatePoints(id, points) {
             post('{{ route('leaderboards::entries::update') }}', {

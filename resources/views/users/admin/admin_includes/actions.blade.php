@@ -102,17 +102,15 @@
                 class="list-group-item"
                 href="{{ route('user::admin::toggle_studied_create', ['id' => $user->id]) }}"
             >
-                Has
-                {!! $user->did_study_create ? '' : '<strong>not</strong>' !!}
-                studied CreaTe.
+                Has {!! $user->did_study_create ? '' : '<strong>not</strong>' !!} studied
+                CreaTe.
             </a>
             <a
                 class="list-group-item"
                 href="{{ route('user::admin::toggle_studied_itech', ['id' => $user->id]) }}"
             >
-                Has
-                {!! $user->did_study_itech ? '' : '<strong>not</strong>' !!}
-                studied ITech.
+                Has {!! $user->did_study_itech ? '' : '<strong>not</strong>' !!} studied
+                ITech.
             </a>
         </ul>
     </div>

@@ -44,7 +44,7 @@
                                         ></i>
                                     </div>
                                 @else
-                                        No icon available
+                                    No icon available
                                 @endif
                             </td>
                             <td>{{ $achievement->name }}</td>

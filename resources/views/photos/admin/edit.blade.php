@@ -1,7 +1,7 @@
 @extends('website.layouts.redesign.generic')
 
 @section('page-title')
-        Edit {{ $album->name }} ({{ date('M j, Y', $album->date_taken) }})
+    Edit {{ $album->name }} ({{ date('M j, Y', $album->date_taken) }})
 @endsection
 
 @section('container')
@@ -100,8 +100,7 @@
                                 ]
                             )
                             <p class="mt-2">
-                                Private album:
-                                {{ $album->private ? '✅' : '❌' }}
+                                Private album: {{ $album->private ? '✅' : '❌' }}
                             </p>
                         </div>
 
@@ -270,8 +269,7 @@
                     {{ csrf_field() }}
 
                     <div class="card-header bg-dark text-center text-white">
-                        {{ $album->name }}
-                        ({{ date('M j, Y', $album->date_taken) }})
+                        {{ $album->name }} ({{ date('M j, Y', $album->date_taken) }})
                     </div>
 
                     <div class="card-body">
@@ -450,18 +448,13 @@
                         if (!acceptedType) {
                             uploadError(
                                 file,
-                                new Error(
-                                    `File type is not supported: ${file.type}`
-                                )
+                                new Error(`File type is not supported: ${file.type}`)
                             )
                             continue
                         }
                         const underSizeLimit = file.size <= MAX_FILE_SIZE
                         if (!underSizeLimit) {
-                            uploadError(
-                                file,
-                                new Error(`The image is too big!`)
-                            )
+                            uploadError(file, new Error(`The image is too big!`))
                             continue
                         }
                         file.id = fileId++

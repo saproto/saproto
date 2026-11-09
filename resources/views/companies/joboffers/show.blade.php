@@ -1,7 +1,7 @@
 @extends('website.layouts.redesign.generic')
 
 @section('page-title')
-        {{ $joboffer->company->name }}: {{ $joboffer->title }}
+    {{ $joboffer->company->name }}: {{ $joboffer->title }}
 @endsection
 
 @section('container')
@@ -28,8 +28,7 @@
                     <h3>{{ $joboffer->title }}</h3>
 
                     <h6 class="card-subtitle text-muted mb-3">
-                        Posted on
-                        {{ date_format($joboffer->created_at, 'd-m-Y') }} for
+                        Posted on {{ date_format($joboffer->created_at, 'd-m-Y') }} for
                         <a
                             href="{{ route('companies::show', ['company' => $joboffer->company]) }}"
                             class="text-info"

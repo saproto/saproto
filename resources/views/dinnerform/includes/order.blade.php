@@ -28,12 +28,10 @@
                     <td>€ {{ number_format($order->price, 2) }}</td>
                     @if ($dinnerform->hasDiscount())
                         <td>
-                            - €
-                            {{ number_format($order->price - $order->price_with_discount, 2) }}
+                            - € {{ number_format($order->price - $order->price_with_discount, 2) }}
                         </td>
                         <td>
-                            €
-                            {{ number_format($order->price_with_discount, 2) }}
+                            € {{ number_format($order->price_with_discount, 2) }}
                         </td>
                     @endif
 

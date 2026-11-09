@@ -23,8 +23,7 @@
                 </div>
                 <div class="modal-body">
                     <p>
-                        Are you sure you want to change the membership type of
-                        {{ $user->name }}?
+                        Are you sure you want to change the membership type of {{ $user->name }}?
 
                         <span class="me-1">Membership type:</span>
                         <select

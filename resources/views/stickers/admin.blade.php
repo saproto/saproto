@@ -43,15 +43,9 @@
                                 <td>
                                     {{ $sticker->reporter->name ?? 'Unknown' }}
                                 </td>
-                                <td>
-                                    {{ $sticker->city }}
-                                </td>
-                                <td>
-                                    {{ $sticker->country }}
-                                </td>
-                                <td>
-                                    {{ $sticker->report_reason }}
-                                </td>
+                                <td>{{ $sticker->city }}</td>
+                                <td>{{ $sticker->country }}</td>
+                                <td>{{ $sticker->report_reason }}</td>
                                 <td>
                                     <img
                                         src="{{ $sticker->getImageUrl() }}"

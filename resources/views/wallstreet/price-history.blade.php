@@ -27,9 +27,7 @@
         window.addEventListener('load', () => {
             const ctx = document.getElementById('myChart')
 
-            get(
-                `{{ route('api::wallstreet::all_prices', ['id' => $id]) }}`
-            ).then((products) => {
+            get(`{{ route('api::wallstreet::all_prices', ['id' => $id]) }}`).then((products) => {
                 var chart = new Chart(ctx, {
                     type: 'line',
                     options: {

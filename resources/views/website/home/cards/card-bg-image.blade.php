@@ -12,14 +12,10 @@
             height: {{ $height ?? 100 }}px;
         "
     >
-        <p class="card-text ellipsis">
-            {!! $html !!}
-        </p>
+        <p class="card-text ellipsis">{!! $html !!}</p>
     </a>
 
     @if (isset($footer) && $footer != null)
-        <div class="card-footer ellipsis">
-            {!! $footer !!}
-        </div>
+        <div class="card-footer ellipsis">{!! $footer !!}</div>
     @endif
 </div>

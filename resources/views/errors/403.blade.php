@@ -8,6 +8,6 @@
     @if (isset($exception) && ! empty($exception->getMessage()))
         {{ $exception->getMessage() }}
     @else
-            You are not allowed to access this page.
+        You are not allowed to access this page.
     @endif
 @endsection

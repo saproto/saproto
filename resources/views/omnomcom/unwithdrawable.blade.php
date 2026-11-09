@@ -44,8 +44,7 @@
                                 <th>{{ $user->id }}</th>
                                 <td>{{ $user->name }}</td>
                                 <th>
-                                    &euro;
-                                    {{ number_format($user->orderlines->sum('total_price'), 2) }}
+                                    &euro; {{ number_format($user->orderlines->sum('total_price'), 2) }}
                                 </th>
                                 <td></td>
                             </tr>
@@ -54,12 +53,10 @@
                                 <tr class="collapse-{{ $key }} collapse">
                                     <td>{{ $orderline->id }}</td>
                                     <td>
-                                        {{ $orderline->units }}x
-                                        {{ $orderline->product->name }}
+                                        {{ $orderline->units }}x {{ $orderline->product->name }}
                                     </td>
                                     <td>
-                                        &euro;
-                                        {{ number_format($orderline->total_price, 2) }}
+                                        &euro; {{ number_format($orderline->total_price, 2) }}
                                     </td>
                                     <td>{{ $orderline->created_at }}</td>
                                 </tr>

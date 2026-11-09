@@ -35,9 +35,7 @@
                                     <tr>
                                         <th></th>
                                         <th>Name</th>
-                                        <th>
-                                            {{ $leaderboard->points_name }}
-                                        </th>
+                                        <th>{{ $leaderboard->points_name }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>

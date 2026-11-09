@@ -63,8 +63,11 @@
 
                     <hr />
 
-                    <textarea class="form-control" name="diet">
-{{ $user->diet }}</textarea>
+                    <textarea
+                        class="form-control"
+                        name="diet"
+                        >{{ $user->diet }}</textarea
+                    >
                 </div>
 
                 <div class="modal-footer">

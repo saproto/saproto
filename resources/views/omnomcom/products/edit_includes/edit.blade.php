@@ -258,8 +258,7 @@
                                 value="{{ $account?->id }}"
                                 @selected(old('account_id', $account && $product && $account->id == $product->account_id))
                             >
-                                {{ $account->name }}
-                                ({{ $account->account_number }})
+                                {{ $account->name }} ({{ $account->account_number }})
                             </option>
                         @endforeach
                     </select>

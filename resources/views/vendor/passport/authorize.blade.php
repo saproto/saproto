@@ -33,8 +33,7 @@
     <p>- or -</p>
 
     <form method="post" action="/oauth/authorize">
-        {{ csrf_field() }}
-        {{ method_field('DELETE') }}
+        {{ csrf_field() }} {{ method_field('DELETE') }}
 
         <input type="hidden" name="state" value="{{ $request->state }}" />
         <input type="hidden" name="client_id" value="{{ $client->id }}" />

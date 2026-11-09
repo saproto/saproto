@@ -77,10 +77,9 @@
                 //disable the checkbox
                 event.target.disabled = true
                 //send the request
-                get(
-                    '{{ urldecode(route('api::wallstreet::toggle_event')) }}',
-                    { id: event.target.value }
-                ).then((response) => {
+                get('{{ urldecode(route('api::wallstreet::toggle_event')) }}', {
+                    id: event.target.value,
+                }).then((response) => {
                     if (response.id != null) {
                         event.target.checked = response.active
                         event.target.disabled = false

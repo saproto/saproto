@@ -8,7 +8,7 @@
     @if ($new)
         New temporary admin
     @else
-            Edit temporary admin
+        Edit temporary admin
     @endif
 @endsection
 

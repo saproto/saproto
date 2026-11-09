@@ -26,8 +26,7 @@
 
     <p>
         We will try again during the next withdrawal. This means that in your
-        order history you will find a new order of
-        &euro;{{ number_format($withdrawal->totalForUser($user), 2, ',', '') }}.
+        order history you will find a new order of &euro;{{ number_format($withdrawal->totalForUser($user), 2, ',', '') }}.
     </p>
 
     <p>

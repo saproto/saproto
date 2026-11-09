@@ -159,7 +159,7 @@
                                 Your are currently only syncing relevant events.
                             </strong>
                         @else
-                                You are currently syncing all events.
+                            You are currently syncing all events.
                         @endif
 
                         <a
@@ -170,7 +170,7 @@
                             @if (Auth::user()->getCalendarRelevantSetting())
                                 Sync all my events.
                             @else
-                                    Sync only relevant events.
+                                Sync only relevant events.
                             @endif
                         </a>
 

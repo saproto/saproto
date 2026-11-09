@@ -3,9 +3,7 @@
         <div class="card-body">
             <ul class="list-group p-3">
                 @foreach ($errors->all() as $error)
-                    <li>
-                        {{ $error }}
-                    </li>
+                    <li>{{ $error }}</li>
                 @endforeach
             </ul>
         </div>

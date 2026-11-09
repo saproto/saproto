@@ -51,9 +51,8 @@
                     <p>
                         <strong>{{ $committee->committee->name }}</strong>
                         <br />
-                        Helps with
-                        {{ $committee->users->count() }}
-                        people. {{ $committee->amount }} are needed.
+                        Helps with {{ $committee->users->count() }} people. {{ $committee->amount }} are
+                        needed.
                     </p>
 
                     <form

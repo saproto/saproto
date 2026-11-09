@@ -75,9 +75,7 @@
                 <tbody>
                     <tr>
                         <th>Name</th>
-                        <td>
-                            {{ $user->name }} ({{{ $user->calling_name }}})
-                        </td>
+                        <td>{{ $user->name }} ({{{ $user->calling_name }}})</td>
                     </tr>
 
                     @if ($user->did_study_create || $user->did_study_itech)
@@ -204,7 +202,7 @@
                                         @if ($user->address_visible)
                                             Hide from members.
                                         @else
-                                                Make visible to members.
+                                            Make visible to members.
                                         @endif
                                     </a>
                                 </p>
@@ -375,8 +373,8 @@
                                         type="button"
                                         class="btn btn-warning"
                                     >
-                                        {{ Cookie::get('disable-december') === 'disabled' ? 'enable' : 'disable' }}
-                                        december theme
+                                        {{ Cookie::get('disable-december') === 'disabled' ? 'enable' : 'disable' }} december
+                                        theme
                                     </button>
                                 </a>
                             @endif

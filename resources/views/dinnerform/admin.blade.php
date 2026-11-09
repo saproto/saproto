@@ -74,9 +74,7 @@
                         <td>
                             €{{ number_format($dinnerform->helper_discount, 2) }}
                         </td>
-                        <td>
-                            {{ $dinnerform->regular_discount_percentage }}%
-                        </td>
+                        <td>{{ $dinnerform->regular_discount_percentage }}%</td>
                         <td>
                             €{{ number_format($dinnerform->totalAmount(), 2) }}
                         </td>
@@ -107,9 +105,7 @@
                                 <td class="text-muted">
                                     #{{ $order->user->id }}
                                 </td>
-                                <td>
-                                    {{ $order->user->name }}
-                                </td>
+                                <td>{{ $order->user->name }}</td>
                                 <td>
                                     @if ($order->helper)
                                         <i

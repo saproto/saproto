@@ -42,9 +42,7 @@
                         </a>
                     </footer>
 
-                    <p class="card-text">
-                        {!! $parsedContent !!}
-                    </p>
+                    <p class="card-text">{!! $parsedContent !!}</p>
                 </div>
             </div>
         </div>

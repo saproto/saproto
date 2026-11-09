@@ -70,8 +70,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    {{ $ticket->sold() }} /
-                                    {{ $ticket->totalAvailable() }}
+                                    {{ $ticket->sold() }} / {{ $ticket->totalAvailable() }}
                                 </td>
                                 <td>
                                     <a
@@ -97,9 +96,7 @@
                     </table>
                 </div>
 
-                <div class="card-footer pb-0">
-                    {{ $tickets->links() }}
-                </div>
+                <div class="card-footer pb-0">{{ $tickets->links() }}</div>
             </div>
         </div>
     </div>

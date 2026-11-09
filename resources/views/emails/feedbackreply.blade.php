@@ -9,8 +9,7 @@
     </p>
 
     <p>
-        You posted the following feedback to the
-        {{ $feedback->category->title }} board:
+        You posted the following feedback to the {{ $feedback->category->title }} board:
     </p>
 
     <table
@@ -29,15 +28,12 @@
                     <i class="fa-solid fa-thumbs-up"></i>
                 </p>
 
-                <p>
-                    {{ $feedback->feedback }}
-                </p>
+                <p>{{ $feedback->feedback }}</p>
 
                 <hr />
                 <p>
                     <sub>
-                        {{ $user->name }} --
-                        {{ $feedback->created_at->format('j M Y, H:i') }}
+                        {{ $user->name }} -- {{ $feedback->created_at->format('j M Y, H:i') }}
                     </sub>
                 </p>
             </td>
@@ -57,9 +53,7 @@
     >
         <tr style="margin: 0; padding: 0; border: none">
             <td style="margin: 0; padding: 10px 20px; border: none">
-                <p>
-                    {{ $reply }}
-                </p>
+                <p>{{ $reply }}</p>
 
                 <hr />
                 <p>

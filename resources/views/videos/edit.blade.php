@@ -49,8 +49,7 @@
                                 Currently linked to:
                                 <br />
                                 <strong>
-                                    {{ $video->event->title }}
-                                    ({{ date('d-m-Y', $video->event->start) }})
+                                    {{ $video->event->title }} ({{ date('d-m-Y', $video->event->start) }})
                                 </strong>
                             </p>
                         @endif

@@ -28,7 +28,7 @@
                             {{ $method->description . ($loop->last ? '.' : ', ') }}
                         @endforeach
                     @else
-                            various payment methods.
+                        various payment methods.
                     @endif
                 </p>
 

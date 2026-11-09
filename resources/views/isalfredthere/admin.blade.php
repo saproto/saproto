@@ -31,9 +31,10 @@
                                 You'll be back at
                                 {{ Carbon::parse($unix)->format('Y-m-d H:i') }}.
                             @elseif ($status == IsAlfredThereEnum::JUR->value)
-                                You do not seem to be Alfred. Do you happen to feel like a Jur today?
+                                You do not seem to be Alfred. Do you happen to
+                                feel like a Jur today?
                             @else
-                                    Your whereabouts are currently not known.
+                                Your whereabouts are currently not known.
                             @endif
                         </p>
 
@@ -178,14 +179,10 @@
         )
         radioList.forEach((el) => {
             el.addEventListener('change', () => {
-                if (
-                    el.checked &&
-                    el.value === '{{ IsAlfredThereEnum::AWAY }}'
-                ) {
+                if (el.checked && el.value === '{{ IsAlfredThereEnum::AWAY }}') {
                     dateSelect.classList.remove('d-none')
                     alfredText.classList.remove('d-none')
-                    alfredText.querySelector('input').placeholder =
-                        'Additional message'
+                    alfredText.querySelector('input').placeholder = 'Additional message'
                     dateBack.required = true
                 } else if (el.checked && el.value === 'text') {
                     alfredText.classList.remove('d-none')

@@ -34,7 +34,7 @@
                                 @if (Feature::for($user)->active($key))
                                     ✅
                                 @else
-                                        ❌
+                                    ❌
                                 @endif
                             </td>
                             <td>

@@ -81,9 +81,8 @@
                     class="list-group-item"
                     href="{{ route('user::admin::toggle_primary_somewhere_else', ['id' => $user->id]) }}"
                 >
-                    Is
-                    {!! $user->member->is_primary_at_another_association ? '' : '<strong>not</strong>' !!}
-                    a primary member at another association.
+                    Is {!! $user->member->is_primary_at_another_association ? '' : '<strong>not</strong>' !!} a
+                    primary member at another association.
                 </a>
             @else
                 <li class="list-group-item">Not a member</li>
@@ -142,7 +141,7 @@
                                         Pet
                                         <i class="fas fa-paw"></i>
                                     @else
-                                            Regular
+                                        Regular
                                     @endif
                                 </td>
                                 <td class="text-center">

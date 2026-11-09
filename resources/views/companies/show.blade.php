@@ -31,9 +31,7 @@
                 @endif
 
                 <div class="card-body">
-                    <h2 class="card-title">
-                        {{ $company->name }}
-                    </h2>
+                    <h2 class="card-title">{{ $company->name }}</h2>
 
                     <div class="mt-3">
                         {!! Markdown::convert($company->description) !!}

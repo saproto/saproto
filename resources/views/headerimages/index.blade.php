@@ -68,9 +68,7 @@
                     </table>
                 </div>
 
-                <div class="card-footer pb-0">
-                    {{ $images->links() }}
-                </div>
+                <div class="card-footer pb-0">{{ $images->links() }}</div>
             </div>
         </div>
     </div>

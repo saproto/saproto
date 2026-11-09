@@ -90,8 +90,8 @@
                             name="note"
                             rows="10"
                             placeholder="The content."
+                            >{{ $password?->note ? Crypt::decrypt($password->note) : '' }}</textarea
                         >
-{{ $password?->note ? Crypt::decrypt($password->note) : '' }}</textarea>
                     </div>
 
                     <div class="card-footer">
