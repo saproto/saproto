@@ -64,6 +64,6 @@ class EmailCron extends Command
             $this->info('Sent to '.$recipients->count().' people.');
         }
 
-        $this->info(($emails->count() > 0 ? 'All e-mails sent.' : 'No e-mails to be sent.'));
+        $this->info(($emails->isNotEmpty() ? 'All e-mails sent.' : 'No e-mails to be sent.'));
     }
 }

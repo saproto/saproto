@@ -30,7 +30,7 @@ services:
             - garage
     mariadb:
         container_name: '${SAIL_CONTAINER_NAME}-mariadb'
-        image: 'mariadb:10.6'
+        image: 'mariadb:10.6.27'
         ports:
             - '${SAIL_SQL_PORT:-3306}:3306'
         environment:

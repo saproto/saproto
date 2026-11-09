@@ -57,7 +57,7 @@
         "league/commonmark": "^2.3",
         "league/oauth1-client": "^1.7",
         "milon/barcode": "^13.1",
-        "mollie/laravel-mollie": "^4.0",
+        "mollie/laravel-mollie": "^5.0",
         "nesbot/carbon": "^3.9.1",
         "pragmarx/google2fa": "^9.0.0",
         "sentry/sentry-laravel": "^4.4.1",
@@ -77,7 +77,7 @@
         "laravel/socialite": "^5.19",
         "socialiteproviders/saml2": "^4.7",
         "google/apiclient": "^2.18.0",
-        "ably/ably-php": "^1.1",
+        "ably/ably-php": "^2.0",
         "anhskohbo/no-captcha": "^3.8.0",
         "spatie/laravel-medialibrary": "^11.13",
         "league/flysystem-sftp-v3": "^3.30",
@@ -89,7 +89,6 @@
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.0",
-        "brianium/paratest": "<7.26.1",
         "fakerphp/faker": "^1.13",
         "itsgoingd/clockwork": "^5.1",
         "laravel/tinker": "^v3.0.0",
@@ -100,8 +99,8 @@
         "mockery/mockery": "^1.6",
         "pestphp/pest-plugin-laravel": "^5.0.0",
         "beyondcode/expose": "^3.0",
-        "pestphp/pest-plugin-browser": "^5.0.0",
-        "pestphp/pest-plugin-phpstan": "^5.0"
+        "pestphp/pest-plugin-browser": "^v5.0.0",
+        "pestphp/pest-plugin-phpstan": "^v5.2.2"
     },
     "autoload": {
         "psr-4": {

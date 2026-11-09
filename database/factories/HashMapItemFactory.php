@@ -18,7 +18,7 @@ class HashMapItemFactory extends Factory
      * @return array<string, mixed>
      */
     #[Override]
-    public function definition()
+    public function definition(): array
     {
         return [
             'key' => 'key',

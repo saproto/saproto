@@ -10,8 +10,8 @@ class ProTube implements Preset
 {
     public function configure(Policy $policy): void
     {
-        $policy->add(Directive::FRAME, [
-            'https://protu.be/',
+        $policy->add([Directive::FRAME, Directive::CONNECT, Directive::FORM_ACTION], [
+            'https://protu.be',
         ]);
     }
 }

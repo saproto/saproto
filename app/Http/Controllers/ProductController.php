@@ -279,7 +279,7 @@ class ProductController extends Controller
         /** @var Product $product */
         $product = Product::query()->findOrFail($id);
 
-        if ($product->orderlines->count() > 0) {
+        if ($product->orderlines->isNotEmpty()) {
             Session::flash('flash_message', 'You cannot delete this product because there are orderlines associated with it.');
 
             return back();

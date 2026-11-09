@@ -17,7 +17,7 @@ jobs:
       DB_HOST: 127.0.0.1
     services:
       mysql:
-        image: mariadb:10.6
+        image: mariadb:10.6.27
         env:
           MYSQL_ROOT_PASSWORD: ${{ env.DB_PASSWORD }}
           MYSQL_DATABASE:  ${{ env.DB_DATABASE }}
@@ -95,7 +95,7 @@ jobs:
         run: ./vendor/bin/pint --parallel
 
       - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v7.2.0
+        uses: stefanzweifel/git-auto-commit-action@v7.2.1
         with:
           commit_message: PHP Automatic Fixing (Pint & Rector)
           skip_fetch: true
@@ -134,7 +134,7 @@ jobs:
 
       - name: Commit changes
         if: steps.changes.outputs.resources == 'true'
-        uses: stefanzweifel/git-auto-commit-action@v7.2.0
+        uses: stefanzweifel/git-auto-commit-action@v7.2.1
         with:
           commit_message: Automatic linting (Prettier and eslint)
           skip_fetch: true
@@ -151,11 +151,6 @@ jobs:
 
       - run: mkdir -p .tmp/phpunit.cache
 
-      - name: Install MariaDB client
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y mariadb-client
-
       - name: 🐘 Run Pest tests
         run: |
           php artisan key:generate
@@ -169,7 +164,7 @@ jobs:
 
       - name: Commit changes (schema dump)
         if: steps.changes.outputs.migrations == 'true'
-        uses: stefanzweifel/git-auto-commit-action@v7.2.0
+        uses: stefanzweifel/git-auto-commit-action@v7.2.1
         with:
           commit_message: Changed sql schema (artisan dump)
           skip_fetch: true

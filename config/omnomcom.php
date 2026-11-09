@@ -17,7 +17,7 @@ return [
     'stores' => [
         'protopolis' => [
             'name' => 'Protopolis',
-            'categories' => [12, 1, 4, 5, 6, 22, 24, 7, 9, 11, 26],
+            'categories' => [12, 1, 4, 5, 6, 22, 24, 7, 9, 11, 26, 35],
             'addresses' => ['130.89.190.22', '130.89.190.235', '2001:67c:2564:318:baae:edff:fe79:9aa3'],
             'roles' => ['board', 'omnomcom'],
             'cash_allowed' => false,

@@ -114,7 +114,7 @@ sail up -d
 sail composer install
 sail artisan key:generate
 sail artisan webpush:vapid
-sail artisan migrate --seed
+sail artisan migrate:fresh --seed
 ```
 
 #### Client-side dependencies

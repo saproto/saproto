@@ -153,7 +153,7 @@ class MenuController extends Controller
         /** @var MenuItem $menuItem */
         $menuItem = MenuItem::query()->findOrfail($id);
 
-        if ($menuItem->children->count() > 0) {
+        if ($menuItem->children->isNotEmpty()) {
             Session::flash('flash_message', "A menu item with children can't be removed.");
 
             return to_route('menu::list');

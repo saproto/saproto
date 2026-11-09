@@ -143,7 +143,9 @@ class PhotoAdminController extends Controller
 
                             continue;
                         }
-
+                        if ($album->thumb_id == $photoId) {
+                            $album->update(['thumb_id' => null]);
+                        }
                         Photo::query()->find($photoId)?->delete();
                     }
 
