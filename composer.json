@@ -77,7 +77,7 @@
         "laravel/socialite": "^5.19",
         "socialiteproviders/saml2": "^4.7",
         "google/apiclient": "^2.18.0",
-        "ably/ably-php": "^1.1",
+        "ably/ably-php": "^2.0",
         "anhskohbo/no-captcha": "^3.8.0",
         "spatie/laravel-medialibrary": "^11.13",
         "league/flysystem-sftp-v3": "^3.30",
