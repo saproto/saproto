@@ -97,6 +97,7 @@
                         name="supplier_collo"
                         placeholder="0"
                         value="{{ $product->supplier_collo ?? '' }}"
+                        required
                     />
                 </div>
             </div>
@@ -104,7 +105,7 @@
             <div class="row mb-3">
                 <div class="col-md-3">
                     <label for="stock">
-                        Shelf stock:
+                        Old stock:
                         <i
                             class="fas fa-info-circle ms-1"
                             data-bs-toggle="tooltip"
@@ -124,7 +125,7 @@
 
                 <div class="col-md-3">
                     <label for="stock">
-                        Final stock:
+                        New stock:
                         <i
                             class="fas fa-info-circle ms-1"
                             data-bs-toggle="tooltip"
@@ -138,6 +139,7 @@
                         id="stock"
                         name="stock"
                         placeholder="0"
+                        required
                         value="{{ $product->stock ?? '' }}"
                     />
                 </div>
@@ -151,6 +153,7 @@
                         name="preferred_stock"
                         placeholder="0"
                         value="{{ $product->preferred_stock ?? '' }}"
+                        required
                     />
                 </div>
 
@@ -163,6 +166,7 @@
                         name="max_stock"
                         placeholder="0"
                         value="{{ $product->max_stock ?? '' }}"
+                        required
                     />
                 </div>
             </div>
@@ -172,6 +176,7 @@
                     <label for="calories">Calories:</label>
                     <div class="input-group">
                         <input
+                            required
                             type="text"
                             class="form-control"
                             id="calories"
