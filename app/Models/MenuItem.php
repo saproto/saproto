@@ -53,6 +53,7 @@ use Override;
 #[Table(name: 'menuitems')]
 class MenuItem extends Model
 {
+    #[Override]
     protected $with = ['page', 'children'];
 
     /**

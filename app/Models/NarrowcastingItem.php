@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
+use Override;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -47,6 +48,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 #[Table(name: 'narrowcasting')]
 class NarrowcastingItem extends Model implements HasMedia
 {
+    #[Override]
     protected $with = ['media'];
 
     use InteractsWithMedia;

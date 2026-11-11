@@ -12,6 +12,7 @@ use Override;
  */
 class CodexTextTypeFactory extends Factory
 {
+    #[Override]
     protected $model = CodexTextType::class;
 
     #[Override]

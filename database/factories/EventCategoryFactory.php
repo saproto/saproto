@@ -12,6 +12,7 @@ use Override;
  */
 class EventCategoryFactory extends Factory
 {
+    #[Override]
     protected $model = EventCategory::class;
 
     #[Override]
