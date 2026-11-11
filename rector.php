@@ -42,7 +42,7 @@ try {
             LaravelSetList::LARAVEL_TESTING,
         ])
         ->withPreparedSets(deadCode: true)
-        ->withPhpSets(php84: true)
+        ->withPhpSets(php85: true)
         ->withConfiguredRule(WhereToWhereLikeRector::class, [
             WhereToWhereLikeRector::USING_POSTGRES_DRIVER => false,
         ])
