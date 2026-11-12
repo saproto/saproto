@@ -15,6 +15,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
+    #[Override]
     protected $namespace = 'App\Http\Controllers';
 
     /**

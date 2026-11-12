@@ -14,6 +14,7 @@ use Override;
  */
 class EventFactory extends Factory
 {
+    #[Override]
     protected $model = Event::class;
 
     #[Override]
