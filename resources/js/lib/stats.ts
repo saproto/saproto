@@ -272,7 +272,7 @@ export const prepareStats = async (
             }
         }
     }
-    let maxCategory = ''
+    let maxCategory = Object.keys(amountForOptions)[2]
     let maxAmount = 0
     for (const option in amountForOptions) {
         if (amountForOptions[option].amount > maxAmount) {
