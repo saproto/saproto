@@ -15,11 +15,7 @@ import { ArrowUp } from '@lucide/vue'
 import domtoimage from 'dom-to-image'
 import ProTube from '@/pages/Wrapped/Slides/ProTube.vue'
 import ProtubeTop from '@/pages/Wrapped/Slides/ProtubeTop.vue'
-import {
-    NativeSelect,
-    NativeSelectOptGroup,
-    NativeSelectOption,
-} from '@/components/ui/native-select'
+import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
 const props = defineProps<{
     data: statsType
 }>()
