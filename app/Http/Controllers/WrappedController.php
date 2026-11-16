@@ -21,7 +21,6 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
-use Inertia\Response;
 
 class WrappedController extends Controller
 {
@@ -43,8 +42,8 @@ class WrappedController extends Controller
                 'events' => $this->eventList($from, $to, $user),
                 'protube_totals' => Cache::remember("wrapped.protube_totals::$from->year::$to->year", Date::tomorrow(), fn () => $this->ProTubeTotals($from, $to)),
                 'played_videos' => PlayedVideoData::collect($this->topProtubeSongs($from, $to, $user)->toArray()),
-                'torondo_price' => Cache::remember("wrapped.torondo_price", Date::tomorrow(), fn () => Product::query()->where('name', 'Torondo')->first()?->price ?? 0.5),
-                'available_years'=>  Cache::remember("wrapped.available_years::$user->id", Date::tomorrow(), fn () => $this->membershipYears($user)),
+                'torondo_price' => Cache::remember('wrapped.torondo_price', Date::tomorrow(), fn () => Product::query()->where('name', 'Torondo')->first()?->price ?? 0.5),
+                'available_years' => Cache::remember("wrapped.available_years::$user->id", Date::tomorrow(), fn () => $this->membershipYears($user)),
             ]);
     }
 
@@ -174,7 +173,6 @@ class WrappedController extends Controller
             ->orderBy('total')
             ->get()->pluck('total')->map(static fn ($total) => (int) $total);
     }
-
 
     /** @return Collection<(int|string), int> **/
     private function membershipYears(User $user): Collection
