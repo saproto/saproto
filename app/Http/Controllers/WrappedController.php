@@ -7,6 +7,7 @@ use App\Data\PlayedVideoData;
 use App\Models\Event;
 use App\Models\OrderLine;
 use App\Models\PlayedVideo;
+use App\Models\Product;
 use App\Models\TicketPurchase;
 use App\Models\User;
 use Illuminate\Database\Query\Builder;
@@ -16,6 +17,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -23,7 +25,7 @@ use Inertia\Response;
 
 class WrappedController extends Controller
 {
-    public function index(Request $request): Response
+    public function index(Request $request)
     {
         abort_if(App::environment('production') && now()->month !== Carbon::DECEMBER && ! Auth::user()?->can('sysadmin'), 403, 'This feature is only available during December.');
 
@@ -41,6 +43,8 @@ class WrappedController extends Controller
                 'events' => $this->eventList($from, $to, $user),
                 'protube_totals' => Cache::remember("wrapped.protube_totals::$from->year::$to->year", Date::tomorrow(), fn () => $this->ProTubeTotals($from, $to)),
                 'played_videos' => PlayedVideoData::collect($this->topProtubeSongs($from, $to, $user)->toArray()),
+                'torondo_price' => Product::query()->where('name', 'Torondo')->first()?->price ?? 0.5,
+                'available_years'=>  Cache::remember("wrapped.available_years::$user->id", Date::tomorrow(), fn () => $this->membershipYears($user)),
             ]);
     }
 
@@ -169,5 +173,13 @@ class WrappedController extends Controller
             ->groupBy('user_id')
             ->orderBy('total')
             ->get()->pluck('total')->map(static fn ($total) => (int) $total);
+    }
+
+
+    /** @return Collection<(int|string), int> **/
+    private function membershipYears(User $user): Collection
+    {
+        return OrderLine::query()->whereIn('product_id', array_values(Config::array('omnomcom.fee')))->where('user_id', $user->id)
+            ->selectRaw('DISTINCT Year(created_at) as start')->pluck('start');
     }
 }

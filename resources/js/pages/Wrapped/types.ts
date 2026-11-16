@@ -5,6 +5,7 @@ interface VideoWithUrl extends App.Data.PlayedVideoData {
 }
 export interface statsType {
     year: number
+    available_years: number[]
     images: {
         cookieMonster: string
         beugel: string
@@ -41,6 +42,7 @@ export interface statsType {
     totalSpent: {
         amount: number
         total: number
+        torondo_price: number
     }
     willToLives: {
         amount: number
