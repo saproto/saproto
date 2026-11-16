@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import type { Component } from 'vue'
 import TotalSpent from '@/pages/Wrapped/Slides/TotalSpent.vue'
 import MostBought from '@/pages/Wrapped/Slides/MostBought.vue'
@@ -15,7 +15,7 @@ import { ArrowUp } from '@lucide/vue'
 import domtoimage from 'dom-to-image'
 import ProTube from '@/pages/Wrapped/Slides/ProTube.vue'
 import ProtubeTop from '@/pages/Wrapped/Slides/ProtubeTop.vue'
-
+import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
 const props = defineProps<{
     data: statsType
 }>()
@@ -42,7 +42,12 @@ type SlideComponent =
 
 const slideElement = ref<SlideComponent>()
 const sharing = ref(false)
-
+const year = ref(stats.year)
+watch(year, (newYear) => {
+    if (newYear !== stats.year) {
+        window.location.href = `/wrapped?year=${newYear}`
+    }
+})
 let allSlides: Array<[Component, number] | true> = [
     [ProTube, 10],
     stats.protube.user.total_played <= 0 || [ProtubeTop, 10],
@@ -221,11 +226,20 @@ const { lengthX } = useSwipe(slideElement, {
 
 <template>
     <div id="slideshow" @click="pageClick">
-        <div>
+        <div class="flex items-baseline justify-center gap-2">
             <h1>
                 {{ $page.props.auth.user.calling_name }}'s
                 <span class="omnomcom">Proto</span> Wrapped
             </h1>
+            <NativeSelect v-model="year">
+                <NativeSelectOption
+                    v-for="availableYear in stats.available_years"
+                    :key="availableYear"
+                    :value="availableYear"
+                >
+                    {{ availableYear }}
+                </NativeSelectOption>
+            </NativeSelect>
         </div>
 
         <div id="progress">

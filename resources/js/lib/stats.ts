@@ -17,18 +17,21 @@ import ProductData = App.Data.ProductData
 import { statsType } from '@/pages/Wrapped/types'
 export const prepareStats = async (
     year: number,
+    available_years: number[],
     orders: Array<OrderlineData>,
     order_totals: number[][],
     total_spent: number,
     events: Array<{ price: number }>,
     protube_totals: number[],
-    played_videos: Array<App.Data.PlayedVideoData>
+    played_videos: Array<App.Data.PlayedVideoData>,
+    torondo_price: number
 ) => {
     const caloriesTotal = orders
         .map((x) => x.units * x.product.calories)
         .reduce((a, b) => a + b)
     const stats: statsType = {
         year: year,
+        available_years: available_years,
         images: {
             cookieMonster: cookieMonster,
             beugel: beugel,
@@ -71,6 +74,7 @@ export const prepareStats = async (
         totalSpent: {
             amount: orders.map((x) => x.total_price).reduce((a, b) => a + b),
             total: total_spent,
+            torondo_price: torondo_price,
         },
         willToLives: {
             amount: 0,
