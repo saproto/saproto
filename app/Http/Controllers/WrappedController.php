@@ -25,7 +25,8 @@ class WrappedController extends Controller
 {
     public function index(Request $request): Response
     {
-        abort_if(App::environment('production') && now()->month !== Carbon::DECEMBER, 403, 'This feature is only available during December.');
+        abort_if(App::environment('production') && now()->month !== Carbon::DECEMBER && ! Auth::user()?->can('sysadmin'), 403, 'This feature is only available during December.');
+
         $year = $request->integer('year', Date::now()->year);
         $from = Date::createFromDate($year)->startOfYear();
         $to = Date::createFromDate($year)->endOfYear();
