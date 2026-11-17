@@ -41,9 +41,9 @@ class VideoController extends Controller
     public static function store(Request $request): RedirectResponse
     {
         $youtube_id = $request->youtube_id;
-        $youtube_video = Youtube::getVideoInfo($youtube_id);
-
-        if ($youtube_video != null) {
+        try {
+            $youtube_video = Youtube::getVideoInfo($youtube_id);
+        } catch (Exception) {
             Session::flash('flash_message', 'This is an invalid YouTube video ID!');
 
             return back();

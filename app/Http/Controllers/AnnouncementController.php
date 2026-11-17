@@ -129,7 +129,7 @@ class AnnouncementController extends Controller
      */
     public function dismiss($id): RedirectResponse
     {
-        /** @var Announcement $announcement */
+        /** @var Announcement|null $announcement */
         $announcement = Announcement::query()->find($id);
 
         if ($announcement == null || ! $announcement->is_dismissable) {

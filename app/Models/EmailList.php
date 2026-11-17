@@ -90,7 +90,7 @@ class EmailList extends Model
     public function unsubscribe(User $user): bool
     {
         $s = EmailListSubscription::query()->where('user_id', $user->id)->where('list_id', $this->id);
-        if ($s == null) {
+        if (! $s->exists()) {
             return false;
         }
 

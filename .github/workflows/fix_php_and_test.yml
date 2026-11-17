@@ -144,7 +144,7 @@ jobs:
       - name: Cache Pest test results
         uses: actions/cache@v6.1.0
         with:
-          path: .tmp/phpunit.cache/test-results
+          path: .tmp/phpunit.cache/test-run-history
           key: ${{ runner.os }}-pest-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-pest-
 
@@ -155,7 +155,7 @@ jobs:
           php artisan key:generate
           php artisan migrate
           php artisan passport:keys
-          vendor/bin/pest --ci
+          vendor/bin/pest --ci --parallel
 
       - name: Dump SQL schema
         if: steps.changes.outputs.migrations == 'true'
