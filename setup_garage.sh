@@ -60,11 +60,9 @@ KEY_ID=$(echo "$KEYOUTPUT"     | grep -m1 "Key ID:"      | awk -F': *' '{print $
 KEY_NAME=$(echo "$KEYOUTPUT"   | grep -m1 "Key name:"    | awk -F': *' '{print $2}')
 SECRET_KEY=$(echo "$KEYOUTPUT" | grep -m1 "Secret key:"  | awk -F': *' '{print $2}')
 
-echo
-echo "Add the following to your .env file:"
-echo "GARAGE_KEY=$KEY_ID"
-echo "GARAGE_SECRET=$SECRET_KEY"
-echo
+
+sed -i "/^GARAGE_KEY=/s/=.*/=$KEY_ID/" .env
+sed -i "/^GARAGE_SECRET=/s/=.*/=$SECRET_KEY/" .env
 
 
 # Create buckets and set permissions
@@ -72,11 +70,16 @@ $GARAGE bucket create $GARAGE_BUCKET > /dev/null
 $GARAGE bucket allow --read --write --owner $GARAGE_BUCKET --key laravel-key > /dev/null
 echo "Created bucket: $GARAGE_BUCKET"
 
-
 $GARAGE bucket create $GARAGE_BUCKET_PUBLIC > /dev/null
 $GARAGE bucket allow --read --write --owner $GARAGE_BUCKET_PUBLIC --key laravel-key > /dev/null
+
 # Allow public read access
 $GARAGE bucket website --allow $GARAGE_BUCKET_PUBLIC > /dev/null
 echo "Created bucket: $GARAGE_BUCKET_PUBLIC"
+
+echo
+echo "GARAGE_KEY=$KEY_ID"
+echo "GARAGE_SECRET=$SECRET_KEY"
+echo
 
 echo "Garage setup completed."
