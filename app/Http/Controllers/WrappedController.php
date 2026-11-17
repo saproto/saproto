@@ -58,6 +58,7 @@ class WrappedController extends Controller
                 $query->where('user_id', $user->id);
             })
             ->with('product.media')
+            ->whereNot('product_id', Config::integer('omnomcom.failed-withdrawal'))
             ->where('created_at', '>', $from)
             ->where('created_at', '<', $to)
             ->orderBy('created_at', 'desc');
@@ -69,6 +70,7 @@ class WrappedController extends Controller
         $totals = OrderLine::query()
             ->whereBetween('created_at', [$from, $to])
             ->selectRaw('product_id, SUM(units) as total')
+            ->whereNot('product_id', Config::integer('omnomcom.failed-withdrawal'))
             ->groupBy('product_id')
             ->groupBy('user_id')
             ->orderBy('product_id')
