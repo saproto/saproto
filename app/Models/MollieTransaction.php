@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Mollie;
 use Mollie\Api\Exceptions\ApiException;
+use Mollie\Api\Http\Requests\GetPaymentRequest;
 use Mollie\Api\Resources\Payment;
 
 /**
@@ -70,9 +71,7 @@ class MollieTransaction extends Model
      */
     public function transaction(): Payment
     {
-        return Mollie::api()
-            ->payments
-            ->get($this->mollie_id);
+        return Mollie::send(new GetPaymentRequest($this->mollie_id));
     }
 
     public static function translateStatus(string $status): MollieEnum
@@ -102,11 +101,10 @@ class MollieTransaction extends Model
      */
     public function updateFromWebhook(): static
     {
-        $mollie = Mollie::api()
-            ->payments
-            ->get($this->mollie_id);
 
-        $new_status = self::translateStatus($mollie->status);
+        $mollie = Mollie::send(new GetPaymentRequest($this->mollie_id));
+
+        $new_status = self::translateStatus($mollie->status->value);
 
         $this->loadMissing(['orderlines.ticketPurchase', 'orderlines.product']);
 

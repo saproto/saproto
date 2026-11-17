@@ -23,9 +23,10 @@ class ProtoApi implements Preset
         $policy->add(Directive::IMG, [
             'https://lh3.googleusercontent.com',
             'data:',
+            'blob:',
         ]);
 
-        $policy->add([Directive::IMG, Directive::MEDIA],
+        $policy->add([Directive::IMG, Directive::MEDIA, Directive::CONNECT],
             Config::array('proto.domains.garage'));
 
         $policy->add(Directive::FORM_ACTION, Config::array('proto.domains.protube'));

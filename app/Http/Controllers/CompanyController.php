@@ -72,6 +72,12 @@ class CompanyController extends Controller
     {
         $request->validate([
             'image' => ['nullable', 'image', 'max:5120', 'mimes:jpeg,png,jpg'], // max 5MB
+            'name' => ['required', 'string'],
+            'url' => ['required', 'url'],
+            'excerpt' => ['required', 'string'],
+            'description' => ['required', 'string'],
+            'membercard_excerpt' => ['nullable', 'string'],
+            'membercard_long' => ['nullable', 'string'],
         ]);
 
         $company = new Company;
@@ -140,6 +146,12 @@ class CompanyController extends Controller
     {
         $request->validate([
             'image' => ['nullable', 'image', 'max:5120', 'mimes:jpeg,png,jpg'], // max 5MB
+            'name' => ['required', 'string'],
+            'url' => ['required', 'url'],
+            'excerpt' => ['required', 'string'],
+            'description' => ['required', 'string'],
+            'membercard_excerpt' => ['nullable', 'string'],
+            'membercard_long' => ['nullable', 'string'],
         ]);
 
         $company->name = $request->name;

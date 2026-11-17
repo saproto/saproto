@@ -110,6 +110,7 @@ export enum PageEnum {
 export enum PhotoEnum {
     ORIGINAL = 'original',
     LARGE = 'large',
+    MEDIUM = 'medium',
     SMALL = 'small',
 }
 export enum ProductEnum {

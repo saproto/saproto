@@ -65,6 +65,17 @@ class ProductController extends Controller
 
         $request->validate([
             'image' => ['nullable', 'image', 'max:5120'], // max 5MB
+            'product_categories' => ['nullable', 'array'],
+            'product_categories.*' => ['integer', 'exists:product_categories,id'],
+            'barcode' => ['nullable', 'string', 'max:255'],
+            'price' => ['required', 'string', 'max:255'],
+            'account_id' => ['required', 'integer', 'exists:accounts,id'],
+            'name' => ['required', 'string', 'max:255'],
+            'stock' => ['required', 'integer', 'min:0'],
+            'preferred_stock' => ['required', 'integer', 'min:0'],
+            'calories' => ['required', 'integer', 'min:0'],
+            'supplier_collo' => ['required', 'integer', 'min:0'],
+            'max_stock' => ['required', 'integer', 'min:0'],
         ]);
 
         $product = Product::query()->create($request->except('image', 'product_categories', 'barcode'));
@@ -133,6 +144,17 @@ class ProductController extends Controller
 
         $request->validate([
             'image' => ['nullable', 'image', 'max:5120'], // max 5MB
+            'product_categories' => ['nullable', 'array'],
+            'product_categories.*' => ['integer', 'exists:product_categories,id'],
+            'barcode' => ['nullable', 'string', 'max:255'],
+            'price' => ['required', 'string', 'max:255'],
+            'account_id' => ['required', 'integer', 'exists:accounts,id'],
+            'name' => ['required', 'string', 'max:255'],
+            'stock' => ['required', 'integer', 'min:0'],
+            'preferred_stock' => ['required', 'integer', 'min:0'],
+            'calories' => ['required', 'integer', 'min:0'],
+            'supplier_collo' => ['required', 'integer', 'min:0'],
+            'max_stock' => ['required', 'integer', 'min:0'],
         ]);
 
         // Mutation logging point
@@ -155,7 +177,7 @@ class ProductController extends Controller
         }
 
         if ($found_stock != $new_stock) {
-            // Actwual restocking mutation
+            // Actual restocking mutation
             $after_mut = StockMutation::query()->make([
                 'before' => $found_stock,
                 'after' => $new_stock,

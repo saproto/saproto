@@ -3,16 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Photo;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class PrivateMediaController extends Controller
 {
-    public function show(int $mediaId, ?string $conversion = null): StreamedResponse
+    public function show(int $mediaId, ?string $conversion = null): Response
     {
         $media = Cache::remember("media::{$mediaId}", Date::now()->addDays(7), fn () => Media::query()->findOrFail($mediaId));
 
@@ -25,11 +25,16 @@ class PrivateMediaController extends Controller
         // only allow if the model is a Photo
         abort_if($media->model_type !== Photo::class, 403, 'This is not a private media file.');
 
-        $path = $media->getPathRelativeToRoot($conversion ?? '');
+        $content = Cache::store('file')->rememberForever("media::{$mediaId}::{$conversion}", function () use ($media, $conversion, $disk) {
+            $path = $media->getPathRelativeToRoot($conversion ?? '');
 
-        return Storage::disk($disk)->response($path, $media->file_name, [
+            return Storage::disk($disk)->get($path);
+        });
+
+        return response($content, 200, [
+            'Content-Type' => $media->mime_type,
+            'Content-Disposition' => 'inline; filename="'.$media->file_name.'"',
             'Cache-Control' => 'private, max-age=3600',
-            'Pragma' => 'public',
         ]);
     }
 }
