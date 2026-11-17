@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\View\View;
 
 class UserProfileController extends Controller
@@ -47,12 +48,12 @@ class UserProfileController extends Controller
 
     private function getSpentMoney(User $user): float
     {
-        return OrderLine::query()->where('user_id', $user->id)->pluck('total_price')->sum();
+        return OrderLine::query()->whereNot('product_id', Config::integer('omnomcom.failed-withdrawal'))->where('user_id', $user->id)->pluck('total_price')->sum();
     }
 
     private function getProductsPurchased(User $user): int
     {
-        return OrderLine::query()->where('user_id', $user->id)->pluck('units')->sum();
+        return OrderLine::query()->whereNot('product_id', Config::integer('omnomcom.failed-withdrawal'))->where('user_id', $user->id)->pluck('units')->sum();
     }
 
     private function getTotalSignups(User $user): int
