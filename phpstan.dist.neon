@@ -17,5 +17,3 @@ parameters:
     ignoreErrors:
         # Issue with the analysis of dynamic object type (see https://github.com/phpstan/phpstan/issues/928)
         - '#Cannot access property (.*) on array\|object.#'
-        # Issue with SephpaInputException not being a subtype of Throwable
-        - '#AbcAeffchen\\Sephpa\\SephpaInputException#'

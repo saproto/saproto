@@ -360,8 +360,6 @@ class WithdrawalController extends Controller
                     'iban' => $user->bank->iban,
                 ]);
                 $i++;
-
-                /** @phpstan-ignore-next-line */
             } catch (SephpaInputException $e) {
                 Session::flash('flash_message', "Error creating the withdrawal. user {$user->id}: Error: {$e->getMessage()}");
 
