@@ -155,7 +155,7 @@ jobs:
           php artisan key:generate
           php artisan migrate
           php artisan passport:keys
-          vendor/bin/pest --ci
+          vendor/bin/pest --ci --parallel
 
       - name: Dump SQL schema
         if: steps.changes.outputs.migrations == 'true'
