@@ -141,15 +141,6 @@ jobs:
       - name: 🔨 build front-end
         run: npm run build --if-present
 
-      - name: Cache Pest test results
-        uses: actions/cache@v6.1.0
-        with:
-          path: .tmp/phpunit.cache/test-results
-          key: ${{ runner.os }}-pest-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-pest-
-
-      - run: mkdir -p .tmp/phpunit.cache
-
       - name: 🐘 Run Pest tests
         run: |
           php artisan key:generate
