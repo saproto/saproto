@@ -148,8 +148,7 @@
                                         <div
                                             class="activity {{ $activity->current ? 'current' : ($activity->over ? 'past' : '') }}"
                                         >
-                                            {{ date('H:i', $activity->start) }}
-                                            - {{ date('H:i', $activity->end) }}
+                                            {{ date('H:i', $activity->start) }} - {{ date('H:i', $activity->end) }}
                                             <br />
                                             <strong>
                                                 {{ $activity->title }}

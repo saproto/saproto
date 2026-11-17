@@ -8,9 +8,7 @@
         The changelog can be found below.
     </p>
 
-    <p>
-        {!! $log !!}
-    </p>
+    <p>{!! $log !!}</p>
 
     <p>Kind regards, The System</p>
 @endsection

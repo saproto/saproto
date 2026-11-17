@@ -39,12 +39,8 @@
                                             {{ $account->name }}
                                         </a>
                                     </td>
-                                    <td>
-                                        {{ $account->account_number }}
-                                    </td>
-                                    <td>
-                                        {{ $account->products_count }}
-                                    </td>
+                                    <td>{{ $account->account_number }}</td>
+                                    <td>{{ $account->products_count }}</td>
                                     <td style="min-width: 60px">
                                         <a
                                             href="{{ route('omnomcom::accounts::edit', ['id' => $account->id]) }}"

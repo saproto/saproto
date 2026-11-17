@@ -91,7 +91,7 @@
                                     @if ($event->category)
                                         {{ $event->category->name }}
                                     @else
-                                            Not set
+                                        Not set
                                     @endif
                                 </td>
 

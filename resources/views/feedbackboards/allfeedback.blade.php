@@ -55,8 +55,6 @@
     </div>
 
     @if ($data->links() != '')
-        <div class="card-footer">
-            {{ $data->withQueryString()->links() }}
-        </div>
+        <div class="card-footer">{{ $data->withQueryString()->links() }}</div>
     @endif
 </div>

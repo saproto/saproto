@@ -67,20 +67,14 @@
                                     </td>
                                     <td>#{{ $user->id }}</td>
                                     <td>{{ $user->name }}</td>
-                                    <td>
-                                        {{ $user->email }}
-                                    </td>
+                                    <td>{{ $user->email }}</td>
                                     <td>
                                         @if ($user->is_member)
                                             {{ $user->member->proto_username }}
                                         @endif
                                     </td>
-                                    <td>
-                                        {{ $user->utwente_username }}
-                                    </td>
-                                    <td>
-                                        {{ $user->utwente_department }}
-                                    </td>
+                                    <td>{{ $user->utwente_username }}</td>
+                                    <td>{{ $user->utwente_department }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

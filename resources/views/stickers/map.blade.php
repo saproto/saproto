@@ -43,8 +43,7 @@
                                     class="dropdown-item"
                                     href="{{ route('stickers.index', ['type' => $stickerType['id']]) }}"
                                 >
-                                    {{ $stickerType['title'] }}
-                                    ({{ $stickerType['count'] }})
+                                    {{ $stickerType['title'] }} ({{ $stickerType['count'] }})
                                 </a>
                             @endforeach
                         </ul>
@@ -296,7 +295,7 @@
 @endsection
 
 @push('head')
-    
+
 @endpush
 
 @push('stylesheet')
@@ -310,8 +309,7 @@
         .leaflet-popup-content-wrapper {
             overflow: hidden;
         }
-
-        @foreach($stickerTypes as $stickerType)
+        @foreach ($stickerTypes as $stickerType)
         .cluster-icon-{{ $stickerType['id'] }} {
             background:
                 linear-gradient(0, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
@@ -326,7 +324,6 @@
             font-size: 1.5em;
         }
         @endforeach
-
 
         .results {
             color: black;
@@ -344,20 +341,14 @@
     <script type="text/javascript" @cspNonce>
         window.addEventListener('load', () => {
             window.Echo.channel(`stickers`)
-                .listen(
-                    '.App\\Events\\Stickers\\StickerPlacedEvent',
-                    (marker) => {
-                        addMarkerToMap(marker)
-                        updateMarkerCount()
-                    }
-                )
-                .listen(
-                    '.App\\Events\\Stickers\\StickerRemovedEvent',
-                    (marker) => {
-                        removeMarkerFromMap(marker.id, marker.stickerType)
-                        updateMarkerCount()
-                    }
-                )
+                .listen('.App\\Events\\Stickers\\StickerPlacedEvent', (marker) => {
+                    addMarkerToMap(marker)
+                    updateMarkerCount()
+                })
+                .listen('.App\\Events\\Stickers\\StickerRemovedEvent', (marker) => {
+                    removeMarkerFromMap(marker.id, marker.stickerType)
+                    updateMarkerCount()
+                })
                 .error((error) => {
                     console.error(error)
                     setTimeout(() => {
@@ -392,14 +383,7 @@
 
             map.addControl(window.GeoSearch)
 
-            const markerFiles = [
-                'chip',
-                'cloud',
-                'gear',
-                'heart',
-                'light',
-                'world',
-            ]
+            const markerFiles = ['chip', 'cloud', 'gear', 'heart', 'light', 'world']
 
             const markerIcons = markerFiles.map((path) => {
                 return L.icon({
@@ -605,40 +589,30 @@
             })
 
             function removeSticker(marker) {
-                const deleteDate = document.getElementById(
-                    'sticker-delete-date'
-                )
+                const deleteDate = document.getElementById('sticker-delete-date')
                 deleteDate.textContent = marker.date
 
-                const deleteImage = document.getElementById(
-                    'sticker-delete-image'
-                )
+                const deleteImage = document.getElementById('sticker-delete-image')
                 deleteImage.src = marker.image
 
-                const deleteForm = document.getElementById(
-                    'sticker-delete-form'
+                const deleteForm = document.getElementById('sticker-delete-form')
+                deleteForm.action = '{{ route('stickers.destroy', ['sticker' => 'id']) }}'.replace(
+                    'id',
+                    marker.id
                 )
-                deleteForm.action =
-                    '{{ route('stickers.destroy', ['sticker' => 'id']) }}'.replace(
-                        'id',
-                        marker.id
-                    )
 
                 window.modals['sticker-confirm-delete-modal'].show()
             }
             const reportForm = document.getElementById('sticker-report-form')
 
             function reportSticker(marker) {
-                const reportImage = document.getElementById(
-                    'sticker-report-image'
-                )
+                const reportImage = document.getElementById('sticker-report-image')
                 reportImage.src = marker.image
 
-                reportForm.action =
-                    '{{ route('stickers.report', ['sticker' => 'id']) }}'.replace(
-                        'id',
-                        marker.id
-                    )
+                reportForm.action = '{{ route('stickers.report', ['sticker' => 'id']) }}'.replace(
+                    'id',
+                    marker.id
+                )
                 reportForm.setAttribute('data-sticker-id', marker.id)
 
                 window.modals['sticker-report-modal'].show()
@@ -751,9 +725,7 @@
                         const canvas = document.createElement('canvas')
                         canvas.width = width
                         canvas.height = height
-                        canvas
-                            .getContext('2d')
-                            .drawImage(image, 0, 0, width, height)
+                        canvas.getContext('2d').drawImage(image, 0, 0, width, height)
 
                         // Convert to Blob
                         canvas.toBlob(

@@ -5,8 +5,9 @@
 
     <p>
         @if ($user->member)
-            You're receiving this e-mail as a reminder that you are a member of S.A. Proto and that, as a consequence,
-            we process personal information about you.
+            You're receiving this e-mail as a reminder that you are a member of
+            S.A. Proto and that, as a consequence, we process personal
+            information about you.
         @else
             You're receiving this e-mail as a reminder that you still have an
             active user account at the website of S.A. Proto.
@@ -95,8 +96,8 @@
             to terminate your membership, and delete your account from your
             dashboard as soon as your membership has been terminated.
         @else
-                If you want us to stop processing your information altogether,
-                you can delete your account from your dashboard.
+            If you want us to stop processing your information altogether, you
+            can delete your account from your dashboard.
         @endif
         Please be reminded that while using the website, you may have generated
         some information (like activity participation, purchases and committee

@@ -10,7 +10,15 @@
                 "*.blade.php"
             ],
             "options": {
-                "parser": "blade"
+                "parser": "blade",
+                "bladeDirectiveArgSpacing": "none",
+                "bladeBlankLinesAroundDirectives": "preserve",
+                "bladeInlineIntentElements": [
+                    "svg",
+                    "svg:*"
+                ],
+                "bladeKeepHeadAndBodyAtRoot": false,
+                "bladeSlotClosingTag": "preserve"
             }
         }
     ]

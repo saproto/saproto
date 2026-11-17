@@ -134,8 +134,8 @@
                                             <span
                                                 class="badge bg-warning float-end mx-3"
                                             >
-                                                {{ $ticket->buy_limit }} max
-                                                per user
+                                                {{ $ticket->buy_limit }} max per
+                                                user
                                             </span>
                                         @endif
                                     @endif
@@ -149,8 +149,7 @@
                                 <p class="card-text">
                                     @if ($ticket->isAvailable(Auth::user()))
                                         <span class="badge bg-info float-end">
-                                            {{ $ticket->product->stock > Config::integer('proto.maxtickets') ? Config::integer('proto.maxtickets') . '+' : $ticket->product->stock }}
-                                            available
+                                            {{ $ticket->product->stock > Config::integer('proto.maxtickets') ? Config::integer('proto.maxtickets') . '+' : $ticket->product->stock }} available
                                         </span>
                                     @endif
 
@@ -160,7 +159,8 @@
                                         For sale starting
                                         {{ date('d-m-Y H:i', $ticket->available_from) }}
                                     @elseif (! $ticket->canBeSoldTo(Auth::user()) && ! Auth::user()->is_member)
-                                        This ticket is only available to members!
+                                        This ticket is only available to
+                                        members!
                                     @elseif ($ticket->product->stock <= 0)
                                         Sold-out!
                                     @else

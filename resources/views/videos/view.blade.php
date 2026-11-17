@@ -22,8 +22,7 @@
                         target="_blank"
                     >
                         <i class="fab fa-youtube me-2" aria-hidden="true"></i>
-                        {{ $video->youtube_title }} by
-                        {{ $video->youtube_user_name }}
+                        {{ $video->youtube_title }} by {{ $video->youtube_user_name }}
                     </a>
 
                     @if ($video->event)

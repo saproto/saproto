@@ -26,15 +26,12 @@
             >
                 <tr style="margin: 0; padding: 0; border: none">
                     <td style="margin: 0; padding: 10px 20px; border: none">
-                        <p>
-                            {{ $report->report_reason }}
-                        </p>
+                        <p>{{ $report->report_reason }}</p>
 
                         <hr />
                         <p>
                             <sub>
-                                {{ $report->reporter->name }} --
-                                {{ $report->updated_at->format('j M Y, H:i') }}
+                                {{ $report->reporter->name }} -- {{ $report->updated_at->format('j M Y, H:i') }}
                             </sub>
                         </p>
                     </td>

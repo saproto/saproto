@@ -134,8 +134,7 @@
                                             value="{{ $url }}"
                                             @selected(isset($item) && $item->url == '(route) ' . $route->getName())
                                         >
-                                            [{{ $route->getName() }}] ->
-                                            {{ $route->domain() }}/{{ $route->uri }}
+                                            [{{ $route->getName() }}] -> {{ $route->domain() }}/{{ $route->uri }}
                                         </option>
                                     @endforeach
                                 </select>

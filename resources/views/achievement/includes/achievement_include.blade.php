@@ -47,8 +47,6 @@
     </div>
 
     @if (! empty($footer))
-        <div class="card-footer">
-            {!! $footer !!}
-        </div>
+        <div class="card-footer">{!! $footer !!}</div>
     @endif
 </div>

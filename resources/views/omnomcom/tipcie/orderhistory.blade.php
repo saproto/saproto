@@ -69,8 +69,7 @@
                                         {{ $product->orderlines_sum_units }}
                                     </td>
                                     <td>
-                                        &euro;
-                                        {{ number_format($product->orderlines_sum_total_price, 2) }}
+                                        &euro; {{ number_format($product->orderlines_sum_total_price, 2) }}
                                     </td>
                                 </tr>
                             @endforeach
@@ -80,8 +79,7 @@
                                 <td><strong>{{ $totalAmount }}</strong></td>
                                 <td>
                                     <strong>
-                                        &euro;
-                                        {{ number_format($totalPrice, 2) }}
+                                        &euro; {{ number_format($totalPrice, 2) }}
                                     </strong>
                                 </td>
                             </tr>
@@ -111,8 +109,7 @@
                                 <tr>
                                     <td>{{ $pinOrder->created_at }}</td>
                                     <td>
-                                        &euro;
-                                        {{ number_format($pinOrder->total_price, 2) }}
+                                        &euro; {{ number_format($pinOrder->total_price, 2) }}
                                     </td>
                                 </tr>
                             @endforeach

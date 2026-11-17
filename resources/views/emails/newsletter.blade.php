@@ -43,9 +43,7 @@
                                 <strong>{{ $event->title }}</strong>
                                 @ {{ $event->location }}
                                 <br />
-                                {{ date('l d F, H:i', $event->start) }}
-                                -
-                                {{ $event->end - $event->start >= 3600 * 24 ? date('l d F, H:i', $event->end) : date('H:i', $event->end) }}
+                                {{ date('l d F, H:i', $event->start) }} - {{ $event->end - $event->start >= 3600 * 24 ? date('l d F, H:i', $event->end) : date('H:i', $event->end) }}
                             </p>
 
                             <p>

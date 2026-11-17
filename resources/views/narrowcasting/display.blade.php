@@ -71,10 +71,7 @@
         async function updateCampaigns() {
             await get('{{ route('api::screen::narrowcasting') }}')
                 .then((data) => {
-                    if (
-                        campaigns.length !== 0 &&
-                        campaigns.length !== data.length
-                    ) {
+                    if (campaigns.length !== 0 && campaigns.length !== data.length) {
                         window.location.reload()
                     }
 
@@ -112,9 +109,7 @@
                     slides.classList.remove(hideClass)
 
                     //show the new slide if it exists, otherwise create it
-                    let slide = document.getElementById(
-                        'slide-' + currentCampaign
-                    )
+                    let slide = document.getElementById('slide-' + currentCampaign)
                     if (slide) {
                         slide.classList.remove(hideClass)
                     } else {
@@ -125,9 +120,7 @@
                             campaign.image +
                             ');"></div>'
 
-                        slide = document.getElementById(
-                            'slide-' + currentCampaign
-                        )
+                        slide = document.getElementById('slide-' + currentCampaign)
                     }
                     setTimeout(() => {
                         slide.classList.add(hideClass)
@@ -135,9 +128,7 @@
                     }, campaign.slide_duration * 1000)
                 } else {
                     player.classList.remove(hideClass)
-                    let video = document.getElementById(
-                        'video-' + currentCampaign
-                    )
+                    let video = document.getElementById('video-' + currentCampaign)
                     if (video) {
                         video.classList.remove(hideClass)
                     } else {
@@ -149,9 +140,7 @@
                             campaign.image +
                             '" type="video/mp4"></video>'
 
-                        video = document.getElementById(
-                            'video-' + currentCampaign
-                        )
+                        video = document.getElementById('video-' + currentCampaign)
                     }
                     video.currentTime = 0
                     video.play()

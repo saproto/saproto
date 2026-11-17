@@ -26,8 +26,7 @@
             >
                 <tr style="margin: 0; padding: 0; border: none">
                     <p>
-                        {{ $activity->event->title }}
-                        (€{{ $activity->price }})
+                        {{ $activity->event->title }} (€{{ $activity->price }})
                     </p>
                     <hr />
                 </tr>

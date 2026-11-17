@@ -149,11 +149,7 @@
             // hide the time submessage
             time.classList.add('d-none')
 
-            document.body.classList.remove(
-                'bg-success',
-                'bg-warning',
-                'bg-danger'
-            )
+            document.body.classList.remove('bg-success', 'bg-warning', 'bg-danger')
             // set the correct color corresponding to the status
             document.body.classList.add(newStatus.color)
         }

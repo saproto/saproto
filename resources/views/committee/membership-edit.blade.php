@@ -6,7 +6,7 @@
 @endsection
 
 @section('panel-title')
-    
+
 @endsection
 
 @section('container')

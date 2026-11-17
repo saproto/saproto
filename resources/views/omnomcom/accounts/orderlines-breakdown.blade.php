@@ -56,8 +56,7 @@
                                     <td>{{ $date }}</td>
                                     <td></td>
                                     <td>
-                                        &euro;
-                                        {{ number_format($products->sum('total'), 2) }}
+                                        &euro; {{ number_format($products->sum('total'), 2) }}
                                     </td>
                                 </tr>
                                 @foreach ($products as $product)

@@ -64,8 +64,7 @@
                                             {{ $outstandingActivity->event->title }}
                                         </td>
                                         <td>
-                                            &euro;
-                                            {{ number_format($outstandingActivity->price, 2, '.', '') }}
+                                            &euro; {{ number_format($outstandingActivity->price, 2, '.', '') }}
                                         </td>
                                     </tr>
                                 @endforeach

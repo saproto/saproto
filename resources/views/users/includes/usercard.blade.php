@@ -18,13 +18,9 @@
             <span class="text-muted">{{ $user->name }}</span>
             <br />
         @endif
-        <div class="ellipsis">
-            {!! $subtitle !!}
-        </div>
+        <div class="ellipsis">{!! $subtitle !!}</div>
     </div>
     @if (! empty($footer))
-        <div class="card-footer">
-            {!! $footer !!}
-        </div>
+        <div class="card-footer">{!! $footer !!}</div>
     @endif
 </div>

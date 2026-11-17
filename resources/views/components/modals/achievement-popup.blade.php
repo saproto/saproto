@@ -32,8 +32,7 @@
             >
                 <div class="modal-content bg-dark text-white">
                     <div class="modal-body text-center">
-                        You just got
-                        {{ count($newAchievements) > 1 ? 'new achievements' : 'a new achievement' }},
+                        You just got {{ count($newAchievements) > 1 ? 'new achievements' : 'a new achievement' }},
                         check it out:
                         @foreach ($newAchievements as $newAchievement)
                             @include('achievement.includes.achievement_include', ['achievement' => $newAchievement, 'obtained' => $newAchievement->pivot])

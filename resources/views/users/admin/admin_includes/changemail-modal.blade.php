@@ -26,8 +26,7 @@
                     ></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to change the email for
-                    {{ $user->name }}?
+                    Are you sure you want to change the email for {{ $user->name }}?
                     <br />
                     <br />
                     <b>Only</b>

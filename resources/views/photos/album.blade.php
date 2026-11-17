@@ -45,9 +45,7 @@
                 @endif
             @endcan
 
-            <div class="fw-bold m-1 p-1">
-                {{ $title }}
-            </div>
+            <div class="fw-bold m-1 p-1">{{ $title }}</div>
         </div>
 
         <div class="card-body">
@@ -79,9 +77,7 @@
                 @endforeach
             </div>
         </div>
-        <div class="card-footer">
-            {{ $photos->links() }}
-        </div>
+        <div class="card-footer">{{ $photos->links() }}</div>
 
         <div class="card-footer text-center">
             <i class="fas fa-shield-alt fa-fw me-3"></i>
@@ -93,6 +89,5 @@
             </a>
         </div>
     </div>
-
     &nbsp;
 @endsection

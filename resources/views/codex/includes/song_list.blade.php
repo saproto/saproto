@@ -31,8 +31,7 @@
                         >
                             <b>
                                 <i class="fas fa-sm fa-fw fa-caret-down"></i>
-                                {{ $songCategory->name }}
-                                ({{ $songCategory->songs_count }})
+                                {{ $songCategory->name }} ({{ $songCategory->songs_count }})
                             </b>
                         </span>
                         @if (! isset($edit))

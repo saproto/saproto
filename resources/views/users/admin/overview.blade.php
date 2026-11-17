@@ -31,7 +31,7 @@
                                     name="filter"
                                     id="users"
                                     value="users"
-                                    @if($filter == 'users') checked @endif
+                                    @if ($filter == 'users') checked @endif
                                 />
                                 <label class="form-check-label" for="users">
                                     Users
@@ -44,7 +44,7 @@
                                     name="filter"
                                     id="members"
                                     value="members"
-                                    @if($filter == 'members') checked @endif
+                                    @if ($filter == 'members') checked @endif
                                 />
                                 <label class="form-check-label" for="members">
                                     Members
@@ -57,7 +57,7 @@
                                     name="filter"
                                     id="pending"
                                     value="pending"
-                                    @if($filter == 'pending') checked @endif
+                                    @if ($filter == 'pending') checked @endif
                                 />
                                 <label class="form-check-label" for="pending">
                                     Pending
@@ -70,7 +70,7 @@
                                     id="all"
                                     name="filter"
                                     value=""
-                                    @if($filter == null) checked @endif
+                                    @if ($filter == null) checked @endif
                                 />
                                 <label class="form-check-label" for="all">
                                     All
@@ -210,7 +210,7 @@
                                                 <strong>Member</strong>
                                             @endif
                                         @else
-                                                User
+                                            User
                                         @endif
                                     </td>
                                     <td class="proto-email">

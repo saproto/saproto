@@ -36,10 +36,11 @@
         />
 
         <title>
-            @if (! App::environment('production')) 
-            [{{ strtoupper(config('app.env')) }}]
-            @endif S.A.
-            Proto | @yield('page-title', 'Default Page Title')
+            @if (! App::environment('production'))
+                [{{ strtoupper(config('app.env')) }}]
+            @endif
+            S.A. Proto |
+            @yield('page-title', 'Default Page Title')
         </title>
 
         @stack('head')
@@ -82,11 +83,7 @@
                                 return 'q' === r
                                     ? n
                                     : function () {
-                                          n.push(
-                                              [r].concat(
-                                                  [].slice.call(arguments)
-                                              )
-                                          )
+                                          n.push([r].concat([].slice.call(arguments)))
                                       }
                             },
                             has: function (t, r) {

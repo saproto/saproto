@@ -1,7 +1,7 @@
 @extends('website.layouts.redesign.generic')
 
 @section('page-title')
-        Purchase Overview for {{ date('F Y', strtotime($selected_month)) }}
+    Purchase Overview for {{ date('F Y', strtotime($selected_month)) }}
 @endsection
 
 @section('container')

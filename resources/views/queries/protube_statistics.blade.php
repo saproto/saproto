@@ -99,9 +99,7 @@
                                 <td class="hidden-sm hidden-xs">
                                     {{ $topUser->user?->name }}
                                 </td>
-                                <td>
-                                    {{ $topUser->played_count }}
-                                </td>
+                                <td>{{ $topUser->played_count }}</td>
                             </tr>
                         @endforeach
                     </table>
@@ -124,9 +122,7 @@
                                 <td class="hidden-sm hidden-xs">
                                     {{ $topVideo->video_title }}
                                 </td>
-                                <td>
-                                    {{ $topVideo->played_count }}
-                                </td>
+                                <td>{{ $topVideo->played_count }}</td>
                             </tr>
                         @endforeach
                     </table>

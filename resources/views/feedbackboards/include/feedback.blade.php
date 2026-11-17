@@ -101,8 +101,8 @@
                         name="reply"
                         placeholder="A reply to this {{ strtolower(str_singular($feedback->category->title)) }}."
                         required
+                        >{{ $feedback->reply ?? '' }}</textarea
                     >
-{{ $feedback->reply ?? '' }}</textarea>
                     <div class="btn-group w-100">
                         <button
                             type="submit"

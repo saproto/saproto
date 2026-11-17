@@ -206,8 +206,7 @@
                         break
                     case 'error':
                         feedbackField.classList.remove('blink')
-                        feedbackField.innerHTML =
-                            'Something went wrong. Try again!'
+                        feedbackField.innerHTML = 'Something went wrong. Try again!'
                         flash('danger')
                         setTimeout(setStatus, 1000)
                         break
@@ -257,13 +256,7 @@
                         setTimeout(setStatus, 1000)
                         document
                             .getElementById('history')
-                            .prepend(
-                                createTicketEl(
-                                    data,
-                                    false,
-                                    'Used on ' + data.scanned
-                                )
-                            )
+                            .prepend(createTicketEl(data, false, 'Used on ' + data.scanned))
                         break
                     case 200:
                         setStatus('ok')

@@ -86,8 +86,7 @@
                                                 <option
                                                     value="{{ $account->id }}"
                                                 >
-                                                    ({{ $account->account_number }}
-                                                    ) {{ $account->name }}
+                                                    ({{ $account->account_number }} ) {{ $account->name }}
                                                 </option>
                                             @endforeach
                                         </select>

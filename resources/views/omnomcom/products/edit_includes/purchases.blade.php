@@ -35,17 +35,14 @@
                         </td>
                         <td>{{ $orderline->units }}x</td>
                         <td>
-                            &euro;
-                            {{ number_format($orderline->total_price, 2) }}
+                            &euro; {{ number_format($orderline->total_price, 2) }}
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
 
-        <div class="card-footer pb-0">
-            {!! $orderlines->render() !!}
-        </div>
+        <div class="card-footer pb-0">{!! $orderlines->render() !!}</div>
     @else
         <div class="card-body">
             <p class="card-text text-center">

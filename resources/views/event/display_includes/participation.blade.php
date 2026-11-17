@@ -14,8 +14,7 @@
                         (Account
                         {{ $event->activity->closedAccount->account_number }} ,
                         {{ $event->activity->closedAccount->name }})
-                    @else
-                            (Unknown account.)
+                    @else(Unknown account.)
                     @endif
                 </li>
             @endif
@@ -45,7 +44,7 @@
                     @if ($event->activity->price > 0)
                         &euro;{{ number_format($event->activity->price, 2, '.', ',') }}
                     @else
-                            &euro;0,-
+                        &euro;0,-
                     @endif
                 </strong>
             </li>
@@ -58,8 +57,7 @@
                     data-bs-target="#noshow-modal"
                 >
                     <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
-                    &nbsp;&nbsp;Not showing up can cost you
-                    &euro;{{ number_format($event->activity->no_show_fee + $event->activity->price, 2, '.', ',') }}
+                    &nbsp;&nbsp;Not showing up can cost you &euro;{{ number_format($event->activity->no_show_fee + $event->activity->price, 2, '.', ',') }}
                 </a>
             @endif
 
@@ -90,14 +88,14 @@
                             {{ $event->activity->isFull() ? 'Full!' : 'Closed!' }}
                             Put me on the back-up list.
                         @else
-                                Sign me up!
+                            Sign me up!
                         @endif
                         |
 
                         @if ($event->activity->price > 0)
                             &euro;{{ number_format($event->activity->price, 2, '.', ',') }}
                         @else
-                                Free!
+                            Free!
                         @endif
                     </strong>
                     <br />
@@ -316,11 +314,10 @@
 @push('javascript')
     @vite('resources/assets/js/echo.js')
     <script type="module" @cspNonce>
-        ;{{-- format-ignore-start --}}
+        {{-- format-ignore-start --}}
         let id = @json($event->id);
-        {{-- format-ignore-end --}}
-
-        const template = document.querySelector('#template_users')
+        {{-- format-ignore-end --}}const template =
+            document.querySelector('#template_users')
         const template_backup_users = document.querySelector(
             '#template_backup_users'
         )

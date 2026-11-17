@@ -104,8 +104,7 @@
                                                 class="dropdown-item"
                                                 href="{{ route('omnomcom::store::show', ['store' => $name]) }}"
                                             >
-                                                Open store:
-                                                {{ $store['name'] }}
+                                                Open store: {{ $store['name'] }}
                                             </a>
                                         @endif
                                     @endforeach

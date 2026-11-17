@@ -50,9 +50,7 @@
 
                         <p class="text-center">
                             My phone number is
-                            <strong>
-                                {{ $userdata['phone'] }}
-                            </strong>
+                            <strong> {{ $userdata['phone'] }} </strong>
                         </p>
                     </div>
 

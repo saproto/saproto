@@ -38,9 +38,7 @@
                 @endforeach
             </div>
         </div>
-        <div class="card-footer">
-            {{ $albums->links() }}
-        </div>
+        <div class="card-footer">{{ $albums->links() }}</div>
 
         <div class="card-footer text-center">
             <i class="fas fa-shield-alt fa-fw me-3"></i>
