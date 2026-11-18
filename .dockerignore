@@ -7,3 +7,5 @@ rector.php
 setup_garage.sh
 phpstan*.neon
 .prettier*
+.env
+.env.*
