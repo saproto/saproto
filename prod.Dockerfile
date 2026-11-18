@@ -28,6 +28,7 @@ COPY . .
 COPY --from=vendor /var/www/html/vendor ./vendor
 RUN composer dump-autoload --no-interaction
 
+RUN php artisan wayfinder:generate --with-form
 RUN npm run build
 
 FROM serversideup/php:8.5-fpm-nginx
