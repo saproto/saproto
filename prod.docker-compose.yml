@@ -6,8 +6,8 @@ services:
     image: my-app:latest
     environment:
       AUTORUN_ENABLED: "true"
-    ports:
-      - "80:8080"
+    expose:
+      - "8080"
 
   scheduler:
     image: my-app:latest
