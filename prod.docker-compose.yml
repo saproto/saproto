@@ -3,5 +3,24 @@ services:
     build:
       context: .
       dockerfile: prod.Dockerfile
+    image: my-app:latest
+    environment:
+      AUTORUN_ENABLED: "true"
     ports:
       - "80:8080"
+
+  scheduler:
+    image: my-app:latest
+    command: ["php", "artisan", "schedule:work"]
+    stop_signal: SIGTERM
+    healthcheck:
+      test: ["CMD", "healthcheck-schedule"]
+      start_period: 10s
+
+  queue:
+    image: my-app:latest
+    command: [ "php", "artisan", "queue:work", "--tries=3", "--queue=high,medium,low,default" ]
+    stop_signal: SIGTERM
+    healthcheck:
+      test: [ "CMD", "healthcheck-queue" ]
+      start_period: 10s
