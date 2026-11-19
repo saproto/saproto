@@ -6,7 +6,8 @@ services:
     image: my-app:latest
     environment:
       AUTORUN_ENABLED: "true"
-      HEALTHCHECK_PATH: "/api/up"
+      NGINX_FASTCGI_BUFFER_SIZE: "32k"
+      NGINX_FASTCGI_BUFFERS: "16 16k"
     expose:
       - "8080"
 
