@@ -34,7 +34,7 @@ RUN npm run build
 FROM serversideup/php:8.5-fpm-nginx
 
 USER root
-RUN install-php-extensions gd exif calendar
+RUN install-php-extensions gd exif calendar bcmath
 USER www-data
 
 ENV PHP_OPCACHE_ENABLE=1
