@@ -36,7 +36,7 @@
         />
 
         <title>
-            @if (! App::environment('production')) 
+            @if (! App::environment('production'))
             [{{ strtoupper(config('app.env')) }}]
             @endif S.A.
             Proto | @yield('page-title', 'Default Page Title')
@@ -66,7 +66,7 @@
         @endsection()
 
         @yield('opengraph')
-
+        @if(Config::string('proto.analytics_url') !== "")
         <!-- OpenPanel -->
         <script @cspNonce>
             window.op =
@@ -105,6 +105,7 @@
         </script>
         <script src="https://openpanel.dev/op1.js" defer async></script>
         <!-- End OpenPanel -->
+        @endif
     </head>
 
     <body>
