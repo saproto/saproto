@@ -6,6 +6,7 @@ services:
     image: my-app:latest
     environment:
       AUTORUN_ENABLED: "true"
+      HEALTHCHECK_PATH: "/api/up"
     expose:
       - "8080"
 

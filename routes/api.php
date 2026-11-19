@@ -4,6 +4,7 @@ use App\Http\Controllers\ApiController;
 use App\Http\Controllers\DiscordController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\HealthController;
 use App\Http\Controllers\NarrowcastingController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\OmNomController;
@@ -16,6 +17,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], static function () {
+
+    Route::get('up', [HealthController::class, 'health'])->name('health');
     /* Routes related to the General APIs */
     Route::group(['middleware' => ['web']], static function () {
         Route::get('scan/{event}', [TicketController::class, 'scanApi'])->name('scan')->middleware(['auth']);
