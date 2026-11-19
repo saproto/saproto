@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('use_dark_theme');
-        });
+        if (Schema::hasColumn('users', 'use_dark_theme')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->dropColumn('use_dark_theme');
+            });
+        }
     }
 
     /**
