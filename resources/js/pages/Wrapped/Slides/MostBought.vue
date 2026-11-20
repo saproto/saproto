@@ -17,8 +17,7 @@ const stats = props.data.mostBought
         </div>
         <h1>
             You bought a total of
-            <span class="dynamic">{{ stats.items[0][1] }}</span
-            >!
+            <span class="dynamic">{{ stats.items[0][1] }}</span>!
         </h1>
         <h2 v-if="stats.percentile === 0">
             You're the <span class="dynamic">top</span> buyer of this product!
