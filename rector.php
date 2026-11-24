@@ -20,7 +20,7 @@ try {
         ->withComposerBased(laravel: true/** other options */)
         ->withCache(
             // ensure file system caching is used instead of in-memory
-            cacheDirectory: '.tmp/rector',
+            cacheDirectory: '.tmp/phplintcache/rector',
 
             // specify a path that works locally as well as on CI job runners
             cacheClass: FileCacheStorage::class
