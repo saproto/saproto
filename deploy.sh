@@ -1,5 +1,8 @@
 #!/bin/bash
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
 # First verify the checksum between uploaded and live code to see if deployment is necessary.
 echo "Verifying checksum..."
 CURRENT_CHECKSUM=$(cat live/checksum.txt)
