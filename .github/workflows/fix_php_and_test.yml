@@ -72,24 +72,17 @@ jobs:
 
       - run: php artisan wayfinder:generate --with-form
 
-      - name: Cache Rector
+      - name: Cache Pint and Rector
         uses: actions/cache@v6.1.0
         with:
-          path: .tmp/rector
+          path: .tmp/phplintcache
           key: ${{ runner.os }}-rector-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-rector-
+          restore-keys: ${{ runner.os }}-phplintcache-
 
-      - run: mkdir -p .tmp/rector
+      - run: mkdir -p .tmp/phplintcache/rector
 
       - name: Run rector
         run: vendor/bin/rector --ansi
-
-      - name: Cache Pint
-        uses: actions/cache@v6.1.0
-        with:
-          path: .tmp/pint.cache
-          key: ${{ runner.os }}-pint-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-pint-
 
       - name: Run pint
         run: ./vendor/bin/pint --parallel
