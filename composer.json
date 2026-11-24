@@ -47,6 +47,8 @@
         "ext-calendar": "*",
         "ext-curl": "*",
         "ext-json": "*",
+	"ext-gd": "*",
+	"ext-exif": "*",
         "globalcitizen/php-iban": "^5.0.0",
         "graham-campbell/markdown": "^16.0.0",
         "guzzlehttp/guzzle": "^7.5",
