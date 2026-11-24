@@ -113,7 +113,7 @@ jobs:
 
       - uses: ramsey/composer-install@v4
         with:
-          composer-options: "--ignore-platform-reqs --optimize-autoloader --prefer-dist --no-dev"
+          composer-options: "--ignore-platform-reqs --optimize-autoloader --prefer-dist"
 
       - name: 🖱️ Set Node v${{ env.NODE_VERSION }}
         uses: actions/setup-node@v7.1.0
@@ -132,8 +132,9 @@ jobs:
         with:
           path: |
             ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}-${{ github.run_id }}
           restore-keys: |
+            ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
             ${{ runner.os }}-playwright-
 
       - name: Install playwright deps
@@ -144,8 +145,10 @@ jobs:
         uses: actions/cache@v6.1.0
         with:
           path: .tmp/rector
-          key: ${{ runner.os }}-rector-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-rector-
+          key: ${{ runner.os }}-rector-${{ hashFiles('**/composer.lock') }}-${{ github.run_id }}
+          restore-keys: |
+            ${{ runner.os }}-rector-${{ hashFiles('**/composer.lock') }}
+            ${{ runner.os }}-rector-
 
       - run: mkdir -p .tmp/rector
 
@@ -156,8 +159,10 @@ jobs:
         uses: actions/cache@v6.1.0
         with:
           path: .tmp/pint.cache
-          key: ${{ runner.os }}-pint-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-pint-
+          key: ${{ runner.os }}-pint-${{ hashFiles('**/composer.lock') }}-${{ github.run_id }}
+          restore-keys: |
+            ${{ runner.os }}-pint-${{ hashFiles('**/composer.lock') }}
+            ${{ runner.os }}-pint-
 
       - name: Run pint
         run: ./vendor/bin/pint --parallel
@@ -166,8 +171,10 @@ jobs:
         uses: actions/cache@v6.1.0
         with:
           path: .tmp/lintcache
-          key: ${{ runner.os }}-lintcache-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-lintcache-
+          key: ${{ runner.os }}-lintcache-${{ hashFiles('**/package-lock.json') }}-${{ github.run_id }}
+          restore-keys: |
+            ${{ runner.os }}-lintcache-${{ hashFiles('**/package-lock.json') }}
+            ${{ runner.os }}-lintcache-
 
       - run: mkdir -p .tmp/lintcache
 
