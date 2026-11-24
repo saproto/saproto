@@ -24,13 +24,13 @@ const shiftSelect = (el, name) => {
             shiftSelectAction(checkbox, e)
         )
         if (checkbox.id) {
-            el.querySelector(`label[for=${checkbox.id}]`).addEventListener(
-                'click',
-                (e) => {
+            const label = el.querySelector(`label[for=${checkbox.id}]`)
+            if (label) {
+                label.addEventListener('click', (e) => {
                     if (e.shiftKey) checkbox.checked = !checkbox.checked
                     shiftSelectAction(checkbox, e)
-                }
-            )
+                })
+            }
         }
     }
 }
