@@ -141,28 +141,19 @@ jobs:
         run: npx playwright install --with-deps chromium
         if: steps.playwright-cache.outputs.cache-hit != 'true'
 
-      - name: Cache Rector
+      - name: Cache Pint and Rector
         uses: actions/cache@v6.1.0
         with:
-          path: .tmp/rector
-          key: ${{ runner.os }}-rector-${{ hashFiles('**/composer.lock') }}-${{ github.run_id }}
+          path: .tmp/phplintcache
+          key: ${{ runner.os }}-phplintcache-${{ hashFiles('**/composer.lock') }}-${{ github.run_id }}
           restore-keys: |
-            ${{ runner.os }}-rector-${{ hashFiles('**/composer.lock') }}
-            ${{ runner.os }}-rector-
+            ${{ runner.os }}-phplintcache-${{ hashFiles('**/composer.lock') }}
+            ${{ runner.os }}-phplintcache-
 
-      - run: mkdir -p .tmp/rector
+      - run: mkdir -p .tmp/phplintcache/rector
 
       - name: Run rector
         run: vendor/bin/rector --ansi
-
-      - name: Cache Pint
-        uses: actions/cache@v6.1.0
-        with:
-          path: .tmp/pint.cache
-          key: ${{ runner.os }}-pint-${{ hashFiles('**/composer.lock') }}-${{ github.run_id }}
-          restore-keys: |
-            ${{ runner.os }}-pint-${{ hashFiles('**/composer.lock') }}
-            ${{ runner.os }}-pint-
 
       - name: Run pint
         run: ./vendor/bin/pint --parallel
