@@ -124,16 +124,22 @@ jobs:
       - name: Install playwright deps
         run: npx playwright install chromium
 
+      - name: Cache Eslint and Prettier
+        uses: actions/cache@v6.1.0
+        with:
+          path: .tmp/lintcache
+          key: ${{ runner.os }}-lintcache-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-lintcache-
+
+      - run: mkdir -p .tmp/lintcache
+
       - name: lint with eslint
-        if: steps.changes.outputs.resources == 'true'
-        run: npx eslint resources/ --fix
+        run: npx eslint resources/ --fix --cache --cache-strategy content --cache-location .tmp/lintcache/eslint
 
       - name: lint with prettier
-        if: steps.changes.outputs.resources == 'true'
-        run: npx prettier --write resources/
+        run: npx prettier --log-level warn --cache --cache-location=.tmp/lintcache/prettier-cache --write resources/
 
       - name: Commit changes
-        if: steps.changes.outputs.resources == 'true'
         uses: stefanzweifel/git-auto-commit-action@v7.2.1
         with:
           commit_message: Automatic linting (Prettier and eslint)
