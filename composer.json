@@ -47,8 +47,8 @@
         "ext-calendar": "*",
         "ext-curl": "*",
         "ext-json": "*",
-	"ext-gd": "*",
-	"ext-exif": "*",
+        "ext-gd": "*",
+        "ext-exif": "*",
         "globalcitizen/php-iban": "^5.0.0",
         "graham-campbell/markdown": "^16.0.0",
         "guzzlehttp/guzzle": "^7.5",
@@ -120,7 +120,7 @@
     "scripts": {
         "pre-autoload-dump": "Google\\Task\\Composer::cleanup",
         "fix": [
-            "./vendor/bin/rector process && ./vendor/bin/pint --parallel && npx eslint resources/ --fix && npx prettier --write resources/"
+            "./vendor/bin/rector process && ./vendor/bin/pint --parallel && npx eslint resources/ --fix --cache --cache-strategy content --cache-location .tmp/lintcache/eslint && npx prettier --log-level warn --cache --cache-location=.tmp/lintcache/prettier-cache --write resources/"
         ],
         "pint": [
             "./vendor/bin/pint --parallel"
