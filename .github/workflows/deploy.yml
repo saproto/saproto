@@ -96,3 +96,83 @@ jobs:
           local-dir: ${{ env.BUILD_ARTIFACT_STAGING_DIR }}
           server-dir: "/"
           timeout: 120000
+  cache:
+    name: Cache
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛎️ Checkout project
+        uses: actions/checkout@v7.0.1
+
+      - name: 🔍 Read .env
+        run: grep -E 'PHP_VERSION|NODE_VERSION' .env.prod >> $GITHUB_ENV
+
+      - name: 🖱️ Setup PHP v${{ env.PHP_VERSION }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+
+      - uses: ramsey/composer-install@v4
+        with:
+          composer-options: "--ignore-platform-reqs --optimize-autoloader --prefer-dist"
+
+      - name: 🖱️ Set Node v${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: 📥 Install front-end dependencies
+        run: npm ci --ignore-scripts
+
+      - run: php artisan wayfinder:generate --with-form
+
+      - name: Cache Playwright
+        uses: actions/cache@v6.1.0
+        id: playwright-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}-${{ github.run_id }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+            ${{ runner.os }}-playwright-
+
+      - name: Install playwright deps
+        run: npx playwright install --with-deps chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+
+      - name: Cache Pint and Rector
+        uses: actions/cache@v6.1.0
+        with:
+          path: .tmp/phplintcache
+          key: ${{ runner.os }}-phplintcache-${{ hashFiles('**/composer.lock') }}-${{ github.run_id }}
+          restore-keys: |
+            ${{ runner.os }}-phplintcache-${{ hashFiles('**/composer.lock') }}
+            ${{ runner.os }}-phplintcache-
+
+      - run: mkdir -p .tmp/phplintcache/rector
+
+      - name: Run rector
+        run: vendor/bin/rector --ansi
+
+      - name: Run pint
+        run: ./vendor/bin/pint --parallel
+
+      - name: Cache Eslint and Prettier
+        uses: actions/cache@v6.1.0
+        with:
+          path: .tmp/lintcache
+          key: ${{ runner.os }}-lintcache-${{ hashFiles('**/package-lock.json') }}-${{ github.run_id }}
+          restore-keys: |
+            ${{ runner.os }}-lintcache-${{ hashFiles('**/package-lock.json') }}
+            ${{ runner.os }}-lintcache-
+
+      - run: mkdir -p .tmp/lintcache
+
+      - name: lint with eslint
+        run: npx eslint resources/ --fix --cache --cache-strategy content --cache-location .tmp/lintcache/eslint
+
+      - name: lint with prettier
+        run: npx prettier --log-level warn --cache --cache-location=.tmp/lintcache/prettier-cache --write resources/
+
+

@@ -72,24 +72,17 @@ jobs:
 
       - run: php artisan wayfinder:generate --with-form
 
-      - name: Cache Rector
+      - name: Cache Pint and Rector
         uses: actions/cache@v6.1.0
         with:
-          path: .tmp/rector
+          path: .tmp/phplintcache
           key: ${{ runner.os }}-rector-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-rector-
+          restore-keys: ${{ runner.os }}-phplintcache-
 
-      - run: mkdir -p .tmp/rector
+      - run: mkdir -p .tmp/phplintcache/rector
 
       - name: Run rector
         run: vendor/bin/rector --ansi
-
-      - name: Cache Pint
-        uses: actions/cache@v6.1.0
-        with:
-          path: .tmp/pint.cache
-          key: ${{ runner.os }}-pint-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-pint-
 
       - name: Run pint
         run: ./vendor/bin/pint --parallel
@@ -124,16 +117,22 @@ jobs:
       - name: Install playwright deps
         run: npx playwright install chromium
 
+      - name: Cache Eslint and Prettier
+        uses: actions/cache@v6.1.0
+        with:
+          path: .tmp/lintcache
+          key: ${{ runner.os }}-lintcache-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-lintcache-
+
+      - run: mkdir -p .tmp/lintcache
+
       - name: lint with eslint
-        if: steps.changes.outputs.resources == 'true'
-        run: npx eslint resources/ --fix
+        run: npx eslint resources/ --fix --cache --cache-strategy content --cache-location .tmp/lintcache/eslint
 
       - name: lint with prettier
-        if: steps.changes.outputs.resources == 'true'
-        run: npx prettier --write resources/
+        run: npx prettier --log-level warn --cache --cache-location=.tmp/lintcache/prettier-cache --write resources/
 
       - name: Commit changes
-        if: steps.changes.outputs.resources == 'true'
         uses: stefanzweifel/git-auto-commit-action@v7.2.1
         with:
           commit_message: Automatic linting (Prettier and eslint)
@@ -141,15 +140,6 @@ jobs:
 
       - name: 🔨 build front-end
         run: npm run build --if-present
-
-      - name: Cache Pest test results
-        uses: actions/cache@v6.1.0
-        with:
-          path: .tmp/phpunit.cache/test-run-history
-          key: ${{ runner.os }}-pest-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-pest-
-
-      - run: mkdir -p .tmp/phpunit.cache
 
       - name: 🐘 Run Pest tests
         run: |
