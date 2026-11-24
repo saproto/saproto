@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "956b580025df4e25353667dbfb639b43",
+    "content-hash": "3084d2bba42dbaefb1e974113ce38312",
     "packages": [
         {
             "name": "abcaeffchen/sepa-utilities",
@@ -18550,6 +18550,8 @@
         "ext-calendar": "*",
         "ext-curl": "*",
         "ext-json": "*",
+        "ext-gd": "*",
+        "ext-exif": "*",
         "ext-iconv": "*",
         "ext-zlib": "*"
     },
