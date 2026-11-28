@@ -18,7 +18,8 @@ use PragmaRX\Google2FA\Exceptions\InvalidCharactersException;
 use PragmaRX\Google2FA\Exceptions\SecretKeyTooShortException;
 use PragmaRX\Google2FA\Google2FA;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
-
+use Illuminate\Support\Facades\Http;
+use Illuminate\Validation\ValidationException;
 class AuthController extends Controller
 {
     /**
@@ -46,9 +47,26 @@ class AuthController extends Controller
             'create_without_ut_account' => ['nullable'],
             'name' => ['exclude_unless:create_without_ut_account,on', 'required', 'string'],
             'calling_name' => ['exclude_unless:create_without_ut_account,on', 'required', 'string'],
-            'g-recaptcha-response' => ['required', 'captcha'],
+            'cap-token' => ['required', 'string'],
             'privacy_policy_acceptance' => ['required', 'accepted'],
         ]);
+        try {
+            $response = Http::timeout(10)
+                ->asJson()
+                ->post(config('cap.siteverify_url'), [
+                    'secret' => config('cap.secret_key'),
+                    'response' => $request->string('cap-token'),
+                ]);
+        } catch (Exception $e) {
+            throw ValidationException::withMessages([
+                'cap-token' => 'CAPTCHA verification failed. Please try again.',
+            ]);
+        }
+        if (! $response->successful() || ! $response->json('success')) {
+            throw ValidationException::withMessages([
+                'cap-token' => 'CAPTCHA verification failed. Please try again.',
+            ]);
+        }
 
         // create with UT account, redirect to UT login
         if (! $request->has('create_without_ut_account')) {

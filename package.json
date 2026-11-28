@@ -38,6 +38,7 @@
         "@tanstack/vue-table": "^9.1.2",
         "@vueuse/core": "^15.0.0",
         "bootstrap": "^5.3.0",
+        "cap-widget": "^0.1.63",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "cn": "^0.5.2",

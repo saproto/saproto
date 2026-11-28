@@ -1,9 +1,5 @@
 @extends('auth.template')
 
-@push('head')
-    {!! NoCaptcha::renderJs() !!}
-@endpush
-
 @section('page-title')
     Register account
 @endsection
@@ -93,7 +89,7 @@
 
         <hr />
 
-        {!! NoCaptcha::display() !!}
+        <cap-widget required id="cap" data-cap-api-endpoint="{{config('cap.api_endpoint')}}"></cap-widget>
 
         <hr />
 

@@ -1,6 +1,9 @@
 window.global ||= window
 
 import * as Sentry from '@sentry/browser'
+
+import('cap-widget')
+
 Sentry.init({
     dsn: config.sentry_dsn,
     integrations: [Sentry.browserTracingIntegration()],
